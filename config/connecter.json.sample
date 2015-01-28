@@ -1,0 +1,12 @@
+<?php 
+   
+	$serveur='databases'; 
+	$user='geonatadmin';
+	$passe='monpassachanger'; 
+	$base='usershubdb';
+    
+	$dbconn = pg_connect("host=$serveur dbname=$base user=$user password=$passe") 
+or die('Connexion impossible : ' . pg_last_error());  
+   
+  
+?>

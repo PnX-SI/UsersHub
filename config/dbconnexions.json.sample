@@ -1,0 +1,19 @@
+{
+"databases":
+    [
+        {
+            "dbfunname":"Utilisateurs"
+            ,"host":"databases"
+            ,"dbname":"gestusersdb"
+            ,"user":"geonatadmin"
+            ,"pass":"monpassachanger"
+        }
+        ,{
+            "dbfunname":"Geonature"
+            ,"host":"databases"
+            ,"dbname":"geonaturedb"
+            ,"user":"geonatadmin"
+            ,"pass":"monpassachanger"
+        }
+    ]
+}

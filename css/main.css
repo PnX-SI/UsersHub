@@ -1,0 +1,202 @@
+/*!
+ * Ext JS Library 3.0+
+ * Copyright(c) 2006-2009 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
+ */
+/*
+ * FileUploadField component styles
+ */
+.x-form-file-wrap {
+    position: relative;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file {
+	position: absolute;
+	right: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity: 0);
+	opacity: 0;
+	z-index: 2;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file-btn {
+	position: absolute;
+	right: 0;
+	z-index: 1;
+}
+.x-form-file-wrap .x-form-file-text {
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    color: #777;
+}
+.upload-icon { 
+	background: url(../images/image_add.png) 
+	no-repeat 0 0 !important; 
+	}
+/*fin pour le  FileUploadField component styles*/
+.bold {
+  font-weight: bold;}
+  
+.add {
+    background-image: url(../images/add.gif) !important;
+}  
+.list {
+    background-image: url(../images/application_view_list.gif) !important;
+}
+.xls {
+    background-image: url(../images/excel.png) !important;
+}
+.application-header {
+  background: transparent url(../images/bandeau_utilisateurs.png) no-repeat  !important;
+
+}
+
+.collapsedTitle {
+  font-size:	11px;
+  font-weight:	bold;
+#  background-image:url(../images/gray/panel/white-top-bottom.gif);
+  line-height: 19px;
+  padding-left: 4px;
+  font-family: tahoma,arial,verdana,sans-serif;}
+
+.legend {
+    background-image: url(../images/application_view_list.gif) !important;
+}
+.ovMap {
+  background-image:url(../images/map_magnify.png) !important;
+}
+.expand {
+  background-image:url(../images/arrow_out.png) !important;
+}
+.disconnect{
+  background-image:url(../images/disconnect.png) !important;
+}
+.raz {
+  background-image:url(../images/cross.gif) !important;
+}
+.user {
+  background-image:url(../images/user.gif) !important;
+}
+.group {
+  background-image:url(../images/group.gif) !important;
+}
+.x-hide-checkbox .x-tree-node-cb {
+  visibility: hidden
+}
+
+input.x-tree-node-cb {
+  vertical-align: middle;
+}
+
+
+.erase {
+    background-image: url(../images/btn_erase.gif) !important;
+}
+.synchro {
+    background-image: url(../images/synchro.gif) !important;
+}
+.search {
+    background-image: url(../images/zoom.gif) !important;
+}
+.mf-print-action {
+    background-image: url(../images/printer.png) !important;
+}
+.mf-info {
+    background-image: url(../images/information.png) !important;
+}
+
+.pInfo div{
+  padding-left: 29px !important;
+  background: #fff url(../images/information.png) 5px 17px no-repeat !important;}
+
+.pInfo2 div{
+  padding-left: 29px !important;
+  background: #fff url(../images/information.png) 5px 3px no-repeat !important;}
+  
+.action-detail {
+    background-image:  url(../images/page_white_magnify.gif) !important;
+}  
+.action-edit {
+    background-image:  url(../images/table_edit.gif) !important;
+} 
+.action-peupler {
+    background-image:  url(../images/table_go.gif) !important;
+} 
+.action-remove {
+    background-image: url(../images/supprimer.gif) !important;
+}  
+
+#search_help {
+  font-family:tahoma,arial,verdana,sans-serif;
+  vertical-align: middle;
+  padding: 15px;
+  font-size: 12px;}
+  
+  #search_help img{
+    vertical-align: middle;}
+    
+    
+.olControlOverviewMapElement {
+  background: #F9E7FF !important;
+  -moz-border-radius: 0 !important;
+}
+.olControlOverviewMapExtentRectangle {
+  border: 3px dotted #888 !important;}
+
+
+.olControlLoadingPanel {
+  background-image:url(../images/large-loading.gif);
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+.olFramedCloudPopupContent table {
+  cell-spacing: 0;
+}
+.olFramedCloudPopupContent table td{
+  padding: 2px;
+}
+.olFramedCloudPopupContent table th{
+  padding: 2px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+.olFramedCloudPopupContent table{
+    font-size: 11px;
+    font-family: Arial;
+}
+
+.olControlScaleLineBottom {
+  display: none;
+}
+
+
+.x-tree-node-ct .x-tree-node-leaf .x-tree-node-icon {
+  background-image:url(../images/folder-empty.gif);
+}
+.x-tree-node-ct .x-tree-node-ct .x-tree-node-leaf .x-tree-node-icon {
+  background-image:url(../images/folder-empty.gif);
+}
+.x-tree-node-ct .x-tree-node-ct .x-tree-node-ct  .x-tree-node-leaf .x-tree-node-icon {
+  background-image:url(../js/client/mfbase/ext/resources/images/default/tree/leaf.gif);
+}
+
+.grid-link {
+  text-decoration: none;
+  color : #ffffff;
+  font-weight: bold;
+  padding: 0 3px;
+}
+.label-pass-red {
+  font-weight: bold;
+  color:red;
+}
+.label-pass-blue {
+  font-weight: bold;
+  color:blue;
+}
+.label-bold {
+	font-weight: bold;
+}
