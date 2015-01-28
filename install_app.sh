@@ -2,6 +2,10 @@
 
 . config/settings.ini
 
+echo "Créer les fichiers de configurations en lien avec la base de données..."
+cp config/connecter.php.sample config/connecter.php
+cp config/dbconnexions.json.sample config/dbconnexions.json
+
 echo "configuration du fichier config/connecter.php..."
 sed -i "s/$user='.*$/$user='$user_pg';/" config/connecter.php
 sed -i "s/$passe='.*$/$passe='$user_pg_pass';/" config/connecter.php
