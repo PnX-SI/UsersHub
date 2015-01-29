@@ -4,8 +4,8 @@
         {
             "dbfunname":"Utilisateurs"
             ,"host":"databases"
-            ,"dbname":"gestusersdb"
-            ,"user":"geonatadmin"
+            ,"dbname":"usershubdb"
+            ,"user":"usershubadmin"
             ,"pass":"monpassachanger"
         }
         ,{

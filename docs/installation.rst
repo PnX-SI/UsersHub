@@ -5,9 +5,12 @@ APPLICATION
 Configuration de la base de données PostgreSQL
 ==============================================
 
-* mettre à jour le fichier ``config/settings.ini``
+* Créer et mettre à jour le fichier ``config/settings.ini``
 
-    :: nano config/settings.ini
+    :: 
+    
+        cp config/settings.ini.sample config/settings.ini
+        nano config/settings.ini
 
 Renseigner le nom de la base de données, l'utilisateur PostgreSQL et son mot de passe. Il est possible mais non conseillé de laisser les valeurs proposées par défaut. 
 

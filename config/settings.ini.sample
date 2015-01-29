@@ -6,4 +6,4 @@ db_name=usershubdb
 #nom de l'utilisateur propriétaire de la base PostgreSQL
 user_pg=usershubadmin
 #user propriétaire de la base geonature
-user_pg_pass=monpassprod
+user_pg_pass=monpassachanger

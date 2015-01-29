@@ -110,10 +110,11 @@ Installation et configuration de PosgreSQL
 
     ::
     
-        su postgres
+        sudo su postgres
         psql
-        CREATE ROLE geonatadmin WITH SUPERUSER LOGIN PASSWORD 'monpassachanger';
+        CREATE ROLE usershubadmin WITH SUPERUSER LOGIN PASSWORD 'monpassachanger';
         \q
+        exit
         
 L'utilisateur ``geonatuser`` sera le propriétaire de la base de données ``geonaturedb`` et sera utilisé par l'application pour se connecter à celle-ci.
 
