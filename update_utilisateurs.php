@@ -8,10 +8,15 @@ $role = $nom_role." ".$prenom_role;
 if(isset($_GET['identifiant'])){$identifiant=$_GET['identifiant'];}else{$identifiant= null;}
 if(isset($_GET['email'])){$email=$_GET['email'];}else{$email= null;}
 if(isset($_GET['id_organisme'])){$id_organisme=$_GET['id_organisme'];}else{$id_organisme= null;}
+if(isset($_GET['id_unite'])){$id_unite=$_GET['id_unite'];}else{$id_unite= null;}
 if(isset($_GET['pass']) AND $_GET['pass']<>''){$pass=md5($_GET['pass']);}else{$pass= null;}
 if(isset($_GET['supprpass'])){$supprpass='true';}else{$supprpass= 'false';}
-$id_unite =$_GET['id_unite'];
 if(isset($_GET['pn'])){$pn='true';}else{$pn= 'false';}
+if(isset($_GET['remarques'])){
+    $remarques=str_replace( array( CHR(10), CHR(13), "\n", "\r" ), array( ' - ',' - ',' - ',' - '), $_GET['remarques'] );
+}else{
+    $remarques= null;
+}
 $action = $_GET['action'];
 //-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
 $fp = fopen ("config/dbconnexions.json", "r");
@@ -29,8 +34,8 @@ foreach ($json as $array) {
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
 			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass");
             if($action=="insert"){ //ajout 
-                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role,nom_role,prenom_role,identifiant,email,id_organisme,id_unite,pnpass)
-                        VALUES('false',$id_role,'$nom_role','$prenom_role','$identifiant','$email',$id_organisme,$id_unite,'$pn','$pass')";
+                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pnpass)
+                        VALUES('false',$id_role,'$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass')";
                 pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
                 $txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; ajout&eacute;.<br />";
             }
@@ -46,6 +51,7 @@ foreach ($json as $array) {
                         set nom_role = '$nom_role',
                         prenom_role = '$prenom_role',
                         identifiant = '$identifiant',
+                        remarques = '$remarques',
                         email = '$email',
                         id_organisme = $id_organisme,
                         id_unite = $id_unite,

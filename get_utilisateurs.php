@@ -103,6 +103,7 @@ else{
 			if($val['id_organisme']){$id_organisme = $val['id_organisme'];}else{$id_organisme = 2;}
 			$nom_unite = str_replace("'","\'",$val['nom_unite']);
 			$nom_organisme = str_replace("'","\'",$val['nom_organisme']);
+			$remarques = str_replace( array( "'",CHR(10), CHR(13), "\n", "\r" ), array( "\'",' - ',' - ',' - ',' - '), $val['remarques'] );
 			$email = $val['email'];
 			$identifiant = $val['identifiant'];
 			if($val['pass']!=null){
@@ -111,7 +112,7 @@ else{
 			$pass = "non";
 			}
 			$pn = bool_to_oui_non($val['pn']);
-			$text = "{id_role:".$id_role.",role:'".$role."',nom_role:'".$nom_role."',nom_organisme:'".$nom_organisme."',prenom_role:'".$prenom_role."',id_unite:".$id_unite.",nom_unite:'".$nom_unite."',id_organisme:".$id_organisme.",email:'".$email."',identifiant:'".$identifiant."',pass:'".$pass."',pn:'".$pn."'}";
+			$text = "{id_role:".$id_role.",role:'".$role."',nom_role:'".$nom_role."',nom_organisme:'".$nom_organisme."',prenom_role:'".$prenom_role."',id_unite:".$id_unite.",nom_unite:'".$nom_unite."',id_organisme:".$id_organisme.",email:'".$email."',identifiant:'".$identifiant."',pass:'".$pass."',pn:'".$pn."',remarques:'".$remarques."'}";
 			$json = $json.$text;
 			$i++;
 			if ($i > 0 and $i!=$nb) {

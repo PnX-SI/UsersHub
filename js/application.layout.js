@@ -631,6 +631,7 @@ application.layout = function() {
 				,'identifiant'
 				,'pass'
 				,'pn'
+				,'remarques'
 			]}
 		)
 		,groupField:'nom_organisme'
@@ -645,6 +646,7 @@ application.layout = function() {
 			'<p><b>E-mail :</b> {email}</p>'
 			,'<p><b>identifiant :</b> {identifiant}</p>'
 			,'<p><b>Unité :</b> {nom_unite}</p>'
+			,'<p><b>Remarques :</b> {remarques}</p>'
 		),
 		enableCaching:false //permet de reconstruire le contenu de l'expandder après modification du storeVisites depuis le formulaire visite Sinon le contenu est en cache et ne s'actualise pas
     });

@@ -19,6 +19,7 @@ GROUP BY a.id_role, a.nom_role, a.prenom_role,a.id_application
 LIMIT 1";
 $result = pg_query($requete) or die ("Erreur requête") ;
 $verif = pg_numrows($result);
+
 if ($verif != "1"){
 	//redirection vers la page d'accueil
 	header("Location: index.php");

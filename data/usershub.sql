@@ -115,13 +115,14 @@ CREATE TABLE t_roles (
     desc_role text,
     pass character varying(100),
     email character varying(250),
+    id_organisme integer,
     organisme character(32),
     id_unite integer,
+    remarques text,
     pn boolean,
     session_appli character varying(50),
     date_insert timestamp without time zone,
-    date_update timestamp without time zone,
-    id_organisme integer
+    date_update timestamp without time zone
 );
 
 
@@ -230,11 +231,7 @@ CREATE TABLE cor_role_droit_application (
 CREATE TABLE t_applications (
     id_application integer NOT NULL,
     nom_application character varying(50) NOT NULL,
-    desc_application text,
-    connect_host character varying(100),
-    connect_database character varying(50),
-    connect_user character varying(50),
-    connect_pass character varying(20)
+    desc_application text
 );
 
 
@@ -520,13 +517,13 @@ SET search_path = utilisateurs, pg_catalog;
 -- Dependencies: 254
 -- Data for Name: bib_droits; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
 -- 
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (5, 'validateur', 'il valide bien sur');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (4, 'modérateur', 'Actuellement utilisé uniquement pour l''administration des sites dans l''application information patrimoniale');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (0, 'aucun', 'aucun droit - inutile mais existe dans l''application police.');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (1, 'utilisateur', 'Equivalent à consultant');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (2, 'rédacteur', 'voir si on conserve ce terme');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (6, 'administrateur', 'il a tous les droits');
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (3, 'referent', 'utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (5, 'validateur', 'Il valide bien sur');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (4, 'modérateur', 'Peu utilisé');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (0, 'aucun', 'aucun droit.');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (1, 'utilisateur', 'Ne peut que consulter');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (2, 'rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (6, 'administrateur', 'Il a tous les droits');
+INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES (3, 'référent', 'utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)');
 -- 
 -- TOC entry 3275 (class 0 OID 17821)
 -- Dependencies: 256
@@ -556,17 +553,16 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 -- Dependencies: 261
 -- Data for Name: t_applications; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
 -- 
-INSERT INTO t_applications (id_application, nom_application, desc_application, connect_host, connect_database, connect_user, connect_pass) VALUES (1, 'application utilisateurs', 'application permettant d''administrer la présente base de données.', 'databases', 'gestusersdb', 'geonatadmin', 'monpassachanger');
---INSERT INTO t_applications (id_application, nom_application, desc_application, connect_host, connect_database, connect_user, connect_pass) VALUES (14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.', null, null, null, null);
-INSERT INTO t_applications (id_application, nom_application, desc_application, connect_host, connect_database, connect_user, connect_pass) VALUES (14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.', 'databases', 'geonaturedb', 'geonatadmin', 'monpassachanger');
+INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (1, 'application utilisateurs', 'application permettant d''administrer la présente base de données.');
+INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.');
 
 -- 
 -- TOC entry 3255 (class 0 OID 17445)
 -- Dependencies: 189
 -- Data for Name: t_roles; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
 -- 
-INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme) VALUES (true, 20002, NULL, 'grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'monpn', 99, true, NULL, NULL, NULL, NULL);
-INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme) VALUES (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', '', 'Parc national des Ecrins', 1, true, NULL, NULL, NULL, 99);
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (true, 20002, NULL, 'grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'monpn', 99, true, NULL, NULL, NULL, NULL,'groupe test');
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', '', 'Parc national des Ecrins', 1, true, NULL, NULL, NULL, 99,'utilisateur test à modifier');
 -- 
 -- TOC entry 3277 (class 0 OID 17831)
 -- Dependencies: 259

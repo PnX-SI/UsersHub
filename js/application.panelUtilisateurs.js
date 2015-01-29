@@ -4,7 +4,7 @@
 var storeUnites = new Ext.data.JsonStore({
 	url: 'get_unites.php'
 	,method: 'GET'
-	,fields: ['id_unite', 'intitule']
+	,fields: ['id_unite', 'nom_unite']
 	,sortInfo: {field: 'id_unite',direction: 'ASC'}
 	,autoLoad:true
 });
@@ -12,7 +12,7 @@ var comboUnite = new Ext.form.ComboBox({
 	fieldLabel: 'Unite',
 	name: 'id_unite',
 	store: storeUnites,
-	displayField:'intitule',
+	displayField:'nom_unite',
 	hiddenName:'id_unite',
 	valueField: 'id_unite',
 	allowBlank:false,
@@ -29,7 +29,7 @@ var comboUnite = new Ext.form.ComboBox({
 var storeOrganismes = new Ext.data.JsonStore({
 	url: 'get_organismes.php'
 	,method: 'GET'
-	,fields: ['id_organisme', 'intitule']
+	,fields: ['id_organisme', 'nom_organisme']
 	,sortInfo: {field: 'id_organisme',direction: 'ASC'}
 	,autoLoad:true
 });
@@ -37,7 +37,7 @@ var comboOrganisme = new Ext.form.ComboBox({
 	fieldLabel: 'Organisme',
 	name: 'id_organisme',
 	store: storeOrganismes,
-	displayField:'intitule',
+	displayField:'nom_organisme',
 	hiddenName:'id_organisme',
 	valueField: 'id_organisme',
 	allowBlank:false,
@@ -67,6 +67,7 @@ var panelFormUtilisateurs = {
 	,title:'L\'utilisateur'
 	,region:'center'
 	,width:500
+    ,height:510
 	,labelWidth: 125 // label settings here cascade unless overridden
 	,frame:true
 	,bodyStyle:'padding:15px'
@@ -124,6 +125,13 @@ var panelFormUtilisateurs = {
 			,fieldLabel: 'Agent interne '
 			,width:300
 			,checked:true
+		},{
+			id:'user-remarques'
+			,xtype:'textarea'
+			,name: 'remarques'
+			,fieldLabel: 'Remarques'
+			,width:300
+			,height:100
 		},{	
 			xtype: 'label'
 			,id: 'label-identification'
@@ -198,7 +206,7 @@ var panelFormUtilisateurs = {
 			loadFormUtilisateurs(record); //on recharge le formulaire depuis le store qui n'a pas changé
 		}
 	}]
-	,height:460
+	
 };
 
 var tabPanelUtilisateurs = new Ext.Panel({ 
@@ -221,6 +229,7 @@ var loadFormUtilisateurs = function(record){
 	form.findField('email').setValue(record.data.email);
 	form.findField('id_organisme').setValue(record.data.id_organisme);
 	form.findField('pn').setValue(record.data.pn=='oui');
+	form.findField('remarques').setValue(record.data.remarques);
 	form.findField('id_unite').setValue(record.data.id_unite);
 	Ext.getCmp('label-pass').setText(record.data.pass,false);
     Ext.getCmp('champ_action-utilisateur').setValue("update");
