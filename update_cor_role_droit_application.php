@@ -27,7 +27,7 @@ foreach ($json as $array) {
 			if($id_application>0){
 				//on supprime d'abord les valeurs du groupe déjà enregistré
 				$sql = "delete from utilisateurs.cor_role_droit_application WHERE id_application=$id_application";
-				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.'"}') ;
 				//puis on recréé les nouveaux
 				foreach ($array_valeurs as $mes_ids){
 					$array_ids = explode(",",$mes_ids);
@@ -35,9 +35,14 @@ foreach ($json as $array) {
 					$id_droit=$array_ids[1];
 					$sql = "insert into utilisateurs.cor_role_droit_application (id_application, id_role, id_droit)
 					values( $id_application, $role, $id_droit)";
-					$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+					$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.'"}') ;
 				}
 				$txt = $db_fun_name." - Les droits de l\'".$nom_application." ont &eacute;t&eacute mis &agrave; jour.<br />";
+        //-- Execution des commandes sql complémentaires
+        if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_droits']))) {
+          $sql = str_replace('$id',$id_application , $database['autresactions']['cor_droits']);
+          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
+        }
 			}
 			pg_close($dbconn);
 		}

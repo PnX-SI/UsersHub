@@ -23,12 +23,18 @@ if($_GET['roles']!= null){
                 if($id_groupe>0){
                     //on supprime d'abord les utilisateurs du groupe déjà enregistré
                     $sql = "delete from utilisateurs.cor_roles WHERE id_role_groupe=$id_groupe";
-                    $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+                    print_r(pg_result_error(pg_query($sql)));
+                    $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon DELETE.'.$db_fun_name.' "  }') ;
                     //puis on recréé les nouveaux
                     foreach ($array_utilisateurs as $utilisateur){
                         $sql = "insert into utilisateurs.cor_roles (id_role_groupe, id_role_utilisateur)
                         values( $id_groupe, $utilisateur)";
-                        $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+                        $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon INSERT. '.$db_fun_name.'" }') ;
+                    }
+                    //-- Execution des commandes sql complémentaires
+                    if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_roles']))) {
+                      $sql = str_replace('$id',$id_groupe , $database['autresactions']['cor_roles']);
+                      $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
                     }
                     $txt = $db_fun_name." - Le contenu du groupe \"".$nom_groupe."\" a &eacute;t&eacute mis &agrave; jour.<br />";
                 }

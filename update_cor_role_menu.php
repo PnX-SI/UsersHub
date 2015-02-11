@@ -27,13 +27,18 @@ foreach ($json as $array) {
 			if($id_menu>0){
 				//on supprime d'abord les valeurs du groupe déjà enregistré
 				$sql = "delete from utilisateurs.cor_role_menu WHERE id_menu=$id_menu";
-				$result = pg_query($sql) or die ('{success: false, msg:"erreur de suppression."}') ;
+				$result = pg_query($sql) or die ('{success: false, msg:"erreur de suppression. '.$db_fun_name.' "}') ;
 				//puis on recréé les nouveaux
 				foreach ($array_valeurs as $id_role){
 					$sql = "insert into utilisateurs.cor_role_menu (id_role, id_menu)
 					values($id_role, $id_menu)";
-					$result = pg_query($sql) or die ('{success: false, msg:"erreur d\'insertion id = '.$id_role.'"}') ;
+					$result = pg_query($sql) or die ('{success: false, msg:"erreur d\'insertion id = '.$id_role.' '.$db_fun_name.' "}') ;
 				}
+        //-- Execution des commandes sql complémentaires
+        if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_listes']))) {
+          $sql = str_replace('$id',$id_menu , $database['autresactions']['cor_listes']);
+          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
+        }
 				$txt = $db_fun_name." - Le contenu du menu \"".$nom_menu."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			pg_close($dbconn);
