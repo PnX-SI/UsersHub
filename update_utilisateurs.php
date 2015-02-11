@@ -36,7 +36,7 @@ foreach ($json as $array) {
             if($action=="insert"){ //ajout 
                 $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pnpass)
                         VALUES('false',$id_role,'$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass')";
-                pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+                pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
                 $txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; ajout&eacute;.<br />";
             }
             //Sinon, c'est un update ou delete donc on vérifie que le role existe dans la bd
@@ -71,17 +71,32 @@ foreach ($json as $array) {
                             $sql = "Update utilisateurs.t_roles set pass = null, identifiant = null WHERE id_role = $id_role";
                             if(pg_query($sql)){$txt = $txt." Mot de passe et identifiant supprim&eacute;s.<br />";}
                             else{$txt = $txt.'<span style="color:red;"> Mot de passe et identifiant non supprim&eacute;s.</span><br />';}
-                        } 
+                        }
+                         //-- Execution des commandes sql complémentaires
+                        if ((isset($database['autresactions'])) && (isset($database['autresactions']['role_update']))) {
+                          $sql = str_replace('$id',$id_role , $database['autresactions']['role_update']);
+                          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. role_update'.$db_fun_name.' "  }') ;
+                        }
                     }
                     elseif($action=="delete"){ //suppression
                         $sql = "DELETE FROM utilisateurs.t_roles
                                 WHERE id_role = $id_role";
                         if(pg_query($sql)){$txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; supprim&eacute;.<br />";}
                         else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur : role \''.$role.'\' non supprim&eacute;.</span><br />';}
+                        //-- Execution des commandes sql complémentaires
+                        if ((isset($database['autresactions'])) && (isset($database['autresactions']['role_delete']))) {
+                          $sql = str_replace('$id',$id_role , $database['autresactions']['role_delete']);
+                          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. role_delete'.$db_fun_name.' "  }') ;
+                        }
                     }   
                 }
                 //si le role n'existe pas
                 else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur :  le role '.$id_role. ' n\\\'existe pas dans cette base.</span><br />';}   
+            }
+            //-- Execution des commandes sql complémentaires
+            if ((isset($database['autresactions'])) && (isset($database['autresactions']['role']))) {
+              $sql = str_replace('$id',$id_role , $database['autresactions']['role']);
+              $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
             }
             pg_close($dbconn);//fermeture de la connexion pour pouvoir en ouvrir une autre dans la boucle
         }

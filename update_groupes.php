@@ -28,6 +28,11 @@ foreach ($json as $array) {
 				WHERE id_role = $id_groupe";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
 				$txt = $db_fun_name." - Le groupe \"".$nom_groupe."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+        //-- Execution des commandes sql complémentaires
+        if ((isset($database['autresactions'])) && (isset($database['autresactions']['groupe_update']))) {
+          $sql = str_replace('$id',$id_groupe , $database['autresactions']['groupe_update']);
+          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. groupe_update'.$db_fun_name.' "  }') ;
+        }
 			}
 			elseif($action=="insert"){ //ajout d'un nouveau groupe
 				$sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,desc_role)
@@ -40,7 +45,17 @@ foreach ($json as $array) {
 						WHERE id_role = $id_groupe";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
 				$txt = $db_fun_name." - Le groupe \"".$nom_groupe."\" a &eacute;t&eacute; supprim&eacute;.<br />";
+         //-- Execution des commandes sql complémentaires
+        if ((isset($database['autresactions'])) && (isset($database['autresactions']['groupe_delete']))) {
+          $sql = str_replace('$id',$id_groupe , $database['autresactions']['groupe_delete']);
+          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. groupe_delete'.$db_fun_name.' "  }') ;
+        }
 			}
+      //-- Execution des commandes sql complémentaires
+      if ((isset($database['autresactions'])) && (isset($database['autresactions']['groupe']))) {
+        $sql = str_replace('$id',$id_groupe , $database['autresactions']['groupe']);
+        $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
+      }
 			pg_close($dbconn);
 		}
 		else{$txt="connection impossible &agrave; l\'".$db_fun_name.".<br />";}
