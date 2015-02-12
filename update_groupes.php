@@ -51,11 +51,6 @@ foreach ($json as $array) {
           $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. groupe_delete'.$db_fun_name.' "  }') ;
         }
 			}
-      //-- Execution des commandes sql complémentaires
-      if ((isset($database['autresactions'])) && (isset($database['autresactions']['groupe']))) {
-        $sql = str_replace('$id',$id_groupe , $database['autresactions']['groupe']);
-        $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
-      }
 			pg_close($dbconn);
 		}
 		else{$txt="connection impossible &agrave; l\'".$db_fun_name.".<br />";}
