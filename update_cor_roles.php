@@ -35,8 +35,12 @@ if($_GET['roles']!= null){
                     if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_roles']))) {
                       $sql = str_replace('$id',$id_groupe , $database['autresactions']['cor_roles']);
                       $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
+                      $txt_autre = '<span style="color:green;"> autre action  r&eacute;alis&eacute;e.</span><br />';
                     }
-                    $txt = $db_fun_name." - Le contenu du groupe \"".$nom_groupe."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+                    else {
+                      $txt_autre = '';
+                    }
+                    $txt = $db_fun_name." - Le contenu du groupe \"".$nom_groupe."\" a &eacute;t&eacute; mis &agrave; jour.<br />".$txt_autre;
                 }
                 pg_close($dbconn);
             }
@@ -46,7 +50,7 @@ if($_GET['roles']!= null){
     }
 }
 else{
-	$msg= "Attention ! Aucun utilisateur sélectionné !";
+	$msg= "Attention ! Aucun utilisateur s&eacute;lectionn&eacute; !";
 }
 header('Content-type: text/html');
 echo "{success: true, msg:'".$msg."'}";

@@ -26,14 +26,14 @@ foreach ($json as $array) {
 				set nom_role = '$nom_groupe',
 				desc_role = '$desc_groupe'
 				WHERE id_role = $id_groupe";
-				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.' '.$sql.'"}') ;
+				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.' "}') ;
 				$txt = $db_fun_name." - Le groupe \"".$nom_groupe."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'un nouveau groupe
          if ($id_groupe == '' ){
           $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,desc_role)
                     VALUES('true','$nom_groupe','$desc_groupe') RETURNING id_role;";
-          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
+          $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.'  "}') ;
           while ($row = pg_fetch_row($result)) {
             $id_groupe =  $row[0];
           }

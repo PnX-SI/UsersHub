@@ -7,7 +7,7 @@ if($_GET['valeurs']!= null){
 	$array_valeurs = explode(",",$ids);
 }
 else{
-	$msg= "Attention ! - Aucun role sélectionné !";
+	$msg= "Attention ! - Aucun role s&eacute;lectionn&eacute; !<br/>";
 }
 //-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
 $fp = fopen ("config/dbconnexions.json", "r");
@@ -38,8 +38,12 @@ foreach ($json as $array) {
         if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_listes']))) {
           $sql = str_replace('$id',$id_menu , $database['autresactions']['cor_listes']);
           $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
+          $txt_autre = '<span style="color:green;"> autre action  r&eacute;alis&eacute;e.</span><br />';
         }
-				$txt = $db_fun_name." - Le contenu du menu \"".$nom_menu."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+        else {
+          $txt_autre = '';
+        }
+				$txt = $db_fun_name." - Le contenu du menu \"".$nom_menu."\" a &eacute;t&eacute mis &agrave; jour.<br />".$txt_autre ;
 			}
 			pg_close($dbconn);
 		}
