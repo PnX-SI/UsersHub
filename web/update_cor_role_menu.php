@@ -10,8 +10,8 @@ else{
 	$msg= "Attention ! - Aucun role sélectionné !";
 }
 //-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
-$fp = fopen ("config/dbconnexions.json", "r");
-$contenu_du_fichier = fread ($fp, filesize('config/dbconnexions.json'));
+$fp = fopen ("../config/dbconnexions.json", "r");
+$contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
 $json = json_decode($contenu_du_fichier,true);
 foreach ($json as $array) {
