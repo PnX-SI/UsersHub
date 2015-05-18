@@ -1,11 +1,13 @@
 UsersHub
 =========
 
-Application web de gestions des utilisateurs.
+Application web de gestion centralisée des utilisateurs.
 
-UsersHub est une application web permettant de regrouper l'ensemble des utilisateurs d'applications web afin de gérer de manière différenciée les droits d'accès à ces applications ainsi que le contenu des listes déroulantes d'observateurs. 
+UsersHub est une application web permettant de regrouper l'ensemble des utilisateurs d'applications web afin de gérer de manière différenciée et centralisée les droits d'accès à ces applications ainsi que le contenu des listes déroulantes d'observateurs. 
 
 Elle permet de gérer de manière centralisée **des utilisateurs** et de les placer dans **des groupes** ; de créer **différents niveaux de droits** et de les affecter aux utilisateurs et/ou aux groupes d'utilisateurs pour chacune de vos **applications**. Elle permet également de gérer **des organismes**, **des unités** et **des listes déroulantes** regroupant des utilisateurs ou des groupes d'utilisateurs.
+
+Compatible avec GeoNature (https://github.com/PnEcrins/GeoNature) et Geotrek (https://github.com/makinacorpus/Geotrek).
 
 Présentation
 -----------

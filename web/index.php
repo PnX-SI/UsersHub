@@ -2,7 +2,7 @@
 if ($_POST['button'] == "CONNEXION"){
 	$login = $_POST['flogin'];
 	$password = md5($_POST['fpassword']);
-	require("config/connecter.php");
+	require("../config/connecter.php");
 	$query = "SELECT * FROM utilisateurs.t_roles u WHERE u.identifiant = '".$login."' AND u.pass = '".$password."'";
 	$sql = pg_query($query) or die ("Erreur requête01") ;
 	$verif = pg_numrows($sql);

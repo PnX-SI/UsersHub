@@ -6,8 +6,8 @@ $nom_application = pg_escape_string($_GET['nom_application']);
 $desc_application = pg_escape_string($_GET['desc_application']);
 $action = $_GET['action'];
 //-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
-$fp = fopen ("config/dbconnexions.json", "r");
-$contenu_du_fichier = fread ($fp, filesize('config/dbconnexions.json'));
+$fp = fopen ("../config/dbconnexions.json", "r");
+$contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
 $json = json_decode($contenu_du_fichier,true);
 foreach ($json as $array) {

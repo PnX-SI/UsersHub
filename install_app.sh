@@ -15,10 +15,12 @@ echo "Suppression des fichiers de log de l'installation..."
 rm log/*.log
 
 
-if [ ! -h /var/www/usershub ]; then
+if [ ! -h /var/www/usershub/web ]; then
   echo "Configuration du répertoire web de l'application..."
-  sudo ln -s ${PWD}/ /var/www/usershub
+  cd web
+  sudo ln -s ${PWD}/ /var/www/usershub/web
+  cd ..
 else
   echo "Le répertoire de l'application exite déjà"
 fi
-echo "Fin. Vous devez manuellement éditer le fichier dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
+echo "Fin. Vous devez manuellement éditer le fichier config/dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("config/connecter.php");
+require("../config/connecter.php");
 //requete permettant d'extraire l'utilisateur avec son niveau de droit maximum qu'il soit dans un role-groupe et/ou en tant qu'utilisateur seul 
 $requete = "SELECT a.id_role, a.nom_role, a.prenom_role,max(a.id_droit) as id_droit, a.id_application 
 FROM (
