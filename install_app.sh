@@ -23,4 +23,4 @@ if [ ! -h /var/www/usershub/web ]; then
 else
   echo "Le répertoire de l'application exite déjà"
 fi
-echo "Fin. Vous devez manuellement éditer le fichier dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
+echo "Fin. Vous devez manuellement éditer le fichier config/dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
