@@ -32,7 +32,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeDroits = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -46,7 +46,7 @@ application.layout = function() {
         ,store: application.storeDroits
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_droit"
 				,sortable: true
@@ -75,9 +75,9 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les différents type de droits disponibles pour être ensuite attribués aux utilisateurs ou aux groupes.'+
-							'<br />Dans la base de données, les droits sont stockés dans la table bib_droits. '+
-							'Une table cor_role_droit_application permet d\'attribuer des droits aux différents rôles selon les applications (voir l\'onglet "Applications").'
+						,msg: 'Cet onglet permet de gÃ©rer les diffÃ©rents type de droits disponibles pour Ãªtre ensuite attribuÃ©s aux utilisateurs ou aux groupes.'+
+							'<br />Dans la base de donnÃ©es, les droits sont stockÃ©s dans la table bib_droits. '+
+							'Une table cor_role_droit_application permet d\'attribuer des droits aux diffÃ©rents rÃ´les selon les applications (voir l\'onglet "Applications").'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -133,7 +133,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeMenus = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -147,7 +147,7 @@ application.layout = function() {
         ,store: application.storeMenus
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_menu"
 				,sortable: true
@@ -177,9 +177,9 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les listes déroulantes des applications.'+
-							'<br />Dans la base de données, les listes sont stockés dans la table t_menus. '+
-							'Une table cor_role_menu permet de placer des rôles dans ces listes déroulantes.'
+						,msg: 'Cet onglet permet de gÃ©rer les listes dÃ©roulantes des applications.'+
+							'<br />Dans la base de donnÃ©es, les listes sont stockÃ©s dans la table t_menus. '+
+							'Une table cor_role_menu permet de placer des rÃ´les dans ces listes dÃ©roulantes.'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -235,7 +235,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeGroupes = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -250,7 +250,7 @@ application.layout = function() {
         ,store: application.storeGroupes
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_groupe"
 				,sortable: true
@@ -281,10 +281,10 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les différents groupes disponibles pour y affecter des utilisateurs.'+
-							'<br />Dans la base de données, les groupes et les utilisateurs sont stockés dans la table t_roles. '+
-							'Une table cor_roles permet de lier les utilisateurs aux différents rôles (groupes).'+
-							'Un rôle de niveau groupes a le champ "groupe" = true.'
+						,msg: 'Cet onglet permet de gÃ©rer les diffÃ©rents groupes disponibles pour y affecter des utilisateurs.'+
+							'<br />Dans la base de donnÃ©es, les groupes et les utilisateurs sont stockÃ©s dans la table t_roles. '+
+							'Une table cor_roles permet de lier les utilisateurs aux diffÃ©rents rÃ´les (groupes).'+
+							'Un rÃ´le de niveau groupes a le champ "groupe" = true.'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -340,7 +340,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeApplications = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -354,7 +354,7 @@ application.layout = function() {
         ,store: application.storeApplications
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_application"
 				,sortable: true
@@ -384,10 +384,10 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les informations relatives aux applications.'+
-							'<br />Dans la base de données, les applications sont stockées dans la table t_applications. '+
-							'<br />Une table cor_role_droit_application permet d\'attribuer des droits aux différents rôles selon les applications.'+
-							'<br />Cet onglet permet de gérer cette table par glisser/déposer entre grille. N\'oubliez pas d\'attribuer des droits à chaque rôle avant d\'enregistrer'
+						,msg: 'Cet onglet permet de gÃ©rer les informations relatives aux applications.'+
+							'<br />Dans la base de donnÃ©es, les applications sont stockÃ©es dans la table t_applications. '+
+							'<br />Une table cor_role_droit_application permet d\'attribuer des droits aux diffÃ©rents rÃ´les selon les applications.'+
+							'<br />Cet onglet permet de gÃ©rer cette table par glisser/dÃ©poser entre grille. N\'oubliez pas d\'attribuer des droits Ã  chaque rÃ´le avant d\'enregistrer'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -443,7 +443,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeOrganismes = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -457,7 +457,7 @@ application.layout = function() {
         ,store: application.storeOrganismes
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_organisme"
 				,sortable: true
@@ -487,8 +487,8 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les informations relatives aux organismes.'+
-							'<br />Dans la base de données, les organismes sont stockés dans la table bib_organismes.'
+						,msg: 'Cet onglet permet de gÃ©rer les informations relatives aux organismes.'+
+							'<br />Dans la base de donnÃ©es, les organismes sont stockÃ©s dans la table bib_organismes.'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -518,14 +518,14 @@ application.layout = function() {
 	if(application.user.droits == 6){ //bouton modifier si droit = admin
 		var rowActionsSupprimeUnites = new Ext.ux.grid.RowActions({
 			actions: [{
-				tooltip: 'Supprimer cett unité',
+				tooltip: 'Supprimer cett unitÃ©',
 				iconCls: 'action-remove'
 			}]
 			,listeners: {
 				action: function (grid, record, action) {
 					switch (action) {
 					case 'action-remove':
-						Ext.Msg.confirm('Attention','Etes-vous certain de vouloir supprimer cette unité ?'
+						Ext.Msg.confirm('Attention','Etes-vous certain de vouloir supprimer cette unitÃ© ?'
                                 ,function(btn) {
                                     if (btn == 'yes') {
 										supprimeUnite(record);
@@ -543,7 +543,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeUnites = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -557,7 +557,7 @@ application.layout = function() {
         ,store: application.storeUnites
         ,columns: [
 			{
-				header: "N°"
+				header: "NÂ°"
 				,width: 30
 				,dataIndex: "id_unite"
 				,sortable: true
@@ -571,8 +571,8 @@ application.layout = function() {
 		]
 		,tbar:[
 			{
-				text: 'Ajouter une unité'
-				,tooltip: 'Ajouter une nouvelle unité'
+				text: 'Ajouter une unitÃ©'
+				,tooltip: 'Ajouter une nouvelle unitÃ©'
 				,iconCls:'add'
 				,handler: function() {
 					Ext.getCmp('formunites').getForm().reset();
@@ -587,8 +587,8 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les informations relatives aux unités.'+
-							'<br />Dans la base de données, les unités sont stockées dans la table bib_unites.'
+						,msg: 'Cet onglet permet de gÃ©rer les informations relatives aux unitÃ©s.'+
+							'<br />Dans la base de donnÃ©es, les unitÃ©s sont stockÃ©es dans la table bib_unites.'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -640,17 +640,17 @@ application.layout = function() {
 		,sortInfo: {field: 'nom_role',direction: 'ASC'}
 		,autoLoad:true
 	});
-	//boutton '+' en début de ligne dans le grid visite
+	//boutton '+' en dÃ©but de ligne dans le grid visite
 	var expander = new Ext.grid.RowExpander({
-        tpl : new Ext.XTemplate(//Template pour le détail de la visite
+        tpl : new Ext.XTemplate(//Template pour le dÃ©tail de la visite
 			'<p><b>E-mail :</b> {email}</p>'
 			,'<p><b>identifiant :</b> {identifiant}</p>'
-			,'<p><b>Unité :</b> {nom_unite}</p>'
+			,'<p><b>UnitÃ© :</b> {nom_unite}</p>'
 			,'<p><b>Remarques :</b> {remarques}</p>'
 		),
-		enableCaching:false //permet de reconstruire le contenu de l'expandder après modification du storeVisites depuis le formulaire visite Sinon le contenu est en cache et ne s'actualise pas
+		enableCaching:false //permet de reconstruire le contenu de l'expandder aprÃ¨s modification du storeVisites depuis le formulaire visite Sinon le contenu est en cache et ne s'actualise pas
     });
-	//préparation des colonnes avec les icones d'action dans les grids (pour le grid aires)
+	//prÃ©paration des colonnes avec les icones d'action dans les grids (pour le grid aires)
 	if(application.user.droits == 6){ //bouton modifier si droit = admin
 		var rowActionsSupprimeUtilisateurs = new Ext.ux.grid.RowActions({
 			actions: [
@@ -681,7 +681,7 @@ application.layout = function() {
 			,width: 25
 		});
 	}
-	else{ //colonne bouton vide si droit différent de admin
+	else{ //colonne bouton vide si droit diffÃ©rent de admin
 		var rowActionsSupprimeUtilisateurs = new Ext.ux.grid.RowActions({
 			actions: [{}]
 			,fixed: true
@@ -723,9 +723,9 @@ application.layout = function() {
 				,handler: function() {
 					Ext.Msg.show({
 						title: 'Information'
-						,msg: 'Cet onglet permet de gérer les informations relatives aux utilisateurs.'+
-							'<br />Dans la base de données, les utilisateurs sont stockées dans la table t_roles, avec les rôles de niveau groupe. '+
-							'<br />Une table cor_roles permet de lier les utilisateurs aux différents rôles (groupes).'
+						,msg: 'Cet onglet permet de gÃ©rer les informations relatives aux utilisateurs.'+
+							'<br />Dans la base de donnÃ©es, les utilisateurs sont stockÃ©es dans la table t_roles, avec les rÃ´les de niveau groupe. '+
+							'<br />Une table cor_roles permet de lier les utilisateurs aux diffÃ©rents rÃ´les (groupes).'
 						,icon: Ext.Msg.INFO
 						,buttons: Ext.Msg.OK
 					});
@@ -765,11 +765,11 @@ application.layout = function() {
 		}
 	});
 
-//-----------------------------------------------------fin de la partie de création des datapanels---------------------------------------------
+//-----------------------------------------------------fin de la partie de crÃ©ation des datapanels---------------------------------------------
 
 
 //-------------------------Les 2 panels de l'onglet Gestion des roles--------------------
-	//accordion de gauche à placer dans le datapanel
+	//accordion de gauche Ã  placer dans le datapanel
 	var accordionGauche = new Ext.Panel({
 		id:'accordeon-gauche'
         ,margins : '5 0 5 5'
@@ -812,7 +812,7 @@ application.layout = function() {
 		,items: [ panelGauche,panelCentre ]
 	});
 
-//création du tabpanel 
+//crÃ©ation du tabpanel 
 	var tabs = new Ext.TabPanel({
         id:'tabPanel'
         ,activeTab: 0
@@ -847,9 +847,9 @@ application.layout = function() {
 			   '->',
 			   '&copy; Parc national des Ecrins',
 			   '-',
-			   'Réalisation Parc national des Ecrins - 2015 '
+			   'RÃ©alisation Parc national des Ecrins - 2015 '
                ,{
-                    text: 'Déconnexion'
+                    text: 'DÃ©connexion'
                     ,iconCls: 'disconnect'
                     ,handler: function() {
                         window.location.href = 'index.php' 
@@ -859,7 +859,7 @@ application.layout = function() {
 		})
     });
  
-//------------Le conteneur général avec le tabpanel (2 onglets de l'appli) + les 2 panels haut et bas --
+//------------Le conteneur gÃ©nÃ©ral avec le tabpanel (2 onglets de l'appli) + les 2 panels haut et bas --
 	this.viewPort = new Ext.Viewport({
         layout: 'border'
 		,defaults: {
@@ -872,7 +872,7 @@ application.layout = function() {
 //				fin de la construction du layout					     
 //
 //-----------------------------------------------------------------------------------------------------------------------
-application.resetFormUtilisateur();//on initialise sur l'onglet utilisateurs donc on ouvre par défaut sur la création d'un nouvel utilisateur
+application.resetFormUtilisateur();//on initialise sur l'onglet utilisateurs donc on ouvre par dÃ©faut sur la crÃ©ation d'un nouvel utilisateur
 }//fin du init
 }//fin du return		
 }();//fin de la fonction de construction de la page de l'appli

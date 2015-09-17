@@ -25,7 +25,7 @@ application.peuplerGroupes = function(record) {
 	var cols1 = [
 		{id : 'id_role', header: "Id", width: 50, sortable: true, dataIndex: 'id_role'}
 		,{header: "Role", width: 150, sortable: true, dataIndex: 'role'}
-		,{header: "Unité", width: 150, sortable: true, dataIndex: 'nom_unite'}
+		,{header: "UnitÃ©", width: 150, sortable: true, dataIndex: 'nom_unite'}
 	];
 	// declare the source Grid
     var firstGrid = new Ext.grid.GridPanel({
@@ -36,7 +36,7 @@ application.peuplerGroupes = function(record) {
 		,enableDragDrop   : true
         ,stripeRows       : true
         ,autoExpandColumn : 'id_role'
-        ,title            : 'Liste des rôles disponibles'
+        ,title            : 'Liste des rÃ´les disponibles'
 		,tbar 			 : [
 			new Ext.form.ComboBox({
 				id:'combo-filtre-unite-groupe',
@@ -63,7 +63,7 @@ application.peuplerGroupes = function(record) {
 			})
 			,new Ext.Button({
 				iconCls: 'raz'
-				,tooltip: 'Afficher tous les rôles'
+				,tooltip: 'Afficher tous les rÃ´les'
 				,handler: function() {
 					firstGridStore.clearFilter();
 					Ext.getCmp('combo-filtre-unite-groupe').reset();
@@ -113,7 +113,7 @@ application.peuplerGroupes = function(record) {
         columns: [
             {id : 'id_role', header: "Id", width: 50, dataIndex: 'id_role'}
 			,{header: "Role", width: 150, dataIndex: 'role'}
-			,{header: "Unité", width: 150, dataIndex: 'nom_unite'}
+			,{header: "UnitÃ©", width: 150, dataIndex: 'nom_unite'}
 			//,rowActionsSupprimeRole
         ]
     });
@@ -128,9 +128,9 @@ application.peuplerGroupes = function(record) {
         autoExpandColumn: 'id_role',
 		clicksToEdit: 1,
 		//plugins:[rowActionsSupprimeRole],
-        title: 'Rôles du groupe "'+nom_groupe+'"'
+        title: 'RÃ´les du groupe "'+nom_groupe+'"'
     });
-	//le submit qui n'envoi aucun paramètre car pas de champ dans le formulaire donc on passe tout en GET dans l'URL
+	//le submit qui n'envoi aucun paramÃ¨tre car pas de champ dans le formulaire donc on passe tout en GET dans l'URL
 	var saveGroupes = function(){
 		var nb = secondGridStore.getCount();
 		var ar = new  Array();//un tableau
@@ -138,7 +138,7 @@ application.peuplerGroupes = function(record) {
 			var r = secondGridStore.getAt(i);
 			ar.push(r.data.id_role);//remplir le tableau
 		}
-		var tab = ar.join(","); //Les valeurs à envoyer php
+		var tab = ar.join(","); //Les valeurs Ã  envoyer php
 		var url = 'update_cor_roles.php?id_groupe='+id_groupe+'&roles='+tab+'&nom_groupe='+nom_groupe
 		Ext.getCmp('tabpanel-'+id_groupe).getForm().submit({
 			url: url

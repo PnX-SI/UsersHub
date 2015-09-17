@@ -24,7 +24,7 @@ application.peuplerApplications = function(record) {
 	var cols1 = [
 		{id : 'id_role', header: "Id", width: 50, sortable: true, dataIndex: 'id_role'}
 		,{header: "Role", width: 150, sortable: true, dataIndex: 'role'}
-		,{header: "Unité", width: 150, sortable: true, dataIndex: 'nom_unite'}
+		,{header: "UnitÃ©", width: 150, sortable: true, dataIndex: 'nom_unite'}
 	];
 	// declare the source Grid
     var firstGrid = new Ext.grid.GridPanel({
@@ -35,7 +35,7 @@ application.peuplerApplications = function(record) {
 		,enableDragDrop   : true
         ,stripeRows       : true
         ,autoExpandColumn : 'id_role'
-        ,title            : 'Rôles n\'ayant pas de droits dans l\''+nom_application
+        ,title            : 'RÃ´les n\'ayant pas de droits dans l\''+nom_application
 		,tbar 			 : [
 			new Ext.form.ComboBox({
 				id:'combo-filtre-unite-application',
@@ -79,7 +79,7 @@ application.peuplerApplications = function(record) {
 			})
             ,new Ext.Button({
 				iconCls: 'raz'
-				,tooltip: 'Afficher tous les rôles'
+				,tooltip: 'Afficher tous les rÃ´les'
 				,handler: function() {
 					firstGridStore.clearFilter();
 					Ext.getCmp('combo-filtre-unite-application').reset();
@@ -130,7 +130,7 @@ application.peuplerApplications = function(record) {
         columns: [
             {id : 'id_role', header: "Id", width: 50, dataIndex: 'id_role'}
 			,{header: "Role", width: 150, dataIndex: 'role'}
-			,{header: "Unité", width: 150, dataIndex: 'nom_unite'}
+			,{header: "UnitÃ©", width: 150, dataIndex: 'nom_unite'}
 			,{header: 'Droits',dataIndex: 'id_droit',width: 100
                 ,editor: new Ext.form.ComboBox({
 					name: 'id_droit',
@@ -164,7 +164,7 @@ application.peuplerApplications = function(record) {
 		//plugins:[rowActionsSupprimeRole],
         title: 'Affectation des droits pour l\''+nom_application
     });
-	//le submit qui n'envoi aucun paramètre car pas de champ dans le formulaire donc on passe tout en GET dans l'URL
+	//le submit qui n'envoi aucun paramÃ¨tre car pas de champ dans le formulaire donc on passe tout en GET dans l'URL
 	var saveDroits = function(){
 		var nb = secondGridStore.getCount();
 		var ar = new  Array();//un tableau de tableau
@@ -177,7 +177,7 @@ application.peuplerApplications = function(record) {
 			var v = [idUtilisateur,idDroit];//un tableau par ligne
 			ar.push(v);//le tableau de ligne rempli le tableau de tableau
 		}
-		var tab = ar.join("-"); //Les valeurs à envoyer php
+		var tab = ar.join("-"); //Les valeurs Ã  envoyer php
 		
 		var url = 'update_cor_role_droit_application.php?id_application='+id_application+'&valeurs='+tab+'&nom_application='+nom_application
 		if (compt==0){
@@ -190,7 +190,7 @@ application.peuplerApplications = function(record) {
 				}
 			});
 		}
-		else{Ext.Msg.alert('Attention !', 'Vous n\'avez pas attribué de droit à tous les utilisateurs');}
+		else{Ext.Msg.alert('Attention !', 'Vous n\'avez pas attribuÃ© de droit Ã  tous les utilisateurs');}
 	};
 
 	return{

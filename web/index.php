@@ -54,7 +54,7 @@ body {
   <p>&nbsp;</p>
   <table width="300" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0f0" valign="center" align="center">
 <tr>
-	<td colspan="2" align="center" bgcolor="#740160"><img src="images/pne_logo.png" alt="Parc national des Ecrins" border="1" style="border-color:#f0f0f0"></td>
+	<td colspan="2" align="center" bgcolor="#740160"><img src="images/main_logo.png" alt="Parc national des Ecrins" border="1" style="border-color:#f0f0f0"></td>
 </tr>
 </table>
  <table width="300" border="0" cellspacing="2" cellpadding="10" bgcolor="#f0f0f0" align="center">
