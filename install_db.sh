@@ -7,6 +7,7 @@ fi
 
 . config/settings.ini
 
+
 function database_exists () {
     # /!\ Will return false if psql can't list database. Edit your pg_hba.conf
     # as appropriate.
@@ -34,6 +35,7 @@ fi
 
 if ! database_exists $db_name
 then
+    mkdir -p log
     echo "Création de la base..."
     sudo -n -u postgres -s createdb -O $user_pg $db_name
     echo "Ajout du language plpgsql..."
