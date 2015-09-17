@@ -12,13 +12,20 @@ sed -i "s/$passe='.*$/$passe='$user_pg_pass';/" config/connecter.php
 sed -i "s/$base='.*$/$base='$db_name';/" config/connecter.php
 
 echo "Suppression des fichiers de log de l'installation..."
-rm log/*.log
+sudo rm log/*.log
 
 
-if [ ! -h /var/www/usershub/web ]; then
+APACHE_REP=/var/www/
+if /usr/sbin/apache2 -v | grep -q version.*2.4; then
+    echo apache 2.4
+	APACHE_REP=/var/www/html
+fi
+
+
+if [ ! -h $APACHE_REP/usershub ]; then
   echo "Configuration du répertoire web de l'application..."
   cd web
-  sudo ln -s ${PWD}/ /var/www/usershub/web
+  sudo ln -s ${PWD}/ $APACHE_REP/usershub
   cd ..
 else
   echo "Le répertoire de l'application exite déjà"
