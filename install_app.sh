@@ -5,11 +5,15 @@
 echo "Créer les fichiers de configurations en lien avec la base de données..."
 cp config/connecter.php.sample config/connecter.php
 cp config/dbconnexions.json.sample config/dbconnexions.json
+cp -n web/js/settings.js.sample web/js/settings.js.sample
+cp -n web/images/main_logo.png.sample web/images/main_logo.png
+cp -n web/images/bandeau_utilisateurs.png.sample web/images/bandeau_utilisateurs.png
+
 
 echo "Configuration du fichier config/connecter.php..."
-sed -i "s/$user='.*$/$user='$user_pg';/" config/connecter.php
-sed -i "s/$passe='.*$/$passe='$user_pg_pass';/" config/connecter.php
-sed -i "s/$base='.*$/$base='$db_name';/" config/connecter.php
+sed -i "s/user='.*$/user='$user_pg';/" config/connecter.php
+sed -i "s/passe='.*$/passe='$user_pg_pass';/" config/connecter.php
+sed -i "s/base='.*$/base='$db_name';/" config/connecter.php
 
 echo "Suppression des fichiers de log de l'installation..."
 sudo rm log/*.log
