@@ -2,3 +2,8 @@
 config/connecter.php
 config/dbconnexions.json
 config/settings.ini
+log/
+
+web/images/bandeau_utilisateurs.png
+web/images/main_logo.png
+web/js/settings.js
