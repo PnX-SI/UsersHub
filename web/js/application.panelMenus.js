@@ -73,13 +73,13 @@ var panelFormMenus = {
 	},{
 		text: 'Annuler'
 		,handler: function(){
-			var store = application.storeMenus;//récupération du dépot de données (store) à modifier
-			var id = Ext.getCmp('champ_id_initial-menu').getValue(); //valeur de la valeur initiale de l'id chargé
+			var store = application.storeMenus;//rÃ©cupÃ©ration du dÃ©pot de donnÃ©es (store) Ã  modifier
+			var id = Ext.getCmp('champ_id_initial-menu').getValue(); //valeur de la valeur initiale de l'id chargÃ©
 			var reg=new RegExp("^"+id+"$", "g");
-			var meslignes = store.query('id_menu', reg);//retourne un tableau mais avec une seule ligne, celle correspondant à l'id
+			var meslignes = store.query('id_menu', reg);//retourne un tableau mais avec une seule ligne, celle correspondant Ã  l'id
 			var record = meslignes.first(); //retourne l'enregistrement de la bonne ligne dans le store
 			Ext.getCmp('formmenus').getForm().reset();
-			loadFormMenus(record); //on recharge le formulaire depuis le store qui n'a pas changé
+			loadFormMenus(record); //on recharge le formulaire depuis le store qui n'a pas changÃ©
 		}
 	}]
 	,height:400
@@ -116,11 +116,11 @@ var supprimeMenu = function(record) {
 				gridPanelMenus.getSelectionModel().selectFirstRow();
 				Ext.ux.Toast.msg('Ok !', result.msg);
 			} else {
-				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas été supprimée.');
+				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas Ã©tÃ© supprimÃ©e.');
 			}
 		}
 		,failure: function() {
-			alert("pas supprimé, erreur");
+			alert("pas supprimÃ©, erreur");
 		}
 		,scope: this
 	});
@@ -149,10 +149,10 @@ var submitFormMenus = function() {
 						  msg = "Les informations saisies sont invalides";
 						  break;
 					  case Ext.form.Action.CONNECT_FAILURE:
-						  msg = "Problème de connexion au serveur";
+						  msg = "ProblÃ¨me de connexion au serveur";
 						  break;
 					  case Ext.form.Action.SERVER_INVALID:
-						  msg = "Erreur lors de l'enregistrement : vérifier les données saisies !";
+						  msg = "Erreur lors de l'enregistrement : vÃ©rifier les donnÃ©es saisies !";
 						  break;
 				}
 				Ext.Msg.show({

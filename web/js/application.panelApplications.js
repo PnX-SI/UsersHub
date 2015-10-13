@@ -20,7 +20,7 @@ var panelFormApplications = {
 			,allowNegative: false
 			,name: 'id_application'
 			,allowBlank:false
-			,blankText: 'L\'identifiant de l\'application est obligatoire.</br>il s\'agit de la clef primaire de la table "t_applications".</br>Ce doit être un nombre entier.'
+			,blankText: 'L\'identifiant de l\'application est obligatoire.</br>il s\'agit de la clef primaire de la table "t_applications".</br>Ce doit Ãªtre un nombre entier.'
 			,width:300
 		},{
 			fieldLabel: 'Nom de l\'application'
@@ -52,13 +52,13 @@ var panelFormApplications = {
 	},{
 		text: 'Annuler'
 		,handler: function(){
-			var store = application.storeApplications;//récupération du dépot de données (store) à modifier
-			var id = Ext.getCmp('champ_id_initial-application').getValue(); //valeur de la valeur initiale de l'id chargé
+			var store = application.storeApplications;//rÃ©cupÃ©ration du dÃ©pot de donnÃ©es (store) Ã  modifier
+			var id = Ext.getCmp('champ_id_initial-application').getValue(); //valeur de la valeur initiale de l'id chargÃ©
 			var reg=new RegExp("^"+id+"$", "g");
-			var meslignes = store.query('id_application', reg);//retourne un tableau mais avec une seule ligne, celle correspondant à l'id
+			var meslignes = store.query('id_application', reg);//retourne un tableau mais avec une seule ligne, celle correspondant Ã  l'id
 			var record = meslignes.first(); //retourne l'enregistrement de la bonne ligne dans le store
 			Ext.getCmp('formapplications').getForm().reset();
-			loadFormApplications(record); //on recharge le formulaire depuis le store qui n'a pas changé
+			loadFormApplications(record); //on recharge le formulaire depuis le store qui n'a pas changÃ©
 		}
 	}]
 	,height:400
@@ -68,7 +68,7 @@ var panelInfoApplications = new Ext.Panel({
 	,bodyStyle:'padding:25px; background:transparent'
 	,style:'margin-left:15px;'
 	,title: 'Informations'
-	,html : 'Cet onglet permet de gérer les différentes applications existantes.<br />L\'affectation des utilisateurs ou des groupes avec des droits se fait via l\'onglet "Gestion des utilisateurs". <br />Attention aux répercussions possiblement facheuses des modifications de l\'identifiant lors de la synchronisation vers les bases avec Talend.'
+	,html : 'Cet onglet permet de gÃ©rer les diffÃ©rentes applications existantes.<br />L\'affectation des utilisateurs ou des groupes avec des droits se fait via l\'onglet "Gestion des utilisateurs". <br />Attention aux rÃ©percussions possiblement facheuses des modifications de l\'identifiant lors de la synchronisation vers les bases avec Talend.'
 	,layout:'fit'
 	,region:'East'
 	,width:300
@@ -105,11 +105,11 @@ var supprimeApplication = function(record) {
 				gridPanelApplications.getSelectionModel().selectFirstRow();
 				Ext.ux.Toast.msg('Ok !', result.msg);
 			} else {
-				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas été supprimée.');
+				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas Ã©tÃ© supprimÃ©e.');
 			}
 		}
 		,failure: function() {
-			alert("pas supprimé, erreur");
+			alert("pas supprimÃ©, erreur");
 		}
 		,scope: this
 	});
@@ -139,10 +139,10 @@ var submitFormApplications = function() {
 						  msg = "Les informations saisies sont invalides";
 						  break;
 					  case Ext.form.Action.CONNECT_FAILURE:
-						  msg = "Problème de connexion au serveur";
+						  msg = "ProblÃ¨me de connexion au serveur";
 						  break;
 					  case Ext.form.Action.SERVER_INVALID:
-						  msg = "Erreur lors de l'enregistrement : vérifier les données saisies !";
+						  msg = "Erreur lors de l'enregistrement : vÃ©rifier les donnÃ©es saisies !";
 						  break;
 				}
 				Ext.Msg.show({

@@ -20,7 +20,7 @@ var panelFormDroits = {
 			,allowNegative: false
 			,name: 'id_droit'
 			,allowBlank:false
-			,blankText: 'L\'identifiant du droit est obligatoire.</br>il s\'agit de la clef primaire de la table "bib_droits".</br>Ce doit être un nombre entier.'
+			,blankText: 'L\'identifiant du droit est obligatoire.</br>il s\'agit de la clef primaire de la table "bib_droits".</br>Ce doit Ãªtre un nombre entier.'
 			,width:300
 		},{
 			fieldLabel: 'Nom du droit'
@@ -52,13 +52,13 @@ var panelFormDroits = {
 	},{
 		text: 'Annuler'
 		,handler: function(){
-			var store = application.storeDroits;//récupération du dépot de données (store) à modifier
-			var id = Ext.getCmp('champ_id_initial-droit').getValue(); //valeur de la valeur initiale de l'id chargé
+			var store = application.storeDroits;//rÃ©cupÃ©ration du dÃ©pot de donnÃ©es (store) Ã  modifier
+			var id = Ext.getCmp('champ_id_initial-droit').getValue(); //valeur de la valeur initiale de l'id chargÃ©
 			var reg=new RegExp("^"+id+"$", "g");
-			var meslignes = store.query('id_droit', reg);//retourne un tableau mais avec une seule ligne, celle correspondant à l'id
+			var meslignes = store.query('id_droit', reg);//retourne un tableau mais avec une seule ligne, celle correspondant Ã  l'id
 			var record = meslignes.first(); //retourne l'enregistrement de la bonne ligne dans le store
 			Ext.getCmp('formdroits').getForm().reset();
-			loadFormDroits(record); //on recharge le formulaire depuis le store qui n'a pas changé
+			loadFormDroits(record); //on recharge le formulaire depuis le store qui n'a pas changÃ©
 		}
 	}]
 	,height:400
@@ -91,11 +91,11 @@ var supprimeDroit = function(record) {
 				gridPanelDroits.getSelectionModel().selectFirstRow();
 				Ext.ux.Toast.msg('Ok !', result.msg);
 			} else {
-				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas été supprimée.');
+				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'enregistrement n\'a pas Ã©tÃ© supprimÃ©e.');
 			}
 		}
 		,failure: function() {
-			alert("pas supprimé, erreur");
+			alert("pas supprimÃ©, erreur");
 		}
 		,scope: this
 	});
@@ -124,10 +124,10 @@ var submitFormDroits = function() {
 						  msg = "Les informations saisies sont invalides";
 						  break;
 					  case Ext.form.Action.CONNECT_FAILURE:
-						  msg = "Problème de connexion au serveur";
+						  msg = "ProblÃ¨me de connexion au serveur";
 						  break;
 					  case Ext.form.Action.SERVER_INVALID:
-						  msg = "Erreur lors de l'enregistrement : vérifier les données saisies !";
+						  msg = "Erreur lors de l'enregistrement : vÃ©rifier les donnÃ©es saisies !";
 						  break;
 				}
 				Ext.Msg.show({

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Language" content="fr" />
-	<meta http-equiv="Content-type" content="text/html; charset=LATIN1" />
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Gestion des utilisateurs</title>
 	<script src="js/ext-3.2.0/adapter/ext/ext-base.js" type="text/javascript"></script>
 	<script src="js/ext-3.2.0/ext-all.js"  type="text/javascript"></script>
@@ -34,6 +34,7 @@
 	<script src="js/Ext.ux.TabCloseMenu.js"  type="text/javascript"></script>
 	<script src="js/RowExpander.js"  type="text/javascript"></script>
 	<script src="js/Ext.ux.Toast.js"  type="text/javascript"></script>
+	<script src="js/settings.js"  type="text/javascript"></script>
 </head>
 <body>
 </body>

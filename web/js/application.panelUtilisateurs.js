@@ -16,7 +16,7 @@ var comboUnite = new Ext.form.ComboBox({
 	hiddenName:'id_unite',
 	valueField: 'id_unite',
 	allowBlank:false,
-	blankText: 'L\'unité est obligatoire. Choisir "autres" dans la liste si besoin.',
+	blankText: 'L\'unitÃ© est obligatoire. Choisir "autres" dans la liste si besoin.',
 	typeAhead: true,
 	mode: 'local',
 	triggerAction: 'all',
@@ -59,7 +59,7 @@ Ext.apply(Ext.form.VTypes, {
     }
     return true;
   },
-  passwordText: 'Les deux mots de passe entrés ne sont pas identiques'
+  passwordText: 'Les deux mots de passe entrÃ©s ne sont pas identiques'
 });
 var panelFormUtilisateurs = {
 	id:'formutilisateurs'
@@ -88,11 +88,11 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = Ext.getCmp('formutilisateurs').getForm().findField('prenom_role').getValue()+'.'+textField.getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@ecrins-parcnational.fr');
+					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
 				}
 			}
 		},{
-			fieldLabel: 'Prénom '
+			fieldLabel: 'PrÃ©nom '
 			,name: 'prenom_role'
 			,allowBlank:true
 			,width:300
@@ -101,7 +101,7 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = textField.getValue()+'.'+Ext.getCmp('formutilisateurs').getForm().findField('nom_role').getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@ecrins-parcnational.fr');
+					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
 				}
 			}
 		},{
@@ -136,7 +136,7 @@ var panelFormUtilisateurs = {
 			xtype: 'label'
 			,id: 'label-identification'
 			,cls: 'label-bold'
-			,html: '<br/>----------------------------- Paramètres d\'identification ----------------------------- <br /><br />'
+			,html: '<br/>----------------------------- ParamÃ¨tres d\'identification ----------------------------- <br /><br />'
 		},{
 			id:'champ_identifiant'
 			,name: 'identifiant'
@@ -155,7 +155,7 @@ var panelFormUtilisateurs = {
 			,inputType: 'password'
 			//,minLength: 6
 			,maxLength: 20
-			,minLengthText: 'Le mot de passe doit avoir au moins 6 caractères.'
+			,minLengthText: 'Le mot de passe doit avoir au moins 6 caractÃ¨res.'
 		},{
 			id:'champ_mdp2'
 			,name: 'pass2'
@@ -164,7 +164,7 @@ var panelFormUtilisateurs = {
 			,inputType: 'password'
 			//,minLength: 6
 			,maxLength: 20
-			,minLengthText: 'Le mot de passe doit avoir au moins 6 caractères.'
+			,minLengthText: 'Le mot de passe doit avoir au moins 6 caractÃ¨res.'
 			,vtype: 'password' 
 			,initialPassField: 'champ_mdp1'
 
@@ -197,13 +197,13 @@ var panelFormUtilisateurs = {
 	},{
 		text: 'Annuler'
 		,handler: function(){
-			var store = application.layout.storeUtilisateurs;//récupération du dépot de données (store) à modifier
-			var id = Ext.getCmp('champ_id_initial-utilisateur').getValue(); //valeur de la valeur initiale de l'id chargé
+			var store = application.layout.storeUtilisateurs;//rÃ©cupÃ©ration du dÃ©pot de donnÃ©es (store) Ã  modifier
+			var id = Ext.getCmp('champ_id_initial-utilisateur').getValue(); //valeur de la valeur initiale de l'id chargÃ©
 			var reg=new RegExp("^"+id+"$", "g");
-			var meslignes = store.query('id_role', reg);//retourne un tableau mais avec une seule ligne, celle correspondant à l'id
+			var meslignes = store.query('id_role', reg);//retourne un tableau mais avec une seule ligne, celle correspondant Ã  l'id
 			var record = meslignes.first(); //retourne l'enregistrement de la bonne ligne dans le store
 			Ext.getCmp('formutilisateurs').getForm().reset();
-			loadFormUtilisateurs(record); //on recharge le formulaire depuis le store qui n'a pas changé
+			loadFormUtilisateurs(record); //on recharge le formulaire depuis le store qui n'a pas changÃ©
 		}
 	}]
 	
@@ -258,11 +258,11 @@ var supprimeUtilisateur = function(record) {
                 if(Ext.getCmp('grid-user-groupes-gauche')){Ext.getCmp('grid-user-groupes-gauche').getStore().reload();}
 				Ext.ux.Toast.msg('Ok !', result.msg);
 			} else {
-				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'utilisateur n\'a pas été supprimé.');
+				Ext.Msg.alert('Attention', 'Une erreur s\'est produite.</br>L\'utilisateur n\'a pas Ã©tÃ© supprimÃ©.');
 			}
 		}
 		,failure: function() {
-			alert("pas supprimé, erreur");
+			alert("pas supprimÃ©, erreur");
 		}
 		,scope: this
 	});
@@ -297,10 +297,10 @@ var submitFormUtilisateurs = function() {
 						  msg = "Les informations saisies sont invalides";
 						  break;
 					  case Ext.form.Action.CONNECT_FAILURE:
-						  msg = "Problème de connexion au serveur";
+						  msg = "ProblÃ¨me de connexion au serveur";
 						  break;
 					  case Ext.form.Action.SERVER_INVALID:
-						  msg = "Erreur lors de l'enregistrement : vérifier les données saisies !";
+						  msg = "Erreur lors de l'enregistrement : vÃ©rifier les donnÃ©es saisies !";
 						  break;
 				}
 				Ext.Msg.show({
