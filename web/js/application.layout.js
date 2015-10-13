@@ -845,9 +845,9 @@ application.layout = function() {
 		,bbar: new Ext.Toolbar({
 			items: [
 			   '->',
-			   '&copy; Parc national des Ecrins',
+			   '&copy; Parc national des Ecrins - 2015',
 			   '-',
-			   'Réalisation Parc national des Ecrins - 2015 '
+			   'Version ' + version
                ,{
                     text: 'Déconnexion'
                     ,iconCls: 'disconnect'
