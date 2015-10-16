@@ -1,6 +1,6 @@
 <?php 
 include "verification.php";
-//récupération des variables passées par l'application
+//rÃ©cupÃ©ration des variables passÃ©es par l'application
 $id_role = $_GET['id_role'];
 $nom_role =pg_escape_string($_GET['nom_role']);
 if(isset($_GET['prenom_role'])){$prenom_role = pg_escape_string($_GET['prenom_role']);}else{$prenom_role= null;}
@@ -18,7 +18,7 @@ if(isset($_GET['remarques'])){
     $remarques= null;
 }
 $action = $_GET['action'];
-//-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
+//-----------crÃ©ation des connections pour mise Ã  jour sur les diffÃ©rentes bases du fichier dbconnexions.json------------
 $fp = fopen ("../config/dbconnexions.json", "r");
 $contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
@@ -30,9 +30,10 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
+        $connect_port = $database['port'];
         //connexion sur chacune des bases 
-		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
-			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass");
+		if ($connect_host<>"" OR $connect_port<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
+			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
             if($action=="insert"){ //ajout 
               if ($id_role == '' ){
                 $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass)
@@ -49,7 +50,7 @@ foreach ($json as $array) {
               }
               $txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; ajout&eacute;.<br />";
             }
-            //Sinon, c'est un update ou delete donc on vérifie que le role existe dans la bd
+            //Sinon, c'est un update ou delete donc on vÃ©rifie que le role existe dans la bd
             if($action=="update" OR $action=="delete"){
                 $sql = "SELECT id_role FROM utilisateurs.t_roles WHERE id_role = $id_role";
                 $res = pg_query($sql);
@@ -86,7 +87,7 @@ foreach ($json as $array) {
                 //si le role n'existe pas
                 else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur :  le role '.$id_role. ' n\\\'existe pas dans cette base.</span><br />';}   
             }
-            //-- Execution des commandes sql complémentaires
+            //-- Execution des commandes sql complÃ©mentaires
             if ((isset($database['autresactions'])) && (isset($database['autresactions']['role_'.$action]))) {
               $sql = str_replace('$id',$id_role , $database['autresactions']['role_'.$action]);
               $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. '.$action.' '.$db_fun_name.' '.$sql.'" }') ;
@@ -95,7 +96,7 @@ foreach ($json as $array) {
             pg_close($dbconn);//fermeture de la connexion pour pouvoir en ouvrir une autre dans la boucle
         }
 		else{$txt="connection impossible &agrave; l\'".$db_fun_name.".<br />";}
-		$msg=$msg.$txt;//On complète le message à afficher dans l'appli utilisateur avant de boucler
+		$msg=$msg.$txt;//On complÃ¨te le message Ã  afficher dans l'appli utilisateur avant de boucler
 	}
 }
 header('Content-type: text/html');
