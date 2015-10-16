@@ -1,11 +1,11 @@
 <?php 
 include "verification.php";
 $id_application =  $_GET['id_application'];
-//correction des magic_quotes_gpc (protection des chaînes de caractères)
+//correction des magic_quotes_gpc (protection des chaÃ®nes de caractÃ¨res)
 $nom_application = pg_escape_string($_GET['nom_application']);
 $desc_application = pg_escape_string($_GET['desc_application']);
 $action = $_GET['action'];
-//-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
+//-----------crÃ©ation des connections pour mise Ã  jour sur les diffÃ©rentes bases du fichier dbconnexions.json------------
 $fp = fopen ("../config/dbconnexions.json", "r");
 $contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
@@ -17,9 +17,10 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
+        $connect_port = $database['port'];
         //connexion sur chacune des bases 
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
-			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
+			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
 			if($action=="update"){ //Update d'une application existante
 				$sql = "Update utilisateurs.t_applications 
 				set id_application = '$id_application', 
@@ -48,7 +49,7 @@ foreach ($json as $array) {
     }
 }// fin de bouclage sur les bases
 
-//retour json à l'application utilisateur
+//retour json Ã  l'application utilisateur
 header('Content-type: text/html');
 echo "{success: true, msg:'".$msg."'}";
 ?>
