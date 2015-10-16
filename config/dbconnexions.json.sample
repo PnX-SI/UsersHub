@@ -7,6 +7,7 @@
             ,"dbname":"usershubdb"
             ,"user":"usershubadmin"
             ,"pass":"monpassachanger"
+            ,"port":5432
         }
         ,{
             "dbfunname":"Geonature"
@@ -14,6 +15,7 @@
             ,"dbname":"geonaturedb"
             ,"user":"geonatadmin"
             ,"pass":"monpassachanger"
+            ,"port":5432
         }
     ]
 }
