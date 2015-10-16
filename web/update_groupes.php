@@ -1,11 +1,11 @@
 <?php 
 include "verification.php";
 $id_groupe =  $_GET['id_groupe'];
-//correction des magic_quotes_gpc (protection des chaînes de caractères)
+//correction des magic_quotes_gpc (protection des chaÃ®nes de caractÃ¨res)
 $nom_groupe =pg_escape_string($_GET['nom_groupe']);
 $desc_groupe =pg_escape_string($_GET['desc_groupe']);
 $action = $_GET['action'];
-//-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
+//-----------crÃ©ation des connections pour mise Ã  jour sur les diffÃ©rentes bases du fichier dbconnexions.json------------
 $fp = fopen ("../config/dbconnexions.json", "r");
 $contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
@@ -17,10 +17,11 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
+        $connect_port = $database['port'];
         //connexion sur chacune des bases 
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
-			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
-			//exécution de la mise à jour dans toutes les bases 
+			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
+			//exÃ©cution de la mise Ã  jour dans toutes les bases 
 			if($action=="update"){ //Update d'un groupe existant
 				$sql = "Update utilisateurs.t_roles 
 				set nom_role = '$nom_groupe',
@@ -51,7 +52,7 @@ foreach ($json as $array) {
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
 				$txt = $db_fun_name." - Le groupe \"".$nom_groupe."\" a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
-      //-- Execution des commandes sql complémentaires
+      //-- Execution des commandes sql complÃ©mentaires
       if ((isset($database['autresactions'])) && (isset($database['autresactions']['groupe_'.$action]))) {
         $sql = str_replace('$id',$id_groupe , $database['autresactions']['groupe_'.$action]);
         $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions. '.$action.' '.$db_fun_name.'" }') ;
