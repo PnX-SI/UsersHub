@@ -9,7 +9,7 @@ if($_GET['valeurs']!= null){
 else{
 	$msg= "Attention ! Aucun role s&eacute;lectionn&eacute; ! <br/>";
 }
-//-----------crÈation des connections pour mise ‡ jour sur les diffÈrentes bases du fichier dbconnexions.json------------
+//-----------cr√©ation des connections pour mise √† jour sur les diff√©rentes bases du fichier dbconnexions.json------------
 $fp = fopen ("../config/dbconnexions.json", "r");
 $contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
@@ -21,14 +21,15 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
+        $connect_port = $databse['port'];
         //connexion sur chacune des bases 
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
-			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass");
+			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
 			if($id_application>0){
-				//on supprime d'abord les valeurs du groupe dÈj‡ enregistrÈ
+				//on supprime d'abord les valeurs du groupe d√©j√† enregistr√©
 				$sql = "delete from utilisateurs.cor_role_droit_application WHERE id_application=$id_application";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.'"}') ;
-				//puis on recrÈÈ les nouveaux
+				//puis on recr√©√© les nouveaux
 				foreach ($array_valeurs as $mes_ids){
 					$array_ids = explode(",",$mes_ids);
 					$role=$array_ids[0];
@@ -37,7 +38,7 @@ foreach ($json as $array) {
 					values( $id_application, $role, $id_droit)";
 					$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon.'.$db_fun_name.'"}') ;
 				}
-        //-- Execution des commandes sql complÈmentaires
+        //-- Execution des commandes sql compl√©mentaires
         if ((isset($database['autresactions'])) && (isset($database['autresactions']['cor_droits']))) {
           $sql = str_replace('$id',$id_application , $database['autresactions']['cor_droits']);
           $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon autres actions.'.$db_fun_name.' "  }') ;
