@@ -3,7 +3,7 @@
     $tab = array( CHR(13) => " ", CHR(10) => " " );
     
 	$sqliste = "SELECT * FROM utilisateurs.t_applications WHERE id_application <> 1;";
-	$result = pg_query($sqliste) or die ('Échec requête : ' . pg_last_error()) ;
+	$result = pg_query($sqliste) or die ('Ã‰chec requÃªte : ' . pg_last_error()) ;
 	$nb = pg_numrows($result);
 		$json = "[";
 		$i = 0;
@@ -15,7 +15,8 @@
 			$connect_database = $val['connect_database'];
 			$connect_user = $val['connect_user'];
 			$connect_pass = $val['connect_pass'];
-			$text = "{id_application:".$id_application.",nom_application:'".$nom_application."',desc_application:'".$desc_application."',connect_host:'".$connect_host."',connect_database:'".$connect_database."',connect_user:'".$connect_user."',connect_pass:'".$connect_pass."'}";
+			$connect_port = $val['connect_port'];
+			$text = "{id_application:".$id_application.",nom_application:'".$nom_application."',desc_application:'".$desc_application."',connect_host:'".$connect_host."',connect_port:'".$connect_port."',connect_database:'".$connect_database."',connect_user:'".$connect_user."',connect_pass:'".$connect_pass."'}";
 			$json = $json.$text;
 			$i++;
 			if ($i > 0 and $i!=$nb) {

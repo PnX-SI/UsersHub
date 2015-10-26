@@ -1,11 +1,11 @@
 <?php
 include "verification.php";
 $id_droit =  $_GET['id_droit'];
-//correction des magic_quotes_gpc (protection des chaînes de caractères)
+//correction des magic_quotes_gpc (protection des chaÃ®nes de caractÃ¨res)
 $nom_droit = pg_escape_string($_GET['nom_droit']);
 $desc_droit = pg_escape_string($_GET['desc_droit']);
 $action = $_GET['action'];
-//-----------création des connections pour mise à jour sur les différentes bases du fichier dbconnexions.json------------
+//-----------crÃ©ation des connections pour mise Ã  jour sur les diffÃ©rentes bases du fichier dbconnexions.json------------
 $fp = fopen ("../config/dbconnexions.json", "r");
 $contenu_du_fichier = fread ($fp, filesize('../config/dbconnexions.json'));
 fclose ($fp);
@@ -17,9 +17,10 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
+        $connect_port = $database['port'];
         //connexion sur chacune des bases 
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
-			$dbconn = pg_connect("host=$connect_host dbname=$connect_dbname user=$connect_user password=$connect_pass");
+			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
 			if($action=="update"){ //Update d'un droit existant
 				$sql = "Update utilisateurs.bib_droits 
 				set id_droit = '$id_droit', 

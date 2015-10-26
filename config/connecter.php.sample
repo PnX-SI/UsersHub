@@ -4,8 +4,9 @@
 	$user='geonatadmin';
 	$passe='monpassachanger'; 
 	$base='usershubdb';
+	$port=5432;
     
-	$dbconn = pg_connect("host=$serveur dbname=$base user=$user password=$passe") 
+	$dbconn = pg_connect("host=$serveur port=$port dbname=$base user=$user password=$passe") 
 or die('Connexion impossible : ' . pg_last_error());  
    
   
