@@ -5,13 +5,15 @@ CHANGELOG
 next
 ----
 
-## Changements
+# Changements
+
+* ajout du port postgres dans les paramètres de configuration (by Claire Lagaye PN Vanoise)
 
  
 1.0.0 (2015-10-13)
 ------------------
 
-* version stabilis�e avec script d'installation
+* version stabilisée avec script d'installation
 
 
 0.1.0 (2015-01-28)
