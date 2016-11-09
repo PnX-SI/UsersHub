@@ -547,7 +547,9 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES ('Service Communication', '', '', '', '', NULL, NULL, 7);
 INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES ('Conseil scientifique', '', '', '', NULL, NULL, NULL, 8);
 INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES ('Conseil d''administration', '', '', '', NULL, NULL, NULL, 9);
+INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES ('Partenaire fournisseur', NULL, NULL, NULL, NULL, NULL, NULL, 10);
 INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES ('Autres', NULL, NULL, NULL, NULL, NULL, NULL, 99);
+
 -- 
 -- TOC entry 3278 (class 0 OID 17837)
 -- Dependencies: 261
@@ -556,6 +558,7 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (1, 'application utilisateurs', 'application permettant d''administrer la présente base de données.');
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (2, 'Taxhub', 'application permettant d''administrer la liste des taxons.');
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.');
+SELECT pg_catalog.setval('t_applications_id_application_seq', 15, true);
 
 -- 
 -- TOC entry 3255 (class 0 OID 17445)
@@ -564,6 +567,9 @@ INSERT INTO t_applications (id_application, nom_application, desc_application) V
 -- 
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (true, 20002, NULL, 'grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'monpn', 99, true, NULL, NULL, NULL, NULL,'groupe test');
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', '', 'Parc national des Ecrins', 1, true, NULL, NULL, NULL, 99,'utilisateur test à modifier');
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (false, 3, 'partenaire', 'Partenaire', 'test', NULL, '5bd40a8524882d75f3083903f2c912fc', '', 'Autre', 99, true, NULL, NULL, NULL, 99,'utilisateur test à modifier ou supprimer');
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES (false, 2, 'agent', 'Agent', 'test', NULL, 'b33aed8f3134996703dc39f9a7c95783', '', 'Parc national des Ecrins', 1, true, NULL, NULL, NULL, 99,'utilisateur test à modifier ou supprimer');
+
 -- 
 -- TOC entry 3277 (class 0 OID 17831)
 -- Dependencies: 259
@@ -573,6 +579,9 @@ INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUE
 INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUES (1, 6, 2);
 INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUES (1, 6, 14);
 INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUES (20002, 3, 14);
+INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUES (2, 2, 14);
+INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUES (3, 1, 14);
+
 -- 
 -- TOC entry 3279 (class 0 OID 17845)
 -- Dependencies: 263
@@ -580,6 +589,8 @@ INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) VALUE
 -- 
 INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) VALUES (9, 'faune - Observateurs', 'listes des observateurs faune', 14);
 INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) VALUES (10, 'flore - Observateurs', 'Liste des observateurs flore', 14);
+SELECT pg_catalog.setval('t_menus_id_menu_seq', 11, true);
+
 -- 
 -- TOC entry 3253 (class 0 OID 17437)
 -- Dependencies: 186
@@ -587,6 +598,7 @@ INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) VALUES (10, '
 -- 
 INSERT INTO cor_role_menu (id_role, id_menu) VALUES (1, 10);
 INSERT INTO cor_role_menu (id_role, id_menu) VALUES (1, 9);
+
 -- 
 -- TOC entry 3254 (class 0 OID 17440)
 -- Dependencies: 187
@@ -600,4 +612,3 @@ INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) VALUES (20002, 1);
 --
 -- PostgreSQL database dump complete
 --
-
