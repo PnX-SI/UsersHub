@@ -32,6 +32,11 @@ application.peuplerApplications = function(record) {
 		,ddGroup          : 'secondGridDDGroup'
         ,store            : firstGridStore
         ,columns          : cols1
+        ,viewConfig: {
+            getRowClass: function(record, index) {
+                return record.get('groupe')=='f' ? '' : 'groups';
+            }
+        } 
 		,enableDragDrop   : true
         ,stripeRows       : true
         ,autoExpandColumn : 'id_role'
@@ -97,6 +102,7 @@ application.peuplerApplications = function(record) {
 			,{name: 'role', mapping : 'role'}
 			,{name: 'nom_unite'}
 			,{name: 'id_droit'}
+			,{name: 'groupe'}
 		]
 		//,sortInfo: {field: 'role',direction: 'ASC'}
 		,autoLoad:true
@@ -156,6 +162,11 @@ application.peuplerApplications = function(record) {
 		ddGroup: 'firstGridDDGroup',
         store: secondGridStore,
         cm: cm,
+        viewConfig: {
+            getRowClass: function(record, index) {
+                return record.get('groupe')=='f' ? '' : 'groups';
+            }
+        },
 		enableDragDrop: true,
         stripeRows: true,
 		sm: new Ext.grid.RowSelectionModel({singleSelect:true}),

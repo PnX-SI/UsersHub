@@ -200,3 +200,7 @@ input.x-tree-node-cb {
 .label-bold {
 	font-weight: bold;
 }
+
+.groups {
+    background-color: #ccc;
+}

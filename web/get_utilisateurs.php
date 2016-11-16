@@ -14,7 +14,7 @@ $panel = $_GET['panel'];
 $role = $_GET['role'];
 
 if (isset($mon_groupe)){
-	$sqliste = "SELECT u.id_role, u.nom_role, u.prenom_role, c.id_role_groupe, b.nom_unite, o.nom_organisme FROM utilisateurs.cor_roles c 
+	$sqliste = "SELECT u.id_role, u.nom_role, u.prenom_role, u.groupe, c.id_role_groupe, b.nom_unite, o.nom_organisme FROM utilisateurs.cor_roles c 
 				JOIN utilisateurs.t_roles u ON u.id_role = c.id_role_utilisateur
 				JOIN utilisateurs.bib_unites b ON b.id_unite = u.id_unite
 				LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
@@ -29,7 +29,8 @@ if (isset($mon_groupe)){
 		$role = str_replace("'","\'",$val['nom_role'])." ".str_replace("'","\'",$val['prenom_role']);
 		$nom_unite = str_replace("'","\'",$val['nom_unite']);
 		$nom_organisme = str_replace("'","\'",$val['nom_organisme']);
-		$text = "{id_role:".$id_role.",role:'".$role."',nom_unite:'".$nom_unite."',nom_organisme:'".$nom_organisme."'}";
+        $groupe = $val['groupe'];
+		$text = "{id_role:".$id_role.",role:'".$role."',groupe:'".$groupe."',nom_unite:'".$nom_unite."',nom_organisme:'".$nom_organisme."'}";
 		$json = $json.$text;
 		$i++;
 		if ($i > 0 and $i!=$nb) {
