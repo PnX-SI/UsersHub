@@ -73,7 +73,7 @@ application = function() {
 				url: 'get_menus.php'
 				,method: 'GET'
 				,fields: ['id_menu', 'nom_menu', 'desc_menu', 'id_application']
-				,sortInfo: {field: 'id_menu',direction: 'ASC'}
+				,sortInfo: {field: 'nom_menu',direction: 'ASC'}
 				,autoLoad:true
 			});
         }
