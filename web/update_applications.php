@@ -28,19 +28,19 @@ foreach ($json as $array) {
 				desc_application = '$desc_application'
 				WHERE id_application = $id_application";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'application ".$nom_application." a &eacute;t&eacute mis &agrave; jour.<br />";
+				$txt = $db_fun_name." - L\'application ".addslashes($nom_application)." a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'une nouvelle application
 				$sql = "INSERT INTO utilisateurs.t_applications
 						VALUES('$id_application','$nom_application','$desc_application')";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'application ".$nom_application." a &eacute;t&eacute; ajout&eacute;.<br />";
+				$txt = $db_fun_name." - L\'application ".addslashes($nom_application)." a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //suppression d'une nouvelle application
 				$sql = "DELETE FROM utilisateurs.t_applications
 						WHERE id_application = $id_application";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'application ".$nom_application." a &eacute;t&eacute; supprim&eacute;.<br />";
+				$txt = $db_fun_name." - L\'application ".addslashes($nom_application)." a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
 			pg_close($dbconn);
 		}

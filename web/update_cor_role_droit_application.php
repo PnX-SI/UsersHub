@@ -47,7 +47,7 @@ foreach ($json as $array) {
         else {
           $txt_autre = '';
         }
-				$txt = $db_fun_name." - Les droits de l\'".$nom_application." ont &eacute;t&eacute mis &agrave; jour.<br />".$txt_autre;
+				$txt = $db_fun_name." - Les droits de l\'".addslashes($nom_application)." ont &eacute;t&eacute mis &agrave; jour.<br />".$txt_autre;
 			}
 			pg_close($dbconn);
 		}

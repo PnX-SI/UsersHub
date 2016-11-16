@@ -29,19 +29,19 @@ foreach ($json as $array) {
 				id_application = $id_application
 				WHERE id_menu = $id_menu";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le menu \"".$nom_menu."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+				$txt = $db_fun_name." - Le menu \"".addslashes($nom_menu)."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'un nouveau menu
 				$sql = "INSERT INTO utilisateurs.t_menus (nom_menu,desc_menu,id_application)
 						VALUES('$nom_menu','$desc_menu',$id_application )";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le menu \"".$nom_menu."\" a &eacute;t&eacute; ajout&eacute;.<br />";
+				$txt = $db_fun_name." - Le menu \"".addslashes($nom_menu)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //ajout d'un nouveau menu
 				$sql = "DELETE FROM utilisateurs.t_menus
 						WHERE id_menu = $id_menu";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le menu \"".$nom_menu."\" a &eacute;t&eacute; supprim&eacute;.<br />";
+				$txt = $db_fun_name." - Le menu \"".addslashes($nom_menu)."\" a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
 			pg_close($dbconn);
 		}

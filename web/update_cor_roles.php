@@ -41,7 +41,7 @@ if($_GET['roles']!= null){
                     else {
                       $txt_autre = '';
                     }
-                    $txt = $db_fun_name." - Le contenu du groupe \"".$nom_groupe."\" a &eacute;t&eacute; mis &agrave; jour.<br />".$txt_autre;
+                    $txt = $db_fun_name." - Le contenu du groupe \"".addslashes($nom_groupe)."\" a &eacute;t&eacute; mis &agrave; jour.<br />".$txt_autre;
                 }
                 pg_close($dbconn);
             }
