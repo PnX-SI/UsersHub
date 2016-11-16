@@ -88,7 +88,7 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = Ext.getCmp('formutilisateurs').getForm().findField('prenom_role').getValue()+'.'+textField.getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
+					if(emailSuffix){Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);}
 				}
 			}
 		},{
@@ -101,7 +101,7 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = textField.getValue()+'.'+Ext.getCmp('formutilisateurs').getForm().findField('nom_role').getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
+					if(emailSuffix){Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);}
 				}
 			}
 		},{
