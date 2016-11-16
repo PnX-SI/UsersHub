@@ -21,7 +21,7 @@ foreach ($json as $array) {
         $connect_dbname = $database['dbname'];
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
-        $connect_port = $databse['port'];
+        $connect_port = $database['port'];
         //connexion sur chacune des bases 
 		if ($connect_host<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
 			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
