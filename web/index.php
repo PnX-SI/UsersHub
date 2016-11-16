@@ -1,4 +1,9 @@
 <?php
+$erreur='';
+if ($_GET['verif']){
+    $msg='Erreur d\'authentification ou droits insuffisants';
+    $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;'.$msg;
+}
 if ($_POST['button'] == "CONNEXION"){
 	$login = $_POST['flogin'];
 	$password = md5($_POST['fpassword']);
@@ -21,7 +26,7 @@ if ($_POST['button'] == "CONNEXION"){
 		}
 		
 		else{
-		$erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Login ou mot de passe incorrect';
+            $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Erreur d\'authentification';
 		}
 }
 else{

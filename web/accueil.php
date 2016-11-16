@@ -1,4 +1,4 @@
-<? include "verification.php";?>
+<?php include "verification.php";?>
 <html>
 <head>
 	<meta http-equiv="Content-Language" content="fr" />

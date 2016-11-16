@@ -22,7 +22,7 @@ $verif = pg_numrows($result);
 
 if ($verif != "1"){
 	//redirection vers la page d'accueil
-	header("Location: index.php");
+	header("Location: index.php?verif='non'");
 }
 else{
 	while ($val = pg_fetch_assoc($result)){
