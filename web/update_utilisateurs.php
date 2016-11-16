@@ -13,7 +13,7 @@ if(isset($_GET['pass']) AND $_GET['pass']<>''){$pass=md5($_GET['pass']);}else{$p
 if(isset($_GET['supprpass'])){$supprpass='true';}else{$supprpass= 'false';}
 if(isset($_GET['pn'])){$pn='true';}else{$pn= 'false';}
 if(isset($_GET['remarques'])){
-    $remarques=str_replace( array( CHR(10), CHR(13), "\n", "\r" ), array( ' - ',' - ',' - ',' - '), $_GET['remarques'] );
+    $remarques=str_replace( array( CHR(10), CHR(13), "\n", "\r" ), array( ' - ',' - ',' - ',' - '), pg_escape_string($_GET['remarques']));
 }else{
     $remarques= null;
 }
