@@ -7,7 +7,7 @@ UsersHub est une application web permettant de regrouper l'ensemble des utilisat
 
 Elle permet de gérer de manière centralisée **des utilisateurs** et de les placer dans **des groupes** ; de créer **différents niveaux de droits** et de les affecter aux utilisateurs et/ou aux groupes d'utilisateurs pour chacune de vos **applications**. Elle permet également de gérer **des organismes**, **des unités** et **des listes déroulantes** regroupant des utilisateurs ou des groupes d'utilisateurs.
 
-Compatible avec GeoNature (https://github.com/PnEcrins/GeoNature) et Geotrek (https://github.com/makinacorpus/Geotrek).
+Compatible avec GeoNature (https://github.com/PnEcrins/GeoNature), TaxHub (https://github.com/PnX-SI/TaxHub), Police (https://github.com/PnEcrins/Police) et Geotrek (https://github.com/GeotrekCE/Geotrek-admin).
 
 Présentation
 -----------
@@ -44,5 +44,5 @@ License
 * Copyright (c) 2015 - Parc National des Écrins
 
 
-.. image:: http://pnecrins.github.io/GeoNature/img/logo-pne.jpg
+.. image:: http://geonature.fr/img/logo-pne.jpg
     :target: http://www.ecrins-parcnational.fr
