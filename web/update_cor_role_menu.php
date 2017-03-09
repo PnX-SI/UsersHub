@@ -44,7 +44,7 @@ foreach ($json as $array) {
         else {
           $txt_autre = '';
         }
-				$txt = $db_fun_name." - Le contenu du menu \"".$nom_menu."\" a &eacute;t&eacute mis &agrave; jour.<br />".$txt_autre ;
+				$txt = $db_fun_name." - Le contenu du menu \"".addslashes($nom_menu)."\" a &eacute;t&eacute mis &agrave; jour.<br />".$txt_autre ;
 			}
 			pg_close($dbconn);
 		}

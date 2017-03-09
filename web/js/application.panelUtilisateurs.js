@@ -5,7 +5,7 @@ var storeUnites = new Ext.data.JsonStore({
 	url: 'get_unites.php'
 	,method: 'GET'
 	,fields: ['id_unite', 'nom_unite']
-	,sortInfo: {field: 'id_unite',direction: 'ASC'}
+	,sortInfo: {field: 'nom_unite',direction: 'ASC'}
 	,autoLoad:true
 });
 var comboUnite = new Ext.form.ComboBox({
@@ -30,7 +30,7 @@ var storeOrganismes = new Ext.data.JsonStore({
 	url: 'get_organismes.php'
 	,method: 'GET'
 	,fields: ['id_organisme', 'nom_organisme']
-	,sortInfo: {field: 'id_organisme',direction: 'ASC'}
+	,sortInfo: {field: 'nom_organisme',direction: 'ASC'}
 	,autoLoad:true
 });
 var comboOrganisme = new Ext.form.ComboBox({
@@ -88,7 +88,7 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = Ext.getCmp('formutilisateurs').getForm().findField('prenom_role').getValue()+'.'+textField.getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
+					if(emailSuffix){Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);}
 				}
 			}
 		},{
@@ -101,7 +101,7 @@ var panelFormUtilisateurs = {
 				keyup: function (textField,e) {
 					var txt = textField.getValue()+'.'+Ext.getCmp('formutilisateurs').getForm().findField('nom_role').getValue();
 					Ext.getCmp('champ_identifiant').setValue(txt.toLowerCase());
-					Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);
+					if(emailSuffix){Ext.getCmp('champ_email').setValue(txt.toLowerCase()+'@'+emailSuffix);}
 				}
 			}
 		},{

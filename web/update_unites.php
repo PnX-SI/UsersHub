@@ -38,19 +38,19 @@ foreach ($json as $array) {
 				email_unite = '$email_unite'
 				WHERE id_unite = $id_unite";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'unite \"".$nom_unite."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+				$txt = $db_fun_name." - L\'unite \"".addslashes($nom_unite)."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'une nouvelle unité
 				$sql = "INSERT INTO utilisateurs.bib_unites
 						VALUES('$nom_unite','$adresse_unite','$cp_unite','$ville_unite','$tel_unite','$fax_unite','$email_unite',$id_unite)";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'unite \"".$nom_unite."\" a &eacute;t&eacute; ajout&eacute;.<br />";
+				$txt = $db_fun_name." - L\'unite \"".addslashes($nom_unite)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //ajout d'une nouvelle unité
 				$sql = "DELETE FROM utilisateurs.bib_unites
 						WHERE id_unite = $id_unite";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'unite \"".$nom_unite."\" a &eacute;t&eacute; supprim&eacute;.<br />";
+				$txt = $db_fun_name." - L\'unite \"".addslashes($nom_unite)."\" a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
 			pg_close($dbconn);
 		}

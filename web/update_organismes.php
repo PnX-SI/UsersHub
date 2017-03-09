@@ -38,19 +38,19 @@ foreach ($json as $array) {
 				email_organisme = '$email_organisme'
 				WHERE id_organisme = $id_organisme";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'organisme \"".$nom_organisme."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+				$txt = $db_fun_name." - L\'organisme \"".addslashes($nom_organisme)."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'un nouvel organisme
 				$sql = "INSERT INTO utilisateurs.bib_organismes
 						VALUES('$nom_organisme','$adresse_organisme','$cp_organisme','$ville_organisme','$tel_organisme','$fax_organisme','$email_organisme',$id_organisme)";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'organisme \"".$nom_organisme."\" a &eacute;t&eacute; ajout&eacute;.<br />";
+				$txt = $db_fun_name." - L\'organisme \"".addslashes($nom_organisme)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //ajout d'un nouvel organisme
 				$sql = "DELETE FROM utilisateurs.bib_organismes
 						WHERE id_organisme = $id_organisme";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - L\'organisme \"".$nom_organisme."\" a &eacute;t&eacute; supprim&eacute;.<br />";
+				$txt = $db_fun_name." - L\'organisme \"".addslashes($nom_organisme)."\" a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
 			pg_close($dbconn);
 		}

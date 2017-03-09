@@ -58,7 +58,7 @@ Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez ch
         ,"pass":"monpassachanger"
         ...
 
-UsersHub peut fonctionner seul avec sa propre base de données mais il configurer par défaut pour fonctionner avec GeoNature. Vous devez renseigner les paramêtres de connexion à la base de GeoNature.
+UsersHub peut fonctionner seul avec sa propre base de données mais il est configurer par défaut pour fonctionner avec GeoNature. Vous devez renseigner les paramêtres de connexion à la base de GeoNature.
 
 * Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub et les login et pass admin/admin
 
@@ -66,3 +66,9 @@ Mise à jour de l'application
 ----------------------------
 
 * Suivre les instructions disponibles dans la doc de la release choisie
+
+Personnalisation
+----------------
+
+Vous pouvez changer le bandeau de l'application en remplaçant le fichier ``web/images/bandeau_utilisateurs.png`` par un bandeau personnalisé.
+Vous pouvez changer le logo de l'application en remplaçant le fichier ``web/images/main_logo.png`` une image de votre choix.

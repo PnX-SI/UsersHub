@@ -13,7 +13,7 @@ if(isset($_GET['pass']) AND $_GET['pass']<>''){$pass=md5($_GET['pass']);}else{$p
 if(isset($_GET['supprpass'])){$supprpass='true';}else{$supprpass= 'false';}
 if(isset($_GET['pn'])){$pn='true';}else{$pn= 'false';}
 if(isset($_GET['remarques'])){
-    $remarques=str_replace( array( CHR(10), CHR(13), "\n", "\r" ), array( ' - ',' - ',' - ',' - '), $_GET['remarques'] );
+    $remarques=str_replace( array( CHR(10), CHR(13), "\n", "\r" ), array( ' - ',' - ',' - ',' - '), pg_escape_string($_GET['remarques']));
 }else{
     $remarques= null;
 }
@@ -48,7 +48,7 @@ foreach ($json as $array) {
                         VALUES('false',$id_role, '$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass');";
                 pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
               }
-              $txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; ajout&eacute;.<br />";
+              $txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
             }
             //Sinon, c'est un update ou delete donc on vérifie que le role existe dans la bd
             if($action=="update" OR $action=="delete"){
@@ -69,7 +69,7 @@ foreach ($json as $array) {
                         pn = '$pn'";
                         if($pass<>null||$pass<>''){$sql= $sql.",pass = '$pass'";}
                         $sql = $sql."WHERE id_role = $id_role";
-                        if(pg_query($sql)){$txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute mis &agrave; jour.<br />";}
+                        if(pg_query($sql)){$txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute mis &agrave; jour.<br />";}
                         else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur de mise &agrave; jour.</span><br />';}
                         if($supprpass=='true'){
                             $sql = "Update utilisateurs.t_roles set pass = null, identifiant = null WHERE id_role = $id_role";
@@ -80,8 +80,8 @@ foreach ($json as $array) {
                     elseif($action=="delete"){ //suppression
                         $sql = "DELETE FROM utilisateurs.t_roles
                                 WHERE id_role = $id_role";
-                        if(pg_query($sql)){$txt = $db_fun_name." - le role \"".$role."\" a &eacute;t&eacute; supprim&eacute;.<br />";}
-                        else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur : role \''.$role.'\' non supprim&eacute;.</span><br />';}
+                        if(pg_query($sql)){$txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute; supprim&eacute;.<br />";}
+                        else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur : role \''.addslashes($role).'\' non supprim&eacute;.</span><br />';}
                     }   
                 }
                 //si le role n'existe pas

@@ -28,19 +28,19 @@ foreach ($json as $array) {
 				desc_droit = '$desc_droit'
 				WHERE id_droit = $id_droit";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le droit \"".$nom_droit."\" a &eacute;t&eacute mis &agrave; jour.<br />";
+				$txt = $db_fun_name." - Le droit \"".addslashes($nom_droit)."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'un nouveau droit
 				$sql = "INSERT INTO utilisateurs.bib_droits
 						VALUES('$id_droit','$nom_droit','$desc_droit')";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le droit \"".$nom_droit."\" a &eacute;t&eacute; ajout&eacute;.<br />";
+				$txt = $db_fun_name." - Le droit \"".addslashes($nom_droit)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //ajout d'un nouveau droit
 				$sql = "DELETE FROM utilisateurs.bib_droits
 						WHERE id_droit = $id_droit";
 				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
-				$txt = $db_fun_name." - Le droit \"".$nom_droit."\" a &eacute;t&eacute; supprim&eacute;.<br />";
+				$txt = $db_fun_name." - Le droit \"".addslashes($nom_droit)."\" a &eacute;t&eacute; supprim&eacute;.<br />";
 			}
 			pg_close($dbconn);
 		}
