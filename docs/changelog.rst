@@ -5,6 +5,11 @@ CHANGELOG
 1.2.1dev0 (unreleased)
 ------------------
 
+**Changements**
+
+* Gestion plus fine des erreurs dans le script SQL de création du schéma utilisateurs afin de pouvoir passer le script sur une base existante.
+
+
 1.2.0 (2016-11-16)
 ------------------
 
