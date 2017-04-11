@@ -5,6 +5,7 @@
 SERVEUR
 =======
 
+Cette documentation décrit l'installation indépendante de UsersHub. Il est aussi possible de l'installation avec le script automatisé d'installation globale de GeoNature (https://github.com/PnEcrins/GeoNature/tree/master/docs/install_all).
 
 Prérequis
 =========
@@ -45,9 +46,7 @@ Installation pour Debian 7.
 
 :notes:
 
-    Bien qu'indépendante, cette documentation est en lien avec l'installation de geonature : https://github.com/PnEcrins/GeoNature.
-
-
+    Bien qu'indépendante, cette documentation est en lien avec l'installation de GeoNature : https://github.com/PnEcrins/GeoNature.
 
 ::
 
@@ -58,7 +57,7 @@ Installation pour Debian 7.
     adduser synthese sudo
     exit
     
-    Fermer la console et la réouvrir pour que les modifications soient prises en compte
+Fermer la console et la réouvrir pour que les modifications soient prises en compte.
     
 * Ajouter un alias du serveur de base de données dans le fichier /etc/hosts
  
