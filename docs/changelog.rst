@@ -2,16 +2,24 @@
 CHANGELOG
 =========
 
-1.2.1dev0 (unreleased)
+1.2.2dev0 (unreleased)
+------------------
+
+1.2.1 (2017-04-11)
 ------------------
 
 **Changements**
 
-* Gestion plus fine des erreurs dans le script SQL de création du schéma utilisateurs afin de pouvoir passer le script sur une base existante.
-* Nettoyage d'une table inutile
-* Correction de l'url du logo
-* Mise à jour du ``web/js/settings.js``
+* Gestion plus fine des erreurs dans le script SQL de création du schéma ``utilisateurs``, afin de pouvoir éxecuter le script sur une BDD existante
+* Gestion des notices PHP
+* Suppression d'une table inutile (``utilisateurs.bib_observateurs``)
+* Correction de l'URL du logo du PNE
+* Mise à jour du fichier ``web/js/settings.js.sample``
+* Documentation - Ajout d'une FAQ et mise en forme
 
+**Notes de version**
+
+* Si vous mettez à jour l'application depuis la version 1.2.0, éxécutez le script ``data/update1.2.0to1.2.1.sql`` qui supprime la table inutile ``bib_observateurs``.
 
 1.2.0 (2016-11-16)
 ------------------
