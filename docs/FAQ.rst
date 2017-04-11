@@ -10,7 +10,7 @@ Comment utiliser UsersHub ?
 - Eventuellement ajouter des groupes dans les différentes listes
 - Donner des droits à des groupes dans chaque application
 
-.. image :: docs/images/usershub-applications.jpg
+.. image :: images/usershub-applications.jpg
 
 Quelles sont les applications compatibles et leurs niveaux de droits ?
 ----------------------------------------------------------------------
