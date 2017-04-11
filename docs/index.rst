@@ -8,6 +8,6 @@ Contenu:
 
    server
    installation
-   faq
+   FAQ
    auteurs
    changelog
