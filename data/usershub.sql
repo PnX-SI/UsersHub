@@ -733,7 +733,7 @@ BEGIN
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (1, 'application utilisateurs', 'application permettant d''administrer la présente base de données.');
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (2, 'Taxhub', 'application permettant d''administrer la liste des taxons.');
 INSERT INTO t_applications (id_application, nom_application, desc_application) VALUES (14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.');
-SELECT pg_catalog.setval('t_applications_id_application_seq', 15, true);
+PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -791,7 +791,7 @@ $$
 BEGIN 
 INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) VALUES (9, 'faune - Observateurs', 'listes des observateurs faune', 14);
 INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) VALUES (10, 'flore - Observateurs', 'Liste des observateurs flore', 14);
-SELECT pg_catalog.setval('t_menus_id_menu_seq', 11, true);
+PERFORM pg_catalog.setval('t_menus_id_menu_seq', 11, true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
