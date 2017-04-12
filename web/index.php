@@ -1,10 +1,12 @@
 <?php
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 $erreur='';
-if ($_GET['verif']){
+if (isset ($_GET['verif'])){
     $msg='Erreur d\'authentification ou droits insuffisants';
     $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;'.$msg;
 }
-if ($_POST['button'] == "CONNEXION"){
+if (isset ($_POST['button'])){
+	if (($_POST['button'] == "CONNEXION")){
 	$login = $_POST['flogin'];
 	$password = md5($_POST['fpassword']);
 	require("../config/connecter.php");
@@ -28,7 +30,7 @@ if ($_POST['button'] == "CONNEXION"){
 		else{
             $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Erreur d\'authentification';
 		}
-}
+	}
 else{
 	session_start();
 	$_SESSION = array();
@@ -36,6 +38,7 @@ else{
 	    setcookie(session_name(), '', time()-42000, '/');
 	}
 	session_destroy();
+}
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

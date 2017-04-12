@@ -1,4 +1,4 @@
-var version = '1.2.0';
-//Si un suffixe d'email est fourni, une auto-complétion de l'adresse mail sera proposé lors de la saisie d'un utilisateur
-//Si ce comportement n'est pas adpaté à votre contexte vous pouvez remplacer la valeur proposée par une chaine vide : var emailSuffix = '';
+var version = '1.2.2dev0';
+//Si un suffixe d'email est fourni, une auto-complÃ©tion de l'adresse mail sera proposÃ© lors de la saisie d'un utilisateur
+//Si ce comportement n'est pas adpatÃ© Ã  votre contexte vous pouvez remplacer la valeur proposÃ©e par une chaine vide : var emailSuffix = '';
 var emailSuffix = 'mondomaine.fr';
