@@ -59,20 +59,6 @@ Installation pour Debian 7.
     
 Fermer la console et la réouvrir pour que les modifications soient prises en compte.
     
-* Ajouter un alias du serveur de base de données dans le fichier /etc/hosts
- 
-  ::  
-  
-    sudo sh -c 'echo "127.0.1.1       databases" >> /etc/hosts'
-    sudo apache2ctl restart
-
-:notes:
-
-    Cet alias ``databases`` permet d'identifier sur quel host l'application doit rechercher la base de données PostgreSQL
-    
-    Par défaut, PostgreSQL est en localhost (127.0.1.1)
-    
-    Si votre serveur PostgreSQL est sur un autre host (par exemple sur ``50.50.56.27``), vous devez modifier la chaine de caratères ci-dessus comme ceci ``50.50.56.27   databases``
 
 * Vérifier que le répertoire ``/tmp`` existe et que l'utilisateur ``www-data`` y ait accès en lecture/écriture
 
@@ -108,17 +94,15 @@ Installation et configuration de PosgreSQL
   
     sudo su postgres
     psql
-    CREATE ROLE usershubadmin WITH SUPERUSER LOGIN PASSWORD 'monpassachanger';
+    CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';
     \q
     exit
-        
-L'utilisateur ``geonatuser`` sera le propriétaire de la base de données ``geonaturedb`` et sera utilisé par l'application pour se connecter à celle-ci.
 
-L'utilisateur ``geonatadmin`` est super utilisateur de PostgreSQL il sera utilisé par l'application pour se connecter à sa propre base de données mais aussi à toutes les autres bases qu'UsersHub doit gérer.
+L'utilisateur ``geonatuser`` est super utilisateur de PostgreSQL il sera utilisé par l'application pour se connecter à sa propre base de données mais aussi à toutes les autres bases qu'UsersHub doit gérer.
 
 L'application fonctionne avec par default le mot de passe ``monpassachanger`` mais il est conseillé de le modifier !
 
-Ce mot de passe, ainsi que l'utilisateur PostgreSQL ``geonatadmin`` créés ci-dessus sont des valeurs par défaut utiliser à plusieurs reprises dans l'application. Ils peuvent cependant être changés. S'ils doivent être changés, ils doivent l'être dans plusieurs fichiers de l'application : 
+Ce mot de passe, ainsi que l'utilisateur PostgreSQL ``geonatuser`` créés ci-dessus sont des valeurs par défaut utiliser à plusieurs reprises dans l'application. Ils peuvent cependant être changés. S'ils doivent être changés, ils doivent l'être dans plusieurs fichiers de l'application : 
 
 - config/settings.ini
 - config/connecter.php

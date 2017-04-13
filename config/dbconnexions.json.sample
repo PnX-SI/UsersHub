@@ -3,7 +3,7 @@
     [
         {
             "dbfunname":"Utilisateurs"
-            ,"host":"databases"
+            ,"host":"localhost"
             ,"dbname":"usershubdb"
             ,"user":"usershubadmin"
             ,"pass":"monpassachanger"
@@ -11,7 +11,7 @@
         }
         ,{
             "dbfunname":"Geonature"
-            ,"host":"databases"
+            ,"host":"localhost"
             ,"dbname":"geonaturedb"
             ,"user":"geonatadmin"
             ,"pass":"monpassachanger"

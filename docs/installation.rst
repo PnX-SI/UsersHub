@@ -52,9 +52,9 @@ Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez ch
   
     ...
     "dbfunname":"Utilisateurs"
-    ,"host":"databases"
+    ,"host":"localhost"
     ,"dbname":"usershubdb"
-    ,"user":"geonatadmin"
+    ,"user":"geonatuser"
     ,"pass":"monpassachanger"
     ...
 

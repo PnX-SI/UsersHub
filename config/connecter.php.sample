@@ -1,7 +1,7 @@
 <?php 
    
-	$serveur='databases'; 
-	$user='geonatadmin';
+	$serveur='localhost'; 
+	$user='geonatuser';
 	$passe='monpassachanger'; 
 	$base='usershubdb';
 	$port=5432;
