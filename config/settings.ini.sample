@@ -3,6 +3,8 @@
 drop_apps_db=false
 #host de la base de données de l'application
 db_host=localhost
+#Port du serveur PostgreSQL
+pg_port=5432
 #nom de la base de données de l'application
 db_name=usershubdb
 #nom de l'utilisateur propriétaire de la base de l'application
