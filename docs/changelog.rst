@@ -2,8 +2,19 @@
 CHANGELOG
 =========
 
-1.2.2dev0 (unreleased)
+1.2.2 (2017-07-06)
 ------------------
+
+**Changements**
+
+* Correction du script SQL (remplacement de SELECT par PERFORM)
+* Mise à jour du fichier ``settings.ini.sample`` pour prendre en compte le port
+* Suppression de la référence au host databases (retour à localhost)
+
+**Notes de version**
+
+* Les modifications réalisée concerne une première installation, vous n'avez aucune action particulière à réaliser.
+
 
 1.2.1 (2017-04-11)
 ------------------
