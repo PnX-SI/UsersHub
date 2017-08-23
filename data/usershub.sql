@@ -1,11 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.1.9
--- Dumped by pg_dump version 9.3.1
--- Started on 2015-01-26 14:11:24
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -13,19 +5,11 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
---
--- TOC entry 9 (class 2615 OID 51956)
--- Name: utilisateurs; Type: SCHEMA; Schema: -; Owner: -
---
 
 CREATE SCHEMA IF NOT EXISTS utilisateurs;
 
 SET search_path = utilisateurs, pg_catalog;
 
---
--- TOC entry 1206 (class 1255 OID 52059)
--- Name: modify_date_insert(); Type: FUNCTION; Schema: utilisateurs; Owner: -
---
 
 CREATE OR REPLACE FUNCTION modify_date_insert() RETURNS trigger
     LANGUAGE plpgsql
@@ -37,11 +21,6 @@ BEGIN
 END;
 $$;
 
-
---
--- TOC entry 1201 (class 1255 OID 52060)
--- Name: modify_date_update(); Type: FUNCTION; Schema: utilisateurs; Owner: -
---
 
 CREATE OR REPLACE FUNCTION modify_date_update() RETURNS trigger
     LANGUAGE plpgsql
@@ -57,41 +36,17 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
---
--- TOC entry 216 (class 1259 OID 52225)
--- Name: cor_role_menu; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS cor_role_menu (
     id_role integer NOT NULL,
     id_menu integer NOT NULL
 );
-
-
---
--- TOC entry 3546 (class 0 OID 0)
--- Dependencies: 216
--- Name: TABLE cor_role_menu; Type: COMMENT; Schema: utilisateurs; Owner: -
---
-
 COMMENT ON TABLE cor_role_menu IS 'gestion du contenu des menus utilisateurs dans les applications';
-
-
---
--- TOC entry 217 (class 1259 OID 52228)
--- Name: cor_roles; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 CREATE TABLE IF NOT EXISTS cor_roles (
     id_role_groupe integer NOT NULL,
     id_role_utilisateur integer NOT NULL
 );
 
-
---
--- TOC entry 218 (class 1259 OID 52231)
--- Name: t_roles_id_seq; Type: SEQUENCE; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -107,11 +62,6 @@ EXCEPTION WHEN duplicate_table THEN
 END
 $$;
 
-
---
--- TOC entry 219 (class 1259 OID 52233)
--- Name: t_roles; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 CREATE TABLE IF NOT EXISTS t_roles (
     groupe boolean DEFAULT false NOT NULL,
@@ -133,11 +83,6 @@ CREATE TABLE IF NOT EXISTS t_roles (
 );
 
 
---
--- TOC entry 275 (class 1259 OID 52565)
--- Name: bib_organismes_id_seq; Type: SEQUENCE; Schema: utilisateurs; Owner: -
---
-
 DO
 $$
 BEGIN
@@ -153,11 +98,6 @@ END
 $$;
 
 
---
--- TOC entry 276 (class 1259 OID 52567)
--- Name: bib_organismes; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS bib_organismes (
     nom_organisme character varying(100) NOT NULL,
     adresse_organisme character varying(128),
@@ -170,22 +110,12 @@ CREATE TABLE IF NOT EXISTS bib_organismes (
 );
 
 
---
--- TOC entry 307 (class 1259 OID 52777)
--- Name: bib_droits; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS bib_droits (
     id_droit integer NOT NULL,
     nom_droit character varying(50),
     desc_droit text
 );
 
-
---
--- TOC entry 309 (class 1259 OID 52786)
--- Name: bib_unites_id_seq; Type: SEQUENCE; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -202,11 +132,6 @@ END
 $$;
 
 
---
--- TOC entry 310 (class 1259 OID 52788)
--- Name: bib_unites; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS bib_unites (
     nom_unite character varying(50) NOT NULL,
     adresse_unite character varying(128),
@@ -219,11 +144,6 @@ CREATE TABLE IF NOT EXISTS bib_unites (
 );
 
 
---
--- TOC entry 311 (class 1259 OID 52792)
--- Name: cor_role_droit_application; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS cor_role_droit_application (
     id_role integer NOT NULL,
     id_droit integer NOT NULL,
@@ -231,22 +151,12 @@ CREATE TABLE IF NOT EXISTS cor_role_droit_application (
 );
 
 
---
--- TOC entry 314 (class 1259 OID 52801)
--- Name: t_applications; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 CREATE TABLE IF NOT EXISTS t_applications (
     id_application integer NOT NULL,
     nom_application character varying(50) NOT NULL,
     desc_application text
 );
 
-
---
--- TOC entry 315 (class 1259 OID 52807)
--- Name: t_applications_id_application_seq; Type: SEQUENCE; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -261,21 +171,8 @@ EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
 END
 $$;
-
-
---
--- TOC entry 3547 (class 0 OID 0)
--- Dependencies: 315
--- Name: t_applications_id_application_seq; Type: SEQUENCE OWNED BY; Schema: utilisateurs; Owner: -
---
-
 ALTER SEQUENCE t_applications_id_application_seq OWNED BY t_applications.id_application;
 
-
---
--- TOC entry 316 (class 1259 OID 52809)
--- Name: t_menus; Type: TABLE; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 CREATE TABLE IF NOT EXISTS t_menus (
     id_menu integer NOT NULL,
@@ -283,21 +180,8 @@ CREATE TABLE IF NOT EXISTS t_menus (
     desc_menu text,
     id_application integer
 );
-
-
---
--- TOC entry 3548 (class 0 OID 0)
--- Dependencies: 316
--- Name: TABLE t_menus; Type: COMMENT; Schema: utilisateurs; Owner: -
---
-
 COMMENT ON TABLE t_menus IS 'table des menus déroulants des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans un menu sont gérés dans la table cor_role_menu_application.';
 
-
---
--- TOC entry 317 (class 1259 OID 52815)
--- Name: t_menus_id_menu_seq; Type: SEQUENCE; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -314,34 +198,14 @@ END
 $$;
 
 
---
--- TOC entry 3549 (class 0 OID 0)
--- Dependencies: 317
--- Name: t_menus_id_menu_seq; Type: SEQUENCE OWNED BY; Schema: utilisateurs; Owner: -
---
-
 ALTER SEQUENCE t_menus_id_menu_seq OWNED BY t_menus.id_menu;
 
---
--- TOC entry 3367 (class 2604 OID 178256)
--- Name: id_application; Type: DEFAULT; Schema: utilisateurs; Owner: -
---
 
 ALTER TABLE ONLY t_applications ALTER COLUMN id_application SET DEFAULT nextval('t_applications_id_application_seq'::regclass);
 
 
---
--- TOC entry 3368 (class 2604 OID 178257)
--- Name: id_menu; Type: DEFAULT; Schema: utilisateurs; Owner: -
---
-
 ALTER TABLE ONLY t_menus ALTER COLUMN id_menu SET DEFAULT nextval('t_menus_id_menu_seq'::regclass);
 
-
---
--- TOC entry 3378 (class 2606 OID 53526)
--- Name: bib_droits_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -353,10 +217,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3384 (class 2606 OID 53530)
--- Name: cor_role_droit_application_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -369,11 +229,6 @@ END
 $$;
 
 
---
--- TOC entry 3370 (class 2606 OID 53533)
--- Name: cor_role_menu_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
-
 DO
 $$
 BEGIN
@@ -384,10 +239,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3372 (class 2606 OID 53535)
--- Name: cor_roles_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -399,10 +250,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3376 (class 2606 OID 53539)
--- Name: pk_bib_organismes; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -414,10 +261,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3382 (class 2606 OID 53541)
--- Name: pk_bib_services; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -429,10 +272,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3374 (class 2606 OID 53543)
--- Name: pk_roles; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -444,10 +283,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3390 (class 2606 OID 53547)
--- Name: t_applications_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -459,10 +294,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3392 (class 2606 OID 53549)
--- Name: t_menus_pkey; Type: CONSTRAINT; Schema: utilisateurs; Owner: -; Tablespace: 
---
 
 DO
 $$
@@ -474,10 +305,6 @@ EXCEPTION WHEN invalid_table_definition  THEN
 END
 $$;
 
---
--- TOC entry 3403 (class 2620 OID 53662)
--- Name: modify_date_insert_trigger; Type: TRIGGER; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -489,11 +316,6 @@ END
 $$;
 
 
---
--- TOC entry 3404 (class 2620 OID 53663)
--- Name: modify_date_update_trigger; Type: TRIGGER; Schema: utilisateurs; Owner: -
---
-
 DO
 $$
 BEGIN
@@ -503,11 +325,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
-
---
--- TOC entry 3399 (class 2606 OID 54329)
--- Name: cor_role_droit_application_id_application_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -519,10 +336,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3400 (class 2606 OID 54334)
--- Name: cor_role_droit_application_id_droit_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -534,10 +347,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3401 (class 2606 OID 54339)
--- Name: cor_role_droit_application_id_role_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -549,10 +358,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3393 (class 2606 OID 54344)
--- Name: cor_role_menu_application_id_menu_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -564,10 +369,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3394 (class 2606 OID 54349)
--- Name: cor_role_menu_application_id_role_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -579,10 +380,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3395 (class 2606 OID 54354)
--- Name: cor_roles_id_role_groupe_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -594,10 +391,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3396 (class 2606 OID 54359)
--- Name: cor_roles_id_role_utilisateur_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -609,10 +402,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3402 (class 2606 OID 54364)
--- Name: t_menus_id_application_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -624,10 +413,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3397 (class 2606 OID 54369)
--- Name: t_roles_id_organisme_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -639,10 +424,6 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
---
--- TOC entry 3398 (class 2606 OID 54374)
--- Name: t_roles_id_unite_fkey; Type: FK CONSTRAINT; Schema: utilisateurs; Owner: -
---
 
 DO
 $$
@@ -654,12 +435,74 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
-
--- 
--- TOC entry 3274 (class 0 OID 17813)
--- Dependencies: 254
--- Data for Name: bib_droits; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
+DO
+$$
+BEGIN
+CREATE OR REPLACE VIEW v_userslist_forall_menu AS
+ SELECT a.groupe,
+    a.id_role,
+    a.identifiant,
+    a.nom_role,
+    a.prenom_role,
+    (upper(a.nom_role::text) || ' '::text) || a.prenom_role::text AS nom_complet,
+    a.desc_role,
+    a.pass,
+    a.email,
+    a.id_organisme,
+    a.organisme,
+    a.id_unite,
+    a.remarques,
+    a.pn,
+    a.session_appli,
+    a.date_insert,
+    a.date_update,
+    a.id_menu
+   FROM ( SELECT u.groupe,
+            u.id_role,
+            u.identifiant,
+            u.nom_role,
+            u.prenom_role,
+            u.desc_role,
+            u.pass,
+            u.email,
+            u.id_organisme,
+            u.organisme,
+            u.id_unite,
+            u.remarques,
+            u.pn,
+            u.session_appli,
+            u.date_insert,
+            u.date_update,
+            c.id_menu
+           FROM utilisateurs.t_roles u
+             JOIN utilisateurs.cor_role_menu c ON c.id_role = u.id_role
+          WHERE u.groupe = false
+        UNION
+         SELECT u.groupe,
+            u.id_role,
+            u.identifiant,
+            u.nom_role,
+            u.prenom_role,
+            u.desc_role,
+            u.pass,
+            u.email,
+            u.id_organisme,
+            u.organisme,
+            u.id_unite,
+            u.remarques,
+            u.pn,
+            u.session_appli,
+            u.date_insert,
+            u.date_update,
+            c.id_menu
+           FROM utilisateurs.t_roles u
+             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
+             JOIN utilisateurs.cor_role_menu c ON c.id_role = g.id_role_groupe
+          WHERE u.groupe = false) a;
+    EXCEPTION WHEN duplicate_object  THEN
+    -- do nothing, it's already there
+END
+$$;
 
 DO
 $$
@@ -677,12 +520,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3275 (class 0 OID 17821)
--- Dependencies: 256
--- Data for Name: bib_organismes; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
---
-
 DO
 $$
 BEGIN
@@ -694,12 +531,6 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
--- 
--- TOC entry 3276 (class 0 OID 17827)
--- Dependencies: 258
--- Data for Name: bib_unites; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
 
 DO
 $$
@@ -721,12 +552,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3278 (class 0 OID 17837)
--- Dependencies: 261
--- Data for Name: t_applications; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
-
 DO
 $$
 BEGIN
@@ -740,12 +565,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3255 (class 0 OID 17445)
--- Dependencies: 189
--- Data for Name: t_roles; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
-
 DO
 $$
 BEGIN
@@ -758,12 +577,6 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
--- 
--- TOC entry 3277 (class 0 OID 17831)
--- Dependencies: 259
--- Data for Name: cor_role_droit_application; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
---
 
 DO
 $$
@@ -780,12 +593,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3279 (class 0 OID 17845)
--- Dependencies: 263
--- Data for Name: t_menus; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
---
-
 DO
 $$
 BEGIN 
@@ -798,12 +605,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3253 (class 0 OID 17437)
--- Dependencies: 186
--- Data for Name: cor_role_menu; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
-
 DO
 $$
 BEGIN
@@ -815,12 +616,6 @@ END
 $$;
 
 
--- 
--- TOC entry 3254 (class 0 OID 17440)
--- Dependencies: 187
--- Data for Name: cor_roles; Type: TABLE DATA; Schema: utilisateurs; Owner: geonatuser
--- 
-
 DO
 $$
 BEGIN
@@ -829,10 +624,3 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
-
-
--- Completed on 2015-01-26 14:11:48
-
---
--- PostgreSQL database dump complete
---
