@@ -11,9 +11,11 @@ cp -n web/images/bandeau_utilisateurs.png.sample web/images/bandeau_utilisateurs
 
 
 echo "Configuration du fichier config/connecter.php..."
+sed -i "s/serveur='.*$/serveur='$db_host';/" config/connecter.php
 sed -i "s/user='.*$/user='$user_pg';/" config/connecter.php
 sed -i "s/passe='.*$/passe='$user_pg_pass';/" config/connecter.php
 sed -i "s/base='.*$/base='$db_name';/" config/connecter.php
+sed -i "s/port='.*$/port='$pg_port';/" config/connecter.php
 
 echo "Suppression des fichiers de log de l'installation..."
 sudo rm log/*.log
