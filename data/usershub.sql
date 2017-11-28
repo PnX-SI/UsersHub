@@ -66,11 +66,13 @@ $$;
 CREATE TABLE IF NOT EXISTS t_roles (
     groupe boolean DEFAULT false NOT NULL,
     id_role integer DEFAULT nextval('t_roles_id_seq'::regclass) NOT NULL,
+    uuid_role uuid NOT NULL DEFAULT public.uuid_generate_v4(),
     identifiant character varying(100),
     nom_role character varying(50),
     prenom_role character varying(50),
     desc_role text,
     pass character varying(100),
+    pass_plus text,
     email character varying(250),
     id_organisme integer,
     organisme character(32),
@@ -99,6 +101,7 @@ $$;
 
 
 CREATE TABLE IF NOT EXISTS bib_organismes (
+    uuid_organisme uuid NOT NULL DEFAULT public.uuid_generate_v4(),
     nom_organisme character varying(100) NOT NULL,
     adresse_organisme character varying(128),
     cp_organisme character varying(5),
@@ -441,6 +444,7 @@ BEGIN
 CREATE OR REPLACE VIEW v_userslist_forall_menu AS
  SELECT a.groupe,
     a.id_role,
+    a.uuid_role,
     a.identifiant,
     a.nom_role,
     a.prenom_role,
@@ -459,6 +463,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.id_menu
    FROM ( SELECT u.groupe,
             u.id_role,
+            u.uuid_role,
             u.identifiant,
             u.nom_role,
             u.prenom_role,
@@ -480,6 +485,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
         UNION
          SELECT u.groupe,
             u.id_role,
+            u.uuid_role,
             u.identifiant,
             u.nom_role,
             u.prenom_role,

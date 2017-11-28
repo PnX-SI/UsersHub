@@ -622,16 +622,17 @@ application.layout = function() {
 				'id_role'
 				,'role'
 				,'nom_role'
+				,'nom_organisme'
 				,'prenom_role'
 				,'id_unite'
 				,'nom_unite'
 				,'id_organisme'
-				,'nom_organisme'
 				,'email'
 				,'identifiant'
 				,'pass'
 				,'pn'
 				,'remarques'
+				,'uuid_role'
 			]}
 		)
 		,groupField:'nom_organisme'
@@ -702,6 +703,7 @@ application.layout = function() {
 			,columns: [
 				expander
 				,{id: 'id_role',header: 'Id', dataIndex: 'id_role', hidden: false}
+				,{header: 'uuid', width: 70, dataIndex: 'uuid_role', hidden: true}
 				,{header: 'Organisme', width: 70, dataIndex: 'nom_organisme', hidden: true}
 				,{header: 'Role',width: 130, dataIndex: 'role',sortable: true}
 				,rowActionsSupprimeUtilisateurs
