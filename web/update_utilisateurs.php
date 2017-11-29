@@ -9,7 +9,11 @@ if(isset($_GET['identifiant'])){$identifiant=$_GET['identifiant'];}else{$identif
 if(isset($_GET['email'])){$email=$_GET['email'];}else{$email= null;}
 if(isset($_GET['id_organisme'])){$id_organisme=$_GET['id_organisme'];}else{$id_organisme= null;}
 if(isset($_GET['id_unite'])){$id_unite=$_GET['id_unite'];}else{$id_unite= null;}
-if(isset($_GET['pass']) AND $_GET['pass']<>''){$pass=md5($_GET['pass']);}else{$pass= null;}
+if(isset($_GET['pass']) AND $_GET['pass']<>''){
+    $pass=md5($_GET['pass']);
+    $passplus=password_hash($_GET['pass'],PASSWORD_BCRYPT,['cost' => 13]);
+}
+else{$pass=null;}
 if(isset($_GET['supprpass'])){$supprpass='true';}else{$supprpass= 'false';}
 if(isset($_GET['pn'])){$pn='true';}else{$pn= 'false';}
 if(isset($_GET['remarques'])){
@@ -36,16 +40,16 @@ foreach ($json as $array) {
 			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
             if($action=="insert"){ //ajout 
               if ($id_role == '' ){
-                $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass)
-                        VALUES('false','$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass') RETURNING id_role;";
+                $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
+                        VALUES('false','$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus') RETURNING id_role;";
                 $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
                 while ($row = pg_fetch_row($result)) {
                   $id_role =  $row[0];
                 }
               }
               else {
-                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role, nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass)
-                        VALUES('false',$id_role, '$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass');";
+                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role, nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
+                        VALUES('false',$id_role, '$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus');";
                 pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
               }
               $txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
@@ -67,14 +71,14 @@ foreach ($json as $array) {
                         id_organisme = $id_organisme,
                         id_unite = $id_unite,
                         pn = '$pn'";
-                        if($pass<>null||$pass<>''){$sql= $sql.",pass = '$pass'";}
-                        $sql = $sql."WHERE id_role = $id_role";
+                        if($pass<>null||$pass<>''){$sql .= ",pass = '$pass', pass_plus = '$passplus'";}
+                        $sql .= "WHERE id_role = $id_role";
                         if(pg_query($sql)){$txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute mis &agrave; jour.<br />";}
                         else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur de mise &agrave; jour.</span><br />';}
                         if($supprpass=='true'){
-                            $sql = "Update utilisateurs.t_roles set pass = null, identifiant = null WHERE id_role = $id_role";
-                            if(pg_query($sql)){$txt = $txt." Mot de passe et identifiant supprim&eacute;s.<br />";}
-                            else{$txt = $txt.'<span style="color:red;"> Mot de passe et identifiant non supprim&eacute;s.</span><br />';}
+                            $sql = "Update utilisateurs.t_roles set pass = null, pass_plus = null, identifiant = null WHERE id_role = $id_role";
+                            if(pg_query($sql)){$txt .= " Mot de passe et identifiant supprim&eacute;s.<br />";}
+                            else{$txt .= '<span style="color:red;"> Mot de passe et identifiant non supprim&eacute;s.</span><br />';}
                         }
                     }
                     elseif($action=="delete"){ //suppression

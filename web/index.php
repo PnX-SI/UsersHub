@@ -7,28 +7,45 @@ if (isset ($_GET['verif'])){
 }
 if (isset ($_POST['button'])){
 	if (($_POST['button'] == "CONNEXION")){
-	$login = $_POST['flogin'];
-	$password = md5($_POST['fpassword']);
-	require("../config/connecter.php");
-	$query = "SELECT * FROM utilisateurs.t_roles u WHERE u.identifiant = '".$login."' AND u.pass = '".$password."'";
-	$sql = pg_query($query) or die ("Erreur requête01") ;
-	$verif = pg_numrows($sql);
-	$dat = pg_fetch_assoc($sql);
+		$login = $_POST['flogin'];
+		$pass = $_POST['fpassword'];
+		$passmd5 = md5($pass);
+		$passplus = password_hash($pass,PASSWORD_BCRYPT,['cost' => 13]);
+		require("../config/connecter.php");
+		require("../config/config.php");
+		if($pass_method == 'md5'){
+			$sql = "SELECT * FROM utilisateurs.t_roles u WHERE u.identifiant = '".$login."' AND u.pass = '".$passmd5."'";
+			$result = pg_query($sql) or die ("Erreur requête02") ;
+			$verif = pg_numrows($result);
+			$dat = pg_fetch_assoc($result);
+		}
+		elseif($pass_method == 'hash'){
+			$sql = "SELECT * FROM utilisateurs.t_roles u WHERE u.identifiant = '".$login."' LIMIT 1";
+			$result = pg_query($sql) or die ("Erreur requête01") ;
+			$dat = pg_fetch_assoc($result);
+			$hash = $dat['pass_plus'];
+			if(password_verify ($pass , $hash )){
+				$verif = "1";
+			}
+		}
+		$id_role = $dat['id_role'];
+
 		if ($verif == "1")
 		{
-            session_start();
+			session_start();
 			if (isset($_POST['flogin'])){
 			$_SESSION['xlogin'] = $login;
-			$_SESSION['xauthor'] = $dat['id_role'];
-			$query = ("UPDATE utilisateurs.t_roles SET session_appli = '".session_id()."' WHERE id_role = '".$dat['id_role']."'");
+			$_SESSION['xauthor'] = $id_role;
+			$query = ("UPDATE utilisateurs.t_roles SET session_appli = '".session_id()."' WHERE id_role = '".$id_role."'");
 			$sql_update = pg_query($query) or die ("Erreur requête") ;
 			pg_close($dbconn);
+			include "generate_pass_plus.php";//permet de remplir le pass_plus avec le hash calculé avec la fonction password_hash
 			header("Location: accueil.php");
 			}
 		}
 		
 		else{
-            $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Erreur d\'authentification';
+						$erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Erreur d\'authentification';
 		}
 	}
 else{

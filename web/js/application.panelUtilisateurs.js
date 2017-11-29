@@ -233,7 +233,7 @@ var loadFormUtilisateurs = function(record){
 	form.findField('id_unite').setValue(record.data.id_unite);
 	Ext.getCmp('label-pass').setText(record.data.pass,false);
     Ext.getCmp('champ_action-utilisateur').setValue("update");
-    Ext.getCmp('formutilisateurs').setTitle('Modification de l\'utilisateur '+record.data.prenom_role+ ' '+record.data.nom_role);
+	Ext.getCmp('formutilisateurs').setTitle('Modification de ' + record.data.prenom_role + ' ' + record.data.nom_role + ' (ID :' + record.data.id_role + ' - UUID : ' + record.data.uuid_role +  ')');
 	if(record.data.pass=='oui'){
 		Ext.getCmp('label-pass').addClass('label-pass-red');
 		Ext.getCmp('label-pass').removeClass('label-pass-blue');

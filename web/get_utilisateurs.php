@@ -20,12 +20,13 @@ if (isset($mon_groupe)){
 				LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
 				WHERE c.id_role_groupe = $mon_groupe
 				AND u.groupe = false";
-	$result = pg_query($sqliste) or die ('Échec requête : ' . pg_last_error()) ;
+	$result = pg_query($sqliste) or die ('ï¿½chec requï¿½te : ' . pg_last_error()) ;
 	$nb = pg_numrows($result);
 	$json = "[";
 	$i = 0;
 	while ($val = pg_fetch_assoc($result)){
 		$id_role = $val['id_role'];
+		$uuid_role = $val['uuid_role'];
 		$role = str_replace("'","\'",$val['nom_role'])." ".str_replace("'","\'",$val['prenom_role']);
 		$nom_unite = str_replace("'","\'",$val['nom_unite']);
 		$nom_organisme = str_replace("'","\'",$val['nom_organisme']);
@@ -66,7 +67,7 @@ else{
 							LEFT JOIN utilisateurs.bib_unites b ON b.id_unite = u.id_unite 
                             LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme";
 		}
-		$result = pg_query($sqliste) or die ('Échec requête : ' . pg_last_error()) ;
+		$result = pg_query($sqliste) or die ('ï¿½chec requï¿½te : ' . pg_last_error()) ;
 		$nb = pg_numrows($result);
 		$json = "[";
 		$i = 0;
@@ -91,12 +92,13 @@ else{
 				LEFT JOIN utilisateurs.bib_unites b ON b.id_unite = u.id_unite
                 LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
 				WHERE u.groupe = false";
-		$result = pg_query($sqliste) or die ('Échec requête : ' . pg_last_error()) ;
+		$result = pg_query($sqliste) or die ('ï¿½chec requï¿½te : ' . pg_last_error()) ;
 		$nb = pg_numrows($result);
 		$json = "[";
 		$i = 0;
 		while ($val = pg_fetch_assoc($result)){
 			$id_role = $val['id_role'];
+			$uuid_role = $val['uuid_role'];
 			$role = str_replace("'","\'",$val['nom_role'])." ".str_replace("'","\'",$val['prenom_role']);
 			$nom_role = str_replace("'","\'",$val['nom_role']);
 			$prenom_role = str_replace("'","\'",$val['prenom_role']);
@@ -113,7 +115,7 @@ else{
 			$pass = "non";
 			}
 			$pn = bool_to_oui_non($val['pn']);
-			$text = "{id_role:".$id_role.",role:'".$role."',nom_role:'".$nom_role."',nom_organisme:'".$nom_organisme."',prenom_role:'".$prenom_role."',id_unite:".$id_unite.",nom_unite:'".$nom_unite."',id_organisme:".$id_organisme.",email:'".$email."',identifiant:'".$identifiant."',pass:'".$pass."',pn:'".$pn."',remarques:'".$remarques."'}";
+			$text = "{id_role:".$id_role.",role:'".$role."',nom_role:'".$nom_role."',nom_organisme:'".$nom_organisme."',prenom_role:'".$prenom_role."',id_unite:".$id_unite.",nom_unite:'".$nom_unite."',id_organisme:".$id_organisme.",email:'".$email."',identifiant:'".$identifiant."',pass:'".$pass."',pn:'".$pn."',remarques:'".$remarques."',uuid_role:'".$uuid_role."'}";
 			$json = $json.$text;
 			$i++;
 			if ($i > 0 and $i!=$nb) {

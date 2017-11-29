@@ -18,11 +18,11 @@ application = function() {
 				,method: 'GET'
                 ,success: function(request) {
                     this.user = Ext.decode(request.responseText);
-                    // initialisation du layout après récupération des paramètres utilisateurs
+                    // initialisation du layout aprï¿½s rï¿½cupï¿½ration des paramï¿½tres utilisateurs
                     application.layout.init();
                 }
                 ,failure: function() {
-                    alert("pas bon ça");
+                    alert("pas bon ï¿½a");
                 }
                 ,scope: this
                 ,synchronous: true
@@ -56,7 +56,7 @@ application = function() {
 			this.storeOrganismes = new Ext.data.JsonStore({
 				url: 'get_organismes.php'
 				,method: 'GET'
-				,fields: ['id_organisme', 'nom_organisme', 'adresse_organisme', 'cp_organisme', 'ville_organisme', 'tel_organisme', 'fax_organisme', 'mail_organisme']
+				,fields: ['id_organisme', 'uuid_organisme', 'nom_organisme', 'adresse_organisme', 'cp_organisme', 'ville_organisme', 'tel_organisme', 'fax_organisme', 'mail_organisme']
 				,sortInfo: {field: 'nom_organisme',direction: 'ASC'}
 				,autoLoad:true
 			});
