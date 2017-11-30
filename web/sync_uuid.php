@@ -1,7 +1,7 @@
 <?php 
 include "verification.php";
 
-$txt = 'Base m&aacute;re : '.$base.'</br>';
+$txt = 'Base m&egrave;re : '.$base.'</br>';
 $txt .= '<hr/>';
 
 require("../config/connecter.php");
@@ -53,7 +53,7 @@ foreach ($json as $array) {
             }
             else{$txt.="connection impossible &agrave; la base ".$db_fun_name.".<br />";}
         }
-        else{$txt.='On ne modifie pas la base m&aacute;re "'.$base.'".<br />';$txt .= "<hr/>";}
+        else{$txt.='On ne modifie pas la base m&egrave;re "'.$base.'".<br />';$txt .= "<hr/>";}
     }
 }// fin de bouclage sur les bases
 echo $txt;
