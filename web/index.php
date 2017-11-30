@@ -1,6 +1,9 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+if(PHP_VERSION_ID<50500){require("../lib/password.php");}
+
 $erreur='';
+
 if (isset ($_GET['verif'])){
     $msg='Erreur d\'authentification ou droits insuffisants';
     $erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;'.$msg;

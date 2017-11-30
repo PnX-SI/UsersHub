@@ -1,5 +1,6 @@
 <?php 
 include "verification.php";
+if(PHP_VERSION_ID<50500){require("../lib/password.php");}
 //récupération des variables passées par l'application
 $id_role = $_GET['id_role'];
 $nom_role =pg_escape_string($_GET['nom_role']);

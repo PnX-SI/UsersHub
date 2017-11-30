@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+if(PHP_VERSION_ID<50500){require("../lib/password.php");}
 require("../config/config.php");
 function testpass($pass)
 {
