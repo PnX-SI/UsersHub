@@ -62,6 +62,8 @@ UsersHub peut fonctionner seul avec sa propre base de données mais il est confi
 
 * Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub et les login et pass admin/admin
 
+* choisir le mode d'authentification dans le fichier ``config/config.php``
+
 Mise à jour de l'application
 ----------------------------
 
