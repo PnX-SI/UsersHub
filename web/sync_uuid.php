@@ -53,7 +53,7 @@ foreach ($json as $array) {
             }
             else{$txt.="connection impossible &agrave; la base ".$db_fun_name.".<br />";}
         }
-        else{$txt.='On ne modifie pas la base mère "'.$base.'".';}
+        else{$txt.='On ne modifie pas la base mère "'.$base.'".<br />< /hr>';}
     }
 }// fin de bouclage sur les bases
 echo $txt;
