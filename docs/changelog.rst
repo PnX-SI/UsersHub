@@ -7,6 +7,7 @@ CHANGELOG
 
 **Changements**
 
+* Mise en paramètre du port PostgreSQL pour l'installation initiale
 * Intégration d'UUID pour les organismes et les roles afin de permettre des consolidations de bases utilisateurs
 * Intégration d'un mécanisme d'authentification plus solide à base de haschage du mot de pass sur la base de l'algorythme ``bscript``. L'ancien mécanisme ``md5`` reste utilisable.
 Attention ceci ne concerne que l'authentification à UsersHub. Pour utiliser le hash dans d'autres applications, il faudra modifier les applications concernées et utiliser le champ ``pass_plus`` à la place du champ ``md5``.
