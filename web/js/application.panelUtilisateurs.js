@@ -78,6 +78,11 @@ var panelFormUtilisateurs = {
 			,xtype:'hidden'
 			,name: 'id_role'
 		},{
+			xtype: 'label'
+			, id: 'label-id'
+			, cls: 'label-bold'
+			, html: '----------------------------- Aucun identifiant disponible -----------------------------<br /><br />'
+		},{
 			fieldLabel: 'Nom '
 			,name: 'nom_role'
 			,allowBlank:false
@@ -223,6 +228,7 @@ var loadFormUtilisateurs = function(record){
 	var form = Ext.getCmp('formutilisateurs').getForm();
 	form.findField('id_role').setValue(record.data.id_role);
 	form.findField('champ_id_initial-utilisateur').setValue(record.data.id_role);
+	Ext.getCmp('label-id').setText('ID : ' + record.data.id_role + ' - UUID : ' + record.data.uuid_role + '<br /><br />', false);
 	form.findField('nom_role').setValue(record.data.nom_role);
 	form.findField('prenom_role').setValue(record.data.prenom_role);
 	form.findField('identifiant').setValue(record.data.identifiant);

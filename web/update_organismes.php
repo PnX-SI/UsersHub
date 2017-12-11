@@ -41,9 +41,20 @@ foreach ($json as $array) {
 				$txt = $db_fun_name." - L\'organisme \"".addslashes($nom_organisme)."\" a &eacute;t&eacute mis &agrave; jour.<br />";
 			}
 			elseif($action=="insert"){ //ajout d'un nouvel organisme
-				$sql = "INSERT INTO utilisateurs.bib_organismes
-						VALUES('$nom_organisme','$adresse_organisme','$cp_organisme','$ville_organisme','$tel_organisme','$fax_organisme','$email_organisme',$id_organisme)";
-				$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon."}') ;
+				if ($uuid_organisme == '' ){
+					$sql = "INSERT INTO utilisateurs.bib_organismes (nom_organisme,adresse_organisme,cp_organisme,ville_organisme,tel_organisme,fax_organisme,email_organisme,id_organisme)
+							VALUES('$nom_organisme','$adresse_organisme','$cp_organisme','$ville_organisme','$tel_organisme','$fax_organisme','$email_organisme',$id_organisme) RETURNING id_organisme, uuid_organisme;";
+					$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon insert mere. SQL = "'.$sql.'}') ;
+					while ($row = pg_fetch_row($result)) {
+						$id_organisme =  $row[0];
+						$uuid_organisme = $row[1];
+					}
+				}
+				else{
+					$sql = "INSERT INTO utilisateurs.bib_organismes (uuid_organisme,nom_organisme,adresse_organisme,cp_organisme,ville_organisme,tel_organisme,fax_organisme,email_organisme,id_organisme)
+							VALUES('$uuid_organisme','$nom_organisme','$adresse_organisme','$cp_organisme','$ville_organisme','$tel_organisme','$fax_organisme','$email_organisme',$id_organisme);";
+					$result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon insert fille. SQL = "'.$sql.'}') ;
+				}
 				$txt = $db_fun_name." - L\'organisme \"".addslashes($nom_organisme)."\" a &eacute;t&eacute; ajout&eacute;.<br />";
 			}
 			elseif($action=="delete"){ //ajout d'un nouvel organisme

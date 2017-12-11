@@ -14,6 +14,11 @@ var panelFormOrganismes = {
 	,defaultType: 'textfield'
 	,items: [
 		{
+			xtype: 'label'
+			, id: 'label-uuid'
+			, cls: 'label-bold'
+			, html: '----------------------------- Aucun identifiant disponible -----------------------------<br /><br />'
+		},{
 			fieldLabel: 'ID'
 			,xtype : 'numberfield'
 			,allowDecimals :false
@@ -95,6 +100,7 @@ var panelOrganismes = new Ext.Panel({
 //remplissage du formulaire
 var loadFormOrganismes = function(record){
 	var form = Ext.getCmp('formorganismes').getForm();
+	Ext.getCmp('label-uuid').setText('UUID : ' + record.data.uuid_organisme + '<br /><br />', false);
 	form.findField('id_organisme').setValue(record.data.id_organisme);
 	form.findField('champ_id_initial-organisme').setValue(record.data.id_organisme);
 	form.findField('nom_organisme').setValue(record.data.nom_organisme);

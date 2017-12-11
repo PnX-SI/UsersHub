@@ -476,6 +476,7 @@ application.layout = function() {
 				,iconCls:'add'
 				,handler: function() {
 					Ext.getCmp('formorganismes').getForm().reset();
+					Ext.getCmp('label-uuid').setText('----------------------------- Aucun identifiant disponible -----------------------------<br /><br />', false);
 					Ext.getCmp('champ_action-organisme').setValue("insert");
 					Ext.getCmp('champ_id_initial-organisme').setValue(null);//conserver l'id initialement charger dans le formulaire pour la bouton annuler
 					panelOrganismes.setActiveTab(0);
