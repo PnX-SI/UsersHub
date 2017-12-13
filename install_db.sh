@@ -38,8 +38,9 @@ then
     mkdir -p log
     echo "Création de la base..."
     sudo -n -u postgres -s createdb -O $user_pg $db_name
-    echo "Ajout du language plpgsql..."
+    echo "Ajout du language plpgsql et de l'extension pour les UUID..."
     sudo -n -u postgres -s psql -d $db_name -c "CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog; COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';"
+    sudo -n -u postgres -s psql -d $db_name -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
     # Mise en place de la structure de la base et des données permettant son fonctionnement avec l'application
     echo "Création de la base..."
     export PGPASSWORD=$user_pg_pass;psql -h $db_host -U $user_pg -d $db_name -f data/usershub.sql &>> log/install_db.log

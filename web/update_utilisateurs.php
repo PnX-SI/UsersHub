@@ -1,5 +1,6 @@
 <?php 
 include "verification.php";
+if(PHP_VERSION_ID<50500){require("../lib/password.php");}
 //récupération des variables passées par l'application
 $id_role = $_GET['id_role'];
 $nom_role =pg_escape_string($_GET['nom_role']);
@@ -41,15 +42,16 @@ foreach ($json as $array) {
             if($action=="insert"){ //ajout 
               if ($id_role == '' ){
                 $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
-                        VALUES('false','$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus') RETURNING id_role;";
+                        VALUES('false','$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus') RETURNING id_role, uuid_role;";
                 $result = pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
                 while ($row = pg_fetch_row($result)) {
                   $id_role =  $row[0];
+                  $uuid_role = $row[1];
                 }
               }
               else {
-                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role, nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
-                        VALUES('false',$id_role, '$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus');";
+                $sql = "INSERT INTO utilisateurs.t_roles (groupe,id_role,uuid_role, nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
+                        VALUES('false',$id_role,'$uuid_role', '$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus');";
                 pg_query($sql) or die ('{success: false, msg:"ben ! pas bon. '.$db_fun_name.' '.$sql.' "}') ;
               }
               $txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute; ajout&eacute;.<br />";

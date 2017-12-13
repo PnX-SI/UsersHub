@@ -1,7 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 --Update t_roles TABLE
-
 DO $$ 
     BEGIN
         ALTER TABLE utilisateurs.t_roles ADD COLUMN uuid_role uuid;
@@ -33,5 +32,5 @@ DO $$
     END
 $$;
 ALTER TABLE utilisateurs.bib_organismes ALTER COLUMN uuid_organisme SET DEFAULT public.uuid_generate_v4(); 
-UPDATE utilisateurs.bib_organismes SET uuid_organisme = public.uuid_generate_v4() WHERE uuid_role IS NULL;
+UPDATE utilisateurs.bib_organismes SET uuid_organisme = public.uuid_generate_v4() WHERE uuid_organisme IS NULL;
 ALTER TABLE utilisateurs.bib_organismes ALTER COLUMN uuid_organisme SET NOT NULL;

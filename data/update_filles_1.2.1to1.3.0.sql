@@ -1,7 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 --Update t_roles TABLE
-
 DO $$ 
     BEGIN
         ALTER TABLE utilisateurs.t_roles ADD COLUMN uuid_role uuid;
@@ -19,7 +18,6 @@ DO $$
         WHEN duplicate_column THEN RAISE NOTICE 'column "pass_plus" already exists in "utilisateurs.t_roles".';
     END
 $$;
-
 
 --Update bib_organismes TABLE
 DO $$ 

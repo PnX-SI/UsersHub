@@ -81,7 +81,8 @@ application = function() {
         ,resetFormUtilisateur: function(){
             Ext.getCmp('formutilisateurs').setTitle('Ajout d\'un nouvel utilisateur');
             Ext.getCmp('formutilisateurs').getForm().reset();
-            Ext.getCmp('champ_action-utilisateur').setValue("insert");
+			Ext.getCmp('champ_action-utilisateur').setValue("insert");
+			Ext.getCmp('label-id').setText('----------------------------- Aucun identifiant disponible -----------------------------<br /><br />', false);
             Ext.getCmp('label-pass').setText('');
             Ext.getCmp('champ_id_initial-utilisateur').setValue(null);//conserver l'id initialement charger dans le formulaire pour la bouton annuler
         }

@@ -1,7 +1,7 @@
 <?php 
 include "verification.php";
 
-$txt = 'Base mère : '.$base.'</br>';
+$txt = 'Base m&egrave;re : '.$base.'</br>';
 $txt .= '<hr/>';
 
 require("../config/connecter.php");
@@ -38,22 +38,22 @@ foreach ($json as $array) {
         if($connect_dbname != $base){
             if ($connect_host<>"" AND $connect_dbname<>"" AND $connect_user<>"" AND $connect_pass<>"") {
                 $dbconnect = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
-                foreach ($array_roles as list($id,$uuid)){
-                    $sql = "UPDATE utilisateurs.t_roles SET uuid_role = '".$uuid."' WHERE id_role = ".$id;
-                    if(pg_query($sql)){$txt .= "Base ".$db_fun_name." --> ID_ROLE : ".$id." avec UUID ".$uuid."<br/>";} 
-                    else{$txt .= "Base ".$db_fun_name." --> ID_ROLE : ".$id." erreur de mise &agrave; jour.<br/>";}
+                foreach ($array_roles as $role){
+                    $sql = "UPDATE utilisateurs.t_roles SET uuid_role = '".$role[1]."' WHERE id_role = ".$role[0];
+                    if(pg_query($sql)){$txt .= "Base ".$db_fun_name." --> ID_ROLE : ".$role[0]." avec UUID ".$role[1]."<br/>";} 
+                    else{$txt .= "Base ".$db_fun_name." --> ID_ROLE : ".$role[0]." erreur de mise &agrave; jour.<br/>";}
                 }
-                foreach ($array_organismes as list($id,$uuid)){
-                    $sql = "UPDATE utilisateurs.bib_organismes SET uuid_organisme = '".$uuid."' WHERE id_organisme = ".$id;
-                    if(pg_query($sql)){$txt .= "Base ".$db_fun_name." --> ID_ORGANISME : ".$id." avec UUID ".$uuid."<br/>";} 
-                    else{$txt .= "Base ".$db_fun_name." --> ID_ORGANISME : ".$id." erreur de mise &agrave; jour.<br/>";}
+                foreach ($array_organismes as $org){
+                    $sql = "UPDATE utilisateurs.bib_organismes SET uuid_organisme = '".$org[1]."' WHERE id_organisme = ".$org[0];
+                    if(pg_query($sql)){$txt .= "Base ".$db_fun_name." --> ID_ORGANISME : ".$org[0]." avec UUID ".$org[1]."<br/>";} 
+                    else{$txt .= "Base ".$db_fun_name." --> ID_ORGANISME : ".$org[0]." erreur de mise &agrave; jour.<br/>";}
                 }
                 $txt .= "<hr/>";
                 pg_close($dbconnect);
             }
             else{$txt.="connection impossible &agrave; la base ".$db_fun_name.".<br />";}
         }
-        else{$txt.='On ne modifie pas la base mère "'.$base.'".';}
+        else{$txt.='On ne modifie pas la base m&egrave;re "'.$base.'".<br />';$txt .= "<hr/>";}
     }
 }// fin de bouclage sur les bases
 echo $txt;
