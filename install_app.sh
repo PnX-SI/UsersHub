@@ -5,7 +5,7 @@
 echo "Créer les fichiers de configurations en lien avec la base de données..."
 cp config/connecter.php.sample config/connecter.php
 cp config/dbconnexions.json.sample config/dbconnexions.json
-cp -n web/js/config.php.sample web/js/config.php
+cp -n config/config.php.sample config/config.php
 cp -n web/js/settings.js.sample web/js/settings.js
 cp -n web/images/main_logo.png.sample web/images/main_logo.png
 cp -n web/images/bandeau_utilisateurs.png.sample web/images/bandeau_utilisateurs.png
