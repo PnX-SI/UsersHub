@@ -3,6 +3,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 if(PHP_VERSION_ID<50500){require("../lib/password.php");}
 require("../config/config.php");
+
 function testpass($pass)
 {
 	require("../config/config.php");
@@ -38,7 +39,7 @@ if (isset ($_POST['button'])){
 				//vérification de la concordance des deux mots de passe
 				if (($newpass == $newpassbis)){
 					$passmd5new = md5($newpass); //calcul du nouveau pass md5
-					$passplus = password_hash($newpass,PASSWORD_BCRYPT,['cost' => 13]); //calcul du hash pour le nouveau pass
+					$passplus = password_hash($newpass,PASSWORD_BCRYPT,['cost' => $pass_cost]); //calcul du hash pour le nouveau pass
 					//mise à jour dans la base mère
 					$query = "UPDATE utilisateurs.t_roles SET pass = '".$passmd5new ."', pass_plus = '".$passplus ."' WHERE id_role = '".$id_role."'";
 					$sql_update = pg_query($query) or die ("Erreur requête 01") ;
@@ -57,10 +58,10 @@ if (isset ($_POST['button'])){
 							$connect_user = $database['user'];
 							$connect_pass = $database['pass'];
 							$connect_port = $database['port'];
-							//connexion sur chacune des bases 
+							//connexion sur chacune des bases
 							if($connect_dbname != $base){
 								if ($connect_host<>"" AND $connect_dbname<>"" AND $connect_user<>"" AND $connect_pass<>"") {
-									$dbconnect = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass"); 
+									$dbconnect = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
 									$sql = "UPDATE utilisateurs.t_roles SET pass = '".$passmd5new ."', pass_plus = '".$passplus ."' WHERE id_role = '".$id_role."'";
 									$result = pg_query($sql) or die ('Erreur requête 02') ;
 									$txt .= $db_fun_name." - Mise &agrave; jour.<br />";

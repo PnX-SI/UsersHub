@@ -2,6 +2,8 @@
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 if(PHP_VERSION_ID<50500){require("../lib/password.php");}
 
+require("../config/config.php");
+
 $erreur='';
 
 if (isset ($_GET['verif'])){
@@ -13,9 +15,8 @@ if (isset ($_POST['button'])){
 		$login = $_POST['flogin'];
 		$pass = $_POST['fpassword'];
 		$passmd5 = md5($pass);
-		$passplus = password_hash($pass,PASSWORD_BCRYPT,['cost' => 13]);
+		$passplus = password_hash($pass,PASSWORD_BCRYPT,['cost' => $pass_cost]);
 		require("../config/connecter.php");
-		require("../config/config.php");
 		if($pass_method == 'md5'){
 			$sql = "SELECT * FROM utilisateurs.t_roles u WHERE u.identifiant = '".$login."' AND u.pass = '".$passmd5."'";
 			$result = pg_query($sql) or die ("Erreur requête02") ;
@@ -46,7 +47,7 @@ if (isset ($_POST['button'])){
 			header("Location: accueil.php");
 			}
 		}
-		
+
 		else{
 						$erreur='<img src="images/supprimer.gif" alt="" align="absmiddle">&nbsp;Erreur d\'authentification';
 		}

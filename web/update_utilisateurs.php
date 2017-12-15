@@ -1,6 +1,8 @@
-<?php 
+<?php
 include "verification.php";
 if(PHP_VERSION_ID<50500){require("../lib/password.php");}
+require("../config/config.php");
+
 //récupération des variables passées par l'application
 $id_role = $_GET['id_role'];
 $nom_role =pg_escape_string($_GET['nom_role']);
@@ -12,7 +14,7 @@ if(isset($_GET['id_organisme'])){$id_organisme=$_GET['id_organisme'];}else{$id_o
 if(isset($_GET['id_unite'])){$id_unite=$_GET['id_unite'];}else{$id_unite= null;}
 if(isset($_GET['pass']) AND $_GET['pass']<>''){
     $pass=md5($_GET['pass']);
-    $passplus=password_hash($_GET['pass'],PASSWORD_BCRYPT,['cost' => 13]);
+    $passplus=password_hash($_GET['pass'],PASSWORD_BCRYPT,['cost' => $pass_cost]);
 }
 else{$pass=null;}
 if(isset($_GET['supprpass'])){$supprpass='true';}else{$supprpass= 'false';}
@@ -36,10 +38,10 @@ foreach ($json as $array) {
         $connect_user = $database['user'];
         $connect_pass = $database['pass'];
         $connect_port = $database['port'];
-        //connexion sur chacune des bases 
+        //connexion sur chacune des bases
 		if ($connect_host<>"" OR $connect_port<>"" OR $connect_dbname<>"" OR $connect_user<>"" OR $connect_pass<>"") {
 			$dbconn = pg_connect("host=$connect_host port=$connect_port dbname=$connect_dbname user=$connect_user password=$connect_pass");
-            if($action=="insert"){ //ajout 
+            if($action=="insert"){ //ajout
               if ($id_role == '' ){
                 $sql = "INSERT INTO utilisateurs.t_roles (groupe,nom_role,prenom_role,identifiant,remarques,email,id_organisme,id_unite,pn, pass, pass_plus)
                         VALUES('false','$nom_role','$prenom_role','$identifiant','$remarques','$email',$id_organisme,$id_unite,'$pn','$pass','$passplus') RETURNING id_role, uuid_role;";
@@ -62,9 +64,9 @@ foreach ($json as $array) {
                 $res = pg_query($sql);
                 $nb = pg_numrows($res);
                 // si le role existe
-                if ($nb>0){ 
+                if ($nb>0){
                     if($action=="update"){ //modification
-                        $sql = "Update utilisateurs.t_roles 
+                        $sql = "Update utilisateurs.t_roles
                         set nom_role = '$nom_role',
                         prenom_role = '$prenom_role',
                         identifiant = '$identifiant',
@@ -88,10 +90,10 @@ foreach ($json as $array) {
                                 WHERE id_role = $id_role";
                         if(pg_query($sql)){$txt = $db_fun_name." - le role \"".addslashes($role)."\" a &eacute;t&eacute; supprim&eacute;.<br />";}
                         else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur : role \''.addslashes($role).'\' non supprim&eacute;.</span><br />';}
-                    }   
+                    }
                 }
                 //si le role n'existe pas
-                else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur :  le role '.$id_role. ' n\\\'existe pas dans cette base.</span><br />';}   
+                else{$txt = $db_fun_name.'<span style="color:red;"> - Erreur :  le role '.$id_role. ' n\\\'existe pas dans cette base.</span><br />';}
             }
             //-- Execution des commandes sql complémentaires
             if ((isset($database['autresactions'])) && (isset($database['autresactions']['role_'.$action]))) {
@@ -108,4 +110,3 @@ foreach ($json as $array) {
 header('Content-type: text/html');
 echo "{success: true, msg:'".$msg."', id_role:".$id_role."}";
 ?>
-
