@@ -41,7 +41,7 @@ License
 -------
 
 * OpenSource - BSD
-* Copyright (c) 2015 - Parc National des Écrins
+* Copyright (c) 2015-2017 - Parc National des Écrins / Parc national des Cévennes
 
 
 .. image:: http://geonature.fr/img/logo-pne.jpg
