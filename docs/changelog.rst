@@ -3,24 +3,26 @@ CHANGELOG
 =========
 
 
-1.3.1-dev (2017-12-13)
+1.3.1-dev (2017-12-18)
 ------------------
 
 **Changements**
 
-* correction de l'installation (localisation du config.php)
+* Correction de l'installation (localisation du config.php)
 * Mise en paramètre de cost de l'algorythme de criptage bcrypt
-* préparation d'une version 1.4.0 
-    * avec intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. 
+* Ajout d'une vue manquante et nécessaire au sous module d'authentification 
+* Préparation d'une version 1.4.0 
+    * Avec intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. 
 Ce mécanisme permet aussi d'affecter des étiquettes à des roles, des organismes ou des applications.
 Il permet également de gérer la notion de portée des actions sur différentes étendue de données (mes données seulement, celles de mon organisme, toutes les données)
     * Intégration d'une hiérarchie entre applications et organismes (id_parent).
-    * pour le moment, ces extentions du modèle ne concernent que la base de données et pas l'interface de l'application.
+    * Pour le moment, ces extentions du modèle ne concernent que la base de données et pas l'interface de l'application.
 
 **Notes de version**
 
 * Ajouter le paramètre ``$pass_cost`` dans le ``config/config.php`` et lui donner une valeur éventuellement différente. Plus la valeur est importante, plus le temps de calcul de hashage du mot de passe est important.
-* Il est conseillé, mais non indispensable à ce stade, de reporter les modifications dans les bases filles.
+* Exécuter le script ``data/update1.3.0to1.4.0.sql``
+* Il est conseillé, mais non indispensable à ce stade, de reporter les modifications dans les bases filles, notamment celle concernées par l'utilisation du sous module d'authentification.
 
 __TODO__ : Script update pour mettre à jour une base existante.
 
