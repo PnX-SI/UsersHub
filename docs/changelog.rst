@@ -10,9 +10,10 @@ CHANGELOG
 
 * Correction de l'installation (localisation du config.php)
 * Mise en paramètre de cost de l'algorythme de criptage bcrypt
-* Ajout d'une vue manquante et nécessaire au sous module d'authentification 
-* Préparation d'une version 1.4.0 
-    * Avec intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. 
+* Ajout d'une vue manquante et nécessaire au sous module d'authentification
+* Ajout du ``pass_plus`` dans toutes les vues
+* Préparation d'une version 1.4.0 (dont les extentsions sont utilisée dans le développement de GeoNature2)
+    * Intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. 
 Ce mécanisme permet aussi d'affecter des étiquettes à des roles, des organismes ou des applications.
 Il permet également de gérer la notion de portée des actions sur différentes étendue de données (mes données seulement, celles de mon organisme, toutes les données)
     * Intégration d'une hiérarchie entre applications et organismes (id_parent).
@@ -21,10 +22,9 @@ Il permet également de gérer la notion de portée des actions sur différentes
 **Notes de version**
 
 * Ajouter le paramètre ``$pass_cost`` dans le ``config/config.php`` et lui donner une valeur éventuellement différente. Plus la valeur est importante, plus le temps de calcul de hashage du mot de passe est important.
-* Exécuter le script ``data/update1.3.0to1.4.0.sql``
-* Il est conseillé, mais non indispensable à ce stade, de reporter les modifications dans les bases filles, notamment celle concernées par l'utilisation du sous module d'authentification.
+* Exécuter le script ``data/update1.3.0to1.3.1.sql``
+* Reporter les modifications dans les bases filles.
 
-__TODO__ : Script update pour mettre à jour une base existante.
 
 1.3.0 (2017-12-11)
 ------------------
