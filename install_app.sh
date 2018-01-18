@@ -18,9 +18,6 @@ sed -i "s/passe='.*$/passe='$user_pg_pass';/" config/connecter.php
 sed -i "s/base='.*$/base='$db_name';/" config/connecter.php
 sed -i "s/port='.*$/port='$pg_port';/" config/connecter.php
 
-echo "Suppression des fichiers de log de l'installation..."
-sudo rm log/*.log
-
 
 APACHE_REP=/var/www/
 if /usr/sbin/apache2 -v | grep -q version.*2.4; then
