@@ -18,6 +18,23 @@ sed -i "s/passe='.*$/passe='$user_pg_pass';/" config/connecter.php
 sed -i "s/base='.*$/base='$db_name';/" config/connecter.php
 sed -i "s/port='.*$/port='$pg_port';/" config/connecter.php
 
+echo "Configuration initiale du fichier config/dbconnexions.json"
+rm config/dbconnexions.json
+touch config/dbconnexions.json
+echo "{" >> config/dbconnexions.json
+echo "    \"databases\":" >> config/dbconnexions.json
+echo "    [" >> config/dbconnexions.json
+echo "        {" >> config/dbconnexions.json  
+echo "            \"dbfunname\":\"Utilisateurs\"" >> config/dbconnexions.json 
+echo "            ,\"host\":\"$pg_host\"" >> config/dbconnexions.json 
+echo "            ,\"dbname\":\"$usershubdb_name\"" >> config/dbconnexions.json 
+echo "            ,\"user\":\"$user_pg\"" >> config/dbconnexions.json 
+echo "            ,\"pass\":\"$user_pg_pass\"" >> config/dbconnexions.json 
+echo "            ,\"port\":\"$pg_port\"" >> config/dbconnexions.json 
+echo "        }" >> config/dbconnexions.json
+echo "    ]" >> config/dbconnexions.json
+echo "}" >> config/dbconnexions.json
+
 
 APACHE_REP=/var/www/
 if /usr/sbin/apache2 -v | grep -q version.*2.4; then
@@ -25,13 +42,4 @@ if /usr/sbin/apache2 -v | grep -q version.*2.4; then
 	APACHE_REP=/var/www/html
 fi
 
-
-if [ ! -h $APACHE_REP/usershub ]; then
-  echo "Configuration du répertoire web de l'application..."
-  cd web
-  sudo ln -s ${PWD}/ $APACHE_REP/usershub
-  cd ..
-else
-  echo "Le répertoire de l'application exite déjà"
-fi
 echo "Fin. Vous devez manuellement éditer le fichier config/dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
