@@ -108,7 +108,8 @@ Ce mot de passe, ainsi que l'utilisateur PostgreSQL ``geonatuser`` créés ci-de
 - config/connecter.php
 - config/dbconnexions.json
 
-* Configuration Apache
+Configuration Apache
+=====================
 
 Créer le fichier de configuration Apache pour UsersHub:
 
@@ -116,13 +117,14 @@ Créer le fichier de configuration Apache pour UsersHub:
 
 Ouvrir et copier la configuration suivante dans le fichier créé:
 
-``sudo nano usershub.conf``
+``sudo nano usershub.conf`` 
 
-  ::
+  ::  
+  
     #Configuration usershub
     Alias /usershub /home/<MON_USER>/usershub/web
     <Directory /home/<MON_USER>/usershub/web>
-        Require all granted
+    Require all granted
     </Directory>
 
 
