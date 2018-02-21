@@ -26,8 +26,8 @@ echo "    \"databases\":" >> config/dbconnexions.json
 echo "    [" >> config/dbconnexions.json
 echo "        {" >> config/dbconnexions.json  
 echo "            \"dbfunname\":\"Utilisateurs\"" >> config/dbconnexions.json 
-echo "            ,\"host\":\"$pg_host\"" >> config/dbconnexions.json 
-echo "            ,\"dbname\":\"$usershubdb_name\"" >> config/dbconnexions.json 
+echo "            ,\"host\":\"$db_host\"" >> config/dbconnexions.json 
+echo "            ,\"dbname\":\"$db_name\"" >> config/dbconnexions.json 
 echo "            ,\"user\":\"$user_pg\"" >> config/dbconnexions.json 
 echo "            ,\"pass\":\"$user_pg_pass\"" >> config/dbconnexions.json 
 echo "            ,\"port\":\"$pg_port\"" >> config/dbconnexions.json 
