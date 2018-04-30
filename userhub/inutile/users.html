@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+
+    <p>Affichage des utilisateurs</p>
+
+
+
+
+    <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Groupe</th>
+                <th scope="col">ID</th>
+                <th scope="col">Identifiant</th>
+                <th scope="col">ID Organisme</th>
+                <th scope="col">Nom_role</th>
+                <th scope="col">Prenom_role</th>
+                <th scope="col">accès info</th>
+                <th scope="col">Supprimer</th>
+                <th scope="col">UID</th>
+                <th scope="col"> 
+                    <button type="submit" class="btn "><a href="{{ url_for('user.user') }}">Add_user</a> </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            
+              {% for u in user %}  
+              <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{u.groupe}}</td>
+                <td>{{u.id_role}}</td>
+                <td>{{u.identifiant}}</td>
+                <td>{{u.id_organisme}}</td>
+                <td>{{u.nom_role}}</td>
+                <td>{{u.prenom_role}}</td>
+                <td>{u.</td>
+                <td>
+                  <button type="submit" class="btn "><a href="{{ url_for('user.user_unique', id_role = u.id_role) }}">Info </a> </button>
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-danger"><a href="{{ url_for('user.deluser', id_role = u.id_role) }}">Supprimer</a></button>
+                </td>  
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+
+        <p></p>
+        <p></p>
+
+        <form action= {{ url_for('user.accueil') }} method="get">
+                <button type="submit" class="btn btn-primary">Retour Accueil</button>
+        </form>
+
+   </body>
+</html>
+

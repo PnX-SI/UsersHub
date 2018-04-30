@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    {% include "header.html" %}  
+
+    <body>
+
+            {% include "head-appli.html" %}
+            <p>
+                
+            </p>
+        <h2>Connexion</h2>
+        <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username.label }}<br>
+                    {{ form.username(size=32) }}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+
+    </body>
+</html>

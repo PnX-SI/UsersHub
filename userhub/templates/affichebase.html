@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+
+        
+
+    <p>Affichage de : </p>
+
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                {% for nom in entete %}
+                <th scope="col">{{nom}}</th>
+                {% endfor %}
+                <th scope="col">Modification</th>
+                <th scope="col">Suppression</th>
+            </tr> 
+
+        </thead>
+        <tbody>
+            {% for elt in table %}
+            <tr>   
+            <th scope="row">{{loop.index}}</th>
+                {% for nom in ligne %}  
+               
+                    <td>{{elt[nom]}}</td>
+               
+                    
+                {% endfor %}
+               
+                <td>
+                        <a href="{{cheminM}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
+
+                </td>
+                <td>
+                    <a href="{{cheminS}}{{elt[cle]}}"  ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
+                </td>
+               
+                </div>
+                  
+                </tr>
+            {% endfor %}
+           
+        </tbody>
+    </table>
+
+
+
+    <p></p>
+    <p></p>
+
+    <form action= {{ url_for('user.accueil') }} method="get">
+            <button type="submit" class="btn btn-primary">Retour Accueil</button>
+    </form>
+</body>
+</html>
+
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+    
+        {% include "head-appli.html" %}
+
+        <p></p>
+
+        
+
+            <form method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }} 
+                
+                    <div class = "row">
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                              
+                        
+                            <label>{{ form.nom_organisme.label }}</label>
+                            {{ form.nom_organisme(size=32, class="form-control", value = nom_organisme) }}
+                        
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                             <label>{{ form.adresse_organisme.label }}</label>
+                            {{ form.adresse_organisme(size=32, class="form-control",  value = adresse_organisme) }}
+                           
+                        </div>
+        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                            <label>{{ form.cp_organisme.label }}</label>
+                            {{ form.cp_organisme(  class="form-control", value = cp_organisme) }}
+                        
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    
+                                <label>{{ form.ville_organisme.label }}</label>
+                                {{ form.ville_organisme(size = 32, class="form-control", value = ville_organisme)}}
+                             </div>
+                            
+            
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                                <label>{{ form.tel_organisme.label }}</label>
+                                {{ form.tel_organisme(size=32, class="form-control", value = tel_organisme) }}
+                            
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                                    
+                            <label>{{ form.fax_organisme.label }}</label>
+                            {{ form.fax_organisme(size=32, class="form-control", value = fax_organisme) }}
+                                
+                        </div>
+            
+                            
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                
+                            <label>{{ form.email_organisme.label }}</label>
+                            {{ form.email_organisme(size=32, class="form-control", value = email_organisme )}}
+                            
+                        </div>
+        
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                                
+                            
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul>
+                                {% for m in messages %}
+                                    <li>{{ m }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% endwith %}
+                        
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <p>
+                                
+                            </p>
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        
+                            {{ form.submit(class="form-control") }}
+                         
+                        </div>             
+                     </div>
+                    </form>
+
+
+                    <p></p>
+                    <p></p>
+            
+                    <form action= {{ url_for('user.accueil') }} method="post">
+                        <button type="submit" class="btn btn-primary">Retour Accueil</button>
+                    </form>
+
+
+   </body>
+</html>

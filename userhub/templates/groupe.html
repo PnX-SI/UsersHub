@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+    {% include "head-appli.html" %}
+    
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }} 
+        
+            <div class = "row">
+                
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                      
+                
+                    <label>{{ form.nom_role.label }}</label>
+                    {{ form.nom_role(size=32, class="form-control", value = nom_role) }}
+                
+                </div>
+                
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                     
+                    
+                        <label>{{ form.desc_role.label }}</label>
+                        {{ form.desc_role(size=32, class="form-control",  value = desc_role) }}
+                   
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            
+                                
+                                
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul>
+                            {% for m in messages %}
+                                <li>{{ m }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% endwith %}
+                    
+                    </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                
+                        <p>
+
+                        </p>
+                
+                </div>
+
+                
+                
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        
+                    {{ form.submit(class="form-control") }}
+                 
+                </div>             
+             </div>
+            </form>
+
+
+            <p></p>
+            <p></p>
+    
+            <form action= {{ url_for('user.accueil') }} method="post">
+                    <button type="submit" class="btn btn-primary">Retour Accueil</button>
+            </form>
+
+
+</body>
+</html>

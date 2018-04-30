@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+<p>Affichage des organismes </p>
+
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">VIlle</th>
+                <th scope="col">Tel</th>
+                <th scope="col">Fax</th>
+                <th scope="col">Email</th>
+                <th scope="col">ID</th>
+                <th scope="col">Modifier</th>
+                <th scope="col">Supprimer</th>
+                <th scope="col"> 
+                    <button type="submit" class="btn "><a href="">Add_Orga</a> </button>
+                </th>
+            </tr> 
+
+        </thead>
+        <tbody>
+
+                {% for elt in table %} 
+            
+                <tr>
+
+
+                <th scope="row">{{loop.index}}</th>
+                <td>{{elt.nom_organisme}}</td>
+                <td>{{elt.adresse_organisme}}</td>
+                <td>{{elt.cp_organisme}}</td>
+                <td>{{elt.ville_organisme}}</td>
+                <td>{{elt.tel_organisme}}</td>
+                <td>{{elt.fax_organisme}}</td>
+                <td>{{elt.email_organisme}}</td>
+                <td>{{elt.id_organisme}}</td>
+                <td>
+                  <button type="submit" class="btn "><a href="" >Info Organisme</a> </button>
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-danger"><a href="">Supprimer</a></button>
+                </td>  
+
+     </tr>
+    {% endfor %}
+        
+    </tbody>
+    </table>
+
+
+    <p></p>
+    <p></p>
+
+    <form action= {{ url_for('user.accueil') }} method="get">
+            <button type="submit" class="btn btn-primary">Retour Accueil</button>
+    </form>
+
+</body>
+</html>

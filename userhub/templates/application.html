@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+    
+        {% include "head-appli.html" %}
+
+        <p>Affichage de: </p>
+
+            <form method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }} 
+                
+                    <div class = "row">
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                              
+                        
+                            <label>{{ form.nom_application.label }}</label>
+                            {{ form.nom_application(size=32, class="form-control", value = nom_application) }}
+                        
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                                <label>{{ form.desc_application.label }}</label>
+                                {{ form.desc_application(size=32, class="form-control", value = desc_application) }}
+                           
+                        </div>
+
+                       
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                                <label>{{ form.id_parent.label }}</label>
+                            {{ form.id_parent(  class="custom-select", id="inputGroupSelect01", value = id_parent) }}
+                        
+                        </div>
+                                              
+                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <p></p>
+                                </div>
+                    
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                               
+                            
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul>
+                                {% for m in messages %}
+                                    <li>{{ m }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% endwith %}
+                        
+                        </div>
+                        
+                       
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <p></p>
+                                </div>
+                        
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        
+                            {{ form.submit(class="form-control") }}
+                         
+                        </div>             
+                     </div>
+                    </form>
+
+
+                    <p></p>
+                    <p></p>
+            
+                    <form action= {{ url_for('user.accueil') }} method="post">
+                            <button type="submit" class="btn btn-primary">Retour Accueil</button>
+                    </form>
+
+
+   </body>
+</html>
