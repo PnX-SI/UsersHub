@@ -2,3 +2,4 @@
 log/
 server.py
 config.py
+venv

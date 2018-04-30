@@ -1,0 +1,2 @@
+# Database settings
+SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usershubdb"
