@@ -20,7 +20,7 @@ def tags():
 @route.route('/tag', methods=['GET','POST'])
 def tag():
     form = t_tagsforms.Tag()
-    form.id_tag_type.choices =TApplications.choixSelect('id_application','nom_application',1)
+    form.id_tag_type.choices =BibTagTypes.choixSelect('id_tag_type','tag_type_name')
     if request.method =='POST':
         if form.validate() and form.validate_on_submit():
             form_tag = form.data
@@ -37,7 +37,7 @@ def tag():
 def update(id_tag):
     tag = TTags.get_one(id_tag)
     form = t_tagsforms.Tag()
-    form.id_tag_type.choices = TApplications.choixSelect('id_application','nom_application',1)
+    form.id_tag_type.choices = BibTagTypes.choixSelect('id_tag_type','tag_type_name')
     if request.method == 'GET':
         form.id_tag_type.process_data(tag['id_tag_type'])
     if request.method == 'POST':

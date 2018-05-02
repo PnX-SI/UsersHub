@@ -63,7 +63,7 @@ class TTags(GenericRepository):
     __tablename__ = 't_tags'
     __table_args__ = {'schema':'utilisateurs'}
     id_tag = db.Column(db.Integer,primary_key = True)
-    id_tag_type = db.Column(db.Integer, ForeignKey('utilisateurs.bib_tag_types'))
+    id_tag_type = db.Column(db.Integer)
     tag_code = db.Column(db.Unicode)
     tag_name = db.Column(db.Unicode)
     tag_label = db.Column(db.Unicode)
@@ -157,7 +157,7 @@ class BibUnites(GenericRepository):
 @serializable
 class BibTagTypes(GenericRepository):
     __tablename__ = 'bib_tag_types'
-    __table_args__ = {'schema':'utilsateurs'}
+    __table_args__ = {'schema':'utilisateurs'}
     id_tag_type = db.Column(db.Integer, primary_key = True)
     tag_type_name = db.Column(db.Unicode)
     tag_type_desc = db.Column(db.Unicode)
@@ -165,7 +165,7 @@ class BibTagTypes(GenericRepository):
 @serializable
 class BibDroits(GenericRepository):
     __tablename__ = 'bib_droits'
-    __table_args__ = {'schema':'utilsateurs'}
+    __table_args__ = {'schema':'utilisateurs'}
     id_droit = db.Column(db.Integer, primary_key = True)
     nom_droit = db.Column(db.Unicode)
     desc_droit = db.Column(db.Unicode)
