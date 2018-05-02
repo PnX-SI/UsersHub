@@ -21,7 +21,7 @@ def applications():
 @route.route('/application', methods=['GET','POST'])
 def application():
     form = t_applicationsforms.Application()
-    form.id_parent.choices = TApplications.choixApp()
+    form.id_parent.choices = TApplications.choixSelect('id_application','nom_application',1)
    
     if request.method == 'POST': 
         if form.validate() and form.validate_on_submit():
@@ -47,7 +47,7 @@ def delete(id_application):
 def update(id_application):
     form = t_applicationsforms.Application()
     application = TApplications.get_one(id_application)
-    tab = TApplications.choixApp()
+    tab = TApplications.choixSelect('id_application','nom_application',1)
     tab.remove((application['id_application'],application['nom_application']))
     form.id_parent.choices = tab
     if request.method == 'GET':

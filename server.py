@@ -25,6 +25,9 @@ with app.app_context():
     from userhub.t_applications import route
     app.register_blueprint(route.route, url_prefix='/application')
 
+    from userhub.t_tags import route
+    app.register_blueprint(route.route, url_prefix='/t_tags')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -43,7 +43,7 @@ def users():
 @route.route('/user', methods=['GET','POST'])
 def user():
     formu = t_rolesforms.Utilisateur()
-    formu.id_organisme.choices = Bib_Organismes.choixOrg()
+    formu.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
     if request.method == 'POST':
         if formu.validate_on_submit() and formu.validate():
             form_user = formu.data
@@ -65,7 +65,7 @@ def user():
 def user_unique(id_role):
     user = TRoles.get_one(id_role)
     formu = t_rolesforms.Utilisateur(request.form)
-    formu.id_organisme.choices = Bib_Organismes.choixOrg()
+    formu.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
     if request.method == 'GET':
         formu.id_organisme.process_data(user['id_organisme'])
         print(formu.id_organisme.data)

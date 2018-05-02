@@ -40,8 +40,15 @@ class GenericRepository(db.Model):
         db.session.commit()
 
     @classmethod
-    def choixOrg(cls):
-        return ""
+    def choixSelect(cls,id,nom,aucun = None):
+        data = cls.get_all()
+        choices = []
+        for d in data :
+            choices.append((d[id], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
+        
 
 
     

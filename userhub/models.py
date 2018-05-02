@@ -22,13 +22,7 @@ class  Bib_Organismes(GenericRepository):
     email_organisme = db.Column(db.Unicode)    
     id_parent = db.Column(db.Integer)
 
-    @classmethod
-    def choixOrg(cls):
-        org = cls.get_all()
-        choices = []
-        for o in org :
-            choices.append((o['id_organisme'], o['nom_organisme']))
-        return choices
+
 
 @serializable
 class TRoles(GenericRepository):
@@ -62,14 +56,7 @@ class TApplications(GenericRepository):
     desc_application = db.Column(db.Unicode)
     id_parent = db.Column(db.Unicode)
 
-    @classmethod
-    def choixApp(cls):
-        app = cls.get_all()
-        choices = []
-        for a in app :
-            choices.append((a['id_application'], a['nom_application']))
-        choices.append((-1,'Aucun'))
-        return choices
+   
 
 @serializable
 class TTags(GenericRepository):
