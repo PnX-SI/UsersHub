@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+    
+        {% include "head-appli.html" %}
+
+        <p>Affichage de: </p>
+
+            <form method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }} 
+                
+                    <div class = "row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                                <label>{{ form.tag_name.label }}</label>
+                                {{ form.tag_name(size=32, class="form-control", value = name) }}
+                           
+                        </div>
+                        
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                            <label>{{ form.tag_desc.label }}</label>
+                            {{ form.tag_desc(size=32, class="form-control", value = desc) }}
+                       
+                        </div>
+
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                              
+                        
+                            <label>{{ form.tag_code.label }}</label>
+                            {{ form.tag_code(size=32, class="form-control", value = code) }}
+                        
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                                <label>{{ form.tag_label.label }}</label>
+                                {{ form.tag_label(size=32, class="form-control", value = label) }}
+                           
+                        </div>
+                        
+                        
+
+                       
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                                <label>{{ form.id_tag_type.label }}</label>
+                            {{ form.id_tag_type(  class="custom-select", id="inputGroupSelect01") }}
+                        
+                        </div>
+                                              
+                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <p></p>
+                                </div>
+                    
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        
+                               
+                            
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul>
+                                {% for m in messages %}
+                                    <li>{{ m }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% endwith %}
+                        
+                        </div>
+                        
+                       
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <p></p>
+                                </div>
+                        
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        
+                            {{ form.submit(class="form-control") }}
+                         
+                        </div>             
+                     </div>
+                    </form>
+
+
+                    <p></p>
+                    <p></p>
+            
+                    <form action= {{ url_for('user.accueil') }} method="post">
+                            <button type="submit" class="btn btn-primary">Retour Accueil</button>
+                    </form>
+
+
+   </body>
+</html>

@@ -60,7 +60,22 @@
 
         <form action= {{ url_for('application.application') }} method="get">
                 <button type="submit" class="btn btn-primary">add appli</button>
-        </form>   
+        </form>  
+        
+        <p></p>
+        <p></p>
+
+        <form action= {{ url_for('tags.tags') }} method="get">
+                <button type="submit" class="btn btn-primary">Info tag</button>
+        </form>
+
+     
+        <p></p>
+        <p></p>
+
+        <form action= {{ url_for('tags.tag') }} method="get">
+                <button type="submit" class="btn btn-primary">add tag</button>
+        </form>
 
     </body>
 </html>

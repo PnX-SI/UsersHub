@@ -63,7 +63,7 @@ class TTags(GenericRepository):
     __tablename__ = 't_tags'
     __table_args__ = {'schema':'utilisateurs'}
     id_tag = db.Column(db.Integer,primary_key = True)
-    id_tag_type = db.Column(db.Integer)
+    id_tag_type = db.Column(db.Integer, ForeignKey('utilisateurs.bib_tag_types'))
     tag_code = db.Column(db.Unicode)
     tag_name = db.Column(db.Unicode)
     tag_label = db.Column(db.Unicode)
