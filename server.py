@@ -28,6 +28,9 @@ with app.app_context():
     from userhub.t_tags import route
     app.register_blueprint(route.route, url_prefix='/t_tags')
 
+    from userhub.bib_tag_types import route
+    app.register_blueprint(route.route, url_prefix='/tags_type')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
