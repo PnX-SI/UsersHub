@@ -1,2 +1,5 @@
 # Database settings
 SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usershubdb"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SECRET_KEY = 'super secret key'
