@@ -50,7 +50,12 @@ def update(id_application):
     tab = TApplications.choixApp()
     tab.remove((application['id_application'],application['nom_application']))
     form.id_parent.choices = tab
-    print('coucou')  
+    if request.method == 'GET':
+        print(form.id_parent.data)        
+        if application['id_parent'] == None:
+                form.id_parent.process_data(-1)
+        else:
+            form.id_parent.process_data(application['id_parent'])  
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
             form_app = form.data
@@ -64,4 +69,4 @@ def update(id_application):
             return redirect(url_for('application.applications'))
         else :
             flash(form.errors)
-    return render_template('application.html', form= form, nom_application = application['nom_application'], desc_application= application['desc_application'] , id_parent = application['id_parent'])
+    return render_template('application.html', form= form, nom_application = application['nom_application'], desc_application= application['desc_application'] )
