@@ -1,5 +1,28 @@
-<div class="container-fluid" id="entete">
-
-    <h1>UsersHUb</h1>
-
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">UsersHub</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('user.users') }}">Utilisateurs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('organisme.organismes') }}">Organismes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('groupe.groupes') }}">Groupe</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('application.applications') }}">Application</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tags.tags') }}">Tag</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tag_type.tag_types') }}">Type Tag</a>
+            </li>
+          </ul>
+        </div>
+      </nav>

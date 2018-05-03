@@ -22,18 +22,13 @@ def auth():
             data = form.data
             login = data['username']
             password = data['password'].encode('utf-8')
-            print(login)
-            print(password)
             q = db.session.query(TRoles)
             q =q.filter(TRoles.identifiant == login)
             data = q.all()
             for user in data:
-                print('cc')
-                print(login)
                 mdp = user.pass_plus.encode('utf-8')
-                print(mdp)
                 if check_password_hash(mdp,password):
-                    print('yes')
+                    Session['user'] = data['password']
                     return redirect(url_for('user.accueil'))
 
     return render_template('login.html', form = form)
