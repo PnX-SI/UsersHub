@@ -8,21 +8,26 @@ from userhub.models import TRoles
 from userhub.models import Bib_Organismes, CorRoles
 from userhub.utils.utilssqlalchemy import json_resp
 from userhub.env import db
+from flask_bcrypt import (Bcrypt,
+                          check_password_hash,
+                          generate_password_hash)
+
+import bcrypt
 
 
 route =  Blueprint('user',__name__)
 
 
-@route.route('/login', methods=['GET','POST'])
-def login():
-    form = t_rolesforms.LogUser()
-    print(form.validate_on_submit())
-    if form.validate_on_submit():
-        if t_rolesrepository.admin_valide(form.username.data,form.password.data) :
-            session['Pseudo']= (form.username.data, form.password.data)
-            print(session.get('Pseudo')[0],session.get('Pseudo')[1])
-            return redirect(url_for('user.accueil'))
-    return render_template('login.html', form=form)
+# @route.route('/login', methods=['GET','POST'])
+# def login():
+#     form = t_rolesforms.LogUser()
+#     print(form.validate_on_submit())
+#     if form.validate_on_submit():
+#         if t_rolesrepository.admin_valide(form.username.data,form.password.data) :
+#             session['Pseudo']= (form.username.data, form.password.data)
+#             print(session.get('Pseudo')[0],session.get('Pseudo')[1])
+#             return redirect(url_for('user.accueil'))
+#     return render_template('login.html', form=form)
 
 
 @route.route('/accueil',methods=['GET','POST'])
@@ -47,12 +52,13 @@ def user():
     if request.method == 'POST':
         if formu.validate_on_submit() and formu.validate():
             form_user = formu.data
-            form_user['groupe'] = False 
+            form_user['groupe'] = False           
             form_user.pop('mdpconf')
             form_user.pop('submit')
             form_user.pop('csrf_token')
             form_user.pop('id_role')
             if formu.pass_plus.data == formu.mdpconf.data:
+                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
                 TRoles.post(form_user)
                 return redirect(url_for('user.users'))
             else :
@@ -80,6 +86,7 @@ def user_unique(id_role):
             form_user.pop('csrf_token')        
             if formu.pass_plus.data == formu.mdpconf.data:
                 form_user['id_role'] = user['id_role']
+                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
                 TRoles.update(form_user)
                 return redirect(url_for('user.users'))
             else :

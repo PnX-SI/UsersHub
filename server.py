@@ -31,6 +31,9 @@ with app.app_context():
     from userhub.bib_tag_types import route
     app.register_blueprint(route.route, url_prefix='/tags_type')
 
+    from userhub.auth import route
+    app.register_blueprint(route.route, url_prefix='/log')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
