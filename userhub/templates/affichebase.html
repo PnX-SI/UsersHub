@@ -7,10 +7,11 @@
         {% include "head-appli.html" %}
 
         
+        
 
-    
-
-    <table class="table table-bordered  table-responsive">
+    <div id='table'>
+   
+    <table class="table table-bordered ">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -41,13 +42,14 @@
                     <a href="{{cheminS}}{{elt[cle]}}"  ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
                 </td>
                
-                </div>
+                
                   
                 </tr>
             {% endfor %}
            
         </tbody>
     </table>
+    </div>
 
 
 
