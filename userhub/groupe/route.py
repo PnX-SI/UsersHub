@@ -31,9 +31,9 @@ def groupe():
             form_group = form.data
             form_group.pop('id_role')
             form_group.pop('csrf_token')
-            form_group.pop('submit')
-            
+            form_group.pop('submit')            
             TRoles.post(form_group)
+            return redirect(url_for('groupe.groupes'))
         else:
             flash(form.errors)
     return render_template('groupe.html', form = form)
@@ -50,6 +50,7 @@ def groupe_unique(id_groupe):
             form_group.pop('csrf_token')
             form_group.pop('submit')
             TRoles.update(form_group)
+            return redirect(url_for('groupe.groupes'))
         else:
             flash(form.errors)
     return render_template('groupe.html',form = form, nom_role = groupe['nom_role'], desc_role = groupe['desc_role'])

@@ -13,6 +13,15 @@
                 {{ form.csrf_token }} 
                 
                     <div class = "row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                             
+                            
+                                <label>{{ form.id_tag_type.label }}</label>
+                                {{ form.id_tag_type(size=32, class="form-control", value = id_tag_type) }}
+                               
+                        </div>
+    
                         
                                                 
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -32,7 +41,9 @@
                         
                         </div>
                                               
-                        
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <p></p>
+                                </div>
                     
                         
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">

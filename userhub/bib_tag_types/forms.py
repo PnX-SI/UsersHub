@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired
 
 class TagTypes(FlaskForm):
-    id_tag_type = HiddenField('id')
+    id_tag_type = StringField('ID', validators=[DataRequired()])
     tag_type_name = StringField('Nom', validators=[DataRequired()])
     tag_type_desc = StringField('Description', validators=[DataRequired()])
     submit = SubmitField('Envoyer')
