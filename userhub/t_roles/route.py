@@ -59,6 +59,7 @@ def user():
             form_user.pop('id_role')
             if formu.pass_plus.data == formu.mdpconf.data:
                 form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
+                form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                 TRoles.post(form_user)
                 return redirect(url_for('user.users'))
             else :
@@ -86,7 +87,8 @@ def user_unique(id_role):
             form_user.pop('csrf_token')        
             if formu.pass_plus.data == formu.mdpconf.data:
                 form_user['id_role'] = user['id_role']
-                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
+                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
+                form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                 TRoles.update(form_user)
                 return redirect(url_for('user.users'))
             else :
