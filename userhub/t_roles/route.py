@@ -44,6 +44,8 @@ def users():
     # test
     formu = t_rolesforms.Utilisateur()
     formu.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
+    # print(TRoles.choixGroupe('id_role','nom_role',1))
+    formu.a_groupe.choices = TRoles.choixGroupe('id_role','nom_role',1)
     if request.method == 'POST':
         if formu.validate_on_submit() and formu.validate():
             form_user = formu.data

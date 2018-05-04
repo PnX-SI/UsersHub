@@ -51,7 +51,10 @@ class GenericRepository(db.Model):
         
 
 
-    
+    @classmethod
+    def choixGroupe(cls,id,nom,aucun = None):
+        print("coucou")
+        return ""
     # @classmethod
     # def get_column_name(cls,columns=None):
     #     if columns:

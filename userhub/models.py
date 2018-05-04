@@ -47,6 +47,18 @@ class TRoles(GenericRepository):
     session_appli = (db.Unicode)
 
 
+    @classmethod
+    def choixGroupe(cls,id,nom,aucun = None):
+        q = db.session.query(cls)
+        q = q.filter(cls.groupe == True )
+        data = [data.as_dict(True) for data in q.all()]
+        choices = []
+        for d in data :
+            choices.append((d[id], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
+
 @serializable
 class TApplications(GenericRepository):
     __tablename__='t_applications'
