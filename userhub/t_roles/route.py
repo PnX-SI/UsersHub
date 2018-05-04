@@ -49,13 +49,15 @@ def users():
     if request.method == 'POST':
         if formu.validate_on_submit() and formu.validate():
             form_user = formu.data
-            form_user['groupe'] = False           
+            form_user['groupe'] = False
+            print(form_user['a_groupe'])
             form_user.pop('mdpconf')
             form_user.pop('submit')
             form_user.pop('csrf_token')
             form_user.pop('id_role')
+            form_user.pop('a_groupe')           
             if formu.pass_plus.data == formu.mdpconf.data:
-                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
+                form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
                 form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                 TRoles.post(form_user)
                 return redirect(url_for('user.users'))
@@ -101,7 +103,7 @@ def user_unique(id_role):
                 flash("mot de passe non identiques")
         else :
             flash(formu.errors)
-    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/t_roles/users/', cheminS = '/t_roles/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'] )
+    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/t_roles/users/', cheminS = '/t_roles/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'], identifiant= user['identifiant'] )
     
 @route.route('/user/delete/<id_role>', methods = ['GET','POST'])
 def deluser(id_role):

@@ -1,12 +1,19 @@
 
 
-        <p>Affichage de: {{nom_role}}</p>
+       
 
             <form method="post">
                 {{ form.hidden_tag() }}
                 {{ form.csrf_token }} 
                 
                     <div class = "row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                          
+                        
+                            <label>{{ form.identifiant.label }}</label>
+                            {{ form.identifiant(size=32, class="form-control", value = identifiant) }}
+                            
+                        </div>
                         
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                               

@@ -12,6 +12,7 @@ class Utilisateur(FlaskForm):
     prenom_role = StringField( 'Prenom', validators=[DataRequired()])
     id_organisme = SelectField('Choix Organisme',coerce=int ,choices = [], default = -1)
     a_groupe = SelectMultipleField('Choix Groupe', choices = [], coerce=int)
+    identifiant = StringField('Identifiant', validators=[DataRequired()])
     pass_plus = PasswordField('Password', validators= [DataRequired()])
     mdpconf = PasswordField('Confirmation', validators= [DataRequired()])
     desc_role = StringField('Description du role' , validators = [DataRequired()])
