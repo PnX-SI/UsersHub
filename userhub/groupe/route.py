@@ -18,10 +18,55 @@ def groupes():
     colonne = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contenu = TRoles.get_all(colonne,filters)
-    print(contenu)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupe/groupe/", cheminS = "/groupe/groupes/delete/" )
+    # test
+    form = groupeforms.Groupe()
+    form.groupe.process_data(True)
+    if request.method == 'POST':
+        if form.validate_on_submit() and form.validate():
+            form_group = form.data
+            form_group.pop('id_role')
+            form_group.pop('csrf_token')
+            form_group.pop('submit')            
+            TRoles.post(form_group)
+            return redirect(url_for('groupe.groupes'))
+        else:
+            flash(form.errors)
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupe/groupe/", cheminS = "/groupe/groupes/delete/", test = 'groupe.html', form = form )
 
 
+
+
+@route.route('/groupe/<id_groupe>', methods=['GET','POST'])
+def groupe_unique(id_groupe):
+    entete = ['ID groupe', 'nom', 'description' ]
+    colonne = ['id_role', 'nom_role', 'desc_role']
+    filters = [{'col': 'groupe', 'filter': 'True'}]
+    contenu = TRoles.get_all(colonne,filters)
+    #test
+    groupe = TRoles.get_one(id_groupe)
+    form = groupeforms.Groupe()
+    form.groupe.process_data(True)
+    if request.method == 'POST':
+        if form.validate_on_submit() and form.validate():
+            form_group = form.data
+            form_group['id_role'] = groupe['id_role']
+            form_group.pop('csrf_token')
+            form_group.pop('submit')
+            TRoles.update(form_group)
+            return redirect(url_for('groupe.groupes'))
+        else:
+            flash(form.errors)
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupe/groupe/", cheminS = "/groupe/groupes/delete/", test ='groupe.html',form = form, nom_role = groupe['nom_role'], desc_role = groupe['desc_role'])
+
+
+
+@route.route('/groupes/delete/<id_groupe>', methods=['GET','POST'])
+def delete(id_groupe):
+    TRoles.delete(id_groupe)
+    return redirect(url_for('groupe.groupes'))
+
+
+#  NON UTILISE
 @route.route('/groupe', methods=['GET','POST'])
 def groupe():
     form = groupeforms.Groupe()
@@ -38,29 +83,8 @@ def groupe():
             flash(form.errors)
     return render_template('groupe.html', form = form)
 
-@route.route('/groupe/<id_groupe>', methods=['GET','POST'])
-def groupe_unique(id_groupe):
-    groupe = TRoles.get_one(id_groupe)
-    form = groupeforms.Groupe()
-    form.groupe.process_data(True)
-    if request.method == 'POST':
-        if form.validate_on_submit() and form.validate():
-            form_group = form.data
-            form_group.pop('id_role')
-            form_group.pop('csrf_token')
-            form_group.pop('submit')
-            TRoles.update(form_group)
-            return redirect(url_for('groupe.groupes'))
-        else:
-            flash(form.errors)
-    return render_template('groupe.html',form = form, nom_role = groupe['nom_role'], desc_role = groupe['desc_role'])
 
 
-
-@route.route('/groupes/delete/<id_groupe>', methods=['GET','POST'])
-def delete(id_groupe):
-    TRoles.delete(id_groupe)
-    return redirect(url_for('groupe.groupes'))
 
 
 @route.route('/mbgroupe/<id_groupe>', methods=['GET','POST'])

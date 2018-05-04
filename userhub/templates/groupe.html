@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-   {% include "header.html" %}   
 
-   <body>
-
-    {% include "head-appli.html" %}
     
     <form method="post">
         {{ form.hidden_tag() }}
@@ -61,13 +55,7 @@
             </form>
 
 
-            <p></p>
-            <p></p>
-    
-            <form action= {{ url_for('user.accueil') }} method="post">
-                    <button type="submit" class="btn btn-primary">Retour Accueil</button>
-            </form>
+            
 
 
-</body>
-</html>
+
