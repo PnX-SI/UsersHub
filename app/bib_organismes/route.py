@@ -8,7 +8,7 @@ from app.models import Bib_Organismes
 
 route =  Blueprint('organisme',__name__)
 
-@route.route('organismes/add', methods=['GET','POST'])
+@route.route('organisms/add', methods=['GET','POST'])
 def organismes():
     entete = ['Nom', 'Adresse', 'Code Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
     colonne = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
@@ -26,12 +26,12 @@ def organismes():
         else:
             flash(formu.errors)
 
-    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organismes/update/', cle= 'id_organisme', cheminS = '/organismes/delete/', test= 'organisme.html', form = formu)
+    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organisms/update/', cle= 'id_organisme', cheminS = '/organisms/delete/', test= 'organisme.html', form = formu)
 
 
 
 
-@route.route('organismes/update/<id_organisme>', methods=['GET','POST'])
+@route.route('organisms/update/<id_organisme>', methods=['GET','POST'])
 def organismes_unique(id_organisme):
     entete = ['Nom', 'Adresse', 'Code Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
     colonne = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
@@ -49,10 +49,10 @@ def organismes_unique(id_organisme):
             return redirect(url_for('organisme.organismes'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organismes/update/', cle= 'id_organisme', cheminS = '/organismes/delete/', test= 'organisme.html', form = form, nom_organisme = org['nom_organisme'], adresse_organisme = org['adresse_organisme'], cp_organisme = org['cp_organisme'], ville_organisme = org['ville_organisme'],tel_organisme = org['tel_organisme'], fax_organisme = org['fax_organisme'], email_organisme = org['email_organisme'] )
+    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organisms/update/', cle= 'id_organisme', cheminS = '/organisms/delete/', test= 'organisme.html', form = form, nom_organisme = org['nom_organisme'], adresse_organisme = org['adresse_organisme'], cp_organisme = org['cp_organisme'], ville_organisme = org['ville_organisme'],tel_organisme = org['tel_organisme'], fax_organisme = org['fax_organisme'], email_organisme = org['email_organisme'] )
 
 
-@route.route('organismes/delete/<id_organisme>', methods = ['GET', 'POST'])
+@route.route('organisms/delete/<id_organisme>', methods = ['GET', 'POST'])
 def delete(id_organisme):
     Bib_Organismes.delete(id_organisme)
     return redirect(url_for('organisme.organismes'))
