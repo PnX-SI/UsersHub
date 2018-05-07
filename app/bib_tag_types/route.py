@@ -7,10 +7,10 @@ from app.bib_tag_types import forms as tag_typeforms
 from app.models import BibTagTypes
 from app.utils.utilssqlalchemy import json_resp
 
-route = Blueprint('tag_type',__name__)
+route = Blueprint('tags_types',__name__)
 
-@route.route('/tag_types',methods=['GET','POST'])
-def tag_types():
+@route.route('tags_types/add',methods=['GET','POST'])
+def tags_types():
     entete = ['ID', 'Nom', 'Description']
     colonne = ['id_tag_type','tag_type_name','tag_type_desc']
     contenu = BibTagTypes.get_all()
@@ -22,14 +22,14 @@ def tag_types():
             form_tagtypes.pop('csrf_token')
             form_tagtypes.pop('submit')
             BibTagTypes.post(form_tagtypes)
-            return redirect(url_for('tag_type.tag_types'))
+            return redirect(url_for('tags_types.tags_types'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tags_type/tag_type/", cle = "id_tag_type", cheminS = "/tags_type/tag_type/delete/", test = 'tagtypes.html', form = form)
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tags_types/update/", cle = "id_tag_type", cheminS = "/tags_types/delete/", test = 'tagtypes.html', form = form)
 
 
 
-@route.route('/tag_type/<id_tag_type>',methods=['GET','POST'])
+@route.route('tags_types/update/<id_tag_type>',methods=['GET','POST'])
 def update(id_tag_type):
     entete = ['ID', 'Nom', 'Description']
     colonne = ['id_tag_type','tag_type_name','tag_type_desc']
@@ -47,15 +47,15 @@ def update(id_tag_type):
             print(form_tagtypes)
             BibTagTypes.update(form_tagtypes)
             print(tag_type)
-            return redirect(url_for('tag_type.tag_types'))
+            return redirect(url_for('tags_types.tags_types'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tags_type/tag_type/", cle = "id_tag_type", cheminS = "/tags_type/tag_type/delete/", test ='tagtypes.html', form = form, id_tag_type = tag_type['id_tag_type'], tag_type_name = tag_type['tag_type_name'], tag_type_desc = tag_type['tag_type_desc'])
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tags_types/update/", cle = "id_tag_type", cheminS = "/tags_types/delete/", test ='tagtypes.html', form = form, id_tag_type = tag_type['id_tag_type'], tag_type_name = tag_type['tag_type_name'], tag_type_desc = tag_type['tag_type_desc'])
 
-@route.route('/tag_type/delete/<id_tag_type>',methods=['GET','POST'])
+@route.route('tags_types/delete/<id_tag_type>',methods=['GET','POST'])
 def delete(id_tag_type):
     BibTagTypes.delete(id_tag_type)
-    return redirect(url_for('tag_type.tag_types'))
+    return redirect(url_for('tags_types.tags_types'))
 
 #  NON UTILISE
 

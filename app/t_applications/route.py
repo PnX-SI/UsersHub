@@ -11,7 +11,7 @@ from app.utils.utilssqlalchemy import json_resp
 
 route =  Blueprint('application',__name__)
 
-@route.route('/applications', methods=['GET','POST'])
+@route.route('applications/add', methods=['GET','POST'])
 def applications():
     entete = ['ID','Nom','Description', 'ID Parent']
     colonne = ['id_application','nom_application','desc_application','id_parent']
@@ -31,17 +31,17 @@ def applications():
             return redirect(url_for('application.applications'))
         else :
             flash(form.errors)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/applications/", cle= "id_application", cheminS="/application/application/delete/", test = 'application.html', form= form)    
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/applications/update/", cle= "id_application", cheminS="/applications/delete/", test = 'application.html', form= form)    
 
 
 
 
-@route.route('/application/delete/<id_application>', methods=['GET','POST'])
+@route.route('applications/delete/<id_application>', methods=['GET','POST'])
 def delete(id_application):
     TApplications.delete(id_application)
     return redirect(url_for('application.applications'))
 
-@route.route('/applications/<id_application>', methods=['GET','POST'])
+@route.route('applications/update/<id_application>', methods=['GET','POST'])
 def update(id_application):
     entete = ['ID','Nom','Description', 'ID Parent']
     colonne = ['id_application','nom_application','desc_application','id_parent']
@@ -71,7 +71,7 @@ def update(id_application):
             return redirect(url_for('application.applications'))
         else :
             flash(form.errors)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/applications/", cle= "id_application", cheminS="/application/application/delete/", test ='application.html', form= form, nom_application = application['nom_application'], desc_application= application['desc_application'] )
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/applications/update/", cle= "id_application", cheminS="/applications/delete/", test ='application.html', form= form, nom_application = application['nom_application'], desc_application= application['desc_application'] )
 
 
 #  NON UTILISE

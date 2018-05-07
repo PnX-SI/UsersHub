@@ -10,7 +10,7 @@ from app.env import db
 
 route =  Blueprint('tags',__name__)
 
-@route.route('/tags', methods=['GET','POST'])
+@route.route('tags/add', methods=['GET','POST'])
 def tags():
     entete =['ID','ID type', 'CODE', 'Nom', 'Label', 'Description']
     colonne = ['id_tag','id_tag_type','tag_name','tag_name','tag_label','tag_desc']
@@ -28,11 +28,11 @@ def tags():
             return redirect(url_for('tags.tags'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/t_tags/tag/', cheminS = '/t_tag/tag/delete/', test = 'tag.html', form = form)
+    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/tags/update/', cheminS = '/tags/delete/', test = 'tag.html', form = form)
 
 
 
-@route.route('/tag/<id_tag>',methods=['GET','POST'])
+@route.route('tags/update/<id_tag>',methods=['GET','POST'])
 def update(id_tag):
     entete =['ID','ID type', 'CODE', 'Nom', 'Label', 'Description']
     colonne = ['id_tag','id_tag_type','tag_name','tag_name','tag_label','tag_desc']
@@ -53,10 +53,10 @@ def update(id_tag):
             return redirect(url_for('tags.tags'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/t_tags/tag/', cheminS = '/t_tag/tag/delete/', test ='tag.html', form = form, code = tag['tag_code'], name = tag['tag_name'], label = tag['tag_label'], desc = tag['tag_desc'])
+    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/tags/update/', cheminS = '/tags/delete/', test ='tag.html', form = form, code = tag['tag_code'], name = tag['tag_name'], label = tag['tag_label'], desc = tag['tag_desc'])
 
 
-@route.route('/tag/delete/<id_tag>',methods=['GET','POST'])
+@route.route('tags/delete/<id_tag>',methods=['GET','POST'])
 def delete(id_tag):
     TTags.delete(id_tag)
     return redirect(url_for('tags.tags'))

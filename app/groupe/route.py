@@ -12,7 +12,7 @@ from app.env import db
 
 route = Blueprint('groupe', __name__)
 
-@route.route('/groupes', methods=['GET','POST'])
+@route.route('groupes/add', methods=['GET','POST'])
 def groupes():
     entete = ['ID groupe', 'nom', 'description' ]
     colonne = ['id_role', 'nom_role', 'desc_role']
@@ -31,12 +31,12 @@ def groupes():
             return redirect(url_for('groupe.groupes'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupe/groupe/", cheminS = "/groupe/groupes/delete/", test = 'groupe.html', form = form )
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupes/update/", cheminS = "/groupes/delete/", test = 'groupe.html', form = form )
 
 
 
 
-@route.route('/groupe/<id_groupe>', methods=['GET','POST'])
+@route.route('groupes/update/<id_groupe>', methods=['GET','POST'])
 def groupe_unique(id_groupe):
     entete = ['ID groupe', 'nom', 'description' ]
     colonne = ['id_role', 'nom_role', 'desc_role']
@@ -56,11 +56,11 @@ def groupe_unique(id_groupe):
             return redirect(url_for('groupe.groupes'))
         else:
             flash(form.errors)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupe/groupe/", cheminS = "/groupe/groupes/delete/", test ='groupe.html',form = form, nom_role = groupe['nom_role'], desc_role = groupe['desc_role'])
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/groupes/update/", cheminS = "/groupes/delete/", test ='groupe.html',form = form, nom_role = groupe['nom_role'], desc_role = groupe['desc_role'])
 
 
 
-@route.route('/groupes/delete/<id_groupe>', methods=['GET','POST'])
+@route.route('groupes/delete/<id_groupe>', methods=['GET','POST'])
 def delete(id_groupe):
     TRoles.delete(id_groupe)
     return redirect(url_for('groupe.groupes'))

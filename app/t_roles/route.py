@@ -30,12 +30,9 @@ route =  Blueprint('user',__name__)
 #     return render_template('login.html', form=form)
 
 
-@route.route('/accueil',methods=['GET','POST'])
-def accueil():   
-    return render_template('accueil.html')
 
 
-@route.route('/users',methods=['GET','POST'])
+@route.route('users/add',methods=['GET','POST'])
 def users():
     entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
     colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
@@ -65,13 +62,13 @@ def users():
                 flash("mot de passe non identiques")
         else :
             flash(formu.errors)
-    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/t_roles/users/', cheminS = '/t_roles/user/delete/', test = 'user_unique.html', form = formu)    
+    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/users/update/', cheminS = '/users/delete/', test = 'user_unique.html', form = formu)    
 
     
 
 
     
-@route.route('/users/<id_role>',  methods=['GET','POST'])
+@route.route('users/update/<id_role>',  methods=['GET','POST'])
 def user_unique(id_role):
     entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
     colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
@@ -92,7 +89,8 @@ def user_unique(id_role):
             form_user['groupe'] = False      
             form_user.pop('mdpconf')
             form_user.pop('submit')
-            form_user.pop('csrf_token')        
+            form_user.pop('csrf_token')
+            form_user.pop('a_groupe')           
             if formu.pass_plus.data == formu.mdpconf.data:
                 form_user['id_role'] = user['id_role']
                 form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
@@ -103,9 +101,9 @@ def user_unique(id_role):
                 flash("mot de passe non identiques")
         else :
             flash(formu.errors)
-    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/t_roles/users/', cheminS = '/t_roles/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'], identifiant= user['identifiant'] )
+    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/users/update/', cheminS = '/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'], identifiant= user['identifiant'] )
     
-@route.route('/user/delete/<id_role>', methods = ['GET','POST'])
+@route.route('users/delete/<id_role>', methods = ['GET','POST'])
 def deluser(id_role):
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
@@ -136,6 +134,9 @@ def user():
     return render_template('user_unique.html', form = formu)
 
 
+@route.route('/accueil',methods=['GET','POST'])
+def accueil():   
+    return render_template('accueil.html')
 # @route.route('/test')
 # @json_resp
 # def test():

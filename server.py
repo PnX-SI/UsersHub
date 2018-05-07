@@ -14,22 +14,22 @@ db.init_app(app)
 with app.app_context():
 
     from app.t_roles import route
-    app.register_blueprint(route.route,  url_prefix='/t_roles')
+    app.register_blueprint(route.route,  url_prefix='/')
 
     from app.bib_organismes import route
-    app.register_blueprint(route.route,  url_prefix='/bib_organismes')
+    app.register_blueprint(route.route,  url_prefix='/')
 
     from app.groupe import route
-    app.register_blueprint(route.route,  url_prefix='/groupe')
+    app.register_blueprint(route.route,  url_prefix='/')
 
     from app.t_applications import route
-    app.register_blueprint(route.route, url_prefix='/application')
+    app.register_blueprint(route.route, url_prefix='/')
 
     from app.t_tags import route
-    app.register_blueprint(route.route, url_prefix='/t_tags')
+    app.register_blueprint(route.route, url_prefix='/')
 
     from app.bib_tag_types import route
-    app.register_blueprint(route.route, url_prefix='/tags_type')
+    app.register_blueprint(route.route, url_prefix='/')
 
     from app.auth import route
     app.register_blueprint(route.route, url_prefix='/log')
