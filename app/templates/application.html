@@ -1,4 +1,10 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
 
+   <body>
+
+        {% include "head-appli.html" %}
 
             <form method="post">
                 {{ form.hidden_tag() }}
@@ -10,7 +16,7 @@
                               
                         
                             <label>{{ form.nom_application.label }}</label>
-                            {{ form.nom_application(size=32, class="form-control", value = nom_application) }}
+                            {{ form.nom_application(size=32, class="form-control") }}
                         
                         </div>
                         
@@ -18,7 +24,7 @@
                              
                             
                                 <label>{{ form.desc_application.label }}</label>
-                                {{ form.desc_application(size=32, class="form-control", value = desc_application) }}
+                                {{ form.desc_application(size=32, class="form-control") }}
                            
                         </div>
 
@@ -67,3 +73,5 @@
                     </form>
 
 
+                </body>
+                </html>

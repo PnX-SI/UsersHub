@@ -1,4 +1,10 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
 
+   <body>
+
+        {% include "head-appli.html" %}
 
        
 
@@ -12,7 +18,7 @@
                           
                         
                             <label>{{ form.identifiant.label }}</label>
-                            {{ form.identifiant(size=32, class="form-control", value = nom_role)}}
+                            {{ form.identifiant(size=32, class="form-control")}}
                             
                         </div>
                         
@@ -20,7 +26,7 @@
                               
                         
                             <label>{{ form.nom_role.label }}</label>
-                            {{ form.nom_role(size=32, class="form-control", value = nom_role) }}
+                            {{ form.nom_role(size=32, class="form-control") }}
                         
                         </div>
                         
@@ -28,14 +34,14 @@
                              
                             
                                 <label>{{ form.prenom_role.label }}</label>
-                                {{ form.prenom_role(size=32, class="form-control",  value = prenom_role) }}
+                                {{ form.prenom_role(size=32, class="form-control") }}
                            
                         </div>
         
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         
                                 <label>{{ form.id_organisme.label }}</label>
-                            {{ form.id_organisme(  class="custom-select", id="inputGroupSelect01", value = organisme) }}
+                            {{ form.id_organisme(  class="custom-select", id="inputGroupSelect01") }}
                         
                         </div>
 
@@ -49,7 +55,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     
                                 <label>{{ form.email.label }}</label>
-                                {{ form.email(size = 32, class="form-control", value = email)}}
+                                {{ form.email(size = 32, class="form-control")}}
                              </div>
                         
                    
@@ -71,14 +77,14 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 
                                 <label>{{ form.desc_role.label }}</label>
-                                {{ form.desc_role(size=32, class="form-control", value = desc_role )}}
+                                {{ form.desc_role(size=32, class="form-control")}}
                             
                             </div>
 
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 
                                 <label>{{ form.remarques.label }}</label>
-                                {{ form.remarques(size=32, class="form-control", value = remarques )}}
+                                {{ form.remarques(size=32, class="form-control")}}
                             
                             </div>
         
@@ -113,3 +119,5 @@
 
 
                
+</body>
+</html>

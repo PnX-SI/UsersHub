@@ -1,4 +1,12 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
 
+   <body>
+
+        {% include "head-appli.html" %}
+
+       
 
             <form method="post">
                 {{ form.hidden_tag() }}
@@ -9,7 +17,7 @@
                              
                             
                                 <label>{{ form.tag_name.label }}</label>
-                                {{ form.tag_name(size=32, class="form-control", value = name) }}
+                                {{ form.tag_name(size=32, class="form-control") }}
                            
                         </div>
 
@@ -17,7 +25,7 @@
                              
                             
                                 <label>{{ form.tag_label.label }}</label>
-                                {{ form.tag_label(size=32, class="form-control", value = label) }}
+                                {{ form.tag_label(size=32, class="form-control") }}
                            
                         </div>
                         
@@ -29,7 +37,7 @@
                               
                         
                             <label>{{ form.tag_code.label }}</label>
-                            {{ form.tag_code(size=32, class="form-control", value = code) }}
+                            {{ form.tag_code(size=32, class="form-control") }}
                         
                         </div>
 
@@ -37,7 +45,7 @@
                              
                             
                                 <label>{{ form.tag_desc.label }}</label>
-                                {{ form.tag_desc(size=32, class="form-control", value = desc) }}
+                                {{ form.tag_desc(size=32, class="form-control") }}
                            
                         </div>
                         
@@ -88,4 +96,5 @@
                     </form>
 
 
-        
+</body>
+</html>
