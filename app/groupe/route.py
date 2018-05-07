@@ -2,13 +2,13 @@ from flask import (
 Flask, redirect, url_for, render_template,
 Blueprint, request, session, flash
 )
-from userhub import genericRepository
-from userhub.t_roles import forms as t_rolesforms
-from userhub.groupe import forms as groupeforms
-from userhub.models import TRoles
-from userhub.models import Bib_Organismes, CorRoles
-from userhub.utils.utilssqlalchemy import json_resp
-from userhub.env import db
+from app import genericRepository
+from app.t_roles import forms as t_rolesforms
+from app.groupe import forms as groupeforms
+from app.models import TRoles
+from app.models import Bib_Organismes, CorRoles
+from app.utils.utilssqlalchemy import json_resp
+from app.env import db
 
 route = Blueprint('groupe', __name__)
 

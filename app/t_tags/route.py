@@ -2,11 +2,11 @@ from flask import (
 Flask, redirect, url_for, render_template,
 Blueprint, request, session, flash
 )
-from userhub import genericRepository
-from userhub.t_tags import forms as t_tagsforms
-from userhub.models import TTags,BibTagTypes, TApplications
-from userhub.utils.utilssqlalchemy import json_resp
-from userhub.env import db
+from app import genericRepository
+from app.t_tags import forms as t_tagsforms
+from app.models import TTags,BibTagTypes, TApplications
+from app.utils.utilssqlalchemy import json_resp
+from app.env import db
 
 route =  Blueprint('tags',__name__)
 

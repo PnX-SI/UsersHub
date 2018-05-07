@@ -1,11 +1,11 @@
-from userhub.env import db
+from app.env import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
-from userhub.utils.utilssqlalchemy import serializable
+from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey
-from userhub.genericRepository import GenericRepository
+from app.genericRepository import GenericRepository
 
 @serializable
 class  Bib_Organismes(GenericRepository):

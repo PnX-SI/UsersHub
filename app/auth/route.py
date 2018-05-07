@@ -2,11 +2,11 @@ from flask import (
 Flask, redirect, url_for, render_template,
 Blueprint, request, session, flash
 )
-from userhub import genericRepository
-from userhub.auth import forms as authforms
-from userhub.models import TRoles
-from userhub.utils.utilssqlalchemy import json_resp
-from userhub.env import db
+from app import genericRepository
+from app.auth import forms as authforms
+from app.models import TRoles
+from app.utils.utilssqlalchemy import json_resp
+from app.env import db
 from flask_bcrypt import (Bcrypt,
                           check_password_hash,
                           generate_password_hash)

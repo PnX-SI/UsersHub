@@ -2,9 +2,9 @@ from flask import (
 Flask, redirect, url_for, render_template,
 Blueprint, request, session, flash
 )
-from userhub import genericRepository
-from userhub.bib_organismes import forms as bib_organismeforms
-from userhub.models import Bib_Organismes
+from app import genericRepository
+from app.bib_organismes import forms as bib_organismeforms
+from app.models import Bib_Organismes
 
 route =  Blueprint('organisme',__name__)
 

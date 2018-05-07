@@ -2,11 +2,11 @@ from flask import (
 Flask, redirect, url_for, render_template,
 Blueprint, request, session, flash
 )
-from userhub import genericRepository
-from userhub.t_applications import forms as t_applicationsforms
-from userhub.models import TRoles
-from userhub.models import Bib_Organismes, CorRoles, TApplications
-from userhub.utils.utilssqlalchemy import json_resp
+from app import genericRepository
+from app.t_applications import forms as t_applicationsforms
+from app.models import TRoles
+from app.models import Bib_Organismes, CorRoles, TApplications
+from app.utils.utilssqlalchemy import json_resp
 
 
 route =  Blueprint('application',__name__)

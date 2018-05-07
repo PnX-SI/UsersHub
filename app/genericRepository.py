@@ -1,4 +1,4 @@
-from userhub.env import db
+from app.env import db
 
 
 
