@@ -12,7 +12,7 @@ from app.env import db
 
 route = Blueprint('groupe', __name__)
 
-@route.route('groups/add', methods=['GET','POST'])
+@route.route('groups/list', methods=['GET','POST'])
 def groupes():
     entete = ['ID groupe', 'nom', 'description' ]
     colonne = ['id_role', 'nom_role', 'desc_role']
