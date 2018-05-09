@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+
+        <p>Listes des Utilisateurs</p>
+        <div class="row">
+            
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+             
+             <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            {% for nom in entete %}
+                            <th scope="col">{{nom}}</th>
+                            {% endfor %}
+                        </tr> 
+            
+                    </thead>
+                    <tbody>
+                        {% for elt in table %}
+                        <tr>   
+                        <th scope="row">{{loop.index}}</th>
+                            {% for nom in ligne %}  
+                           
+                                <td>{{elt[nom]}}</td>
+                           
+                                {% endfor %}         
+                        {% endfor %}
+                    </tbody>
+                </table>   
+            </div>
+            
+            
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+                    <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    {% for nom in entete2 %}
+                                    <th scope="col">{{nom}}</th>
+                                    {% endfor %}
+                                </tr> 
+                    
+                            </thead>
+                            <tbody>
+                                {% for elt in table2 %}
+                                <tr>   
+                                <th scope="row">{{loop.index}}</th>
+                                    {% for nom in ligne2 %}  
+                                   
+                                        <td>{{elt[nom]}}</td>
+                                   
+                                        {% endfor %}         
+                                {% endfor %} 
+            
+                            </tbody>
+                        </table>
+                            </div>
+        </div>
+      
+
+ 
+    
+</body>
+</html>
+    
+    

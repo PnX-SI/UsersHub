@@ -8,7 +8,7 @@
 
         
 
-     <p></p>
+     
      <div class = "container">
     <h2>{{nom_liste}}</h2>         
     <p>
@@ -40,7 +40,15 @@
                
                     
                 {% endfor %}
+
                
+            {% set test =  t %}
+            {% if t == 'True'%}
+            <td>
+                    <a href="{{cheminP}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >{{Membres}}  </button></a>
+
+            </td>
+            {%endif%}
                 <td>
                         <a href="{{cheminM}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
 

@@ -18,7 +18,7 @@ def groupes():
     colonne = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contenu = TRoles.get_all(colonne,filters)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/group/update/", cheminS = "/groups/delete/", cheminA = '/group/add/new',nom = "un groupe", nom_liste = "Liste des Groupes")
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/group/update/", cheminS = "/groups/delete/", cheminA = '/group/add/new', cheminP = '/groups/members/',nom = "un groupe", nom_liste = "Liste des Groupes", t = 'True', Membres = "Membres")
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -62,7 +62,23 @@ def mbgroupe(id_groupe):
     [data.as_dict(True) for data in q.all()]
     return render_template('affichebase.html', entete = entete , ligne = colonne, table = [data.as_dict(True) for data in q.all()] , cle = "", cheminM = "", cheminS = "" )
     
- 
+@route.route('groups/members/<id_groupe>', methods=['GET','POST'])
+def membres(id_groupe):
+    # liste utilisateurs
+    entete = ['ID groupe', 'nom', 'description' ]
+    colonne = ['id_role', 'nom_role', 'desc_role']
+    filters = [{'col': 'groupe', 'filter': 'False'}]
+    contenu = TRoles.get_all(colonne,filters)
+    # liste des utilisateurs du groupe
+    entete2 = ['identifiant', 'id role', 'prenom role', 'nom role']
+    colonne2 = ['identifiant','id_role','prenom_role', 'nom_role']
+    q = db.session.query(TRoles)
+    q = q.join(CorRoles)
+    q = q.filter(id_groupe == CorRoles.id_role_groupe  )
+    [data.as_dict(True) for data in q.all()]
+    return render_template("tobelong.html", entete = entete , ligne = colonne, table = contenu, entete2 = entete2, ligne2 = colonne2, table2 = [data.as_dict(True) for data in q.all()]  )
+
+
 
 
 @route.route('groups/delete/<id_groupe>', methods=['GET','POST'])
