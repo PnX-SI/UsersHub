@@ -24,7 +24,7 @@ def users():
     colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contenu = TRoles.get_all(colonne,filters)
-    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/user/update/', cheminS = '/users/delete/', test = 'user_unique.html')    
+    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/user/update/', cheminS = '/users/delete/',cheminA = "/user/add/new", nom_liste = "Liste des utilisateurs")    
 
     
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])

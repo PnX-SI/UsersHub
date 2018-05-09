@@ -18,7 +18,7 @@ def groupes():
     colonne = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contenu = TRoles.get_all(colonne,filters)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/group/update/", cheminS = "/groups/delete/")
+    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/group/update/", cheminS = "/groups/delete/", cheminA = '/group/add/new', nom_liste = "Liste des Groupes")
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
