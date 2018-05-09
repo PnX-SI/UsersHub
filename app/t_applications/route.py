@@ -26,12 +26,10 @@ def addorupdate(id_application):
     if id_application == None:
         if request.method == 'POST': 
             if form.validate() and form.validate_on_submit():
-                form_app = form.data
+                form_app = pops(form.data)
                 if form.id_parent.data == -1:
                     form_app['id_parent'] = None
                 form_app.pop('id_application')
-                form_app.pop('csrf_token')
-                form_app.pop('submit')
                 TApplications.post(form_app)
                 return redirect(url_for('application.applications'))
             else :
@@ -45,17 +43,14 @@ def addorupdate(id_application):
                     form.id_parent.process_data(-1)
             else:
                 form.id_parent.process_data(application['id_parent'])
-            form.nom_application.process_data(application['nom_application'])
-            form.desc_application.process_data(application['desc_application'])  
+            form_app = process(form,application) 
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
-                form_app = form.data
+                form_app = pops(form.data)
                 print('coucou2')
                 if form.id_parent.data == -1:
                     form_app['id_parent'] = None
                 form_app['id_application'] = application['id_application']
-                form_app.pop('csrf_token')
-                form_app.pop('submit')
                 TApplications.update(form_app)
                 return redirect(url_for('application.applications'))
             else :
@@ -69,6 +64,18 @@ def addorupdate(id_application):
 def delete(id_application):
     TApplications.delete(id_application)
     return redirect(url_for('application.applications'))
+
+
+
+def pops(form):
+    form.pop('csrf_token')
+    form.pop('submit')
+    return form    
+
+def process(form,application):
+    form.nom_application.process_data(application['nom_application'])
+    form.desc_application.process_data(application['desc_application'])
+    return form
 
 
 

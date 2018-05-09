@@ -29,10 +29,8 @@ def addorupdate(id_role):
     if id_role == None:
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
-                form_group = form.data
+                form_group = pops(form.data)
                 form_group.pop('id_role')
-                form_group.pop('csrf_token')
-                form_group.pop('submit')            
                 TRoles.post(form_group)
                 return redirect(url_for('groupe.groups'))
             else:
@@ -40,14 +38,12 @@ def addorupdate(id_role):
         return render_template('groupe.html', form = form)
     else :
         groupe = TRoles.get_one(id_role)
-        form.nom_role.process_data(groupe['nom_role'])
-        form.desc_role.process_data(groupe['desc_role'])
+        if request.method =='GET':
+            form = process(form,groupe)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
-                form_group = form.data
+                form_group = pops(form.data)
                 form_group['id_role'] = groupe['id_role']
-                form_group.pop('csrf_token')
-                form_group.pop('submit')
                 TRoles.update(form_group)
                 return redirect(url_for('groupe.groupes'))
             else:
@@ -73,6 +69,18 @@ def mbgroupe(id_groupe):
 def delete(id_groupe):
     TRoles.delete(id_groupe)
     return redirect(url_for('groupe.groupes'))
+
+
+def pops(form):
+    form.pop('submit')
+    form.pop('csrf_token')
+    return form
+
+
+def process(form,groupe):
+    form.nom_role.process_data(groupe['nom_role'])
+    form.desc_role.process_data(groupe['desc_role'])
+    return form
 
 
 #  NON UTILISE

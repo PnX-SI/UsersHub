@@ -36,13 +36,9 @@ def addorupdate(id_role):
     if id_role == None :
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
-                form_user = form.data
+                form_user = pops(form.data)
                 form_user['groupe'] = False
-                form_user.pop('mdpconf')
-                form_user.pop('submit')
-                form_user.pop('csrf_token')
                 form_user.pop('id_role')
-                form_user.pop('a_groupe')           
                 if form.pass_plus.data == form.mdpconf.data:
                     form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
                     form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
@@ -57,21 +53,11 @@ def addorupdate(id_role):
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
             print('coucou')
-            form.id_organisme.process_data(user['id_organisme'])
-            form.nom_role.process_data(user['nom_role'])
-            form.prenom_role.process_data(user['prenom_role'])
-            form.email.process_data(user['email'])
-            form.desc_role.process_data(user['desc_role'])
-            form.remarques.process_data(user['remarques'])
-            form.identifiant.process_data(user['identifiant'])
+            form = process(form,user)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():  
-                form_user = form.data
+                form_user = pops(form.data)
                 form_user['groupe'] = False      
-                form_user.pop('mdpconf')
-                form_user.pop('submit')
-                form_user.pop('csrf_token')
-                form_user.pop('a_groupe')           
                 if form.pass_plus.data == form.mdpconf.data:
                     form_user['id_role'] = user['id_role']
                     form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
@@ -90,6 +76,24 @@ def addorupdate(id_role):
 def deluser(id_role):
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
+
+
+def pops(form):
+    form.pop('mdpconf')
+    form.pop('submit')
+    form.pop('csrf_token')
+    form.pop('a_groupe')
+    return form 
+
+def process(form,user):
+    form.id_organisme.process_data(user['id_organisme'])
+    form.nom_role.process_data(user['nom_role'])
+    form.prenom_role.process_data(user['prenom_role'])
+    form.email.process_data(user['email'])
+    form.desc_role.process_data(user['desc_role'])
+    form.remarques.process_data(user['remarques'])
+    form.identifiant.process_data(user['identifiant'])
+    return form
 
 #  NON UTILISE
 

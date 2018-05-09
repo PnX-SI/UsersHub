@@ -23,9 +23,7 @@ def addorupdate(id_tag_type):
     if id_tag_type == None:
         if request.method == 'POST':
             if form.validate() and form.validate_on_submit() :
-                form_tagtypes = form.data
-                form_tagtypes.pop('csrf_token')
-                form_tagtypes.pop('submit')
+                form_tagtypes = pops(form.data)
                 BibTagTypes.post(form_tagtypes)
                 return redirect(url_for('tags_types.tags_types'))
             else:
@@ -33,18 +31,12 @@ def addorupdate(id_tag_type):
         return render_template('tagtypes.html', form = form)
     else :
         tag_type = BibTagTypes.get_one(id_tag_type)
-        form.id_tag_type.process_data(tag_type['id_tag_type'])
-        form.tag_type_name.process_data(tag_type['tag_type_name'])
-        form.tag_type_desc.process_data(tag_type['tag_type_desc'])
+        if request.method == 'GET':
+            form = process(form,tag_type)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
-                print('coucou')
-                form_tagtypes = form.data
-                form_tagtypes.pop('csrf_token')
-                form_tagtypes.pop('submit')
-                print(form_tagtypes)
+                form_tagtypes = pops(form.data)
                 BibTagTypes.update(form_tagtypes)
-                print(tag_type)
                 return redirect(url_for('tags_types.tags_types'))
             else:
                 flash(form.errors)
@@ -56,6 +48,18 @@ def addorupdate(id_tag_type):
 def delete(id_tag_type):
     BibTagTypes.delete(id_tag_type)
     return redirect(url_for('tags_types.tags_types'))
+
+
+def pops(form):
+    form.pop('submit')
+    form.pop('csrf_token')
+    return form
+
+def process(form,tag_type):
+    form.id_tag_type.process_data(tag_type['id_tag_type'])
+    form.tag_type_name.process_data(tag_type['tag_type_name'])
+    form.tag_type_desc.process_data(tag_type['tag_type_desc'])
+    return form
 
 #  NON UTILISE
 

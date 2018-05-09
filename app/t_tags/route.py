@@ -32,9 +32,7 @@ def addorupdate(id_tag):
     if id_tag == None:
         if request.method =='POST':
             if form.validate() and form.validate_on_submit():
-                form_tag = form.data
-                form_tag.pop('csrf_token')
-                form_tag.pop('submit')
+                form_tag = pops(form.data)
                 form_tag.pop('id_tag')
                 TTags.post(form_tag)
                 return redirect(url_for('tags.tags'))
@@ -44,22 +42,32 @@ def addorupdate(id_tag):
     else:
         tag = TTags.get_one(id_tag)
         if request.method == 'GET':
-            form.id_tag_type.process_data(tag['id_tag_type'])
-            form.tag_name.process_data(tag['tag_name'])
-            form.tag_label.process_data(tag['tag_label'])
-            form.tag_code.process_data(tag['tag_code'])
-            form.tag_desc.process_data(tag['tag_desc'])
+            form = process(form,tag)
         if request.method == 'POST':
             if form.validate() and form.validate_on_submit():
-                form_tag = form.data
-                form_tag.pop('csrf_token')
-                form_tag.pop('submit')
+                form_tag = pops(form.data)
                 form_tag['id_tag'] = tag['id_tag']
                 TTags.update(form_tag)
                 return redirect(url_for('tags.tags'))
             else:
                 flash(form.errors)
         return render_template('tag.html',form = form)
+
+
+def pops(form):
+    form.pop('csrf_token')
+    form.pop('submit')
+    return form
+
+def process(form,tag):
+    form.id_tag_type.process_data(tag['id_tag_type'])
+    form.tag_name.process_data(tag['tag_name'])
+    form.tag_label.process_data(tag['tag_label'])
+    form.tag_code.process_data(tag['tag_code'])
+    form.tag_desc.process_data(tag['tag_desc'])
+    return form
+
+
 
 # NON UTILISE
 # @route.route('/tag', methods=['GET','POST'])

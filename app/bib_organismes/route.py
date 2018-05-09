@@ -23,10 +23,8 @@ def addorupdate(id_organisme):
     if id_organisme == None:
         if request.method == 'POST':
             if formu.validate_on_submit() and formu.validate():
-                form_org = formu.data
+                form_org =  pops(form.data)
                 form_org.pop('id_organisme')
-                form_org.pop('submit')
-                form_org.pop('csrf_token')        
                 Bib_Organismes.post(form_org)
                 return redirect(url_for('organisme.organismes'))
             else:
@@ -34,20 +32,11 @@ def addorupdate(id_organisme):
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method =='GET':
-            form.nom_organisme.process_data(org['nom_organisme'])
-            form.cp_organisme.process_data(org['cp_organisme'])
-            form.adresse_organisme.process_data(org['adresse_organisme'])
-            print(org['cp_organisme'])
-            form.ville_organisme.process_data(org['ville_organisme'])
-            form.tel_organisme.process_data(org['tel_organisme'])
-            form.fax_organisme.process_data(org['fax_organisme'])
-            form.email_organisme.process_data(org['email_organisme'])
+            form = process(form,org)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate() :
-                form_org = form.data
+                form_org = pops(form.data)
                 form_org['id_organisme'] = org['id_organisme']
-                form_org.pop('submit')
-                form_org.pop('csrf_token')
                 Bib_Organismes.update(form_org)
                 return redirect(url_for('organisme.organismes'))
             else:
@@ -62,6 +51,23 @@ def addorupdate(id_organisme):
 def delete(id_organisme):
     Bib_Organismes.delete(id_organisme)
     return redirect(url_for('organisme.organismes'))
+
+
+
+def pops(form):
+    form.pop('submit')
+    form.pop('csrf_token')
+    return form
+
+def process(form,org):
+    form.nom_organisme.process_data(org['nom_organisme'])
+    form.cp_organisme.process_data(org['cp_organisme'])
+    form.adresse_organisme.process_data(org['adresse_organisme'])
+    form.ville_organisme.process_data(org['ville_organisme'])
+    form.tel_organisme.process_data(org['tel_organisme'])
+    form.fax_organisme.process_data(org['fax_organisme'])
+    form.email_organisme.process_data(org['email_organisme'])
+    return form
 
 # NON UTILISE
 
