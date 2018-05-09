@@ -13,7 +13,7 @@ def organismes():
     entete = ['Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
     colonne = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
     contenu = Bib_Organismes.get_all(colonne)
-    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organism/update/', cle= 'id_organisme', cheminS = '/organisms/delete/', cheminA= '/organism/add/new', nom_liste = "Listes des organismes")
+    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organism/update/', cle= 'id_organisme', cheminS = '/organisms/delete/', cheminA= '/organism/add/new',nom = "un organisme", nom_liste = "Listes des organismes")
 
 
 @route.route('organism/add/new', defaults={'id_organisme': None}, methods=['GET','POST'])

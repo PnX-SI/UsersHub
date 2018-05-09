@@ -16,7 +16,7 @@ def applications():
     entete = ['ID','Nom','Description', 'ID Parent']
     colonne = ['id_application','nom_application','desc_application','id_parent']
     contenu = TApplications.get_all(colonne)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/update/", cle= "id_application", cheminS="/applications/delete/", cheminA = '/application/add/new', nom_liste = "Listes des Applications" )    
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/update/", cle= "id_application", cheminS="/applications/delete/", cheminA = '/application/add/new',nom = 'une application', nom_liste = "Listes des Applications" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])

@@ -14,7 +14,7 @@ def tags_types():
     entete = ['ID', 'Nom', 'Description']
     colonne = ['id_tag_type','tag_type_name','tag_type_desc']
     contenu = BibTagTypes.get_all()
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tag_type/update/", cle = "id_tag_type", cheminS = "/tags_types/delete/", cheminA = '/tag_type/add/new', nom_liste = "Listes des Types de Tags")
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tag_type/update/", cle = "id_tag_type", cheminS = "/tags_types/delete/", cheminA = '/tag_type/add/new',nom = "type de tag", nom_liste = "Listes des Types de Tags")
 
 @route.route('tag_type/add/new',defaults={'id_tag_type' : None}, methods=['GET','POST'])
 @route.route('tag_type/update/<id_tag_type>', methods=['GET','POST'])
