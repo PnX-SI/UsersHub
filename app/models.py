@@ -112,8 +112,8 @@ class CorRoles(GenericRepository):
 class CorRoleTag(GenericRepository):
     __tablename__ = 'cor_role_tag'
     __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer, primary_key = True)
-    id_tag = db.Column(db.Integer, primary_key = True)
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_tag = db.Column(db.Integer, ForeignKey('utilisateurs.t_tags.id_tag'),primary_key = True)
 
 @serializable
 class CorRoleMenu(GenericRepository):

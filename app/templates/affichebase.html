@@ -29,6 +29,10 @@
                 {% if t == 'True'%}
                     <th scope="col">{{Membres}}</th>
                 {%endif%}
+                {% set tag = tag %}
+                {% if tag == 'True'%}
+                    <th scope="col">Tags</th>
+                {% endif %}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
             </tr> 
@@ -53,6 +57,16 @@
 
             </td>
             {%endif%}
+
+            {% set tag = tag %}
+            {% if tag == 'True'%}
+
+            <td>
+                <a href="{{cheminT}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >Tags  </button></a>
+
+            </td>
+            
+            {% endif %}
                 <td>
                         <a href="{{cheminM}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
 

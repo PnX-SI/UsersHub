@@ -14,7 +14,6 @@
              <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             {% for nom in entete %}
                             <th scope="col">{{nom}}</th>
                             {% endfor %}
@@ -22,15 +21,28 @@
             
                     </thead>
                     <tbody>
+                        {% set group = group %}
+                        {% if group == 'True' %}
+                            {% for elt in table3 %}
+                            <tr>   
+                                {% for nom in ligne %}  
+                                    
+                                    <td class="table-secondary">{{elt[nom]}}</td>
+                                    {% endfor %}
+                                        
+                            {% endfor %}
+                            </tr>
+                        {% endif %}
+
                         {% for elt in table %}
-                        <tr>   
-                        <th scope="row">{{loop.index}}</th>
+                            <tr>   
                             {% for nom in ligne %}  
-                           
+                                
                                 <td>{{elt[nom]}}</td>
-                           
-                                {% endfor %}         
-                        {% endfor %}
+                            {% endfor %}
+                                    
+                            {% endfor %}
+                        </tr>
                     </tbody>
                 </table>   
             </div>
@@ -58,7 +70,7 @@
                                    
                                         {% endfor %}         
                                 {% endfor %} 
-            
+                                </tr>
                             </tbody>
                         </table>
                             </div>

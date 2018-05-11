@@ -4,7 +4,7 @@ Blueprint, request, session, flash
 )
 from app import genericRepository
 from app.t_tags import forms as t_tagsforms
-from app.models import TTags,BibTagTypes, TApplications
+from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 
@@ -15,7 +15,7 @@ def tags():
     entete =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
     colonne = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
     contenu = TTags.get_all(colonne)
-    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/tag/update/', cheminS = '/tags/delete/', cheminA = '/tag/add/new',nom = "un tag", nom_liste = "Liste des Tags")
+    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/tag/update/', cheminS = '/tags/delete/', cheminA = '/tag/add/new', cheminP = "/tag/users/",nom = "un tag", nom_liste = "Liste des Tags", Membres = "Utilisateurs", t = 'True')
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
@@ -52,6 +52,53 @@ def addorupdate(id_tag):
             else:
                 flash(form.errors)
         return render_template('tag.html',form = form)
+
+@route.route('tag/users/<id_tag>', methods=['GET','POST'])
+def tag_users(id_tag):
+    # affichage des utlisateurs
+    entete = [ 'id role', 'nom role']
+    colonne = [ 'id_role', 'prenom_role', 'nom_role']
+    filters = [{'col': 'groupe', 'filter': 'False'}]
+    
+    contenu = TRoles.get_all(colonne,filters, False)
+    filters2 = [{'col': 'groupe', 'filter': 'True'}]
+    contenu2 = TRoles.get_all(colonne,filters2)
+    col = [ 'id_role', 'nom_role']
+    tab =[]
+    tab2 = []
+    tab3 = []
+    for d in contenu:
+        t = dict()
+        t['id_role'] = d['id_role']
+        t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']
+        tab.append(t)
+    for d in contenu2:
+        t = dict()
+        t['id_role'] = d['id_role']
+        if d['prenom_role'] == None:
+            t['nom_role'] =d['nom_role']
+        else :
+            t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
+        tab2.append(t)
+    
+    # affichage des utilisateurs du tag
+    entete2 =[ 'id role', 'nom role']
+    colonne2 = ['id_role','prenom_role', 'nom_role']
+    q = db.session.query(TRoles)
+    q = q.join(CorRoleTag)
+    q = q.filter(id_tag == CorRoleTag.id_tag  )
+    data =  [data.as_dict(False) for data in q.all()]
+    for d in data:
+        t = dict()
+        t['id_role'] = d['id_role']
+        if d['prenom_role'] == None:
+            t['nom_role'] =d['nom_role']
+        else :
+            t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
+        tab3.append(t)
+
+    return render_template("tobelong.html", entete = entete , ligne = col, table = tab, table3= tab2, entete2 = entete2, ligne2 = col, table2 =tab3, group = 'True'   )
+    
 
 
 def pops(form):
