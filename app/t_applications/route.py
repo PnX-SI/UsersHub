@@ -5,8 +5,9 @@ Blueprint, request, session, flash
 from app import genericRepository
 from app.t_applications import forms as t_applicationsforms
 from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles, TApplications
+from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges
 from app.utils.utilssqlalchemy import json_resp
+from app.env import db
 
 
 route =  Blueprint('application',__name__)
@@ -16,7 +17,7 @@ def applications():
     entete = ['ID','Nom','Description', 'ID Parent']
     colonne = ['id_application','nom_application','desc_application','id_parent']
     contenu = TApplications.get_all(colonne)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/update/", cle= "id_application", cheminS="/applications/delete/", cheminA = '/application/add/new',nom = 'une application', nom_liste = "Listes des Applications" )    
+    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/update/", cle= "id_application", cheminS="/applications/delete/", cheminA = '/application/add/new',cheminP= '/application/users/', nom = 'une application', nom_liste = "Listes des Applications", t = 'True' , Membres = "Utilisateurs" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])
@@ -65,6 +66,22 @@ def delete(id_application):
     TApplications.delete(id_application)
     return redirect(url_for('application.applications'))
 
+
+
+@route.route('application/users/<id_application>', methods = ['GET','POST'])
+def users(id_application):
+    # liste utilisateurs
+    entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
+    colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
+    contenu = TRoles.get_all(colonne)
+    # liste utilisateurs de l'application
+    entete2 = ['Nom', 'Prenom']
+    colonne2 = ['nom_role','prenom_role']
+    q = db.session.query(TRoles)
+    q = q.join( CorAppPrivileges)
+    q = q.filter(TRoles.id_role ==  CorAppPrivileges.id_role) 
+    q = q.filter(id_application ==  CorAppPrivileges.id_application )
+    return render_template('tobelong.html', entete = entete ,ligne = colonne,  table = contenu, entete2 = entete2, ligne2= colonne2, table2 = [data.as_dict(True) for data in q.all()])
 
 
 def pops(form):

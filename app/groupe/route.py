@@ -75,7 +75,6 @@ def membres(id_groupe):
     q = db.session.query(TRoles)
     q = q.join(CorRoles)
     q = q.filter(id_groupe == CorRoles.id_role_groupe  )
-    [data.as_dict(True) for data in q.all()]
     return render_template("tobelong.html", entete = entete , ligne = colonne, table = contenu, entete2 = entete2, ligne2 = colonne2, table2 = [data.as_dict(True) for data in q.all()]  )
 
 

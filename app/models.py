@@ -126,7 +126,7 @@ class CorRoleMenu(GenericRepository):
 class CorRoleDroitApplication(GenericRepository):
     __tablename__ = 'cor_role_droit_application'
     __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer, primary_key = True)
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_droit = db.Column(db.Integer, primary_key = True)
     id_application = db.Column(db.Integer, primary_key = True)
 
@@ -147,10 +147,11 @@ class CorApplicationTag(GenericRepository):
 @serializable
 class CorAppPrivileges(GenericRepository):
     __tablename__ = 'cor_app_privileges'
-    __table_args__ = {'schema':'utilsateurs'}
+    __table_args__ = {'schema':'utilisateurs'}
     id_application = db.Column(db.Integer, primary_key = True)
-    id_tag = db.Column(db.Integer, primary_key = True)
-
+    id_tag_object = db.Column(db.Integer, primary_key = True)
+    id_role = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_tag_action = db.Column(db.Integer)
     
 @serializable
 class BibUnites(GenericRepository):

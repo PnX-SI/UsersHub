@@ -25,6 +25,10 @@
                 {% for nom in entete %}
                 <th scope="col">{{nom}}</th>
                 {% endfor %}
+                {% set test =  t %}
+                {% if t == 'True'%}
+                    <th scope="col">{{Membres}}</th>
+                {%endif%}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
             </tr> 
