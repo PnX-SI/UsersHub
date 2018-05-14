@@ -13,18 +13,18 @@ from app.env import db
 route = Blueprint('groupe', __name__)
 
 @route.route('groups/list', methods=['GET','POST'])
-def groupes():
-    entete = ['ID groupe', 'nom', 'description' ]
-    colonne = ['id_role', 'nom_role', 'desc_role']
+def groups():
+    fLine = ['ID groupe', 'nom', 'description' ]
+    columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
-    contenu = TRoles.get_all(colonne,filters)
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = contenu ,  cle = "id_role", cheminM = "/group/update/", cheminS = "/groups/delete/", cheminA = '/group/add/new', cheminP = '/groups/members/', cheminI = "",nom = "un groupe", nom_liste = "Liste des Groupes", t = 'True', Membres = "Membres",information = 'True')
+    contents = TRoles.get_all(columns,filters)
+    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = "/group/update/", pathD = "/groups/delete/", pathA = '/group/add/new', pathP = '/groups/members/',name = "un groupe", name_list = "Liste des Groupes", otherCol = 'True', Members = "Membres",)
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
 @route.route('group/update/<id_role>', methods=['GET','POST'])
 def addorupdate(id_role):
-    form = groupeforms.Groupe()
+    form = groupeforms.Group()
     form.groupe.process_data(True)
     if id_role == None:
         if request.method == 'POST':
@@ -35,47 +35,38 @@ def addorupdate(id_role):
                 return redirect(url_for('groupe.groups'))
             else:
                 flash(form.errors)
-        return render_template('groupe.html', form = form)
+        return render_template('group.html', form = form)
     else :
-        groupe = TRoles.get_one(id_role)
+        group = TRoles.get_one(id_role)
         if request.method =='GET':
-            form = process(form,groupe)
+            form = process(form,group)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_group = pops(form.data)
-                form_group['id_role'] = groupe['id_role']
+                form_group['id_role'] = group['id_role']
                 TRoles.update(form_group)
-                return redirect(url_for('groupe.groupes'))
+                return redirect(url_for('groupe.groups'))
             else:
                 flash(form.errors)
-        return render_template('groupe.html', form = form)
+        return render_template('group.html', form = form)
 
 
 
-@route.route('/mbgroupe/<id_groupe>', methods=['GET','POST'])
-def mbgroupe(id_groupe):
-    entete = ['identifiant', 'id role', 'prenom role', 'nom role']
-    colonne = ['identifiant','id_role','prenom_role', 'nom_role']
-    q = db.session.query(TRoles)
-    q = q.join(CorRoles)
-    q = q.filter(id_groupe == CorRoles.id_role_groupe  )
-    [data.as_dict(True) for data in q.all()]
-    return render_template('affichebase.html', entete = entete , ligne = colonne, table = [data.as_dict(True) for data in q.all()] , cle = "", cheminM = "", cheminS = "" )
-    
+  
 @route.route('groups/members/<id_groupe>', methods=['GET','POST'])
 def membres(id_groupe):
     # liste utilisateurs
-    entete = ['ID groupe', 'nom', 'description' ]
-    colonne = ['id_role', 'nom_role', 'desc_role']
+    fLine = ['ID groupe', 'nom', 'description' ]
+    columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'False'}]
-    contenu = TRoles.get_all(colonne,filters)
+    contents = TRoles.get_all(columns,filters)
     # liste des utilisateurs du groupe
-    entete2 = ['identifiant', 'id role', 'prenom role', 'nom role']
-    colonne2 = ['identifiant','id_role','prenom_role', 'nom_role']
+    fLine2 = ['identifiant', 'id role', 'prenom role', 'nom role']
+    columns2 = ['identifiant','id_role','prenom_role', 'nom_role']
     q = db.session.query(TRoles)
     q = q.join(CorRoles)
     q = q.filter(id_groupe == CorRoles.id_role_groupe  )
-    return render_template("tobelong.html", entete = entete , ligne = colonne, table = contenu, entete2 = entete2, ligne2 = colonne2, table2 = [data.as_dict(True) for data in q.all()]  )
+    return render_template("tobelong.html", fLine = fLine , line = columns, table = contents, fLine2 = fLine2, line2 = columns2, table2 = [data.as_dict(True) for data in q.all()]  )
 
 
 
@@ -83,7 +74,7 @@ def membres(id_groupe):
 @route.route('groups/delete/<id_groupe>', methods=['GET','POST'])
 def delete(id_groupe):
     TRoles.delete(id_groupe)
-    return redirect(url_for('groupe.groupes'))
+    return redirect(url_for('groupe.groups'))
 
 
 def pops(form):
@@ -92,9 +83,9 @@ def pops(form):
     return form
 
 
-def process(form,groupe):
-    form.nom_role.process_data(groupe['nom_role'])
-    form.desc_role.process_data(groupe['desc_role'])
+def process(form,group):
+    form.nom_role.process_data(group['nom_role'])
+    form.desc_role.process_data(group['desc_role'])
     return form
 
 
@@ -147,4 +138,15 @@ def process(form,groupe):
     # contenu = CorRoles.get_all(colonne,filters)
     # print(contenu)
     # print(contenu[0]["t_roles"]['identifiant'])
-    
+
+
+# @route.route('/mbgroupe/<id_groupe>', methods=['GET','POST'])
+# def mbgroupe(id_groupe):
+#     entete = ['identifiant', 'id role', 'prenom role', 'nom role']
+#     colonne = ['identifiant','id_role','prenom_role', 'nom_role']
+#     q = db.session.query(TRoles)
+#     q = q.join(CorRoles)
+#     q = q.filter(id_groupe == CorRoles.id_role_groupe  )
+#     [data.as_dict(True) for data in q.all()]
+#     return render_template('affichebase.html', entete = entete , ligne = colonne, table = [data.as_dict(True) for data in q.all()] , cle = "", cheminM = "", cheminS = "" )
+      

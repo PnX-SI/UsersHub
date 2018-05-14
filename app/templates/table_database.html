@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+
+        
+
+     
+     <div class = "container">
+    <h2>{{name_list}}</h2>         
+    <p>
+        <a href="{{pathA}}"  ><button type="submit" class="btn btn-success" >Ajouter {{name}}</button></a>
+    </p>
+    </div>    
+    <div class = "container">
+    <div id='table'>
+    
+    <table class="table table-bordered table-striped table-sm ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                {% for name in fLine %}
+                <th scope="col">{{name}}</th>
+                {% endfor %}
+                {#{% set otherCols =  otherCol %}#}
+                {% if otherCol == 'True'%}
+                    <th scope="col">{{Members}}</th>
+                {%endif%}
+                {#{% set tag = tag %}
+                {% if tag == 'True'%}
+                    <th scope="col">Tags</th>
+                {% endif %}#}
+                <th scope="col">Modification</th>
+                <th scope="col">Suppression</th>
+            </tr> 
+
+        </thead>
+        <tbody>
+            {% for elt in table %}
+            <tr>   
+            <th scope="row">{{loop.index}}</th>
+                {% for name in line %}  
+               
+                    <td>{{elt[name]}}</td>
+               
+                    
+                {% endfor %}
+
+               
+            {#{% set test =  t %}#}
+            {% if otherCol == 'True'%}
+            <td>
+                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >{{Members}}  </button></a>
+
+            </td>
+            {%endif%}
+
+            {#{% set tag = tag %}
+            {% if tag == 'True'%}
+
+            <td>
+                <a href="{{cheminT}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >Tags  </button></a>
+
+            </td>
+            
+            {% endif %}#}
+                <td>
+                        <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
+
+                </td>
+                <td class = "delete">
+                    <a href="{{pathD}}{{elt[key]}}" onclick="alert('Etes vous sûr de vouloir supprimer cette élement ?')" ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
+                </td>
+               
+                
+                  
+                </tr>
+            {% endfor %}
+           
+        </tbody>
+    </table>
+    </div>
+
+</div>
+
+    
+</body>
+</html>
+
+

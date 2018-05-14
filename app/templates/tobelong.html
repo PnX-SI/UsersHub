@@ -14,20 +14,20 @@
              <table class="table table-bordered table-sm">
                     <thead>
                         <tr>
-                            {% for nom in entete %}
-                            <th scope="col">{{nom}}</th>
+                            {% for name in fLine %}
+                            <th scope="col">{{name}}</th>
                             {% endfor %}
                         </tr> 
             
                     </thead>
                     <tbody>
-                        {% set group = group %}
+                        {#{% set group = group %}#}
                         {% if group == 'True' %}
                             {% for elt in table3 %}
                             <tr>   
-                                {% for nom in ligne %}  
+                                {% for name in line %}  
                                     
-                                    <td class="table-secondary">{{elt[nom]}}</td>
+                                    <td class="table-secondary">{{elt[name]}}</td>
                                     {% endfor %}
                                         
                             {% endfor %}
@@ -36,9 +36,9 @@
 
                         {% for elt in table %}
                             <tr>   
-                            {% for nom in ligne %}  
+                            {% for name in line %}  
                                 
-                                <td>{{elt[nom]}}</td>
+                                <td>{{elt[name]}}</td>
                             {% endfor %}
                                     
                             {% endfor %}
@@ -54,8 +54,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    {% for nom in entete2 %}
-                                    <th scope="col">{{nom}}</th>
+                                    {% for name in fLine2 %}
+                                    <th scope="col">{{name}}</th>
                                     {% endfor %}
                                 </tr> 
                     
@@ -64,9 +64,9 @@
                                 {% for elt in table2 %}
                                 <tr>   
                                 <th scope="row">{{loop.index}}</th>
-                                    {% for nom in ligne2 %}  
+                                    {% for name in line2 %}  
                                    
-                                        <td>{{elt[nom]}}</td>
+                                        <td>{{elt[name]}}</td>
                                    
                                         {% endfor %}         
                                 {% endfor %} 

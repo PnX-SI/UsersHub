@@ -9,11 +9,11 @@ from app.models import Bib_Organismes
 route =  Blueprint('organisme',__name__)
 
 @route.route('organisms/list', methods=['GET','POST'])
-def organismes():
-    entete = ['Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
-    colonne = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
-    contenu = Bib_Organismes.get_all(colonne)
-    return render_template('affichebase.html', table = contenu, entete = entete,ligne = colonne, cheminM = '/organism/update/', cle= 'id_organisme', cheminS = '/organisms/delete/', cheminA= '/organism/add/new',nom = "un organisme", nom_liste = "Listes des organismes" )
+def organisms():
+    fLine = ['Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
+    columns = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
+    contents = Bib_Organismes.get_all(columns)
+    return render_template('table_database.html', table = contents, fLine = fLine,line = columns, pathU = '/organism/update/', key= 'id_organisme', pathD = '/organisms/delete/', pathA= '/organism/add/new',name = "un organisme", name_list = "Listes des organismes" )
 
 
 @route.route('organism/add/new', defaults={'id_organisme': None}, methods=['GET','POST'])
@@ -22,13 +22,13 @@ def addorupdate(id_organisme):
     form = bib_organismeforms.Organisme()
     if id_organisme == None:
         if request.method == 'POST':
-            if formu.validate_on_submit() and formu.validate():
+            if form.validate_on_submit() and form.validate():
                 form_org =  pops(form.data)
                 form_org.pop('id_organisme')
                 Bib_Organismes.post(form_org)
-                return redirect(url_for('organisme.organismes'))
+                return redirect(url_for('organisme.organisms'))
             else:
-                flash(formu.errors)
+                flash(form.errors)
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method =='GET':
@@ -38,10 +38,10 @@ def addorupdate(id_organisme):
                 form_org = pops(form.data)
                 form_org['id_organisme'] = org['id_organisme']
                 Bib_Organismes.update(form_org)
-                return redirect(url_for('organisme.organismes'))
+                return redirect(url_for('organisme.organisms'))
             else:
                 flash(form.errors)
-    return render_template('organisme.html',form = form)        
+    return render_template('organism.html',form = form)        
 
 
 
@@ -50,7 +50,7 @@ def addorupdate(id_organisme):
 @route.route('organisms/delete/<id_organisme>', methods = ['GET', 'POST'])
 def delete(id_organisme):
     Bib_Organismes.delete(id_organisme)
-    return redirect(url_for('organisme.organismes'))
+    return redirect(url_for('organisme.organisms'))
 
 
 # @route.route('organism/members/<id_organisme', methods=['GET','POST'])

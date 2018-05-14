@@ -12,10 +12,10 @@ route =  Blueprint('tags',__name__)
 
 @route.route('tags/list', methods=['GET','POST'])
 def tags():
-    entete =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
-    colonne = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
-    contenu = TTags.get_all(colonne)
-    return render_template('affichebase.html' ,entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_tag', cheminM = '/tag/update/', cheminS = '/tags/delete/', cheminA = '/tag/add/new', cheminP = "/tag/users/",nom = "un tag", nom_liste = "Liste des Tags", Membres = "Utilisateurs", t = 'True')
+    fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
+    columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
+    contents = TTags.get_all(columns)
+    return render_template('affichebase.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True')
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
@@ -56,23 +56,23 @@ def addorupdate(id_tag):
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
     # affichage des utlisateurs
-    entete = [ 'id role', 'nom role']
-    colonne = [ 'id_role', 'prenom_role', 'nom_role']
+    fLine = [ 'id role', 'nom role']
+    columns = [ 'id_role', 'prenom_role', 'nom_role']
     filters = [{'col': 'groupe', 'filter': 'False'}]
     
-    contenu = TRoles.get_all(colonne,filters, False)
+    contents = TRoles.get_all(columns,filters, False)
     filters2 = [{'col': 'groupe', 'filter': 'True'}]
-    contenu2 = TRoles.get_all(colonne,filters2)
+    contents2 = TRoles.get_all(columns,filters2)
     col = [ 'id_role', 'nom_role']
     tab =[]
     tab2 = []
     tab3 = []
-    for d in contenu:
+    for d in contents:
         t = dict()
         t['id_role'] = d['id_role']
         t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']
         tab.append(t)
-    for d in contenu2:
+    for d in contents2:
         t = dict()
         t['id_role'] = d['id_role']
         if d['prenom_role'] == None:
@@ -82,8 +82,8 @@ def tag_users(id_tag):
         tab2.append(t)
     
     # affichage des utilisateurs du tag
-    entete2 =[ 'id role', 'nom role']
-    colonne2 = ['id_role','prenom_role', 'nom_role']
+    fLine2 =[ 'id role', 'nom role']
+    columns2 = ['id_role','prenom_role', 'nom_role']
     q = db.session.query(TRoles)
     q = q.join(CorRoleTag)
     q = q.filter(id_tag == CorRoleTag.id_tag  )
@@ -97,7 +97,7 @@ def tag_users(id_tag):
             t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
         tab3.append(t)
 
-    return render_template("tobelong.html", entete = entete , ligne = col, table = tab, table3= tab2, entete2 = entete2, ligne2 = col, table2 =tab3, group = 'True'   )
+    return render_template("tobelong.html", fLine = fLine , line = col, table = tab, table3= tab2, fLine2 = fLine2, line2 = col, table2 =tab3, group = 'True'   )
     
 
 

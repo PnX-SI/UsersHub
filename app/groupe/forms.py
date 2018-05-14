@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired
 
 
-class Groupe(FlaskForm):
+class Group(FlaskForm):
     nom_role = StringField("Nom du groupe", validators=[DataRequired()])
     desc_role = StringField('Description du groupe', validators=[DataRequired()])
     groupe = BooleanField('groupe', validators=[DataRequired()])

@@ -20,11 +20,11 @@ route =  Blueprint('user',__name__)
 
 @route.route('users/list',methods=['GET','POST'])
 def users():
-    entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-    colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
+    fLine = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
+    columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
-    contenu = TRoles.get_all(colonne,filters)
-    return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/user/update/', cheminS = '/users/delete/',cheminA = "/user/add/new", cheminI = "",nom = 'un utilisateur', nom_liste = "Liste des utilisateurs", information = 'True')    
+    contents = TRoles.get_all(columns,filters)
+    return render_template('table_database.html', fLine = fLine ,line = columns, table = contents,  key = 'id_role', pathU = '/user/update/', pathD = '/users/delete/',pathA = "/user/add/new", name = 'un utilisateur', name_list = "Liste des utilisateurs")    
 
     
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -52,7 +52,6 @@ def addorupdate(id_role):
     else:
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
-            print('coucou')
             form = process(form,user)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():  
@@ -68,7 +67,7 @@ def addorupdate(id_role):
                     flash("mot de passe non identiques")
             else :
                 flash(form.errors)
-        return render_template('user_unique.html',form = form)
+        return render_template('userhtml',form = form)
 
 
    

@@ -14,10 +14,10 @@ route =  Blueprint('application',__name__)
 
 @route.route('applications/list', methods=['GET','POST'])
 def applications():
-    entete = ['ID','Nom','Description', 'ID Parent']
-    colonne = ['id_application','nom_application','desc_application','id_parent']
-    contenu = TApplications.get_all(colonne)
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/application/update/", cle= "id_application", cheminS="/applications/delete/", cheminA = '/application/add/new',cheminP= '/application/users/', nom = 'une application', nom_liste = "Listes des Applications", t = 'True' , Membres = "Utilisateurs" )    
+    fLine = ['ID','Nom','Description', 'ID Parent']
+    columns = ['id_application','nom_application','desc_application','id_parent']
+    contents = TApplications.get_all(columns)
+    return render_template('affichebase.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", otherCol = 'True' , Members = "Utilisateurs" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])
@@ -48,7 +48,6 @@ def addorupdate(id_application):
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_app = pops(form.data)
-                print('coucou2')
                 if form.id_parent.data == -1:
                     form_app['id_parent'] = None
                 form_app['id_application'] = application['id_application']
@@ -71,17 +70,17 @@ def delete(id_application):
 @route.route('application/users/<id_application>', methods = ['GET','POST'])
 def users(id_application):
     # liste utilisateurs
-    entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-    colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
-    contenu = TRoles.get_all(colonne)
+    fLine = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
+    columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
+    contents = TRoles.get_all(columns)
     # liste utilisateurs de l'application
-    entete2 = ['Nom', 'Prenom']
-    colonne2 = ['nom_role','prenom_role']
+    fLine2 = ['Nom', 'Prenom']
+    columns2 = ['nom_role','prenom_role']
     q = db.session.query(TRoles)
     q = q.join( CorAppPrivileges)
     q = q.filter(TRoles.id_role ==  CorAppPrivileges.id_role) 
     q = q.filter(id_application ==  CorAppPrivileges.id_application )
-    return render_template('tobelong.html', entete = entete ,ligne = colonne,  table = contenu, entete2 = entete2, ligne2= colonne2, table2 = [data.as_dict(True) for data in q.all()])
+    return render_template('tobelong.html', fLine = fLine ,line = columns,  table = contents, fLine2 = fLine2, line2= columns2, table2 = [data.as_dict(True) for data in q.all()])
 
 
 def pops(form):

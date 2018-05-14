@@ -11,10 +11,10 @@ route = Blueprint('tags_types',__name__)
 
 @route.route('tags_types/list',methods=['GET','POST'])
 def tags_types():
-    entete = ['ID', 'Nom', 'Description']
-    colonne = ['id_tag_type','tag_type_name','tag_type_desc']
-    contenu = BibTagTypes.get_all()
-    return render_template('affichebase.html', table = contenu, entete = entete, ligne = colonne, cheminM = "/tag_type/update/", cle = "id_tag_type", cheminS = "/tags_types/delete/", cheminA = '/tag_type/add/new',nom = "type de tag", nom_liste = "Listes des Types de Tags")
+    fLine = ['ID', 'Nom', 'Description']
+    columns = ['id_tag_type','tag_type_name','tag_type_desc']
+    contents = BibTagTypes.get_all()
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = "/tag_type/update/", key = "id_tag_type", pathD = "/tags_types/delete/", pathA = '/tag_type/add/new',name = "type de tag", name_liste = "Listes des Types de Tags")
 
 @route.route('tag_type/add/new',defaults={'id_tag_type' : None}, methods=['GET','POST'])
 @route.route('tag_type/update/<id_tag_type>', methods=['GET','POST'])
