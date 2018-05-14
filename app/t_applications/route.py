@@ -17,7 +17,7 @@ def applications():
     fLine = ['ID','Nom','Description', 'ID Parent']
     columns = ['id_application','nom_application','desc_application','id_parent']
     contents = TApplications.get_all(columns)
-    return render_template('affichebase.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", otherCol = 'True' , Members = "Utilisateurs" )    
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", otherCol = 'True' , Members = "Utilisateurs" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])

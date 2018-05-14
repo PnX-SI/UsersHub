@@ -12,7 +12,7 @@
      <div class = "container">
     <h2>{{name_list}}</h2>         
     <p>
-        <a href="{{pathA}}"  ><button type="submit" class="btn btn-success" >Ajouter {{name}}</button></a>
+        <a href="{{pathA}}"  ><button type="submit" class="btn btn-success btn-sm" >Ajouter {{name}}</button></a>
     </p>
     </div>    
     <div class = "container">
@@ -40,11 +40,11 @@
         </thead>
         <tbody>
             {% for elt in table %}
-            <tr>   
+            <tr onclick = "test1()">   
             <th scope="row">{{loop.index}}</th>
                 {% for name in line %}  
                
-                    <td>{{elt[name]}}</td>
+                    <td >{{elt[name]}}</td>
                
                     
                 {% endfor %}
@@ -53,7 +53,7 @@
             {#{% set test =  t %}#}
             {% if otherCol == 'True'%}
             <td>
-                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >{{Members}}  </button></a>
+                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
 
             </td>
             {%endif%}
@@ -62,17 +62,17 @@
             {% if tag == 'True'%}
 
             <td>
-                <a href="{{cheminT}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >Tags  </button></a>
+                <a href="{{cheminT}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Tags  </button></a>
 
             </td>
             
             {% endif %}#}
                 <td>
-                        <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
+                        <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
 
                 </td>
                 <td class = "delete">
-                    <a href="{{pathD}}{{elt[key]}}" onclick="alert('Etes vous sûr de vouloir supprimer cette élement ?')" ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
+                    <a href="{{pathD}}{{elt[key]}}" onclick="alert('Etes vous sûr de vouloir supprimer cette élement ?')" ><button type="submit" class="btn btn-danger btn-sm" >Supprimer</button></a> 
                 </td>
                
                 

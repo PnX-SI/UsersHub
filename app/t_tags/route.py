@@ -15,7 +15,7 @@ def tags():
     fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
     columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
     contents = TTags.get_all(columns)
-    return render_template('affichebase.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True')
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True')
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
