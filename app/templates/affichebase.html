@@ -18,7 +18,7 @@
     <div class = "container">
     <div id='table'>
     
-    <table class="table table-bordered table-sm">
+    <table class="table table-bordered table-sm table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -71,8 +71,8 @@
                         <a href="{{cheminM}}{{elt[cle]}}"  > <button type="submit" class="btn btn-secondary " >Modification  </button></a>
 
                 </td>
-                <td>
-                    <a href="{{cheminS}}{{elt[cle]}}"  ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
+                <td class = "delete">
+                    <a href="{{cheminS}}{{elt[cle]}}" onclick="alert('Etes vous sûr de vouloir supprimer cette élement ?')" ><button type="submit" class="btn btn-danger" >Supprimer</button></a> 
                 </td>
                
                 
