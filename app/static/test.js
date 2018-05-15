@@ -9,11 +9,20 @@ $( document ).ready(function() {
         });
         console.log(tab)
     });    
-    console.log('coucou')
+    console.log('coucou');
   
-    $("table tbody tr td #delete").click(function(event){
-        console.log(event.target)
-        confirm("Etes vous sur de vouloir supprimer cette élement ? ");
-    });
+    function test(){
+        console.log('test');
+    };
 
+    
+    
+    
 });
+
+
+var deleteRaw = function (path){        
+        var c = confirm("Etes vous sur de vouloir supprimer cette élement ? ");
+        if (c == true)
+           window.location.href = path;  
+    }
