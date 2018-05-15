@@ -48,7 +48,7 @@ def addorupdate(id_role):
                     flash("mot de passe non identiques")
             else :
                 flash(form.errors)
-        return render_template('user_unique.html', form = form)
+        return render_template('user.html', form = form)
     else:
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
@@ -67,7 +67,7 @@ def addorupdate(id_role):
                     flash("mot de passe non identiques")
             else :
                 flash(form.errors)
-        return render_template('userhtml',form = form)
+        return render_template('user.html',form = form)
 
 
    

@@ -61,8 +61,8 @@ def membres(id_groupe):
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns,filters)
     # liste des utilisateurs du groupe
-    fLine2 = ['identifiant', 'id role', 'prenom role', 'nom role']
-    columns2 = ['identifiant','id_role','prenom_role', 'nom_role']
+    fLine2 = ['id role','identifiant',  'prenom role', 'nom role']
+    columns2 = ['id_role','identifiant','prenom_role', 'nom_role']
     q = db.session.query(TRoles)
     q = q.join(CorRoles)
     q = q.filter(id_groupe == CorRoles.id_role_groupe  )

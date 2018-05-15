@@ -40,7 +40,7 @@
         </thead>
         <tbody>
             {% for elt in table %}
-            <tr onclick = "test1()">   
+            <tr >   
             <th scope="row">{{loop.index}}</th>
                 {% for name in line %}  
                
@@ -71,8 +71,8 @@
                         <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
 
                 </td>
-                <td class = "delete">
-                    <a href="{{pathD}}{{elt[key]}}" onclick="alert('Etes vous sûr de vouloir supprimer cette élement ?')" ><button type="submit" class="btn btn-danger btn-sm" >Supprimer</button></a> 
+                <td >
+                    <a  href="{{pathD}}{{elt[key]}}"  ><button id = "delete" type="submit" class="btn btn-danger btn-sm" >Supprimer</button></a> 
                 </td>
                
                 

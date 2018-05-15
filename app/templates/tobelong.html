@@ -11,9 +11,10 @@
             
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
              
-             <table class="table table-bordered table-sm">
+             <table  id="user" class="table table-bordered table-sm">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             {% for name in fLine %}
                             <th scope="col">{{name}}</th>
                             {% endfor %}
@@ -24,7 +25,9 @@
                         {#{% set group = group %}#}
                         {% if group == 'True' %}
                             {% for elt in table3 %}
-                            <tr>   
+                        
+                            <tr >  
+                                    <td><input id="checkBox" type="checkbox"> </td> 
                                 {% for name in line %}  
                                     
                                     <td class="table-secondary">{{elt[name]}}</td>
@@ -35,7 +38,8 @@
                         {% endif %}
 
                         {% for elt in table %}
-                            <tr>   
+                            <tr>
+                                 <td><input id="checkBox" type="checkbox"> </td>    
                             {% for name in line %}  
                                 
                                 <td>{{elt[name]}}</td>
@@ -50,7 +54,7 @@
             
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-                    <table class="table table-bordered table-sm">
+                    <table  id="user"  class="table table-bordered table-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -73,8 +77,14 @@
                                 </tr>
                             </tbody>
                         </table>
-                            </div>
+        
+        
+                    </div>
+       
+        <button  id="transfert" class ="btn btn-success btn-sm"> Valider</button>
         </div>
+
+
       
 
  

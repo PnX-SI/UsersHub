@@ -10,8 +10,8 @@ route =  Blueprint('organisme',__name__)
 
 @route.route('organisms/list', methods=['GET','POST'])
 def organisms():
-    fLine = ['Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email', 'ID']
-    columns = ['nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme','id_organisme']
+    fLine = [ 'ID','Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email']
+    columns = ['id_organisme','nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme']
     contents = Bib_Organismes.get_all(columns)
     return render_template('table_database.html', table = contents, fLine = fLine,line = columns, pathU = '/organism/update/', key= 'id_organisme', pathD = '/organisms/delete/', pathA= '/organism/add/new',name = "un organisme", name_list = "Listes des organismes" )
 

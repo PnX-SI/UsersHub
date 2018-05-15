@@ -5,7 +5,7 @@ import config
 
 
 
-app = Flask(__name__, template_folder= "app/templates" )
+app = Flask(__name__, template_folder= "app/templates" , static_folder = 'app/static' )
 
 app.secret_key = config.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI

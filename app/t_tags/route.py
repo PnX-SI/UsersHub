@@ -97,7 +97,7 @@ def tag_users(id_tag):
             t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
         tab3.append(t)
 
-    return render_template("tobelong.html", fLine = fLine , line = col, table = tab, table3= tab2, fLine2 = fLine2, line2 = col, table2 =tab3, group = 'True'   )
+    return render_template("tobelong.html", fLine = fLine , line = col, table = tab, table3= tab2, fLine2 = fLine2, line2 = col, table2 =tab3, group = 'True', testjs = 'static/test.js'  )
     
 
 
