@@ -4,11 +4,19 @@ $( document ).ready(function() {
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
             var getRow = $(this).parents('tr');
-            tab.push(getRow.find('td:eq(1)').html());
-        
+            var user ={
+                id : getRow.find('td:eq(1)').html(),
+                name : getRow.find('td:eq(2)').html()
+            }
+            tab.push(user);
+            addTab(tab)
         });
         console.log(tab)
     });    
+
+
+
+
     console.log('coucou');
   
     function test(){
@@ -19,6 +27,18 @@ $( document ).ready(function() {
     
     
 });
+
+
+function addTab(tab){
+    for(var i = 0; i<tab.length;i++){
+        var sHtml = "<tr>"+
+                "   <td class='m1'>"+tab[i].id+"</td>"+
+                "   <td class='m2'>"+tab[i].name+"</td>"+
+                "</tr>";
+    }    
+    
+    $("#test").append(sHtml);
+}
 
 
 var deleteRaw = function (path){        

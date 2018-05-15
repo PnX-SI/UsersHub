@@ -54,10 +54,9 @@
             
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-                    <table  id="user"  class="table table-bordered table-sm">
+                    <table  id="test"  class="table table-bordered table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
                                     {% for name in fLine2 %}
                                     <th scope="col">{{name}}</th>
                                     {% endfor %}
@@ -67,11 +66,10 @@
                             <tbody>
                                 {% for elt in table2 %}
                                 <tr>   
-                                <th scope="row">{{loop.index}}</th>
                                     {% for name in line2 %}  
                                    
                                         <td>{{elt[name]}}</td>
-                                   
+                                        
                                         {% endfor %}         
                                 {% endfor %} 
                                 </tr>
