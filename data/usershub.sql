@@ -1175,7 +1175,7 @@ DO
 $$
 BEGIN
 INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
-(1, 3,'1','Utilisateur', 'Utilisateur','Ne peut que consulter')
+(1, 3,'1','utilisateur', 'Utilisateur','Ne peut que consulter')
 ,(2, 3, '2', 'rédacteur', 'Rédacteur','Il possède des droit d''écriture pour créer des enregistrements')
 ,(3, 3, '3', 'référent', 'Référent','Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
 ,(4, 3, '4', 'modérateur', 'Modérateur', 'Peu utilisé')
