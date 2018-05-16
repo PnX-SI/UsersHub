@@ -54,7 +54,13 @@ class GenericRepository(db.Model):
     def choixGroupe(cls,id,nom,aucun = None):        
         return ""
 
+    @classmethod 
+    def concat(cls):
+        return ""
 
+    @classmethod
+    def testGroup(cls,id):
+        return ""
 
     # @classmethod
     # def get_column_name(cls,columns=None):

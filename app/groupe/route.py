@@ -89,7 +89,13 @@ def process(form,group):
     return form
 
 
-#  NON UTILISE
+
+@route.route('test')
+def test():
+    print(TRoles.testGroup(TRoles.concat()))
+    return ""
+    
+    #  NON UTILISE
 # @route.route('/groupe', methods=['GET','POST'])
 # def groupe():
 #     form = groupeforms.Groupe()

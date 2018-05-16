@@ -22,27 +22,19 @@
             
                     </thead>
                     <tbody>
-                        {#{% set group = group %}#}
-                        {% if group == 'True' %}
-                            {% for elt in table3 %}
                         
-                            <tr >  
-                                    <td><input id="checkBox" type="checkbox"> </td> 
-                                {% for name in line %}  
-                                    
-                                    <td class="table-secondary">{{elt[name]}}</td>
-                                    {% endfor %}
-                                        
-                            {% endfor %}
-                            </tr>
-                        {% endif %}
 
                         {% for elt in table %}
                             <tr>
                                  <td><input id="checkBox" type="checkbox"> </td>    
-                            {% for name in line %}  
+                            {% for name in line %}
+                            {% set groups = elt[group] %}  
+                            {% if groups == 'True' %}    
+                                <td class = "table-secondary" >{{elt[name]}}</td>
+                            {% else %}
+                                <td >{{elt[name]}}</td>
+                            {% endif%}
                                 
-                                <td>{{elt[name]}}</td>
                             {% endfor %}
                                     
                             {% endfor %}

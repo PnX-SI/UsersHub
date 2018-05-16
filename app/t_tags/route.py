@@ -55,33 +55,11 @@ def addorupdate(id_tag):
 
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
-    # affichage des utlisateurs
-    fLine = [ 'id role', 'nom role']
-    columns = [ 'id_role', 'prenom_role', 'nom_role']
-    filters = [{'col': 'groupe', 'filter': 'False'}]
-    
-    contents = TRoles.get_all(columns,filters, False)
-    filters2 = [{'col': 'groupe', 'filter': 'True'}]
-    contents2 = TRoles.get_all(columns,filters2)
-    col = [ 'id_role', 'nom_role']
-    tab =[]
-    tab2 = []
+    fLine = [ 'ID', 'nom']
+    content =  TRoles.concat()
+    tab = TRoles.testGroup(content)
+
     tab3 = []
-    for d in contents:
-        t = dict()
-        t['id_role'] = d['id_role']
-        t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']
-        tab.append(t)
-    for d in contents2:
-        t = dict()
-        t['id_role'] = d['id_role']
-        if d['prenom_role'] == None:
-            t['nom_role'] =d['nom_role']
-        else :
-            t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
-        tab2.append(t)
-    
-    # affichage des utilisateurs du tag
     fLine2 =[ 'id role', 'nom role']
     columns2 = ['id_role','prenom_role', 'nom_role']
     q = db.session.query(TRoles)
@@ -96,8 +74,37 @@ def tag_users(id_tag):
         else :
             t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
         tab3.append(t)
+    return render_template("tobelong.html",fLine = fLine, line = fLine, table = tab, group = 'groupe',fLine2 = fLine, line2 = fLine, table2 =tab3  )
 
-    return render_template("tobelong.html", fLine = fLine , line = col, table = tab, table3= tab2, fLine2 = fLine2, line2 = col, table2 =tab3, group = 'True', testjs = 'static/test.js'  )
+    # # affichage des utlisateurs
+    # fLine = [ 'id role', 'nom role']
+    # columns = [ 'id_role', 'prenom_role', 'nom_role']
+    # filters = [{'col': 'groupe', 'filter': 'False'}]
+    
+    # contents = TRoles.get_all(columns,filters, False)
+    # filters2 = [{'col': 'groupe', 'filter': 'True'}]
+    # contents2 = TRoles.get_all(columns,filters2)
+    # col = [ 'id_role', 'nom_role']
+    # tab =[]
+    # tab2 = []
+    # tab3 = []
+    # for d in contents:
+    #     t = dict()
+    #     t['id_role'] = d['id_role']
+    #     t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']
+    #     tab.append(t)
+    # for d in contents2:
+    #     t = dict()
+    #     t['id_role'] = d['id_role']
+    #     if d['prenom_role'] == None:
+    #         t['nom_role'] =d['nom_role']
+    #     else :
+    #         t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
+    #     tab2.append(t)
+    
+    # affichage des utilisateurs du tag
+    
+
     
 
 

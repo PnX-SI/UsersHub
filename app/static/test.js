@@ -42,7 +42,7 @@ function addTab(tab){
 
 
 var deleteRaw = function (path){        
-        var c = confirm("Etes vous sur de vouloir supprimer cette élement ? ");
+        var c = confirm("Etes vous sur de vouloir supprimer cet élement ? ");
         if (c == true)
            window.location.href = path;  
     }

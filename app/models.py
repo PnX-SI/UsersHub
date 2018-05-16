@@ -59,6 +59,34 @@ class TRoles(GenericRepository):
             choices.append((-1,'Aucun'))
         return choices
 
+    @classmethod
+    def concat(cls):
+        columns = ['id_role', 'nom_role', 'prenom_role']
+        contents = cls.get_all(columns,recursif = False)
+        tab = []
+        for d in contents :
+            t = dict()
+            t['ID'] = d['id_role']
+            if d['prenom_role'] == None:
+                t['nom']= d["nom_role"]
+            else :
+                t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
+            tab.append(t)
+        return (tab)
+
+    @classmethod
+    def testGroup(cls,tab):
+        table = []
+        for d in tab :
+            if cls.get_one(d['ID'])['groupe'] == False:
+                d['groupe'] = 'False'
+            else :
+                d['groupe'] = 'True'
+            table.append(d)
+        return table
+
+        
+
 @serializable
 class TApplications(GenericRepository):
     __tablename__='t_applications'
