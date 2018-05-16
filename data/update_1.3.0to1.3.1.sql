@@ -538,3 +538,53 @@ DECLARE
 $BODY$
   LANGUAGE plpgsql IMMUTABLE
   COST 100;
+  
+  
+----------
+-- DATA --
+----------
+
+DO
+$$
+BEGIN
+INSERT INTO bib_tag_types(id_tag_type, tag_type_name, tag_type_desc) VALUES
+(1, 'Object', 'Define a type object. Usually to define privileges on an object.')
+,(2, 'Action', 'Define a type action. Usually to define privileges for an action.')
+,(3, 'Privilege', 'Define a privilege level.')
+,(4, 'Liste', 'Define a type liste for grouping anything.')
+;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+DO
+$$
+BEGIN
+INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
+(1, 3,'1','Utilisateur', 'Utilisateur','Ne peut que consulter')
+,(2, 3, '2', 'rédacteur', 'Rédacteur','Il possède des droit d''écriture pour créer des enregistrements')
+,(3, 3, '3', 'référent', 'Référent','Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
+,(4, 3, '4', 'modérateur', 'Modérateur', 'Peu utilisé')
+,(5, 3, '5', 'validateur', 'Validateur', 'Il valide bien sur')
+,(6, 3, '6', 'administrateur', 'Administrateur', 'Il a tous les droits')
+,(11, 2, 'C', 'create', 'Create', 'Can create/add new data')
+,(12, 2, 'R', 'read', 'Read', 'Can read data')
+,(13, 2, 'U', 'update', 'Update', 'Can update data')
+,(14, 2, 'V', 'validate', 'Validate', 'Can validate data')
+,(15, 2, 'E', 'export', 'Export', 'Can export data')
+,(16, 2, 'D', 'delete', 'Delete', 'Can delete data')
+,(20, 3, '0', 'nothing', 'Nothing', 'Cannot do anything')
+,(21, 3, '1', 'my data', 'My data', 'Can do action only on my data')
+,(22, 3, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
+,(23, 3, '3', 'all data', 'All data', 'Can do action on all data')
+
+,(100, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
+,(101, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
+,(102, 4, NULL, 'observateurs aigle', 'Observateurs aigle', 'Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
+;
+PERFORM pg_catalog.setval('t_tags_id_tag_seq', 104, true);
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
