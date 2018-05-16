@@ -3,21 +3,25 @@ CHANGELOG
 =========
 
 
-1.3.1-dev (2017-12-18)
-------------------
+1.3.1-dev (unreleased)
+----------------------
 
-**Changements**
+https://github.com/PnEcrins/UsersHub/compare/1.3.0...develop
 
-* Correction de l'installation (localisation du config.php)
-* Mise en paramètre de cost de l'algorythme de criptage bcrypt
-* Ajout d'une vue manquante et nécessaire au sous module d'authentification
+**Nouveautés**
+
+* Préparation dans la BDD d'une future version 1.4.0 (dont les extensions sont utilisées dans le développement de GeoNature2) :
+  
+  - Intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. Ce mécanisme permet aussi d'affecter des étiquettes à des roles, des organismes ou des applications. Il permet également de gérer la notion de portée des actions sur différentes étendue de données (mes données seulement, celles de mon organisme, toutes les données)
+  - Intégration d'une hiérarchie entre applications et organismes (``id_parent``).
+  - Pour le moment, ces extensions du modèle ne concernent que la base de données et pas l'interface de l'application.
+* Mise en paramètre du cost de l'algorythme de criptage bcrypt
+
+**Corrections**
+
 * Ajout du ``pass_plus`` dans toutes les vues
-* Préparation d'une version 1.4.0 (dont les extentsions sont utilisée dans le développement de GeoNature2)
-    * Intégration d'un mécanisme générique d'étiquettes (tags) permettant une gestion des droits par actions sur des objets. 
-Ce mécanisme permet aussi d'affecter des étiquettes à des roles, des organismes ou des applications.
-Il permet également de gérer la notion de portée des actions sur différentes étendue de données (mes données seulement, celles de mon organisme, toutes les données)
-    * Intégration d'une hiérarchie entre applications et organismes (id_parent).
-    * Pour le moment, ces extentions du modèle ne concernent que la base de données et pas l'interface de l'application.
+* Correction de l'installation (localisation du ``config.php``)
+* Ajout d'une vue manquante et nécessaire au sous-module d'authentification
 
 **Notes de version**
 
