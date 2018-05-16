@@ -7,21 +7,25 @@ class GenericRepository(db.Model):
 
 
     @classmethod
-    def get_one(cls,id):
-        data = db.session.query(cls).get(id)
-        return data.as_dict(True)
-
+    def get_one(cls,id, query = False):
+        if query ==False :
+            data = db.session.query(cls).get(id)
+            return data.as_dict(True)
+        else :
+            return db.session.query(cls).get(id)
     @classmethod
-    def get_all(cls,columns=None, params = None, recursif = True):
-        if params == None :
-            return [data.as_dict(recursif,columns) for data in db.session.query(cls).all()]
-        else:
-            q = db.session.query(cls)
-            for param in params : 
-                nom_col = getattr(cls,param['col'])
-                q = q.filter(nom_col == param['filter'])
-            return [data.as_dict(recursif,columns) for data in q.all()]
-
+    def get_all(cls, columns=None, params = None, recursif = True,query = False):
+        if query == False:
+            if params == None :
+                return [data.as_dict(recursif,columns) for data in db.session.query(cls).all()]
+            else:
+                q = db.session.query(cls)
+                for param in params : 
+                    nom_col = getattr(cls,param['col'])
+                    q = q.filter(nom_col == param['filter'])
+                return [data.as_dict(recursif,columns) for data in q.all()]
+        else :
+            return db.session.query(cls).all()
 
 
     @classmethod
@@ -54,15 +58,7 @@ class GenericRepository(db.Model):
     def choixGroupe(cls,id,nom,aucun = None):        
         return ""
 
-    @classmethod 
-    def concat(cls):
-        return ""
-
-    @classmethod
-    def testGroup(cls,id):
-        return ""
-
-    # @classmethod
+   
     # def get_column_name(cls,columns=None):
     #     if columns:
     #         for col in cls.__table__.columns.keys()

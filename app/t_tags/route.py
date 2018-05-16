@@ -56,25 +56,11 @@ def addorupdate(id_tag):
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
     fLine = [ 'ID', 'nom']
-    content =  TRoles.concat()
-    tab = TRoles.testGroup(content)
-
-    tab3 = []
-    fLine2 =[ 'id role', 'nom role']
-    columns2 = ['id_role','prenom_role', 'nom_role']
-    q = db.session.query(TRoles)
-    q = q.join(CorRoleTag)
-    q = q.filter(id_tag == CorRoleTag.id_tag  )
-    data =  [data.as_dict(False) for data in q.all()]
-    for d in data:
-        t = dict()
-        t['id_role'] = d['id_role']
-        if d['prenom_role'] == None:
-            t['nom_role'] =d['nom_role']
-        else :
-            t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
-        tab3.append(t)
-    return render_template("tobelong.html",fLine = fLine, line = fLine, table = tab, group = 'groupe',fLine2 = fLine, line2 = fLine, table2 =tab3  )
+    user_list =  TRoles.concat()
+    user_list = TRoles.test_group(user_list)
+    user_tag = TRoles.get_user_in_tag(id_tag)
+    tab2= TRoles.test_group(TRoles.concat(user_tag))    
+    return render_template("tobelong.html",fLine = fLine, table = user_list, group = 'groupe', table2 =tab2  )
 
     # # affichage des utlisateurs
     # fLine = [ 'id role', 'nom role']

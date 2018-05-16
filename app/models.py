@@ -48,7 +48,7 @@ class TRoles(GenericRepository):
 
 
     @classmethod
-    def choixGroupe(cls,id,nom,aucun = None):
+    def choix_group(cls,id,nom,aucun = None):
         q = db.session.query(cls)
         q = q.filter(cls.groupe == True )
         data = [data.as_dict(True) for data in q.all()]
@@ -60,22 +60,35 @@ class TRoles(GenericRepository):
         return choices
 
     @classmethod
-    def concat(cls):
-        columns = ['id_role', 'nom_role', 'prenom_role']
-        contents = cls.get_all(columns,recursif = False)
-        tab = []
-        for d in contents :
-            t = dict()
-            t['ID'] = d['id_role']
-            if d['prenom_role'] == None:
-                t['nom']= d["nom_role"]
-            else :
-                t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
-            tab.append(t)
-        return (tab)
+    def concat(cls, requete = None ):
+        
+        if requete == None :
+            columns = ['id_role', 'nom_role', 'prenom_role']
+            contents = cls.get_all(columns,recursif = False)
+            tab = []
+            for d in contents :
+                t = dict()
+                t['ID'] = d['id_role']
+                if d['prenom_role'] == None:
+                    t['nom']= d["nom_role"]
+                else :
+                    t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
+                tab.append(t)
+        else :
+            tab = []
+            for d in requete :
+                t = dict()
+                t['ID'] = d['id_role']
+                if d['prenom_role'] == None:
+                    t['nom']= d["nom_role"]
+                else :
+                    t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
+                tab.append(t)
+
+        return tab
 
     @classmethod
-    def testGroup(cls,tab):
+    def test_group(cls,tab):
         table = []
         for d in tab :
             if cls.get_one(d['ID'])['groupe'] == False:
@@ -85,7 +98,38 @@ class TRoles(GenericRepository):
             table.append(d)
         return table
 
-        
+    @classmethod
+    def get_user_in_tag(cls, id_tag):
+        columns = ['id_role', 'nom_role', 'prenom_role']
+        q = db.session.query(TRoles)
+        q = q.join(CorRoleTag)
+        q = q.filter(id_tag == CorRoleTag.id_tag  )        
+        data =  [data.as_dict(False, columns) for data in q.all()]
+        return data   
+
+
+    @classmethod
+    def get_user_in_group(cls, id_groupe):
+        """
+
+        """
+        columns = ['id_role', 'nom_role', 'prenom_role']
+        q = db.session.query(TRoles)
+        q = q.join(CorRoles)
+        q = q.filter(id_groupe == CorRoles.id_role_groupe )
+        data =  [data.as_dict(False, columns) for data in q.all()]
+        return data
+
+    @classmethod
+    def get_user_in_application(cls,id_application):
+        columns = ['id_role', 'nom_role', 'prenom_role']
+        q = db.session.query(TRoles)
+        q = q.join( CorAppPrivileges)
+        q = q.filter(TRoles.id_role ==  CorAppPrivileges.id_role) 
+        q = q.filter(id_application ==  CorAppPrivileges.id_application )   
+        data =  [data.as_dict(False, columns) for data in q.all()]
+        return data 
+
 
 @serializable
 class TApplications(GenericRepository):

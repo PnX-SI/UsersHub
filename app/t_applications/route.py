@@ -70,17 +70,13 @@ def delete(id_application):
 @route.route('application/users/<id_application>', methods = ['GET','POST'])
 def users(id_application):
     # liste utilisateurs
-    fLine = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-    columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
-    contents = TRoles.get_all(columns)
+    user_list= TRoles.concat()
+    user_list = TRoles.test_group(user_list)
     # liste utilisateurs de l'application
-    fLine2 = ['Nom', 'Prenom']
-    columns2 = ['nom_role','prenom_role']
-    q = db.session.query(TRoles)
-    q = q.join( CorAppPrivileges)
-    q = q.filter(TRoles.id_role ==  CorAppPrivileges.id_role) 
-    q = q.filter(id_application ==  CorAppPrivileges.id_application )
-    return render_template('tobelong.html', fLine = fLine ,line = columns,  table = contents, fLine2 = fLine2, line2= columns2, table2 = [data.as_dict(True) for data in q.all()])
+    fLine = ['ID','nom']
+    user_app = TRoles.get_user_in_application(id_application)
+    user_app = TRoles.test_group(TRoles.concat(user_app))
+    return render_template('tobelong.html', fLine = fLine, table = user_list, table2 =user_app, group = 'groupe')
 
 
 def pops(form):
