@@ -30,7 +30,7 @@
                             {% for name in data %}
                             {% set groups = elt[group] %}  
                             {% if groups == 'True' %}    
-                                <td class = "table-secondary" >{{elt[name]}}</td>
+                                <td class = "table-success" >{{elt[name]}}</td>
                             {% else %}
                                 <td >{{elt[name]}}</td>
                             {% endif%}
@@ -49,6 +49,7 @@
                     <table  id="test"  class="table table-bordered table-sm">
                             <thead>
                                 <tr>
+                                    <th scope="col">#</th>
                                     {% for name in fLine %}
                                     <th scope="col">{{name}}</th>
                                     {% endfor %}
@@ -58,10 +59,11 @@
                             <tbody>
                                 {% for elt in table2 %}
                                 <tr>   
+                                    <td><input id="checkBox" type="checkbox"> </td>
                                     {% for name in data %}  
                                     {% set groups = elt[group] %}  
                                     {% if groups == 'True' %}    
-                                        <td class = "table-secondary" >{{elt[name]}}</td>
+                                        <td class = "table-success" >{{elt[name]}}</td>
                                     {% else %}
                                         <td >{{elt[name]}}</td>
                                     {% endif%}   
@@ -76,11 +78,12 @@
        
         <button  id="transfert" class ="btn btn-success btn-sm"> Valider</button>
         </div>
-
-
+       
       
+       
 
- 
+        
+
     
 </body>
 </html>
