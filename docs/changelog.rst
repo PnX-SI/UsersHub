@@ -16,6 +16,7 @@ https://github.com/PnEcrins/UsersHub/compare/1.3.0...develop
   - Intégration d'une hiérarchie entre applications et organismes (``id_parent``).
   - Pour le moment, ces extensions du modèle ne concernent que la base de données et pas l'interface de l'application.
 * Mise en paramètre du cost de l'algorythme de criptage bcrypt
+* Configuration apache dans un fichier usershub.conf comme taxhub et l'atlas
 
 **Corrections**
 
@@ -29,6 +30,7 @@ https://github.com/PnEcrins/UsersHub/compare/1.3.0...develop
 * Ajouter le paramètre ``$pass_cost`` dans le ``config/config.php`` et lui donner une valeur éventuellement différente. Plus la valeur est importante, plus le temps de calcul de hashage du mot de passe est important.
 * Exécuter le script ``data/update1.3.0to1.3.1.sql``
 * Reporter les modifications dans les bases filles.
+* Facultatif : revoir la configuration apache qui est maintenant dans un fichier usershub.conf (voir la doc). Ne pas oublier de supprimer le lien symbolique dans ``/var/www/html``
 
 
 1.3.0 (2017-12-11)
