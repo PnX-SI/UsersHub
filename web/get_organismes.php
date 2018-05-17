@@ -3,13 +3,13 @@
 	$id=$_GET['id'];
 	$form=$_GET['form'];
     $tab = array( CHR(13) => " ", CHR(10) => " " );
-//si un organisme et un seul doit �tre retourn�	
+//si un organisme et un seul doit être retourné	
 	if($id>0){
 		$sqliste = "SELECT * FROM utilisateurs.bib_organismes
 		WHERE id_organisme=$id";
 	}
 	else{
-	$sqliste = "SELECT * FROM utilisateurs.bib_organismes";
+	$sqliste = "SELECT * FROM utilisateurs.bib_organismes WHERE id_organisme<>0";
 	}
 	$result = pg_query($sqliste) or die ('�chec requ�te : ' . pg_last_error()) ;
 	$nb = pg_numrows($result);
