@@ -69,9 +69,6 @@ def delete(id_application):
 
 @route.route('application/users/<id_application>', methods = ['GET','POST'])
 def users(id_application):
-    # liste utilisateurs
-    # users_list = TRoles.get_all(as_model = True)
-    # users_list_bis = [user.as_dict_full_name() for user in users_list]
     users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
     header = ['ID', 'Nom']
@@ -80,13 +77,7 @@ def users(id_application):
 
 
 
-    # user_list= TRoles.concat()
-    # user_list = TRoles.test_group(user_list)
-    # # liste utilisateurs de l'application
-    # fLine = ['ID','nom']
-    # user_app = TRoles.get_user_in_application(id_application)
-    # user_app = TRoles.test_group(TRoles.concat(user_app))
-    # return render_template('tobelong.html', fLine = fLine, table = user_list, table2 =user_app, group = 'groupe')
+    
 
 @route.route('test')
 def test():

@@ -77,9 +77,6 @@ class TRoles(GenericRepository):
         return user_as_dict
        
 
-
-
-
     @classmethod
     def test_group(cls,tab):
         table = []
@@ -93,11 +90,10 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_in_tag(cls, id_tag):
-        columns = ['id_role', 'nom_role', 'prenom_role']
         q = db.session.query(TRoles)
         q = q.join(CorRoleTag)
         q = q.filter(id_tag == CorRoleTag.id_tag  )        
-        data =  [data.as_dict(False, columns) for data in q.all()]
+        data =  [data.as_dict_full_name() for data in q.all()]
         return data   
 
 
@@ -106,12 +102,21 @@ class TRoles(GenericRepository):
         """
 
         """
-        columns = ['id_role', 'nom_role', 'prenom_role']
         q = db.session.query(cls)
         q = q.join(CorRoles)
         q = q.filter(id_groupe == CorRoles.id_role_groupe )
-        data =  [data.as_dict(False, columns) for data in q.all()]
+        data =  [data.as_dict_full_name() for data in q.all()]
         return data
+
+    @classmethod
+    def get_user_out_group(cls,id_groupe):
+        q = db.session.query(cls)
+        subquery = db.session.query(CorRoles.id_role_utilisateur).filter(id_groupe == CorRoles.id_role_groupe )
+        q = q.filter(cls.id_role.notin_(subquery))
+        data =  [data.as_dict_full_name() for data in q.all()]
+        return data
+
+
 
     @classmethod
     def get_user_in_application(cls,id_application):
@@ -130,32 +135,7 @@ class TRoles(GenericRepository):
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
 
-    # @classmethod
-    # def concat(cls,requete = None):
-    #     if requete == None :
-    #         columns = ['id_role', 'nom_role', 'prenom_role']
-    #         contents = cls.get_all(columns,recursif = False)
-    #         tab = []
-    #         for d in contents :
-    #             t = dict()
-    #             t['ID'] = d['id_role']
-    #             if d['prenom_role'] == None:
-    #                 t['nom']= d["nom_role"]
-    #             else :
-    #                 t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
-    #             tab.append(t)
-    #     else :
-    #         tab = []
-    #         for d in requete :
-    #             t = dict()
-    #             t['ID'] = d['id_role']
-    #             if d['prenom_role'] == None:
-    #                 t['nom']= d["nom_role"]
-    #             else :
-    #                 t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
-    #             tab.append(t)
-
-    #     return tab
+    
 
 @serializable
 class TApplications(GenericRepository):
