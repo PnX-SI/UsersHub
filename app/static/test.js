@@ -1,6 +1,6 @@
 $( document ).ready(function() {  
    
-    $("#transfert").click(function(){
+    $("#ajouter").click(function(){
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
             var getRow = $(this).parents('tr');
