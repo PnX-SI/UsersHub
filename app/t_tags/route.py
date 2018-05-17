@@ -55,41 +55,12 @@ def addorupdate(id_tag):
 
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
-    fLine = [ 'ID', 'nom']
-    user_list =  TRoles.concat()
-    user_list = TRoles.test_group(user_list)
-    user_tag = TRoles.get_user_in_tag(id_tag)
-    tab2= TRoles.test_group(TRoles.concat(user_tag))    
-    return render_template("tobelong.html",fLine = fLine, table = user_list, group = 'groupe', table2 =tab2  )
+    users_in_tag = TRoles.test_group(TRoles.get_user_in_tag(id_tag))
+    users_out_tag = TRoles.test_group(TRoles.get_user_out_tag(id_tag))
+    header = [ 'ID', 'Nom']
+    data = ['id_role','full_name']
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe')
 
-    # # affichage des utlisateurs
-    # fLine = [ 'id role', 'nom role']
-    # columns = [ 'id_role', 'prenom_role', 'nom_role']
-    # filters = [{'col': 'groupe', 'filter': 'False'}]
-    
-    # contents = TRoles.get_all(columns,filters, False)
-    # filters2 = [{'col': 'groupe', 'filter': 'True'}]
-    # contents2 = TRoles.get_all(columns,filters2)
-    # col = [ 'id_role', 'nom_role']
-    # tab =[]
-    # tab2 = []
-    # tab3 = []
-    # for d in contents:
-    #     t = dict()
-    #     t['id_role'] = d['id_role']
-    #     t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']
-    #     tab.append(t)
-    # for d in contents2:
-    #     t = dict()
-    #     t['id_role'] = d['id_role']
-    #     if d['prenom_role'] == None:
-    #         t['nom_role'] =d['nom_role']
-    #     else :
-    #         t['nom_role'] = d['prenom_role']+ ' '+d['nom_role']        
-    #     tab2.append(t)
-    
-    # affichage des utilisateurs du tag
-    
 
     
 

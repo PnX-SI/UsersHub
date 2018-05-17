@@ -55,11 +55,11 @@ def addorupdate(id_role):
   
 @route.route('groups/members/<id_groupe>', methods=['GET','POST'])
 def membres(id_groupe):
-    users_in_group = TRoles.get_user_in_group(id_groupe)
-    users_out_group = TRoles.get_user_out_group(id_groupe)
+    users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
+    users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
-    return render_template("tobelong.html", fLine = header, data = data, table = users_out_group, table2 = users_in_group  )
+    return render_template("tobelong.html", fLine = header, data = data, table = users_out_group, table2 = users_in_group, group = 'groupe'  )
 
 
 

@@ -90,12 +90,20 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_in_tag(cls, id_tag):
-        q = db.session.query(TRoles)
+        q = db.session.query(cls)
         q = q.join(CorRoleTag)
         q = q.filter(id_tag == CorRoleTag.id_tag  )        
         data =  [data.as_dict_full_name() for data in q.all()]
         return data   
 
+
+    @classmethod
+    def get_user_out_tag(cls,id_tag):
+        q = db.session.query(cls)
+        subquery = db.session.query(CorRoleTag.id_role).filter(id_tag == CorRoleTag.id_tag)
+        q = q.filter(cls.id_role.notin_(subquery))
+        data =  [data.as_dict_full_name() for data in q.all()]
+        return data
 
     @classmethod
     def get_user_in_group(cls, id_groupe):
