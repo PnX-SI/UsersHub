@@ -45,6 +45,25 @@ Configuration de l'application
     cd /home/synthese/usershub
     ./install_app.sh
 
+Configuration apache
+====================
+Remplacer `MONUSER` par le nom de votre utilisateur linux.
+
+  ::  
+  
+    sudo touch /etc/apache2/sites-available/usershub.conf
+    sudo sh -c 'echo "# Configuration UsersHub" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "Alias /usershub  /home/MONUSER/usershub/web" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "<Directory /home/MONUSER/usershub/web>" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "Options Indexes MultiViews" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "Order allow,deny" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "Allow from all" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "Require all granted" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "</Directory>" >> /etc/apache2/sites-available/usershub.conf'
+    sudo sh -c 'echo "#FIN Configuration UsersHub" >> /etc/apache2/sites-available/usershub.conf'
+    sudo a2ensite usershub
+    sudo service apache2 restart
+
 Vous devez éditer le fichier dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub.
 Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez changer la première section de ce fichier pour obtenir quelque chose qui ressemble à ceci :
  

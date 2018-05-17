@@ -26,7 +26,7 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
   ::  
   
     cd /tmp
-    wget https://github.com/PnEcrins/UsersHub/archive/vX.Y.Z.zip
+    wget https://github.com/PnEcrins/UsersHub/archive/X.Y.Z.zip
     unzip vX.Y.Z.zip
     mkdir -p /home/synthese/usershub
     cp usershub-X.Y.Z/* /home/synthese/usershub
@@ -107,4 +107,25 @@ Ce mot de passe, ainsi que l'utilisateur PostgreSQL ``geonatuser`` créés ci-de
 - config/settings.ini
 - config/connecter.php
 - config/dbconnexions.json
+
+Configuration Apache
+=====================
+
+Créer le fichier de configuration Apache pour UsersHub:
+
+``sudo touch /etc/apache2/sites-available/usershub.conf``
+
+Ouvrir et copier la configuration suivante dans le fichier créé:
+
+``sudo nano usershub.conf`` 
+
+  ::  
+  
+    #Configuration usershub
+    Alias /usershub /home/<MON_USER>/usershub/web
+    <Directory /home/<MON_USER>/usershub/web>
+    Require all granted
+    </Directory>
+
+
     
