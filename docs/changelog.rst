@@ -2,9 +2,8 @@
 CHANGELOG
 =========
 
-
-1.3.1-dev (unreleased)
-----------------------
+1.3.1 (2018-05-17)
+------------------
 
 https://github.com/PnEcrins/UsersHub/compare/1.3.0...develop
 
