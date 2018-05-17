@@ -22,6 +22,7 @@ https://github.com/PnEcrins/UsersHub/compare/1.3.0...develop
 * Ajout du ``pass_plus`` dans toutes les vues
 * Correction de l'installation (localisation du ``config.php``)
 * Ajout d'une vue manquante et nécessaire au sous-module d'authentification
+* Interdire la création d'utilisateur avec l'organisme 0 (= ALL = tous les organismes) ; Utilisé dans GeoNature2 pour définir des paramètres applicables à tous les organismes.
 
 **Notes de version**
 
