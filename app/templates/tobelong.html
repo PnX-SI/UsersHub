@@ -27,7 +27,7 @@
                         {% for elt in table %}
                             <tr>
                                  <td><input id="checkBox" type="checkbox"> </td>    
-                            {% for name in fLine %}
+                            {% for name in data %}
                             {% set groups = elt[group] %}  
                             {% if groups == 'True' %}    
                                 <td class = "table-secondary" >{{elt[name]}}</td>
@@ -58,7 +58,7 @@
                             <tbody>
                                 {% for elt in table2 %}
                                 <tr>   
-                                    {% for name in fLine %}  
+                                    {% for name in data %}  
                                     {% set groups = elt[group] %}  
                                     {% if groups == 'True' %}    
                                         <td class = "table-secondary" >{{elt[name]}}</td>

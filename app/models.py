@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
 from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, distinct
 from app.genericRepository import GenericRepository
 
 @serializable
@@ -23,6 +23,8 @@ class  Bib_Organismes(GenericRepository):
     id_parent = db.Column(db.Integer)
 
 
+def mydefault(context):
+    return context.get_current_parameters()['nom_role'] + ' ' + context.get_current_parameters()['prenom_role'] 
 
 @serializable
 class TRoles(GenericRepository):
@@ -45,8 +47,9 @@ class TRoles(GenericRepository):
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     session_appli = (db.Unicode)
-
-
+    
+    
+   
     @classmethod
     def choix_group(cls,id,nom,aucun = None):
         q = db.session.query(cls)
@@ -59,39 +62,29 @@ class TRoles(GenericRepository):
             choices.append((-1,'Aucun'))
         return choices
 
-    @classmethod
-    def concat(cls, requete = None ):
-        
-        if requete == None :
-            columns = ['id_role', 'nom_role', 'prenom_role']
-            contents = cls.get_all(columns,recursif = False)
-            tab = []
-            for d in contents :
-                t = dict()
-                t['ID'] = d['id_role']
-                if d['prenom_role'] == None:
-                    t['nom']= d["nom_role"]
-                else :
-                    t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
-                tab.append(t)
+    
+    def get_full_name(self):
+        if self.prenom_role == None:
+            full_name = self.nom_role
         else :
-            tab = []
-            for d in requete :
-                t = dict()
-                t['ID'] = d['id_role']
-                if d['prenom_role'] == None:
-                    t['nom']= d["nom_role"]
-                else :
-                    t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
-                tab.append(t)
+            full_name = self.nom_role + ' '+ self.prenom_role
+        return full_name
+       
+    def as_dict_full_name(self):
+        full_name = self.get_full_name()
+        user_as_dict = self.as_dict()
+        user_as_dict['full_name'] = full_name
+        return user_as_dict
+       
 
-        return tab
+
+
 
     @classmethod
     def test_group(cls,tab):
         table = []
         for d in tab :
-            if cls.get_one(d['ID'])['groupe'] == False:
+            if d['groupe'] == False:
                 d['groupe'] = 'False'
             else :
                 d['groupe'] = 'True'
@@ -114,7 +107,7 @@ class TRoles(GenericRepository):
 
         """
         columns = ['id_role', 'nom_role', 'prenom_role']
-        q = db.session.query(TRoles)
+        q = db.session.query(cls)
         q = q.join(CorRoles)
         q = q.filter(id_groupe == CorRoles.id_role_groupe )
         data =  [data.as_dict(False, columns) for data in q.all()]
@@ -122,14 +115,47 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_in_application(cls,id_application):
-        columns = ['id_role', 'nom_role', 'prenom_role']
-        q = db.session.query(TRoles)
-        q = q.join( CorAppPrivileges)
-        q = q.filter(TRoles.id_role ==  CorAppPrivileges.id_role) 
-        q = q.filter(id_application ==  CorAppPrivileges.id_application )   
-        data =  [data.as_dict(False, columns) for data in q.all()]
+        q = db.session.query(cls)
+        q = q.join(CorAppPrivileges, TRoles.id_role == CorAppPrivileges.id_role)
+        q = q.filter(id_application ==  CorAppPrivileges.id_application )
+        for data in q.all():
+            data.as_dict() 
+        data =  [data.as_dict_full_name() for data in q.all()]
         return data 
 
+    @classmethod
+    def get_user_out_application(cls,id_application):
+        q = db.session.query(cls)
+        subquery = db.session.query(distinct(CorAppPrivileges.id_role)).filter(id_application == CorAppPrivileges.id_application)
+        q = q.filter(cls.id_role.notin_(subquery))
+        return  [data.as_dict_full_name() for data in q.all()]
+
+    # @classmethod
+    # def concat(cls,requete = None):
+    #     if requete == None :
+    #         columns = ['id_role', 'nom_role', 'prenom_role']
+    #         contents = cls.get_all(columns,recursif = False)
+    #         tab = []
+    #         for d in contents :
+    #             t = dict()
+    #             t['ID'] = d['id_role']
+    #             if d['prenom_role'] == None:
+    #                 t['nom']= d["nom_role"]
+    #             else :
+    #                 t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
+    #             tab.append(t)
+    #     else :
+    #         tab = []
+    #         for d in requete :
+    #             t = dict()
+    #             t['ID'] = d['id_role']
+    #             if d['prenom_role'] == None:
+    #                 t['nom']= d["nom_role"]
+    #             else :
+    #                 t["nom"] = d["nom_role"]+ ' ' +d['prenom_role']
+    #             tab.append(t)
+
+    #     return tab
 
 @serializable
 class TApplications(GenericRepository):
@@ -220,7 +246,7 @@ class CorApplicationTag(GenericRepository):
 class CorAppPrivileges(GenericRepository):
     __tablename__ = 'cor_app_privileges'
     __table_args__ = {'schema':'utilisateurs'}
-    id_application = db.Column(db.Integer, primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_tag_object = db.Column(db.Integer, primary_key = True)
     id_role = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_tag_action = db.Column(db.Integer)

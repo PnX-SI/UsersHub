@@ -70,14 +70,31 @@ def delete(id_application):
 @route.route('application/users/<id_application>', methods = ['GET','POST'])
 def users(id_application):
     # liste utilisateurs
-    user_list= TRoles.concat()
-    user_list = TRoles.test_group(user_list)
-    # liste utilisateurs de l'application
-    fLine = ['ID','nom']
-    user_app = TRoles.get_user_in_application(id_application)
-    user_app = TRoles.test_group(TRoles.concat(user_app))
-    return render_template('tobelong.html', fLine = fLine, table = user_list, table2 =user_app, group = 'groupe')
+    # users_list = TRoles.get_all(as_model = True)
+    # users_list_bis = [user.as_dict_full_name() for user in users_list]
+    users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
+    users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
+    header = ['ID', 'Nom']
+    data = ['id_role','full_name']
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe') 
 
+
+
+    # user_list= TRoles.concat()
+    # user_list = TRoles.test_group(user_list)
+    # # liste utilisateurs de l'application
+    # fLine = ['ID','nom']
+    # user_app = TRoles.get_user_in_application(id_application)
+    # user_app = TRoles.test_group(TRoles.concat(user_app))
+    # return render_template('tobelong.html', fLine = fLine, table = user_list, table2 =user_app, group = 'groupe')
+
+@route.route('test')
+def test():
+    a = TRoles.get_one(1, as_model= True)
+    print(a['full_name'])
+    return ''
+
+# def compare
 
 def pops(form):
     form.pop('csrf_token')
