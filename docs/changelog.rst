@@ -41,7 +41,7 @@ CHANGELOG
 
 * Mise en paramètre du port PostgreSQL pour l'installation initiale
 * Intégration d'UUID pour les organismes et les roles afin de permettre des consolidations de bases utilisateurs
-* Intégration d'un mécanisme d'authentification plus solide à base de hachage du mot de pass sur la base de l'algorithme ``bscript``. L'ancien mécanisme encodé en md5 (champ ``pass``) reste utilisable. Attention ceci ne concerne que l'authentification à UsersHub. Pour utiliser le hash dans d'autres applications, il faudra modifier les applications concernées et utiliser le nouveau champ ``pass_plus`` à la place du champ ``pass``.
+* Intégration d'un mécanisme d'authentification plus solide à base de hachage du mot de pass sur la base de l'algorithme ``bcrypt``. L'ancien mécanisme encodé en md5 (champ ``pass``) reste utilisable. Attention ceci ne concerne que l'authentification à UsersHub. Pour utiliser le hash dans d'autres applications, il faudra modifier les applications concernées et utiliser le nouveau champ ``pass_plus`` à la place du champ ``pass``.
 * Création d'un formulaire permettant aux utilisateurs de mettre à jour leur mot de passe et de générer le nouveau hachage du mot de passe (http://mondomaine.fr/usershub/majpass.php).
 
 **Notes de version**
