@@ -59,6 +59,9 @@ def tag_users(id_tag):
     users_out_tag = TRoles.test_group(TRoles.get_user_out_tag(id_tag))
     header = [ 'ID', 'Nom']
     data = ['id_role','full_name']
+    if request.method == 'POST':
+        print('LAA')
+        print(request.get_json())
     return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe')
 
 
