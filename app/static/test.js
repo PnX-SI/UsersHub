@@ -1,18 +1,40 @@
 $( document ).ready(function() {  
    
-    $("#ajouter").click(function(){
+    $("#add").click(function(){
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
             var getRow = $(this).parents('tr');
-           
+            tab.push(getRow[0]);
+            $("#user").find("input[type=checkbox]").attr('checked', false);
+            
+        });
+        var table = $('#adding_table')
+        addTab(tab,table)
+ 
+    });
+    
+    $("#delete").click(function(){
+        var tab = []
+        $('#adding_table input[type="checkbox"]:checked').each(function(){
+            var getRow = $(this).parents('tr');
+            $("#adding_table").find("input[type=checkbox]").attr('checked', false);
             tab.push(getRow[0]);
             
             
         });
-        addTab(tab)
+        var table = $('#user')
+        addTab(tab,table)
  
-    });    
+    });
 
+    function addTab(tab,table){
+        // table.find("input[type=checkbox]").attr('checked', false);
+        for(var i = 0; i<tab.length;i++){
+            
+            table.append(tab[i]);
+        }    
+        
+    }
 
 
 
@@ -23,18 +45,7 @@ $( document ).ready(function() {
     };
 
     
-    function addTab(tab){
-    var table = $('#test')
-    console.log(table)
-    console.log(tab)
-    for(var i = 0; i<tab.length;i++){
-        console.log(tab[i])
-        
-        
-        table.append(tab[i]);
-    }    
     
-    }
     
 });
 
