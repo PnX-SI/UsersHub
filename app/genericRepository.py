@@ -59,6 +59,8 @@ class GenericRepository(db.Model):
     def choixGroupe(cls,id,nom,aucun = None):        
         return ""
 
+    
+
    
     # def get_column_name(cls,columns=None):
     #     if columns:

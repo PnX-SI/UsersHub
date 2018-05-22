@@ -1,4 +1,7 @@
 $( document ).ready(function() {  
+
+    var tab_add = []
+    var tab_del = []
    
     $("#add").click(function(){
         var tab = []
@@ -6,7 +9,14 @@ $( document ).ready(function() {
             var getRow = $(this).parents('tr');
             tab.push(getRow[0]);
             $("#user").find("input[type=checkbox]:checked").prop('checked', false);
-            
+            var getID=$(this).parents('tr').find('td:eq(1)').html();
+            tab_add.push(getID);
+            if (include(tab_del,getID,tab_add)== true){
+                tab_del.splice(tab_del.indexOf(getID),1);
+                tab_add.splice(tab_add.indexOf(getID),1);
+            }     
+
+
         });
         var table = $('#adding_table')
         addTab(tab,table)
@@ -19,6 +29,14 @@ $( document ).ready(function() {
             var getRow = $(this).parents('tr');
             tab.push(getRow[0]);
             $("#adding_table").find("input[type=checkbox]:checked").prop('checked', false);
+            var getID=$(this).parents('tr').find('td:eq(1)').html();
+            tab_del.push(getID);
+            if (include(tab_add,getID,tab_del)== false){
+                console.log('salam ' + getID)
+            }else{
+                tab_add.splice(tab_add.indexOf(getID),1);
+                tab_del.splice(tab_del.indexOf(getID),1);
+            } 
         });
         var table = $('#user')
         addTab(tab,table)
@@ -35,19 +53,18 @@ $( document ).ready(function() {
     }
 
     $("#update").click(function(){
-        var tab_add = []
-        $("#adding_table tbody tr").each(function(){
-            var user ={
-                id : $(this).find('td:eq(1)').html()
-            }
-            tab_add.push(user)
-        });
-       
+        console.log("tableau d ajout : "+ tab_add);
+        console.log("tablea de suppression : "+ tab_del );
+        var data ={}
+        data["tab_add"] = tab_add;
+        data["tab_del"]= tab_del;
+        console.log(data);
+        console.log(JSON.stringify(data))        
 
         $.ajax({
             url : $(location).attr('href'),
             type : 'post',
-            data : JSON.stringify(tab_add),
+            data : JSON.stringify(data),
             contentType:"application/json; charset=utf-8",
             dataType:"json"
         });
@@ -67,7 +84,17 @@ $( document ).ready(function() {
     
 });
 
-
+function include (tab_a,id,tab_b){
+    for(var i = 0; i<tab_a.length;i++){
+        for(var j = 0; j<tab_b.length;j++){
+            if (tab_a[i]==tab_b[j]){
+                return true
+            }
+        }
+    }
+    console.log('je suis bien passer ici')
+    return false
+}
 
 
 

@@ -60,12 +60,28 @@ def tag_users(id_tag):
     header = [ 'ID', 'Nom']
     data = ['id_role','full_name']
     if request.method == 'POST':
-        print('LAA')
-        print(request.get_json())
+        data = request.get_json()
+        print(data)
+        new_users_in_tag = data["tab_add"]
+        new_users_out_tag = data["tab_del"]
+        CorRoleTag.add_cor(id_tag,new_users_in_tag)
+        CorRoleTag.del_cor(id_tag,new_users_out_tag)
+
     return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe')
 
 
     
+# def compare(initial, update):
+#     users = update
+#     for id_i in initial:
+#         test = 0
+#         for id_u in update:
+#             if id_i['id_role'] == id_u['id']:
+#                 test = -1
+#             else :
+#                 test += 1
+#         if test == len(update):
+
 
 
 def pops(form):

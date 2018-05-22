@@ -201,6 +201,25 @@ class CorRoleTag(GenericRepository):
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_tag = db.Column(db.Integer, ForeignKey('utilisateurs.t_tags.id_tag'),primary_key = True)
 
+
+    @classmethod
+    def add_cor(cls,id_tag,tab_id):
+        dict_add = dict()
+        dict_add["id_tag"] = id_tag 
+        for d in tab_id:
+            dict_add["id_role"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_tag,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_tag == id_tag).filter(cls.id_role == d).delete()
+            db.session.commit()
+    
+
+
+
+
 @serializable
 class CorRoleMenu(GenericRepository):
     __tablename__= 'CorRoleMenu'
