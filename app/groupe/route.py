@@ -59,6 +59,13 @@ def membres(id_groupe):
     users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        new_users_in_group = data["tab_add"]
+        new_users_out_group = data["tab_del"]
+        CorRoles.add_cor(id_groupe,new_users_in_group)
+        CorRoles.del_cor(id_groupe,new_users_out_group)
     return render_template("tobelong.html", fLine = header, data = data, table = users_out_group, table2 = users_in_group, group = 'groupe'  )
 
 

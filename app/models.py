@@ -193,6 +193,20 @@ class CorRoles(GenericRepository):
     id_role_utilisateur = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'),primary_key = True )
     t_roles = db.relationship('TRoles')
 
+    @classmethod
+    def add_cor(cls,id_group,tab_id):
+        dict_add = dict()
+        dict_add["id_role_groupe"] = id_group 
+        for d in tab_id:
+            dict_add["id_role_utilisateur"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_group,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_role_groupe == id_group).filter(cls.id_role_utilisateur == d).delete()
+            db.session.commit()
+
 
 @serializable
 class CorRoleTag(GenericRepository):
