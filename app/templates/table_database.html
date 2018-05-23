@@ -29,10 +29,12 @@
                 {% if otherCol == 'True'%}
                     <th scope="col">{{Members}}</th>
                 {%endif%}
-                {#{% set tag = tag %}
-                {% if tag == 'True'%}
-                    <th scope="col">Tags</th>
-                {% endif %}#}
+                {% if tag_orga == 'True'%}
+                    <th scope="col">{{Organismes}}</th>
+                {% endif %}
+                {% if tag_app == 'True'%}
+                    <th scope="col">{{App}}</th>
+                {% endif %}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
             </tr> 
@@ -50,7 +52,8 @@
                 {% endfor %}
 
                
-            {#{% set test =  t %}#}
+            {% set type_tag = elt['id_tag_type'] %}
+            {% if type_tag == 4 %}
             {% if otherCol == 'True'%}
             <td>
                     <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
@@ -58,15 +61,41 @@
             </td>
             {%endif%}
 
-            {#{% set tag = tag %}
-            {% if tag == 'True'%}
+           
+            {% if tag_orga == 'True'%}
 
             <td>
-                <a href="{{cheminT}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Tags  </button></a>
+                <a href="{{pathO}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >{{Organismes}}  </button></a>
 
             </td>
             
-            {% endif %}#}
+            {% endif %}
+
+            {% if tag_app == 'True'%}
+
+            <td>
+                <a href="{{pathApp}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >{{App}}  </button></a>
+
+            </td>
+            
+            {% endif %}
+            {% elif  tag_app == 'True' %}
+
+            <td></td>
+            <td></td>
+            <td></td>
+
+            {% else %}
+
+            {% if otherCol == 'True'%}
+            <td>
+                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
+
+            </td>
+            {%endif%}
+
+            {% endif %}
+
                 <td>
                         <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
 

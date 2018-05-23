@@ -7,6 +7,127 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, distinct
 from app.genericRepository import GenericRepository
 
+
+
+
+@serializable
+class CorOrganismeTag(GenericRepository):
+    __tablename__ = 'cor_organism_tag'
+    __table_args__= {'schema':'utilisateurs'}
+    id_organism = db.Column(db.Integer,ForeignKey('utilisateurs.bib_organismes.id_organisme'), primary_key = True)
+    id_tag = db.Column(db.Integer, ForeignKey('utilisateurs.t_tags.id_tag'), primary_key = True)
+
+    @classmethod
+    def add_cor(cls,id_tag,tab_id):
+        dict_add = dict()
+        dict_add["id_tag"] = id_tag 
+        for d in tab_id:
+            dict_add["id_organism"] = d
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_tag,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_tag == id_tag).filter(cls.id_organism == d).delete()
+            db.session.commit()
+
+@serializable
+class CorTagsRelations(GenericRepository):
+    __tablename__ = 'cor_tags_relations'
+    __table_args__ = {'schema':'utilisateurs'}
+    id_tag_l = db.Column(db.Integer, primary_key = True)
+    id_tag_r = db.Column(db.Integer, primary_key = True)
+    relation_type = db.Column(db.Unicode)
+
+
+
+    @classmethod
+    def add_cor(cls,id_group,tab_id):
+        dict_add = dict()
+        dict_add["id_role_groupe"] = id_group 
+        for d in tab_id:
+            dict_add["id_role_utilisateur"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_group,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_role_groupe == id_group).filter(cls.id_role_utilisateur == d).delete()
+            db.session.commit()
+
+
+@serializable
+class CorRoleTag(GenericRepository):
+    __tablename__ = 'cor_role_tag'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_tag = db.Column(db.Integer, ForeignKey('utilisateurs.t_tags.id_tag'),primary_key = True)
+
+
+    @classmethod
+    def add_cor(cls,id_tag,tab_id):
+        dict_add = dict()
+        dict_add["id_tag"] = id_tag 
+        for d in tab_id:
+            dict_add["id_role"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_tag,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_tag == id_tag).filter(cls.id_role == d).delete()
+            db.session.commit()
+    
+
+
+
+
+@serializable
+class CorRoleMenu(GenericRepository):
+    __tablename__= 'CorRoleMenu'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_menu = db.Column(db.Integer,ForeignKey('utilisateurs.t_menus.id_menu'), primary_key = True)
+
+@serializable
+class CorRoleDroitApplication(GenericRepository):
+    __tablename__ = 'cor_role_droit_application'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_droit = db.Column(db.Integer,ForeignKey('utilisateurs.bib_droits.id_droit'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_application.id_application'), primary_key = True)
+
+
+@serializable
+class CorApplicationTag(GenericRepository):
+    __tablename__ = "cor_application_tag"
+    __table_args__ = {'schema':'utilisateurs'}
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    id_tag = db.Column(db.Integer,ForeignKey('utilisateurs.t_tags.id_tag'), primary_key = True)
+
+    @classmethod
+    def add_cor(cls,id_tag,tab_id):
+        dict_add = dict()
+        dict_add["id_tag"] = id_tag 
+        for d in tab_id:
+            dict_add["id_application"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_tag,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_tag == id_tag).filter(cls.id_application == d).delete()
+            db.session.commit()
+
+@serializable
+class CorAppPrivileges(GenericRepository):
+    __tablename__ = 'cor_app_privileges'
+    __table_args__ = {'schema':'utilisateurs'}
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_tag_object = db.Column(db.Integer, primary_key = True)
+    id_role = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_tag_action = db.Column(db.Integer)
+  
 @serializable
 class  Bib_Organismes(GenericRepository):
     __tablename__ = 'bib_organismes'
@@ -22,9 +143,21 @@ class  Bib_Organismes(GenericRepository):
     email_organisme = db.Column(db.Unicode)    
     id_parent = db.Column(db.Integer)
 
-
-def mydefault(context):
-    return context.get_current_parameters()['nom_role'] + ' ' + context.get_current_parameters()['prenom_role'] 
+    @classmethod
+    def get_orgs_in_tag(cls,id_tag):
+        q =db.session.query(cls)
+        q = q.join(CorOrganismeTag)
+        q = q.filter(id_tag == CorOrganismeTag.id_tag)
+        data =  [data.as_dict() for data in q.all()]
+        return data 
+    
+    @classmethod
+    def get_orgs_out_tag(cls,id_tag):
+        q = db.session.query(cls)
+        subquery = db.session.query(CorOrganismeTag.id_organism).filter(id_tag == CorOrganismeTag.id_tag)
+        q = q.filter(cls.id_organisme.notin_(subquery))
+        data =  [data.as_dict() for data in q.all()]
+        return data
 
 @serializable
 class TRoles(GenericRepository):
@@ -143,6 +276,28 @@ class TRoles(GenericRepository):
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
 
+@serializable
+class CorRoles(GenericRepository):
+    __tablename__= 'cor_roles'
+    __table_args__ = {'schema':'utilisateurs'}
+    id_role_groupe = db.Column(db.Integer, primary_key = True)
+    id_role_utilisateur = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'),primary_key = True )
+    t_roles = db.relationship('TRoles')
+
+
+    @classmethod
+    def add_cor(cls,id_group,tab_id):
+        dict_add = dict()
+        dict_add["id_role_group"] = id_group 
+        for d in tab_id:
+            dict_add["id_role_utilisateur"] = d
+            cls.post(dict_add)
+    
+    @classmethod
+    def del_cor(cls,id_group,tab_id):
+        for d in tab_id:
+            cls.query.filter(cls.id_role_groupe== id_group).filter(cls.id_role_utilisateur == d).delete()
+            db.session.commit()
     
 
 @serializable
@@ -154,6 +309,22 @@ class TApplications(GenericRepository):
     desc_application = db.Column(db.Unicode)
     id_parent = db.Column(db.Unicode)
 
+    @classmethod
+    def get_applications_in_tag(cls, id_tag):
+        q = db.session.query(cls)
+        q = q.join(CorApplicationTag)
+        q = q.filter(id_tag == CorApplicationTag.id_tag  )        
+        data =  [data.as_dict() for data in q.all()]
+        return data   
+
+
+    @classmethod
+    def get_applications_out_tag(cls,id_tag):
+        q = db.session.query(cls)
+        subquery = db.session.query(CorApplicationTag.id_application).filter(id_tag == CorApplicationTag.id_tag)
+        q = q.filter(cls.id_application.notin_(subquery))
+        data =  [data.as_dict() for data in q.all()]
+        return data
    
 
 @serializable
@@ -176,102 +347,7 @@ class TMenu(GenericRepository):
     desc_menu = db.Column(db.Unicode)
     id_application = db.Column(db.Unicode)
 
-@serializable
-class CorTagsRelations(GenericRepository):
-    __tablename__ = 'cor_tags_relations'
-    __table_args__ = {'schema':'utilisateurs'}
-    id_tag_l = db.Column(db.Integer, primary_key = True)
-    id_tag_r = db.Column(db.Integer, primary_key = True)
-    relation_type = db.Column(db.Unicode)
-
-
-@serializable
-class CorRoles(GenericRepository):
-    __tablename__= 'cor_roles'
-    __table_args__ = {'schema':'utilisateurs'}
-    id_role_groupe = db.Column(db.Integer, primary_key = True)
-    id_role_utilisateur = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'),primary_key = True )
-    t_roles = db.relationship('TRoles')
-
-    @classmethod
-    def add_cor(cls,id_group,tab_id):
-        dict_add = dict()
-        dict_add["id_role_groupe"] = id_group 
-        for d in tab_id:
-            dict_add["id_role_utilisateur"] = d
-            cls.post(dict_add)
-    
-    @classmethod
-    def del_cor(cls,id_group,tab_id):
-        for d in tab_id:
-            cls.query.filter(cls.id_role_groupe == id_group).filter(cls.id_role_utilisateur == d).delete()
-            db.session.commit()
-
-
-@serializable
-class CorRoleTag(GenericRepository):
-    __tablename__ = 'cor_role_tag'
-    __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_tag = db.Column(db.Integer, ForeignKey('utilisateurs.t_tags.id_tag'),primary_key = True)
-
-
-    @classmethod
-    def add_cor(cls,id_tag,tab_id):
-        dict_add = dict()
-        dict_add["id_tag"] = id_tag 
-        for d in tab_id:
-            dict_add["id_role"] = d
-            cls.post(dict_add)
-    
-    @classmethod
-    def del_cor(cls,id_tag,tab_id):
-        for d in tab_id:
-            cls.query.filter(cls.id_tag == id_tag).filter(cls.id_role == d).delete()
-            db.session.commit()
-    
-
-
-
-
-@serializable
-class CorRoleMenu(GenericRepository):
-    __tablename__= 'CorRoleMenu'
-    __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer, primary_key = True)
-    id_menu = db.Column(db.Integer,primary_key = True)
-
-@serializable
-class CorRoleDroitApplication(GenericRepository):
-    __tablename__ = 'cor_role_droit_application'
-    __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_droit = db.Column(db.Integer, primary_key = True)
-    id_application = db.Column(db.Integer, primary_key = True)
-
-@serializable
-class CorOrganismeTag(GenericRepository):
-    __tablename__ = 'cor_organisme_tag'
-    __table_args__= {'schema':'utilisateurs'}
-    id_organisme = db.Column(db.Integer, primary_key = True)
-    id_tag = db.Column(db.Integer, primary_key = True)
-
-@serializable
-class CorApplicationTag(GenericRepository):
-    __tablename__ = "cor_appplication_tag"
-    __table_args__ = {'schema':'utilsateurs'}
-    id_application = db.Column(db.Integer, primary_key = True)
-    id_tag = db.Column(db.Integer, primary_key = True)
-
-@serializable
-class CorAppPrivileges(GenericRepository):
-    __tablename__ = 'cor_app_privileges'
-    __table_args__ = {'schema':'utilisateurs'}
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_tag_object = db.Column(db.Integer, primary_key = True)
-    id_role = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_tag_action = db.Column(db.Integer)
-    
+  
 @serializable
 class BibUnites(GenericRepository):
     __tablename__ = 'bib_unites'

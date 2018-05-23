@@ -4,7 +4,7 @@ Blueprint, request, session, flash
 )
 from app import genericRepository
 from app.t_tags import forms as t_tagsforms
-from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles
+from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles, CorOrganismeTag, Bib_Organismes, CorApplicationTag
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 
@@ -15,7 +15,7 @@ def tags():
     fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
     columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
     contents = TTags.get_all(columns)
-    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True')
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",pathO = "/tag/organisms/",pathApp = "/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
@@ -70,17 +70,42 @@ def tag_users(id_tag):
     return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe')
 
 
-    
-# def compare(initial, update):
-#     users = update
-#     for id_i in initial:
-#         test = 0
-#         for id_u in update:
-#             if id_i['id_role'] == id_u['id']:
-#                 test = -1
-#             else :
-#                 test += 1
-#         if test == len(update):
+@route.route('tag/organisms/<id_tag>', methods=['GET','POST'])
+def tag_organismes(id_tag):
+    organismes_in_tag = Bib_Organismes.get_orgs_in_tag(id_tag)
+    organismes_out_tag = Bib_Organismes.get_orgs_out_tag(id_tag)
+    header = ['ID','Nom']
+    data = ['id_organisme','nom_organisme']
+    if request.method == 'POST':
+        data = request.get_json()
+        new_orgs_in_tag = data["tab_add"]
+        new_orgs_out_tag = data["tab_del"]
+        CorOrganismeTag.add_cor(id_tag,new_orgs_in_tag)
+        CorOrganismeTag.del_cor(id_tag,new_orgs_out_tag)
+        print("ajout : ")
+        print(new_orgs_in_tag)
+        print("supp : ")
+        print( new_orgs_out_tag )
+    return render_template('tobelong.html', fLine = header, data = data, table = organismes_out_tag, table2 = organismes_in_tag)
+
+
+@route.route('tag/applications/<id_tag>',  methods=['GET','POST'])
+def tag_applications(id_tag):
+    applications_in_tag = TApplications.get_applications_in_tag(id_tag)
+    applications_out_tag = TApplications.get_applications_out_tag(id_tag)
+    header = ['ID','Nom']
+    data = ['id_application','nom_application']
+    if request.method == 'POST':
+        data = request.get_json()
+        new_apps_in_tag = data["tab_add"]
+        new_apps_out_tag = data["tab_del"]
+        CorApplicationTag.add_cor(id_tag,new_apps_in_tag)
+        CorApplicationTag.del_cor(id_tag,new_apps_out_tag)
+        print("ajout : ")
+        print(new_apps_in_tag)
+        print("supp : ")
+        print( new_apps_out_tag )
+    return render_template('tobelong.html', fLine = header, data = data, table = applications_out_tag, table2 = applications_in_tag)
 
 
 

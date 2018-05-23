@@ -6,18 +6,21 @@ $( document ).ready(function() {
     $("#add").click(function(){
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
-            var getRow = $(this).parents('tr');
-            tab.push(getRow[0]);
+            var Row = $(this).parents('tr');
+            tab.push(Row[0]);
             $("#user").find("input[type=checkbox]:checked").prop('checked', false);
-            var getID=$(this).parents('tr').find('td:eq(1)').html();
-            tab_add.push(getID);
-            if (include(tab_del,getID,tab_add)== true){
-                tab_del.splice(tab_del.indexOf(getID),1);
-                tab_add.splice(tab_add.indexOf(getID),1);
-            }     
+            var ID=$(this).parents('tr').find('td:eq(1)').html();
+            tab_add.push(ID);
+            if (isInTabb(tab_del,ID) == true){
+                tab_del.splice(tab_del.indexOf(ID),1);
+                tab_add.splice(tab_add.indexOf(ID),1);
+            }
+            
 
+            console.log(tab_add)
 
         });
+        
         var table = $('#adding_table')
         addTab(tab,table)
  
@@ -26,17 +29,17 @@ $( document ).ready(function() {
     $("#delete").click(function(){
         var tab = []
         $('#adding_table input[type="checkbox"]:checked').each(function(){
-            var getRow = $(this).parents('tr');
-            tab.push(getRow[0]);
+            var Row = $(this).parents('tr');
+            tab.push(Row[0]);
             $("#adding_table").find("input[type=checkbox]:checked").prop('checked', false);
-            var getID=$(this).parents('tr').find('td:eq(1)').html();
-            tab_del.push(getID);
-            if (include(tab_add,getID,tab_del)== false){
-                console.log('salam ' + getID)
-            }else{
-                tab_add.splice(tab_add.indexOf(getID),1);
-                tab_del.splice(tab_del.indexOf(getID),1);
-            } 
+            var ID=$(this).parents('tr').find('td:eq(1)').html();
+            tab_del.push(ID)
+            console.log(isInTabb(tab_add,ID))
+            if (isInTabb(tab_add,ID) == true){
+                tab_add.splice(tab_add.indexOf(ID),1);
+                tab_del.splice(tab_del.indexOf(ID),1);
+            }
+            
         });
         var table = $('#user')
         addTab(tab,table)
@@ -58,8 +61,6 @@ $( document ).ready(function() {
         var data ={}
         data["tab_add"] = tab_add;
         data["tab_del"]= tab_del;
-        console.log(data);
-        console.log(JSON.stringify(data))        
 
         $.ajax({
             url : $(location).attr('href'),
@@ -69,7 +70,8 @@ $( document ).ready(function() {
             dataType:"json"
         });
 
-       
+       tab_add = []
+       tab_del = []
     });
 
 
@@ -81,20 +83,33 @@ $( document ).ready(function() {
 
     
     
-    
 });
 
-function include (tab_a,id,tab_b){
-    for(var i = 0; i<tab_a.length;i++){
-        for(var j = 0; j<tab_b.length;j++){
-            if (tab_a[i]==tab_b[j]){
-                return true
-            }
+function isInTabb(tab,id){
+    var bool = false
+    tab.forEach(element => {
+        if (element == id){
+            bool = true
         }
-    }
-    console.log('je suis bien passer ici')
-    return false
+    });
+    return bool
 }
+
+
+
+// tab.forEach(element => {
+    
+// });
+
+// tab_del = tab_del.filter(function(el) {
+//     return el =! id
+// });
+
+// new = array.map(el => {
+//     el +1
+// })
+
+
 
 
 
