@@ -2,6 +2,9 @@ $( document ).ready(function() {
 
     var tab_add = []
     var tab_del = []
+
+    $('#user').DataTable();
+    $('#adding_table').DataTable();
    
     $("#add").click(function(){
         var tab = []
@@ -81,9 +84,8 @@ $( document ).ready(function() {
         console.log('test');
     };
 
-    
-    
-});
+   
+}); 
 
 function isInTabb(tab,id){
     var bool = false

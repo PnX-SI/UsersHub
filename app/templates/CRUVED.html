@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+        
+        
+        <table class="table table-bordered table-striped table-sm " id = "tri">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for name in fLine %}
+                        <th scope="col">{{name}}</th>
+                        {% endfor %}
+                    </tr> 
+
+                </thead>
+                <tbody>
+                    {% for elt in table %}
+                    <tr >   
+                    <th scope="row">{{loop.index}}</th>
+                        {% for name in line %}  
+                       
+                            <td >{{elt[name]}}</td>
+                       
+                            
+                        {% endfor %}
+                        <td>
+                                <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
+        
+                        </tsd>
+                        <td >
+                            <button onClick = "deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm" >Supprimer</button>
+                        </td>
+                       
+                        
+                          
+                        </tr>
+                    {% endfor %}
+                   
+                </tbody>
+    
+    </body>
+</html>

@@ -377,3 +377,25 @@ class BibDroits(GenericRepository):
     id_droit = db.Column(db.Integer, primary_key = True)
     nom_droit = db.Column(db.Unicode)
     desc_droit = db.Column(db.Unicode)
+
+@serializable
+class VUsersactionForallGnModules(GenericRepository):
+    '''
+    Droit d'acces d'un user particulier a une application particuliere
+    '''
+    __tablename__ = 'v_usersaction_forall_gn_modules'
+    __table_args__ = {'schema': 'utilisateurs'}
+    id_role = db.Column(db.Integer, primary_key=True)
+    id_application = db.Column(db.Integer, primary_key=True)
+    id_organisme = db.Column(db.Integer)
+    id_tag_action = db.Column(db.Integer, primary_key=True)
+    tag_action_code = db.Column(db.Unicode)
+    id_tag_object = db.Column(db.Integer, primary_key=True)
+    tag_object_code = db.Column(db.Unicode)
+
+    def __repr__(self):
+        return """VUsersactionForallGnModules
+            role='{}' action='{}' porté='{}' app='{}'>""".format(
+                self.id_role, self.tag_action_code,
+                self.tag_object_code, self.id_application
+            )

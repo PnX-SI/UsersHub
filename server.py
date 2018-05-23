@@ -34,6 +34,9 @@ with app.app_context():
     from app.auth import route
     app.register_blueprint(route.route, url_prefix='/log')
 
+    from app.CRUVED import route
+    app.register_blueprint(route.route, url_prefix='/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
