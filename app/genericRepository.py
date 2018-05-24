@@ -26,7 +26,7 @@ class GenericRepository(db.Model):
                     q = q.filter(nom_col == param['filter'])
                 return [data.as_dict(recursif,columns) for data in q.all()]
         else :
-            return db.session.query(cls).all()
+            return db.session.query(cls)
 
 
     @classmethod

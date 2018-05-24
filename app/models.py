@@ -386,6 +386,8 @@ class VUsersactionForallGnModules(GenericRepository):
     __tablename__ = 'v_usersaction_forall_gn_modules'
     __table_args__ = {'schema': 'utilisateurs'}
     id_role = db.Column(db.Integer, primary_key=True)
+    nom_role = db.Column(db.Unicode)
+    prenom_role = db.Column(db.Unicode)
     id_application = db.Column(db.Integer, primary_key=True)
     id_organisme = db.Column(db.Integer)
     id_tag_action = db.Column(db.Integer, primary_key=True)
@@ -399,3 +401,16 @@ class VUsersactionForallGnModules(GenericRepository):
                 self.id_role, self.tag_action_code,
                 self.tag_object_code, self.id_application
             )
+
+    def get_full_name(self):
+        if self.prenom_role == None:
+            full_name = self.nom_role
+        else :
+            full_name = self.nom_role + ' '+ self.prenom_role
+        return full_name
+       
+    def as_dict_full_name(self):
+        full_name = self.get_full_name()
+        user_as_dict = self.as_dict()
+        user_as_dict['full_name'] = full_name
+        return user_as_dict
