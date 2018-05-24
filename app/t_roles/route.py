@@ -24,7 +24,7 @@ def users():
     columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns,filters)
-    return render_template('table_database.html', fLine = fLine ,line = columns, table = contents,  key = 'id_role', pathU = '/user/update/', pathD = '/users/delete/',pathA = "/user/add/new", name = 'un utilisateur', name_list = "Liste des utilisateurs")    
+    return render_template('table_database.html', fLine = fLine ,line = columns, table = contents,  key = 'id_role', pathU = '/user/update/', pathD = '/users/delete/',pathA = "/user/add/new", name = 'un utilisateur', name_list = "Liste des Utilisateurs")    
 
     
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])

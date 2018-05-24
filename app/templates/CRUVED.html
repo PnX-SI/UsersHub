@@ -5,8 +5,16 @@
    <body>
 
         {% include "head-appli.html" %}
+        <div class = "container">
+                <h2>{{name_list}}</h2>         
+                <p>
+                    <a href="{{pathA}}"  ><button type="submit" class="btn btn-success btn-sm" >Ajouter {{name}}</button></a>
+                </p>
+        </div>  
         
-        
+        <div class = "container">
+        <div id='table'>
+
         <table class="table table-bordered table-striped table-sm " id = "tri">
                 <thead>
                     <tr>
@@ -14,6 +22,8 @@
                         {% for name in fLine %}
                         <th scope="col">{{name}}</th>
                         {% endfor %}
+                        <th scope="col">Modification</th>
+                        <th scope="col">Suppression</th>
                     </tr> 
 
                 </thead>
@@ -21,10 +31,13 @@
                     {% for elt in table %}
                     <tr >   
                     <th scope="row">{{loop.index}}</th>
-                        {% for name in line %}  
-                       
+                        {% for name in line %}
+                        {% set groups = elt[group] %}  
+                        {% if groups == 'True' %}    
+                            <td class = "table-primary" >{{elt[name]}}</td>
+                        {% else %}
                             <td >{{elt[name]}}</td>
-                       
+                        {% endif%}
                             
                         {% endfor %}
                         <td>
@@ -41,6 +54,8 @@
                     {% endfor %}
                    
                 </tbody>
+                </div>
+                </div>
     
     </body>
 </html>
