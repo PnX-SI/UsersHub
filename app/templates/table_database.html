@@ -45,10 +45,12 @@
             <tr >   
             <th scope="row">{{loop.index}}</th>
                 {% for name in line %}  
-               
+                {% set groups = elt[group] %}  
+                {% if groups == 'True' %}    
+                    <td class = "table-primary" >{{elt[name]}}</td>
+                {% else %}
                     <td >{{elt[name]}}</td>
-               
-                    
+                {% endif%} 
                 {% endfor %}
 
                
