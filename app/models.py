@@ -338,6 +338,17 @@ class TTags(GenericRepository):
     tag_label = db.Column(db.Unicode)
     tag_desc = db.Column(db.Unicode)
 
+    @classmethod
+    def choixSelect(cls,tag_code,nom,aucun = None):
+        data = cls.get_all()
+        choices = []
+        for d in data :
+            if d['id_tag_type'] == 5:  
+                choices.append((d[tag_code], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
+   
 @serializable
 class TMenu(GenericRepository):
     __tablename__ = 't_menus'
@@ -369,6 +380,8 @@ class BibTagTypes(GenericRepository):
     id_tag_type = db.Column(db.Integer, primary_key = True)
     tag_type_name = db.Column(db.Unicode)
     tag_type_desc = db.Column(db.Unicode)
+
+
 
 @serializable
 class BibDroits(GenericRepository):

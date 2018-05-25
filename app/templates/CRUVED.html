@@ -5,57 +5,103 @@
    <body>
 
         {% include "head-appli.html" %}
-        <div class = "container">
+        <div class="row">
+                <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
                 <h2>{{name_list}}</h2>         
-                <p>
-                    <a href="{{pathA}}"  ><button type="submit" class="btn btn-success btn-sm" >Ajouter {{name}}</button></a>
-                </p>
-        </div>  
-        
-        <div class = "container">
-        <div id='table'>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+                
+                <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
+                        <h3>{{name_role}}</h3> 
+                </div>
+            </div>  
 
+        <div class="row">
+        <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
         <table class="table table-bordered table-striped table-sm " id = "tri">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        {% for name in fLine %}
-                        <th scope="col">{{name}}</th>
-                        {% endfor %}
-                        <th scope="col">Modification</th>
-                        <th scope="col">Suppression</th>
+                            {% for name in fLine %}
+                            <th scope="col">{{name}}</th>
+                            {% endfor %}
+                            <th scope="col">Cruved</th>
+                        
                     </tr> 
 
                 </thead>
                 <tbody>
                     {% for elt in table %}
                     <tr >   
-                    <th scope="row">{{loop.index}}</th>
                         {% for name in line %}
                         {% set groups = elt[group] %}  
                         {% if groups == 'True' %}    
                             <td class = "table-primary" >{{elt[name]}}</td>
                         {% else %}
                             <td >{{elt[name]}}</td>
-                        {% endif%}
-                            
+                        {% endif%} 
                         {% endfor %}
                         <td>
-                                <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
+                                <a href="{{pathC}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Voir CRUVED  </button></a>
         
-                        </tsd>
-                        <td >
-                            <button onClick = "deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm" >Supprimer</button>
                         </td>
                        
-                        
-                          
                         </tr>
                     {% endfor %}
                    
                 </tbody>
+                </table>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <p><br/><br/><br/></p>
+            
+            </div>
+                <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
+                
+                        <table class="table table-bordered table-striped table-sm " id = "tri">
+                                <thead>
+                                    <tr>
+                                            {% for name in fLineCruved %}
+                                            <th scope="col">{{name}}</th>
+                                            {% endfor %}
+                                            <th scope="col">
+                                                 <a href="{{pathA}}{{key}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Ajouter des Droits  </button></a>
+                                            </th>
+                                        
+                                    </tr> 
+                
+                                </thead>
+                                <tbody>
+                                    {% for elt in tableCruved %}
+                                    <tr >   
+                                        {% for name in lineCruved %}
+                                            <td >{{elt[name]}}</td>
+                                        {% endfor %}
+                                        <td>
+                                                <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Editer  </button></a>
+                        
+                                        </td>
+                                       
+                                        </tr>
+                                    {% endfor %}
+                                   
+                                </tbody>
+                                </table>
+                 </div>
                 </div>
-                </div>
-    
+                
     </body>
 </html>
+
+
+{#                      <th scope="col">Application</th>
+                        <th scope="col">Create</th>
+                        <th scope="col">Read</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Validate</th>
+                        <th scope="col">Export</th>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Modification</th>
+                        <th scope="col">Suppression</th>
+                        
+
+                        #}
