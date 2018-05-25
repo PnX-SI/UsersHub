@@ -68,3 +68,43 @@ SELECT
 FROM utilisateurs.cor_role_tag c
 JOIN utilisateurs.bib_droits b ON b.id_droit = c.id_tag
 JOIN utilisateurs.cor_application_tag ct ON ct.id_tag = c.id_tag
+
+-- Associe les portées des données à un type de tag "scope"
+INSERT INTO utilisateurs.bib_tag_types(id_tag_type,tag_type_name,tag_type_desc) VALUES
+(5,'scope','Define a type scope for CRUVED data')
+
+
+UPDATE utilisateurs.t_tags
+set 
+id_tag = 22,
+id_tag_type = 5,
+tag_code = '2',
+tag_name = 'my organism data',
+tag_label = 'My organism data',
+tag_desc = 'Can do action only on my data and on my organism data'
+where 
+id_tag = 22;
+
+UPDATE utilisateurs.t_tags
+set 
+id_tag = 21,
+id_tag_type = 5,
+tag_code = '1',
+tag_name = 'my data',
+tag_label = 'My data',
+tag_desc = 'Can do action only on my data'
+where 
+id_tag = 21;
+
+UPDATE utilisateurs.t_tags
+set 
+id_tag = 23,
+id_tag_type = 5,
+tag_code = '3',
+tag_name = 'all data',
+tag_label = 'All data',
+tag_desc = 'Can do action on all data'
+where 
+id_tag = 23;
+
+
