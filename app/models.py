@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
 from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, distinct
+from sqlalchemy import ForeignKey, distinct, or_
 from app.genericRepository import GenericRepository
 
 
@@ -181,7 +181,16 @@ class TRoles(GenericRepository):
     pn = db.Column(db.Boolean)
     session_appli = (db.Unicode)
     
-    
+    @classmethod
+    def choixSelect(cls,id,nom,aucun = None):
+        q = cls.get_all(as_model =True) 
+        data =[data.as_dict_full_name() for data in q.all()]
+        choices = []
+        for d in data :
+            choices.append((d[id], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
    
     @classmethod
     def choix_group(cls,id,nom,aucun = None):
@@ -325,6 +334,17 @@ class TApplications(GenericRepository):
         q = q.filter(cls.id_application.notin_(subquery))
         data =  [data.as_dict() for data in q.all()]
         return data
+
+    @classmethod
+    def choix_app_cruved(cls,id_app,nom,aucun = None):
+        q = cls.get_all(as_model = True).filter(or_(cls.id_application == 14,cls.id_parent == 14))
+        data = [data.as_dict() for data in q.all()]
+        choices = []
+        for d in data :
+            choices.append((d[id_app], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
    
 
 @serializable

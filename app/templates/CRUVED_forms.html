@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+                {% include "head-appli.html" %}
+
+        <form method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.csrf_token }} 
+
+                <div class = "row">        
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id = "selectnom">
+                        <label>{{ form.full_name_role.label }}</label>
+                        {{ form.full_name_role(class="custom-select", id="inputGroupSelect03") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.app.label }}</label>
+                        {{ form.app(class="custom-select", id="inputGroupSelect02") }}
+                </div>
+                
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeCreate.label }}</label>
+                        {{ form.scopeCreate(class="custom-select", id="inputGroupSelect02") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeRead.label }}</label>
+                        {{ form.scopeRead(class="custom-select", id="inputGroupSelect02") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeUpdate.label }}</label>
+                        {{ form.scopeUpdate(class="custom-select", id="inputGroupSelect02") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeValidate.label }}</label>
+                        {{ form.scopeValidate(class="custom-select", id="inputGroupSelect02") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeExport.label }}</label>
+                        {{ form.scopeExport(class="custom-select", id="inputGroupSelect01") }}
+
+                        <p></p>
+                </div>
+                
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form.scopeDelete.label }}</label>
+                        {{ form.scopeDelete(class="custom-select", id="inputGroupSelect01") }}
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        {{ form.submit(class="form-control") }}
+                </div>
+        </div>
+         </form>       
+    </body>
+</html>
+
+

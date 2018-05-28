@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired, Email
 
 class Scope(FlaskForm):
-    full_name_role = SelectField("Nom role",coerce=int ,choices = [], default = -1)
+    full_name_role = SelectField("Nom ",coerce=int ,choices = [], default = -1)
     scopeCreate = SelectField('Portee Create',coerce=int ,choices = [], default = -1)
     scopeRead = SelectField('Portee Read',coerce = int, choices = [],default = -1)
     scopeUpdate = SelectField('Portee Update',coerce = int, choices = [],default = -1)
