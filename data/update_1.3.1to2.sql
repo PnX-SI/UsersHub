@@ -108,3 +108,103 @@ where
 id_tag = 23;
 
 
+--Correction de la Vue v_usersaction_forall_gn_modules afin d'obtenir le cruved de groupe
+
+CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS 
+ WITH p_user_tag AS (
+         SELECT u.id_role,
+            u.identifiant,
+            u.nom_role,
+            u.prenom_role,
+            u.desc_role,
+            u.pass,
+            u.pass_plus,
+            u.email,
+            u.id_organisme,
+            c_1.id_tag_action,
+            c_1.id_tag_object,
+            c_1.id_application
+           FROM utilisateurs.t_roles u
+             JOIN utilisateurs.cor_app_privileges c_1 ON c_1.id_role = u.id_role
+          WHERE u.groupe = false
+        ), p_groupe_tag AS (
+         SELECT u.id_role,
+            u.identifiant,
+            u.nom_role,
+            u.prenom_role,
+            u.desc_role,
+            u.pass,
+            u.pass_plus,
+            u.email,
+            u.id_organisme,
+            c_1.id_tag_action,
+            c_1.id_tag_object,
+            c_1.id_application
+           FROM utilisateurs.t_roles u
+             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role OR g.id_role_groupe=u.id_role
+             JOIN utilisateurs.cor_app_privileges c_1 ON c_1.id_role = g.id_role_groupe
+          WHERE (g.id_role_groupe IN ( SELECT DISTINCT cor_roles.id_role_groupe
+                   FROM utilisateurs.cor_roles))
+        ), all_users_tags AS (
+         SELECT v_1.id_role,
+            v_1.identifiant,
+            v_1.nom_role,
+            v_1.prenom_role,
+            v_1.desc_role,
+            v_1.pass,
+            v_1.pass_plus,
+            v_1.email,
+            v_1.id_organisme,
+            v_1.id_application,
+            v_1.id_tag_action,
+            v_1.id_tag_object,
+            t1.tag_code AS tag_action_code,
+            t2.tag_code AS tag_object_code,
+            max(t2.tag_code::text) OVER (PARTITION BY v_1.id_role, v_1.id_application, t1.tag_code) AS max_tag_object_code
+           FROM ( SELECT a1.id_role,
+                    a1.identifiant,
+                    a1.nom_role,
+                    a1.prenom_role,
+                    a1.desc_role,
+                    a1.pass,
+                    a1.pass_plus,
+                    a1.email,
+                    a1.id_organisme,
+                    a1.id_tag_action,
+                    a1.id_tag_object,
+                    a1.id_application
+                   FROM p_user_tag a1
+                UNION
+                 SELECT a2.id_role,
+                    a2.identifiant,
+                    a2.nom_role,
+                    a2.prenom_role,
+                    a2.desc_role,
+                    a2.pass,
+                    a2.pass_plus,
+                    a2.email,
+                    a2.id_organisme,
+                    a2.id_tag_action,
+                    a2.id_tag_object,
+                    a2.id_application
+                   FROM p_groupe_tag a2) v_1
+             JOIN utilisateurs.t_tags t1 ON t1.id_tag = v_1.id_tag_action
+             JOIN utilisateurs.t_tags t2 ON t2.id_tag = v_1.id_tag_object
+        )
+ SELECT v.id_role,
+    v.identifiant,
+    v.nom_role,
+    v.prenom_role,
+    v.desc_role,
+    v.pass,
+    v.pass_plus,
+    v.email,
+    v.id_organisme,
+    v.id_application,
+    v.id_tag_action,
+    v.id_tag_object,
+    v.tag_action_code,
+    v.max_tag_object_code::character varying(25) AS tag_object_code
+   FROM all_users_tags v
+  WHERE v.max_tag_object_code = v.tag_object_code::text;
+

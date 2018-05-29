@@ -366,7 +366,7 @@ class TTags(GenericRepository):
             if d['id_tag_type'] == 5:  
                 choices.append((d[tag_code], d[nom]))
         if aucun != None :
-            choices.append((-1,'Aucun'))
+            choices.append((0,'Aucun'))
         return choices
    
 @serializable

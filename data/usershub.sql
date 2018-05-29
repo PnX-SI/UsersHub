@@ -791,7 +791,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS
             c_1.id_tag_object,
             c_1.id_application
            FROM utilisateurs.t_roles u
-             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
+             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role OR g.id_role_groupe=u.id_role
              JOIN utilisateurs.cor_app_privileges c_1 ON c_1.id_role = g.id_role_groupe
           WHERE (g.id_role_groupe IN ( SELECT DISTINCT cor_roles.id_role_groupe
                    FROM utilisateurs.cor_roles))

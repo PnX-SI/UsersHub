@@ -39,9 +39,12 @@ def cruved_one(id_role):
     contents = get_cruved_one(id_role)
     if contents == []:
         role = TRoles.get_one(id_role,as_model = True).as_dict_full_name()
+        app = None
     else:
         role = contents[0]
-    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id=role['id_role'],  pathC = '', pathU='',pathA= '/CRUVED/update/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
+        app =  contents[0]['id_application']
+    save_cruved(contents)
+    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU='/CRUVED/update/',pathUu = '/' ,pathA= '/CRUVED/update/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
 
 # @route.route('CRUVED/add/new', defautls={'id_role':None,'id_application':None}, methods=['GET','POST'])
 # @route.route('CRUVED/update/<id_role>/<id_application>', methods=['GET','POST'])
@@ -52,8 +55,11 @@ def cruved_one(id_role):
 def get_cruved_one(id_role):
     q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
     q = q.join(TRoles,CorAppPrivileges.id_role == TRoles.id_role)
-    App = [data[0] for data in q.all()]
-    role =  [data[1].as_dict_full_name() for data in q.all()]
+    App = []
+    role = []
+    for data in q.all():
+        App.append(data[0])
+        role.append(data[1].as_dict_full_name())
     tab_dict=[]
     if role != []:
         role = role[0]
@@ -61,8 +67,8 @@ def get_cruved_one(id_role):
         for id_app in App:
             app = TApplications.get_one(id_app)
             cruved = cruved_for_user_in_app(role['id_role'],id_app,app['id_parent'])
-            tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name'] 
-            d_data = [app['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],role['id_role'],role['full_name']]
+            tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name','id_application'] 
+            d_data = [app['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],role['id_role'],role['full_name'],id_app]
             tdict = dict(zip(tdict,d_data))
             tab_dict.append(tdict)
     return tab_dict 
@@ -92,56 +98,108 @@ def cruved_user(id_role, id_application):
     form.scopeExport.choices = tab_choices
     form.scopeDelete.choices = tab_choices
     form.app.choices = TApplications.choix_app_cruved('id_application','nom_application')
+    cruved = save_cruved()
     if id_application == None:
+        for c in cruved:
+            for app in form.app.choices:
+                if c['nom_application'] == app[1]:
+                    form.app.choices.remove(app)
         if request.method =='GET':
             form.full_name_role.process_data(id_role)
         if request.method == 'POST':
-            if form.Validate and form.validate_on_submit() :
+            if form.validate() and form.validate_on_submit() :
+                print('coucou')
                 form_data = {"id_role":id_role,"id_application":form.data['app']}
                 form_scope = pops(form.data)
                 for scope in form_scope:
-                    if form_scope[scope] != -1:
-                            if scope == "scopeCreate":
-                                CorAppPrivileges.post({"id_tag_action":11,"id_tag_object":form_scope[scope],**form_data})
-                            if scope == "scopeRead":
-                                CorAppPrivileges.post({"id_tag_action":12,"id_tag_object":form_scope[scope],**form_data})
-                            if scope == "scopeUpdate":
-                                CorAppPrivileges.post({"id_tag_action":13,"id_tag_object":form_scope[scope],**form_data})
-                            if scope == "scopeValidate":
-                                CorAppPrivileges.post({"id_tag_action":14,"id_tag_object":form_scope[scope],**form_data})
-                            if scope == "scopeExport":
-                                CorAppPrivileges.post({"id_tag_action":15,"id_tag_object":form_scope[scope],**form_data})
-                            if scope == "scopeDelete": 
-                                CorAppPrivileges.post({"id_tag_action":16,"id_tag_object":form_scope[scope],**form_data})
+                    if form_scope[scope] != 0:
+                        if scope == "scopeCreate":
+                            CorAppPrivileges.post({"id_tag_action":11,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeRead":
+                            CorAppPrivileges.post({"id_tag_action":12,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeUpdate":
+                            CorAppPrivileges.post({"id_tag_action":13,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeValidate":
+                            CorAppPrivileges.post({"id_tag_action":14,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeExport":
+                            CorAppPrivileges.post({"id_tag_action":15,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeDelete": 
+                            CorAppPrivileges.post({"id_tag_action":16,"id_tag_object":form_scope[scope],**form_data})
             return redirect(url_for(('cruved.CRUVED')))
-            print(form_data)
-            print(form_scope)
-            
+    else :
+        for c in cruved :
+            if c['id_application'] == int(id_application):
+                CRUVED = c
+        CRUVED = convert_code_to_id(CRUVED)
+        if request.method == 'GET':
+            form.full_name_role.process_data(id_role)
+            form.app.process_data(id_application)
+            # print(tab_choices)
+            # print(CRUVED['C'])
+            # print(CRUVED['R'])
+            # print(CRUVED['U'])
+            # print(CRUVED['V'])
+            # print(CRUVED['E'])
+            # print(CRUVED['D'])
 
-
-
+            form.scopeCreate.process_data(CRUVED['C'])
+            form.scopeRead.process_data(CRUVED['R'])
+            form.scopeUpdate.process_data(CRUVED['U'])
+            form.scopeValidate.process_data(CRUVED['V'])
+            form.scopeExport.process_data(CRUVED['E'])
+            form.scopeDelete.process_data(CRUVED['D'])
+        if request.method == 'POST':
+            if form.validate() and form.validate_on_submit() :
+                form_data = {"id_role":id_role,"id_application":form.data['app']}
+                form_scope = pops(form.data)
+                for scope in form_scope:
+                    if form_scope[scope] != 0:
+                        if scope == "scopeCreate":
+                            CorAppPrivileges.post({"id_tag_action":11,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeRead":
+                            CorAppPrivileges.post({"id_tag_action":12,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeUpdate":
+                            CorAppPrivileges.post({"id_tag_action":13,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeValidate":
+                            CorAppPrivileges.post({"id_tag_action":14,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeExport":
+                            CorAppPrivileges.post({"id_tag_action":15,"id_tag_object":form_scope[scope],**form_data})
+                        if scope == "scopeDelete": 
+                            CorAppPrivileges.post({"id_tag_action":16,"id_tag_object":form_scope[scope],**form_data})
+            return redirect(url_for(('cruved.CRUVED')))
     return render_template('CRUVED_forms.html', form = form)
 
 def pops(form):
     form.pop('submit')
     form.pop('csrf_token')
     form.pop('app')
+    form.pop('full_name_role')
     return form
 
+def convert_code_to_id(cruved):
+    test =  dict([(3,23), (1, 21), (2,22),(0,0)]) 
+    cruved['C'] = test[int(cruved['C'])]
+    cruved['R'] = test[int(cruved['R'])]
+    cruved['U'] = test[int(cruved['U'])]
+    cruved['V'] = test[int(cruved['V'])]
+    cruved['E'] = test[int(cruved['E'])]
+    cruved['D'] = test[int(cruved['D'])]
+    return cruved
+
+
 def get_tab_choice():
-    tab_choices = TTags.choixSelect('id_tag','tag_name',1)
-    int_tab = []
-    for t in tab_choices:
-        int_tab.append((int(t[0]),t[1]))
-    tab_choices = int_tab
+    tab_choices = TTags.choixSelect('id_tag','tag_name',0)
     return tab_choices
 
 
 def get_cruved_all_test(id_role):
     q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
     q = q.join(TRoles,CorAppPrivileges.id_role == TRoles.id_role)
-    App = [data[0] for data in q.all()]
-    role =  [data[1].as_dict_full_name() for data in q.all()]
+    App = []
+    role = []
+    for data in q.all():
+        App.append(data[0])
+        role.append(data[1].as_dict_full_name())
     tab_dict=[]
     if role != []:
         role = role[0]
@@ -149,8 +207,8 @@ def get_cruved_all_test(id_role):
         for id_app in App:
             app = TApplications.get_one(id_app)
             cruved = cruved_for_user_in_app(role['id_role'],id_app,app['id_parent'])
-            tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name'] 
-            d_data = [app['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],role['id_role'],role['full_name']]
+            tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name','id_application'] 
+            d_data = [app['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],role['id_role'],role['full_name'],id_app]
             tdict = dict(zip(tdict,d_data))
             tab_dict.append(tdict)
     return tab_dict 
