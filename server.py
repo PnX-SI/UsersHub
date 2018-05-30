@@ -5,6 +5,10 @@ import config
 
 
 
+""" Serveur de l'application UsersHub """
+
+
+
 app = Flask(__name__, template_folder= "app/templates" , static_folder = 'app/static' )
 
 app.secret_key = config.SECRET_KEY
