@@ -3,3 +3,23 @@ SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usersh
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SECRET_KEY = 'super secret key'
+
+""" ID of application Geonature"""
+
+ID_GEONATURE = 14
+
+
+""" ID of tag cruved in your database """ 
+
+ID_TAG_CREATE = 11
+ID_TAG_READ = 12
+ID_TAG_UPDATE = 13
+ID_TAG_VALIDATE = 14
+ID_TAG_EXPORT = 15
+ID_TAG_DELETE = 16
+
+""" ID of tag scope in your database """
+
+ID_TAG_MYDATA = 21
+ID_TAG_MYORGDATA = 22
+ID_TAG_ALLDATA = 23

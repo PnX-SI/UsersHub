@@ -6,6 +6,7 @@ from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, distinct, or_
 from app.genericRepository import GenericRepository
+import config
 
 
 
@@ -345,7 +346,7 @@ class TApplications(GenericRepository):
 
     @classmethod
     def choix_app_cruved(cls,id_app,nom,aucun = None):
-        q = cls.get_all(as_model = True).filter(or_(cls.id_application == 14,cls.id_parent == 14))
+        q = cls.get_all(as_model = True).filter(or_(cls.id_application == config.ID_GEONATURE,cls.id_parent == config.ID_GEONATURE))
         data = [data.as_dict() for data in q.all()]
         choices = []
         for d in data :
