@@ -7,6 +7,10 @@ from wtforms.validators import DataRequired, Email
 
 
 class Organisme(FlaskForm):
+
+    """
+    Classe du formulaire des Organismes
+    """
         
     nom_organisme = StringField('Nom organisme', validators=[DataRequired()])
     adresse_organisme = StringField('Adresse', validators=[DataRequired()])
