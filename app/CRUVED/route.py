@@ -153,18 +153,29 @@ def cruved_user(id_role, id_application):
                 form_data = {"id_role":id_role,"id_application":form.data['app']}
                 form_scope = pops(form.data)
                 for scope in form_scope:
-                    if form_scope[scope] != 0:
-                        if scope == "scopeCreate":
+                    if scope == "scopeCreate" and form_scope[scope] != CRUVED['C']:
+                        CorAppPrivileges.delete(CRUVED['C'],form_data['id_role'],form_data['id_application'])
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":11,"id_tag_object":form_scope[scope],**form_data})
-                        if scope == "scopeRead":
+                    if scope == "scopeRead" and form_scope[scope] != CRUVED['R']:
+                        CorAppPrivileges.delete(CRUVED['R'],form_data['id_role'],form_data['id_application'])
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":12,"id_tag_object":form_scope[scope],**form_data})
-                        if scope == "scopeUpdate":
+                    if scope == "scopeUpdate" and form_scope[scope] != CRUVED['U']:
+                        CorAppPrivileges.delete(CRUVED['U'],form_data['id_role'],form_data['id_application'])
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":13,"id_tag_object":form_scope[scope],**form_data})
-                        if scope == "scopeValidate":
+                    if scope == "scopeValidate" and form_scope[scope] != CRUVED['V']:
+                        CorAppPrivileges.delete(CRUVED['V'],form_data['id_role'],form_data['id_application'])
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":14,"id_tag_object":form_scope[scope],**form_data})
-                        if scope == "scopeExport":
+                    if scope == "scopeExport" and form_scope[scope] != CRUVED['E']:
+                        CorAppPrivileges.delete(CRUVED['E'],form_data['id_role'],form_data['id_application'])
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":15,"id_tag_object":form_scope[scope],**form_data})
-                        if scope == "scopeDelete": 
+                    if scope == "scopeDelete" and form_scope[scope] != CRUVED['D']:
+                        CorAppPrivileges.delete(CRUVED['D'],form_data['id_role'],form_data['id_application']) 
+                        if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":16,"id_tag_object":form_scope[scope],**form_data})
             return redirect(url_for(('cruved.CRUVED')))
     return render_template('CRUVED_forms.html', form = form)

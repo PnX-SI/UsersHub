@@ -127,6 +127,14 @@ class CorAppPrivileges(GenericRepository):
     id_tag_object = db.Column(db.Integer, primary_key = True)
     id_role = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_tag_action = db.Column(db.Integer)
+
+    @classmethod
+    def delete(cls,id_tag,id_role,id_app):
+        print(id_tag)
+        print(id_role)
+        print(id_app)
+        cls.query.filter(cls.id_tag_object == id_tag).filter(cls.id_application == id_app).filter(cls.id_role == id_role).delete()
+        db.session.commit()
   
 @serializable
 class  Bib_Organismes(GenericRepository):
