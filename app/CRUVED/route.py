@@ -14,8 +14,27 @@ import config
 
 route =  Blueprint('cruved',__name__)
 
+"""
+Route du Cruved
+"""
+
 @route.route('CRUVED/list', methods=['GET','POST'])
 def CRUVED():
+
+    """
+    Route qui affiche la liste des Roles avec un tableau de cruved vide
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau des roles --> fLine
+                                            - une entête de tableau du Cruved --> fLineCruved
+                                            - le nom des colonnes de la roles --> line
+                                            - le contenu de la table des roles --> table
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin affichant le cruved d'un roles --> pathC
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - un nom de listes --> name_list
+                                            - mise en page si le role est un groupe --> group
+    """
+
     fLine = ['ID', 'Nom']
     columns = ['id_role','full_name']
     fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
@@ -31,6 +50,28 @@ def CRUVED():
 
 @route.route('CRUVED/user/<id_role>',methods=['GET','POST'])
 def cruved_one(id_role):
+    
+    """
+    Route qui affiche la liste des Roles avec un tableau de cruved vide
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau des roles --> fLine
+                                            - une entête de tableau du Cruved --> fLineCruved
+                                            - le nom des colonnes des roles --> line
+                                            - le nom des colonnes du cruved --> lineCruved
+                                            - le contenu de la table des roles  --> table
+                                            - le contenu du tableau du cruved pour un roles --> tableCruved
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de mise à jour (séparation entre l'id role et l'id application) --> pathUu
+                                            - le chemin affichant le cruved d'un role --> pathC
+                                            - le chemin d'ajout d'un cruved à un role --> pathA
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - une id de role --> id_r
+                                            - une id d'application --> app
+                                            - un nom de listes --> name_list
+                                            - mise en page si le role est un groupe --> group
+                                            - nom du role --> name_role
+    """
+
     fLine = ['ID', 'Nom']
     columns = ['id_role','full_name']
     fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
@@ -45,7 +86,7 @@ def cruved_one(id_role):
         role = contents[0]
         app =  contents[0]['id_application']
     save_cruved(contents)
-    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU='/CRUVED/update/',pathUu = '/' ,pathA= '/CRUVED/update/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
+    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU='/CRUVED/update/',pathUu = '/' ,pathA= '/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
 
 # @route.route('CRUVED/add/new', defautls={'id_role':None,'id_application':None}, methods=['GET','POST'])
 # @route.route('CRUVED/update/<id_role>/<id_application>', methods=['GET','POST'])
@@ -87,7 +128,7 @@ def save_cruved(tab = None):
 
 
 @route.route('CRUVED/update/<id_role>/<id_application>',methods=['GET','POST'])
-@route.route('CRUVED/update/<id_role>',defaults={'id_application': None},methods=['GET','POST']) 
+@route.route('CRUVED/add/new/<id_role>',defaults={'id_application': None},methods=['GET','POST']) 
 def cruved_user(id_role, id_application):
     tab_choices = get_tab_choice()
     form = Cruvedforms.Scope()
