@@ -14,6 +14,24 @@ route = Blueprint('groupe', __name__)
 
 @route.route('groups/list', methods=['GET','POST'])
 def groups():
+
+    """
+    Route qui affiche la liste des groupes
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau --> fLine
+                                            - le nom des colonnes de la base --> line
+                                            - le contenu du tableau --> table
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de suppression --> pathD
+                                            - le chemin d'ajout --> pathA
+                                            - le chemin des membres du groupe --> pathP
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - un nom (nom de la table) pour le bouton ajout --> name
+                                            - un nom de listes --> name_list
+                                            - ajoute une colonne de bouton ('True' doit être de type string)--> otherCol
+                                            - nom du afficher sur le bouton --> Members  
+    """
+
     fLine = ['ID groupe', 'nom', 'description' ]
     columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
@@ -24,6 +42,14 @@ def groups():
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
 @route.route('group/update/<id_role>', methods=['GET','POST'])
 def addorupdate(id_role):
+
+    """
+    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un groupe
+    L'envoie du formulaire permet l'ajout ou la maj du groupe dans la base
+    Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_role
+    Une fois le formulaire validé on retourne une redirection vers la liste de groupe
+    """
+
     form = groupeforms.Group()
     form.groupe.process_data(True)
     if id_role == None:
@@ -55,6 +81,17 @@ def addorupdate(id_role):
   
 @route.route('groups/members/<id_groupe>', methods=['GET','POST'])
 def membres(id_groupe):
+
+    """
+    Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui apparatiennent à celui ci.
+    Retourne un template avec pour paramètres:
+                                            - une entête des tableaux --> fLine
+                                            - le nom des colonnes de la base --> data
+                                            - liste des roles n'appartenant pas au groupe --> table
+                                            - liste des roles appartenant au groupe --> table2
+                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
+    """
+
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
     users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
     header = ['ID', 'Nom']
@@ -73,17 +110,35 @@ def membres(id_groupe):
 
 @route.route('groups/delete/<id_groupe>', methods=['GET','POST'])
 def delete(id_groupe):
+
+    """
+    Route qui supprime un groupe dont l'id est donné en paramètres dans l'url
+    Retourne une redirection vers la liste de groupe
+    """
+
     TRoles.delete(id_groupe)
     return redirect(url_for('groupe.groups'))
 
 
 def pops(form):
+
+    """
+    Methode qui supprime les éléments indésirables du formulaires
+    Avec pour paramètre un formulaire
+    """
+
     form.pop('submit')
     form.pop('csrf_token')
     return form
 
 
 def process(form,group):
+      
+    """
+    Methode qui rempli le formulaire par les données de l'éléments concerné
+    Avec pour paramètres un formulaire et un groupe 
+    """
+
     form.nom_role.process_data(group['nom_role'])
     form.desc_role.process_data(group['desc_role'])
     return form

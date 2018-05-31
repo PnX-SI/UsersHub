@@ -3,6 +3,11 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired, Email
 
 class Scope(FlaskForm):
+
+    """
+    Classe du formulaire des portées du cruved
+    """
+
     full_name_role = SelectField("Nom ",coerce=int ,choices = [])
     scopeCreate = SelectField('Portee Create',coerce=int ,choices = [], default = 0)
     scopeRead = SelectField('Portee Read',coerce = int, choices = [],default = 0)

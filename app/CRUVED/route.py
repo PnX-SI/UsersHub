@@ -52,7 +52,7 @@ def CRUVED():
 def cruved_one(id_role):
     
     """
-    Route qui affiche la liste des Roles avec un tableau de cruved vide
+    Route qui affiche la liste des Roles avec un tableau de cruved correspondant à celui de l'id_role passé en paramètre
     Retourne un template avec pour paramètres :
                                             - une entête de tableau des roles --> fLine
                                             - une entête de tableau du Cruved --> fLineCruved
@@ -95,6 +95,22 @@ def cruved_one(id_role):
 
 
 def get_cruved_one(id_role):
+
+    """
+    Methode qui retourne un dictionnaire contenant :    'nom_application',
+                                                        'C',
+                                                        'R',
+                                                        'U',
+                                                        'V',
+                                                        'E',
+                                                        'D',
+                                                        'id_role',
+                                                        'full_name',
+                                                        'id_application'
+
+    sauf si aucun rôle est associé à un droit cruveddans ce cas là la methode retourne un tableau vide                                                    
+    """
+
     q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
     q = q.join(TRoles,CorAppPrivileges.id_role == TRoles.id_role)
     App = []
@@ -117,6 +133,13 @@ def get_cruved_one(id_role):
 
 
 def save_cruved(tab = None):
+
+    """
+    Methode qui sauvegarde le cruved entre 2 route
+    Si la methode recoit en paramètre un tableau  alors le tableau est sauvegardé
+    Si la methode est appelé sans paramètre alors celle-ci retourne le tableau stocké
+    """
+
     d = shelve.open('cruvedtest')
     if tab != None:
         d['cruved'] = tab 
@@ -130,6 +153,14 @@ def save_cruved(tab = None):
 @route.route('CRUVED/update/<id_role>/<id_application>',methods=['GET','POST'])
 @route.route('CRUVED/add/new/<id_role>',defaults={'id_application': None},methods=['GET','POST']) 
 def cruved_user(id_role, id_application):
+
+    """
+    Route affichant un formulaire vierge ou non selon l'url) pour ajouter ou mettre à jour un cruved d'un role pour une application
+    L'envoie du formulaire permet l'ajout ou la mise à jour de l'éléments dans la base
+    Retourne un template accompagné d'un formulaire, pré-rempli si on met à jour des données ou vierge si on créer des nouvelles données 
+    Une fois le formulaire validé, on retourne une redirection vers la liste de roles et leur cruved associé
+    """
+
     tab_choices = get_tab_choice()
     form = Cruvedforms.Scope()
     form.full_name_role.choices = TRoles.choixSelect('id_role','full_name')
@@ -215,6 +246,12 @@ def cruved_user(id_role, id_application):
     return render_template('CRUVED_forms.html', form = form)
 
 def pops(form):
+
+    """
+    Methode qui supprime les éléments indésirables du formulaires
+    Avec pour paramètre un formulaire
+    """
+
     form.pop('submit')
     form.pop('csrf_token')
     form.pop('app')
@@ -222,6 +259,11 @@ def pops(form):
     return form
 
 def convert_code_to_id(cruved):
+
+    """
+    Methode qui transforme l'id tag des portées en leur tag_code
+    """
+
     test =  dict([(3,config.ID_TAG_ALLDATA), (1, config.ID_TAG_MYDATA), (2,config.ID_TAG_MYORGDATA),(0,0)]) 
     cruved['C'] = test[int(cruved['C'])]
     cruved['R'] = test[int(cruved['R'])]
@@ -233,11 +275,21 @@ def convert_code_to_id(cruved):
 
 
 def get_tab_choice():
+
+    """
+    Methode qui retourne le tableau de tuples des selectfield des portées
+    """
+
     tab_choices = TTags.choixSelect('id_tag','tag_name',0)
     return tab_choices
 
 
 def get_cruved_all_test(id_role):
+
+    """
+    Method de test pour recupérer le cruved d'un role
+    """
+
     q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
     q = q.join(TRoles,CorAppPrivileges.id_role == TRoles.id_role)
     App = []
