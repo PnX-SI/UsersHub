@@ -5,6 +5,11 @@ from wtforms.validators import DataRequired
 
 
 class Application(FlaskForm):
+    
+    """
+    Classe du formulaire des applications
+    """
+
     nom_application = StringField('Nom',validators=[DataRequired()])
     desc_application = StringField('Description', validators=[DataRequired()])
     id_parent = SelectField('Choix application parent',coerce=int ,choices = [])

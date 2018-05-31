@@ -5,6 +5,11 @@ from wtforms.validators import DataRequired
 
 
 class Tag(FlaskForm):
+    
+    """
+    Classe du formulaire des tags
+    """
+
     id_tag = HiddenField('id')
     id_tag_type = SelectField('ID type', coerce=int ,choices = [])
     tag_code = StringField('Code', validators=[DataRequired()])

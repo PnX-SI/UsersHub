@@ -14,6 +14,24 @@ route =  Blueprint('application',__name__)
 
 @route.route('applications/list', methods=['GET','POST'])
 def applications():
+
+    """
+    Route qui affiche la liste des applications
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau --> fLine
+                                            - le nom des colonnes de la base --> line
+                                            - le contenu du tableau --> table
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de suppression --> pathD
+                                            - le chemin d'ajout --> pathA
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - un nom (nom de la table) pour le bouton ajout --> name
+                                            - un nom de liste --> name_list
+                                            - ajoute une colonne de bouton ('True doit être de type string) --> otherCol
+                                            - nom affiché sur le bouton --> Members
+
+    """
+
     fLine = ['ID','Nom','Description', 'ID Parent']
     columns = ['id_application','nom_application','desc_application','id_parent']
     contents = TApplications.get_all(columns)
@@ -22,6 +40,14 @@ def applications():
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])
 def addorupdate(id_application):
+
+    """
+    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
+    L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
+    Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_application
+    Une fois le formulaire validé on retourne une redirection vers la liste d'application
+    """
+
     form = t_applicationsforms.Application()
     form.id_parent.choices = TApplications.choixSelect('id_application','nom_application',1)
     if id_application == None:
@@ -62,6 +88,12 @@ def addorupdate(id_application):
 
 @route.route('applications/delete/<id_application>', methods=['GET','POST'])
 def delete(id_application):
+
+    """
+    Route qui supprime une application dont l'id est donné en paramètres dans l'url
+    Retourne une redirection vers la liste de groupe
+    """
+
     TApplications.delete(id_application)
     return redirect(url_for('application.applications'))
 
@@ -69,6 +101,17 @@ def delete(id_application):
 
 @route.route('application/users/<id_application>', methods = ['GET','POST'])
 def users(id_application):
+
+    """
+    Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui apparatiennent à celui ci.
+    Retourne un template avec pour paramètres:
+                                            - une entête des tableaux --> fLine
+                                            - le nom des colonnes de la base --> data
+                                            - liste des roles n'appartenant pas au groupe --> table
+                                            - liste des roles appartenant au groupe --> table2
+                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
+    """
+
     users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
     header = ['ID', 'Nom']
@@ -81,6 +124,10 @@ def users(id_application):
 
 @route.route('test')
 def test():
+    
+    """
+    Route de test
+    """
     a = TRoles.get_one(1, as_model= True)
     print(a['full_name'])
     return ''
@@ -88,11 +135,23 @@ def test():
 # def compare
 
 def pops(form):
+
+    """
+    Methode qui supprime les éléments indésirables du formulaires
+    Avec pour paramètre un formulaire
+    """
+
     form.pop('csrf_token')
     form.pop('submit')
     return form    
 
 def process(form,application):
+          
+    """
+    Methode qui rempli le formulaire par les données de l'éléments concerné
+    Avec pour paramètres un formulaire et une application 
+    """
+
     form.nom_application.process_data(application['nom_application'])
     form.desc_application.process_data(application['desc_application'])
     return form

@@ -20,6 +20,21 @@ route =  Blueprint('user',__name__)
 
 @route.route('users/list',methods=['GET','POST'])
 def users():
+
+    """
+    Route qui affiche la liste des utilisateurs
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau --> fLine
+                                            - le nom des colonnes de la base --> line
+                                            - le contenu du tableau --> table
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de suppression --> pathD
+                                            - le chemin d'ajout --> pathA
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - un nom (nom de la table) pour le bouton ajout --> name
+                                            - un nom de listes --> name_list
+    """
+
     fLine = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
     columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
@@ -30,6 +45,14 @@ def users():
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
 @route.route('user/update/<id_role>', methods=['GET','POST'])
 def addorupdate(id_role):
+
+    """
+    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un utilisateurs
+    L'envoie du formulaire permet l'ajout ou la mise à jour de l'utilisateur dans la base
+    Retourne un template accompagné du formulaire pré-rempli ou non selon le paramètre id_role
+    Une fois le formulaire validé on retourne une redirection vers la liste de type de tag
+    """
+
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
     form.a_groupe.choices = TRoles.choixGroupe('id_role','nom_role',1)
@@ -73,11 +96,24 @@ def addorupdate(id_role):
    
 @route.route('users/delete/<id_role>', methods = ['GET','POST'])
 def deluser(id_role):
+
+
+    """
+    Route qui supprime un utilisateurs dont l'id est donné en paramètres dans l'url
+    Retourne une redirection vers la liste d'utilisateurs
+    """
+
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
 
 
 def pops(form):
+
+    """
+    Methode qui supprime les éléments indésirables du formulaires
+    Avec pour paramètre un formulaire
+    """
+
     form.pop('mdpconf')
     form.pop('submit')
     form.pop('csrf_token')
@@ -85,6 +121,12 @@ def pops(form):
     return form 
 
 def process(form,user):
+        
+    """
+    Methode qui rempli le formulaire par les données de l'éléments concerné
+    Avec pour paramètres un formulaire et un type de tag 
+    """
+
     form.id_organisme.process_data(user['id_organisme'])
     form.nom_role.process_data(user['nom_role'])
     form.prenom_role.process_data(user['prenom_role'])

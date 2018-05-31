@@ -29,7 +29,7 @@ def groups():
                                             - un nom (nom de la table) pour le bouton ajout --> name
                                             - un nom de listes --> name_list
                                             - ajoute une colonne de bouton ('True' doit être de type string)--> otherCol
-                                            - nom du afficher sur le bouton --> Members  
+                                            - nom affiché sur le bouton --> Members  
     """
 
     fLine = ['ID groupe', 'nom', 'description' ]
@@ -83,7 +83,8 @@ def addorupdate(id_role):
 def membres(id_groupe):
 
     """
-    Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui apparatiennent à celui ci.
+    Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui appartiennent à celui ci.
+    Avec pour paramètre un id de groupe (id_role)
     Retourne un template avec pour paramètres:
                                             - une entête des tableaux --> fLine
                                             - le nom des colonnes de la base --> data

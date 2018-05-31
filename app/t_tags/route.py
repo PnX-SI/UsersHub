@@ -10,8 +10,36 @@ from app.env import db
 
 route =  Blueprint('tags',__name__)
 
+"""
+Route des Tags
+"""
+
 @route.route('tags/list', methods=['GET','POST'])
 def tags():
+
+    """
+    Route qui affiche la liste des tags
+    Retourne un template avec pour paramètres :
+                                            - une entête de tableau --> fLine
+                                            - le nom des colonnes de la base --> line
+                                            - le contenu du tableau --> table
+                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de suppression --> pathD
+                                            - le chemin d'ajout --> pathA
+                                            - le chemin des roles étiquetés par le tag --> pathP
+                                            - le chemin des organismes étiquetés par le tag --> pathO
+                                            - le chemin des applications étiquetés par le tag --> pathApp
+                                            - une clé (clé primaire dans la plupart des cas) --> key
+                                            - un nom (nom de la table) pour le bouton ajout --> name
+                                            - un nom de listes --> name_list
+                                            - ajoute une colonne de bouton ('True' doit être de type string)--> otherCol
+                                            - nom affiché sur le bouton --> Members 
+                                            - ajoute une colonne de bouton ('True' doit être de type string)--> tag_orga
+                                            - nom affiché sur le bouton --> Organismes  
+                                            - ajoute une colonne de bouton ('True' doit être de type string)--> tag_app
+                                            - nom affiché sur le bouton --> App  
+    """
+
     fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
     columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
     contents = TTags.get_all(columns)
@@ -20,6 +48,12 @@ def tags():
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
 def delete(id_tag):
+
+    """
+    Route qui supprime un tag dont l'id est donné en paramètres dans l'url
+    Retourne une redirection vers la liste de tag
+    """
+
     TTags.delete(id_tag)
     return redirect(url_for('tags.tags'))
 
@@ -27,6 +61,14 @@ def delete(id_tag):
 @route.route('tag/add/new',defaults={'id_tag': None}, methods=['GET','POST'])
 @route.route('tag/update/<id_tag>',methods=['GET','POST'])
 def addorupdate(id_tag):
+    
+    """
+    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un tag
+    L'envoie du formulaire permet l'ajout ou la maj du tag dans la base
+    Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_tag
+    Une fois le formulaire validé on retourne une redirection vers la liste de tag
+    """
+
     form = t_tagsforms.Tag()
     form.id_tag_type.choices = BibTagTypes.choixSelect('id_tag_type','tag_type_name')
     if id_tag == None:
@@ -55,6 +97,18 @@ def addorupdate(id_tag):
 
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
+
+    """
+    Route affichant la liste des roles n'appartenant pas au tag vis à vis de ceux qui apparatiennent à celui ci.
+    Avec pour paramètre un id de tag.
+    Retourne un template avec pour paramètres:
+                                            - une entête des tableaux --> fLine
+                                            - le nom des colonnes de la base --> data
+                                            - liste des roles non étiquetés par le tag --> table
+                                            - liste des roles étiquetés par le tag --> table2
+                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
+    """
+
     users_in_tag = TRoles.test_group(TRoles.get_user_in_tag(id_tag))
     users_out_tag = TRoles.test_group(TRoles.get_user_out_tag(id_tag))
     header = [ 'ID', 'Nom']
@@ -72,6 +126,18 @@ def tag_users(id_tag):
 
 @route.route('tag/organisms/<id_tag>', methods=['GET','POST'])
 def tag_organismes(id_tag):
+
+    """
+    Route affichant la liste des organismes n'appartenant pas au tag vis à vis de ceux qui apparatiennent à celui ci.
+    Avec pour paramètre un id de tag.
+    Retourne un template avec pour paramètres:
+                                            - une entête des tableaux --> fLine
+                                            - le nom des colonnes de la base --> data
+                                            - liste des organismes non étiquetés par le tag --> table
+                                            - liste des organismes étiquetés par le tag --> table2
+                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
+    """
+
     organismes_in_tag = Bib_Organismes.get_orgs_in_tag(id_tag)
     organismes_out_tag = Bib_Organismes.get_orgs_out_tag(id_tag)
     header = ['ID','Nom']
@@ -91,6 +157,18 @@ def tag_organismes(id_tag):
 
 @route.route('tag/applications/<id_tag>',  methods=['GET','POST'])
 def tag_applications(id_tag):
+
+    """
+    Route affichant la liste des applications non étiquetés par le tag vis à vis de ceux étiquetés par celui ci.
+    Avec pour paramètre un id de tag.
+    Retourne un template avec pour paramètres:
+                                            - une entête des tableaux --> fLine
+                                            - le nom des colonnes de la base --> data
+                                            - liste des organismes non étiquetés par le tag --> table
+                                            - liste des organismes étiquetés par le tag --> table2
+                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
+    """
+
     applications_in_tag = TApplications.get_applications_in_tag(id_tag)
     applications_out_tag = TApplications.get_applications_out_tag(id_tag)
     header = ['ID','Nom']
@@ -110,11 +188,23 @@ def tag_applications(id_tag):
 
 
 def pops(form):
+
+    """
+    Methode qui supprime les éléments indésirables du formulaires
+    Avec pour paramètre un formulaire
+    """
+
     form.pop('csrf_token')
     form.pop('submit')
     return form
 
 def process(form,tag):
+          
+    """
+    Methode qui rempli le formulaire par les données de l'éléments concerné
+    Avec pour paramètres un formulaire et un tag
+    """
+
     form.id_tag_type.process_data(tag['id_tag_type'])
     form.tag_name.process_data(tag['tag_name'])
     form.tag_label.process_data(tag['tag_label'])

@@ -42,7 +42,7 @@ def addorupdate(id_tag_type):
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un type de tag
     L'envoie du formulaire permet l'ajout ou la mise à jour de l'éléments dans la base
-    Retourne un template accompagné du formulaire
+    Retourne un template accompagné du formulaire pré-rempli ou non selon le paramètre id_tag_type
     Une fois le formulaire validé on retourne une redirection vers la liste de type de tag
     """
 
