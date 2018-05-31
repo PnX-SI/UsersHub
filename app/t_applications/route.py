@@ -104,11 +104,12 @@ def users(id_application):
 
     """
     Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui apparatiennent à celui ci.
+    Avec pour paramètre un id d'application
     Retourne un template avec pour paramètres:
                                             - une entête des tableaux --> fLine
                                             - le nom des colonnes de la base --> data
-                                            - liste des roles n'appartenant pas au groupe --> table
-                                            - liste des roles appartenant au groupe --> table2
+                                            - liste des roles n'appartenant pas à l'application --> table
+                                            - liste des roles appartenant à l'application--> table2
                                             - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
     """
 
