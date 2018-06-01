@@ -158,7 +158,7 @@ def cruved_user(id_role, id_application):
     Route affichant un formulaire vierge ou non selon l'url) pour ajouter ou mettre à jour un cruved d'un role pour une application
     L'envoie du formulaire permet l'ajout ou la mise à jour de l'éléments dans la base
     Retourne un template accompagné d'un formulaire, pré-rempli si on met à jour des données ou vierge si on créer des nouvelles données 
-    Une fois le formulaire validé, on retourne une redirection vers la liste de roles et leur cruved associé
+    Une fois le formulaire validé, on retourne une redirection vers la liste de roles et leur cruved associé, si c'est une édition d'un cruved alors on retourne en plus le paramètre active qui desactive le champs applications
     """
 
     tab_choices = get_tab_choice()

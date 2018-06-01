@@ -10,7 +10,9 @@ class Group(FlaskForm):
     """
 
     nom_role = StringField("Nom du groupe", validators=[DataRequired()])
-    desc_role = StringField('Description du groupe', validators=[DataRequired()])
+    desc_role = StringField('Description du groupe')
     groupe = BooleanField('groupe', validators=[DataRequired()])
+    remarques = StringField('Remarques')
+    identifiant = StringField('Identifiant')
     id_role = HiddenField('id')
     submit = SubmitField('Envoyer')
