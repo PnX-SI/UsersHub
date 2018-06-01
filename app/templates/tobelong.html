@@ -60,6 +60,9 @@
                                     {% for name in fLine %}
                                     <th scope="col">{{name}}</th>
                                     {% endfor %}
+                                    {% if app == 'True'%}
+                                    <th scope="col">Droit</th>
+                                    {% endif%}
                                 </tr> 
                     
                             </thead>
@@ -74,9 +77,13 @@
                                     {% else %}
                                         <td >{{elt[name]}}</td>
                                     {% endif%}   
-                                        {% endfor %}         
-                                {% endfor %} 
+                                    {% endfor %}         
+                                    {% if app == 'True'%}
+                                    <td>{{ form.right(class="custom-select", id="inputGroupSelect02") }} </td>
+                                    {% endif%}
                                 </tr>
+                                {%endfor%}
+                                
                             </tbody>
                         </table>
         

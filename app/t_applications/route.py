@@ -115,9 +115,10 @@ def users(id_application):
 
     users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
+    form = t_applicationsforms.AppRight()
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
-    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe') 
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True') 
 
 
 

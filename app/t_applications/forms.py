@@ -15,3 +15,11 @@ class Application(FlaskForm):
     id_parent = SelectField('Choix application parent',coerce=int ,choices = [])
     id_application = HiddenField('id')
     submit = SubmitField('Envoyer')
+
+class AppRight(FlaskForm):
+
+    """
+    Classe du formulaire de droit d'un role pour une appli
+    """
+
+    right = SelectField('Droit application',coerce=int ,choices = [])
