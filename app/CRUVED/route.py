@@ -163,29 +163,35 @@ def cruved_user(id_role, id_application):
 
     tab_choices = get_tab_choice()
     form = Cruvedforms.Scope()
-    form.full_name_role.choices = TRoles.choixSelect('id_role','full_name')
+    form_na = Cruvedforms.Name_App()
+    form_na.full_name_role.choices = TRoles.choixSelect('id_role','full_name')
     form.scopeCreate.choices = tab_choices
     form.scopeRead.choices = tab_choices
     form.scopeUpdate.choices = tab_choices
     form.scopeValidate.choices = tab_choices
     form.scopeExport.choices = tab_choices
     form.scopeDelete.choices = tab_choices
-    form.app.choices = TApplications.choix_app_cruved('id_application','nom_application')
+    form_na.app.choices = TApplications.choix_app_cruved('id_application','nom_application')
     cruved = save_cruved()
+    data = request.get_json()
     if id_application == None:
         for c in cruved:
-            for app in form.app.choices:
+            for app in form_na.app.choices:
                 if c['nom_application'] == app[1]:
-                    form.app.choices.remove(app)
+                    form_na.app.choices.remove(app)
         if request.method =='GET':
-            form.full_name_role.process_data(id_role)
+            form_na.full_name_role.process_data(id_role)
         if request.method == 'POST':
             if form.validate() and form.validate_on_submit() :
-                print('coucou')
-                form_data = {"id_role":id_role,"id_application":form.data['app']}
+                form_data = {"id_role":id_role,"id_application":form_na.app.data}
                 form_scope = pops(form.data)
                 for scope in form_scope:
                     if form_scope[scope] != 0:
+                        print("id_tag_action")
+                        print(config.ID_TAG_CREATE)
+                        print("id_tag_object" )
+                        print(form_scope[scope])
+                        print(form_data)
                         if scope == "scopeCreate":
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_CREATE,"id_tag_object":form_scope[scope],**form_data})
                         if scope == "scopeRead":
@@ -199,14 +205,15 @@ def cruved_user(id_role, id_application):
                         if scope == "scopeDelete": 
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_DELETE,"id_tag_object":form_scope[scope],**form_data})
             return redirect(url_for(('cruved.CRUVED')))
+        return render_template('CRUVED_forms.html', form = form,form_na = form_na)
     else :
         for c in cruved :
             if c['id_application'] == int(id_application):
                 CRUVED = c
         CRUVED = convert_code_to_id(CRUVED)
         if request.method == 'GET':
-            form.full_name_role.process_data(id_role)
-            form.app.process_data(id_application)
+            form_na.full_name_role.process_data(id_role)
+            form_na.app.process_data(id_application)
             form.scopeCreate.process_data(CRUVED['C'])
             form.scopeRead.process_data(CRUVED['R'])
             form.scopeUpdate.process_data(CRUVED['U'])
@@ -215,7 +222,7 @@ def cruved_user(id_role, id_application):
             form.scopeDelete.process_data(CRUVED['D'])
         if request.method == 'POST':
             if form.validate() and form.validate_on_submit() :
-                form_data = {"id_role":id_role,"id_application":form.data['app']}
+                form_data = {"id_role":id_role,"id_application":id_application}
                 form_scope = pops(form.data)
                 for scope in form_scope:
                     if scope == "scopeCreate" and form_scope[scope] != CRUVED['C']:
@@ -243,7 +250,7 @@ def cruved_user(id_role, id_application):
                         if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_DELETE,"id_tag_object":form_scope[scope],**form_data})
             return redirect(url_for(('cruved.CRUVED')))
-    return render_template('CRUVED_forms.html', form = form)
+        return render_template('CRUVED_forms.html', form = form,form_na = form_na, active = 'True')
 
 def pops(form):
 
@@ -254,8 +261,6 @@ def pops(form):
 
     form.pop('submit')
     form.pop('csrf_token')
-    form.pop('app')
-    form.pop('full_name_role')
     return form
 
 def convert_code_to_id(cruved):

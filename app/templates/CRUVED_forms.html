@@ -11,15 +11,23 @@
 
                 <div class = "row">        
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id = "selectnom">
-                        <label>{{ form.full_name_role.label }}</label>
-                        {{ form.full_name_role(class="custom-select", id="inputGroupSelect03") }}
+                        <label>{{ form_na.full_name_role.label }}</label>
+                        {{ form_na.full_name_role(class="custom-select", id="inputGroupSelect03", disabled=True) }}
                 </div>
 
+                {% if active == 'True' %}
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <label>{{ form.app.label }}</label>
-                        {{ form.app(class="custom-select", id="inputGroupSelect02") }}
+                        <label>{{ form_na.app.label }}</label>
+                        {{ form_na.app(class="custom-select", id="inputGroupSelect04", disabled = True) }}
                 </div>
-                
+                {% else %}
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label>{{ form_na.app.label }}</label>
+                        {{ form_na.app(class="custom-select", id="inputGroupSelect04") }}
+                </div>
+                {%endif%}
+
+
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         <label>{{ form.scopeCreate.label }}</label>
                         {{ form.scopeCreate(class="custom-select", id="inputGroupSelect02") }}
@@ -54,7 +62,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        {{ form.submit(class="form-control") }}
+                        {{ form.submit(class="form-control", id="submit") }}
                 </div>
         </div>
          </form>       
