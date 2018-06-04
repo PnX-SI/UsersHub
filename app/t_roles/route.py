@@ -35,8 +35,8 @@ def users():
                                             - un nom de listes --> name_list
     """
 
-    fLine = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-    columns = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
+    fLine = ['Id','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
+    columns = ['id_role','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns,filters)
     return render_template('table_database.html', fLine = fLine ,line = columns, table = contents,  key = 'id_role', pathU = '/user/update/', pathD = '/users/delete/',pathA = "/user/add/new", name = 'un utilisateur', name_list = "Liste des Utilisateurs")    
@@ -55,7 +55,7 @@ def addorupdate(id_role):
 
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
-    form.a_groupe.choices = TRoles.choixGroupe('id_role','nom_role',1)
+    form.a_groupe.choices = TRoles.choix_group('id_role','nom_role',1)
     if id_role == None :
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():

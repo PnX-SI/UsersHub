@@ -35,6 +35,9 @@
                 {% if tag_app == 'True'%}
                     <th scope="col">{{App}}</th>
                 {% endif %}
+                {% if app_geonature == 'True' %}
+                    <th scope="col">{{Members}}</th>
+                {%endif%}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
             </tr> 
@@ -97,6 +100,16 @@
             {%endif%}
 
             {% endif %}
+
+            {% if elt['id_application'] != id_geonature and elt['id_parent']!= id_geonature %}
+            <td>
+                <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
+
+            </td>
+
+            {%elif app_geonature == 'True'%}
+            <td></td>
+            {%endif%}
 
                 <td>
                         <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>

@@ -8,6 +8,7 @@ from app.models import TRoles
 from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
+import config
 
 
 route =  Blueprint('application',__name__)
@@ -27,7 +28,8 @@ def applications():
                                             - une clé (clé primaire dans la plupart des cas) --> key
                                             - un nom (nom de la table) pour le bouton ajout --> name
                                             - un nom de liste --> name_list
-                                            - ajoute une colonne de bouton ('True doit être de type string) --> otherCol
+                                            - empeche l'ajout de droits à des utilisateurs pour l'application géonature ou les applications filles --> id_geonature
+                                            - ajoute une colonne de bouton ('True doit être de type string) --> app_geonature
                                             - nom affiché sur le bouton --> Members
 
     """
@@ -35,7 +37,7 @@ def applications():
     fLine = ['ID','Nom','Description', 'ID Parent']
     columns = ['id_application','nom_application','desc_application','id_parent']
     contents = TApplications.get_all(columns)
-    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", otherCol = 'True' , Members = "Utilisateurs" )    
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])

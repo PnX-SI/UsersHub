@@ -102,7 +102,7 @@ class GenericRepository(db.Model):
         
 
   
-
+    
    
     # def get_column_name(cls,columns=None):
     #     if columns:
