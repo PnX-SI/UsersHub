@@ -7,7 +7,7 @@ from app.CRUVED import forms as Cruvedforms
 from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles, CorOrganismeTag, Bib_Organismes, CorApplicationTag, CorAppPrivileges, VUsersactionForallGnModules
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
-from sqlalchemy import distinct,tuple_
+from sqlalchemy import distinct,tuple_, desc
 from pypnusershub.db.tools import cruved_for_user_in_app, get_or_fetch_user_cruved
 import shelve
 import config
@@ -39,6 +39,7 @@ def CRUVED():
     columns = ['id_role','full_name']
     fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
     q = TRoles.get_all(as_model=True)
+    q = q.order_by(desc(TRoles.groupe))
     data = TRoles.test_group([data.as_dict_full_name() for data in q.all()])
     if request.method == 'GET':
         return render_template('CRUVED.html',fLine = fLine, line = columns,fLineCruved = fLineCruved, table = data, key = 'id_role', pathC = '/CRUVED/user/',pathU='',group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes')       
@@ -77,6 +78,7 @@ def cruved_one(id_role):
     fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
     columnsCruved = [ 'nom_application','C','R','U','V','E','D']
     q = TRoles.get_all(as_model=True)
+    q = q.order_by(desc(TRoles.groupe))
     data = TRoles.test_group([data.as_dict_full_name() for data in q.all()])
     contents = get_cruved_one(id_role)
     if contents == []:

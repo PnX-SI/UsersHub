@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
 from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, distinct, or_
+from sqlalchemy import ForeignKey, distinct, or_, desc
 from app.genericRepository import GenericRepository
 import config
 
@@ -375,6 +375,7 @@ class TRoles(GenericRepository):
         """
         
         q = db.session.query(cls)
+        q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoleTag)
         q = q.filter(id_tag == CorRoleTag.id_tag  )        
         data =  [data.as_dict_full_name() for data in q.all()]
@@ -390,6 +391,7 @@ class TRoles(GenericRepository):
         """
 
         q = db.session.query(cls)
+        q = q.order_by(desc(cls.groupe))
         subquery = db.session.query(CorRoleTag.id_role).filter(id_tag == CorRoleTag.id_tag)
         q = q.filter(cls.id_role.notin_(subquery))
         data =  [data.as_dict_full_name() for data in q.all()]
@@ -435,6 +437,7 @@ class TRoles(GenericRepository):
         """
 
         q = db.session.query(cls)
+        q = q.order_by(desc(cls.groupe))
         q = q.join(CorAppPrivileges, TRoles.id_role == CorAppPrivileges.id_role)
         q = q.filter(id_application ==  CorAppPrivileges.id_application )
         for data in q.all():
@@ -451,6 +454,7 @@ class TRoles(GenericRepository):
         """
 
         q = db.session.query(cls)
+        q = q.order_by(desc(cls.groupe))
         subquery = db.session.query(distinct(CorAppPrivileges.id_role)).filter(id_application == CorAppPrivileges.id_application)
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
