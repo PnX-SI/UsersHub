@@ -1,3 +1,4 @@
+
 $( document ).ready(function() {  
 
     var tab_add = []
@@ -10,6 +11,7 @@ $( document ).ready(function() {
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
             var Row = $(this).parents('tr');
+            console.log(Row[0])
             tab.push(Row[0]);
             $("#user").find("input[type=checkbox]:checked").prop('checked', false);
             var ID=$(this).parents('tr').find('td:eq(1)').html();
@@ -33,6 +35,8 @@ $( document ).ready(function() {
         var tab = []
         $('#adding_table input[type="checkbox"]:checked').each(function(){
             var Row = $(this).parents('tr');
+            console.log(Row[0])
+            Row = Row.remove('.right')
             tab.push(Row[0]);
             $("#adding_table").find("input[type=checkbox]:checked").prop('checked', false);
             var ID=$(this).parents('tr').find('td:eq(1)').html();
