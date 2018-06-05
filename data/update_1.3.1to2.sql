@@ -10,7 +10,7 @@ INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
 ;
 
 -- Supprimer la table t_menus
-DROP TABLE utilisateurs.t_menus;
+DROP TABLE utilisateurs.t_menus CASCADE;
 
 -- Vue recréant l'equivalent de t_menus
 CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
@@ -24,12 +24,14 @@ LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
 WHERE b.id_tag_type = 4
 
+
 -- Supprimer la table cor_role_menu
-DROP TABLE utilisateurs.cor_role_menu;
+DROP TABLE utilisateurs.cor_role_menu CASCADE;
 
 -- Vue recréant l'equivalent de cor_role_menu
 CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
 SELECT 
+ DISTINCT
  c.id_role,
  c.id_tag AS id_menu
 FROM utilisateurs.cor_role_tag c
@@ -47,27 +49,40 @@ INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
 ;
 
 -- Supprimer la table bib_droits
-DROP TABLE utilisateurs.bib_droits;
+DROP TABLE utilisateurs.bib_droits CASCADE;
 
 -- Vue recréant l'equivalent de bib_droits
 CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
 SELECT 
  t.id_tag AS id_droit,
  t.tag_name AS nom_droit,
- t.tag_desc AS desc_desc_droit
+ t.tag_desc AS desc_droit
 FROM utilisateurs.bib_tag_types b
 JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 WHERE b.id_tag_type = 3
+
+
+
+--Table qui compense la table cor_role_droit_application de la V1
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
+    id_role integer NOT NULL,
+    id_tag integer NOT NULL,
+    id_application integer NOT NULL
+);
+
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_tag_fkey FOREIGN KEY (id_tag) REFERENCES utilisateurs.t_tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Vue recréant l'equivalent de cor_role_droit_application
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
  c.id_role,
- b.id_droit, 
- ct.id_application
-FROM utilisateurs.cor_role_tag c
-JOIN utilisateurs.bib_droits b ON b.id_droit = c.id_tag
-JOIN utilisateurs.cor_application_tag ct ON ct.id_tag = c.id_tag
+ c.id_tag as id_droit, 
+ c.id_application
+FROM utilisateurs.cor_role_tag_application c
+
 
 -- Associe les portées des données à un type de tag "scope"
 INSERT INTO utilisateurs.bib_tag_types(id_tag_type,tag_type_name,tag_type_desc) VALUES

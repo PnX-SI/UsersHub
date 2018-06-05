@@ -10,7 +10,8 @@ $( document ).ready(function() {
     $("#add").click(function(){
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
-            var Row = $(this).parents('tr');
+            console.log($(this));
+            var Row = $(this).parents('tr').append('<td><select class="custom-select" id="inputGroupSelect02" name="right"></select></td>');
             console.log(Row[0])
             tab.push(Row[0]);
             $("#user").find("input[type=checkbox]:checked").prop('checked', false);
@@ -34,6 +35,7 @@ $( document ).ready(function() {
     $("#delete").click(function(){
         var tab = []
         $('#adding_table input[type="checkbox"]:checked').each(function(){
+            $('#right').remove();
             var Row = $(this).parents('tr');
             console.log(Row[0])
             Row = Row.remove('.right')
