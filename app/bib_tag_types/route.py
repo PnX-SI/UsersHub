@@ -54,7 +54,13 @@ def addorupdate(id_tag_type):
                 BibTagTypes.post(form_tagtypes)
                 return redirect(url_for('tags_types.tags_types'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['id_tag_type'] != None):
+                    flash("Champ 'ID' vide, veillez à le remplir afin de valider le formulaire. ")
+                if(errors['tag_type_name'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                if(errors['tag_type_desc'] != None):
+                    flash("Champ 'Description' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('tagtypes.html', form = form)
     else :
         tag_type = BibTagTypes.get_one(id_tag_type)
@@ -66,7 +72,13 @@ def addorupdate(id_tag_type):
                 BibTagTypes.update(form_tagtypes)
                 return redirect(url_for('tags_types.tags_types'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['id_tag_type'] != None):
+                    flash("Champ 'ID' vide, veillez à le remplir afin de valider le formulaire. ")
+                if(errors['tag_type_name'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                if(errors['tag_type_desc'] != None):
+                    flash("Champ 'Description' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('tagtypes.html', form = form)
 
 

@@ -60,7 +60,9 @@ def addorupdate(id_role):
                 TRoles.post(form_group)
                 return redirect(url_for('groupe.groups'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_role'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('group.html', form = form)
     else :
         group = TRoles.get_one(id_role)
@@ -73,7 +75,9 @@ def addorupdate(id_role):
                 TRoles.update(form_group)
                 return redirect(url_for('groupe.groups'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_role'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('group.html', form = form)
 
 

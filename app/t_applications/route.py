@@ -53,6 +53,7 @@ def addorupdate(id_application):
     form = t_applicationsforms.Application()
     form.id_parent.choices = TApplications.choixSelect('id_application','nom_application',1)
     if id_application == None:
+        form.id_parent.process_data(-1)
         if request.method == 'POST': 
             if form.validate() and form.validate_on_submit():
                 form_app = pops(form.data)
@@ -62,7 +63,9 @@ def addorupdate(id_application):
                 TApplications.post(form_app)
                 return redirect(url_for('application.applications'))
             else :
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_application'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('application.html', form= form)
     else :
         application = TApplications.get_one(id_application)
@@ -82,7 +85,9 @@ def addorupdate(id_application):
                 TApplications.update(form_app)
                 return redirect(url_for('application.applications'))
             else :
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_application'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('application.html', form= form)
         
 

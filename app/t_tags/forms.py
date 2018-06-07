@@ -13,7 +13,7 @@ class Tag(FlaskForm):
     id_tag = HiddenField('id')
     id_tag_type = SelectField('ID type', coerce=int ,choices = [])
     tag_code = StringField('Code')
-    tag_name = StringField('Nom')
+    tag_name = StringField('Nom', validators = [DataRequired()])
     tag_label = StringField('Label')
     tag_desc = StringField('Description')
     submit = SubmitField('Envoyer')

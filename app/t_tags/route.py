@@ -79,7 +79,9 @@ def addorupdate(id_tag):
                 TTags.post(form_tag)
                 return redirect(url_for('tags.tags'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['tag_name'] != None):
+                    flash("Champ Nom vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('tag.html', form = form)
     else:
         tag = TTags.get_one(id_tag)
@@ -92,7 +94,9 @@ def addorupdate(id_tag):
                 TTags.update(form_tag)
                 return redirect(url_for('tags.tags'))
             else:
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['tag_name'] != None):
+                    flash("Champ Nom vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('tag.html',form = form)
 
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])

@@ -70,7 +70,9 @@ def addorupdate(id_role):
                 else :
                     flash("mot de passe non identiques")
             else :
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_role'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('user.html', form = form)
     else:
         user = TRoles.get_one(id_role)
@@ -89,7 +91,9 @@ def addorupdate(id_role):
                 else :
                     flash("mot de passe non identiques")
             else :
-                flash(form.errors)
+                errors =  form.errors
+                if(errors['nom_role'] != None):
+                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('user.html',form = form)
 
 
