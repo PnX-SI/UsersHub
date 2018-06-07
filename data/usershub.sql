@@ -36,11 +36,6 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
-CREATE TABLE IF NOT EXISTS cor_role_menu (
-    id_role integer NOT NULL,
-    id_menu integer NOT NULL
-);
-COMMENT ON TABLE cor_role_menu IS 'gestion du contenu des menus utilisateurs dans les applications';
 
 CREATE TABLE IF NOT EXISTS cor_roles (
     id_role_groupe integer NOT NULL,
@@ -115,14 +110,6 @@ $$;
 ALTER SEQUENCE bib_organismes_id_seq OWNED BY bib_organismes.id_organisme;
 ALTER TABLE ONLY bib_organismes ALTER COLUMN id_organisme SET DEFAULT nextval('bib_organismes_id_seq'::regclass);
 
-
-CREATE TABLE IF NOT EXISTS bib_droits (
-    id_droit integer NOT NULL,
-    nom_droit character varying(50),
-    desc_droit text
-);
-
-
 CREATE TABLE IF NOT EXISTS bib_unites (
     nom_unite character varying(50) NOT NULL,
     adresse_unite character varying(128),
@@ -152,11 +139,12 @@ ALTER SEQUENCE bib_unites_id_seq OWNED BY bib_unites.id_unite;
 ALTER TABLE ONLY bib_unites ALTER COLUMN id_unite SET DEFAULT nextval('bib_unites_id_seq'::regclass);
 
 
-CREATE TABLE IF NOT EXISTS cor_role_droit_application (
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
     id_role integer NOT NULL,
-    id_droit integer NOT NULL,
+    id_tag integer NOT NULL,
     id_application integer NOT NULL
 );
+
 
 
 CREATE TABLE IF NOT EXISTS t_applications (
@@ -181,32 +169,6 @@ END
 $$;
 ALTER SEQUENCE t_applications_id_application_seq OWNED BY t_applications.id_application;
 ALTER TABLE ONLY t_applications ALTER COLUMN id_application SET DEFAULT nextval('t_applications_id_application_seq'::regclass);
-
-
-CREATE TABLE IF NOT EXISTS t_menus (
-    id_menu integer NOT NULL,
-    nom_menu character varying(50) NOT NULL,
-    desc_menu text,
-    id_application integer
-);
-COMMENT ON TABLE t_menus IS 'table des menus déroulants des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans un menu sont gérés dans la table cor_role_menu_application.';
-
-DO
-$$
-BEGIN
-CREATE SEQUENCE t_menus_id_menu_seq
-    START WITH 1000000
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-EXCEPTION WHEN duplicate_table THEN
-        -- do nothing, it's already there
-END
-$$;
-ALTER SEQUENCE t_menus_id_menu_seq OWNED BY t_menus.id_menu;
-ALTER TABLE ONLY t_menus ALTER COLUMN id_menu SET DEFAULT nextval('t_menus_id_menu_seq'::regclass);
-
 
 CREATE TABLE IF NOT EXISTS t_tags (
     id_tag integer NOT NULL,
@@ -284,28 +246,11 @@ COMMENT ON TABLE cor_app_privileges IS 'Cette table centrale, permet de gérer l
 ----------------
 --PRIMARY KEYS--
 ----------------
-DO
-$$
-BEGIN
-ALTER TABLE ONLY bib_droits ADD CONSTRAINT bib_droits_pkey PRIMARY KEY (id_droit);
-EXCEPTION WHEN invalid_table_definition  THEN
-        -- do nothing, it's already there
-END
-$$;
 
 DO
 $$
 BEGIN
-ALTER TABLE ONLY cor_role_droit_application ADD CONSTRAINT cor_role_droit_application_pkey PRIMARY KEY (id_role, id_droit, id_application);
-EXCEPTION WHEN invalid_table_definition  THEN
-        -- do nothing, it's already there
-END
-$$;
-
-DO
-$$
-BEGIN
-ALTER TABLE ONLY cor_role_menu ADD CONSTRAINT cor_role_menu_pkey PRIMARY KEY (id_role, id_menu);
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
 END
@@ -352,15 +297,6 @@ DO
 $$
 BEGIN
 ALTER TABLE ONLY t_applications ADD CONSTRAINT t_applications_pkey PRIMARY KEY (id_application);
-EXCEPTION WHEN invalid_table_definition  THEN
-        -- do nothing, it's already there
-END
-$$;
-
-DO
-$$
-BEGIN
-ALTER TABLE ONLY t_menus ADD CONSTRAINT t_menus_pkey PRIMARY KEY (id_menu);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
 END
@@ -476,39 +412,20 @@ $$;
 DO
 $$
 BEGIN
-ALTER TABLE ONLY cor_role_droit_application ADD CONSTRAINT cor_role_droit_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ONLY cor_role_droit_application ADD CONSTRAINT cor_role_droit_application_id_droit_fkey FOREIGN KEY (id_droit) REFERENCES bib_droits(id_droit) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ONLY cor_role_droit_application ADD CONSTRAINT cor_role_droit_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_tag_fkey FOREIGN KEY (id_tag) REFERENCES utilisateurs.t_tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
 END
 $$;
 
-DO
-$$
-BEGIN
-ALTER TABLE ONLY cor_role_menu ADD CONSTRAINT cor_role_menu_application_id_menu_fkey FOREIGN KEY (id_menu) REFERENCES t_menus(id_menu) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ONLY cor_role_menu ADD CONSTRAINT cor_role_menu_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
-EXCEPTION WHEN duplicate_object  THEN
-        -- do nothing, it's already there
-END
-$$;
 
 DO
 $$
 BEGIN
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_id_role_groupe_fkey FOREIGN KEY (id_role_groupe) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_id_role_utilisateur_fkey FOREIGN KEY (id_role_utilisateur) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
-EXCEPTION WHEN duplicate_object  THEN
-        -- do nothing, it's already there
-END
-$$;
-
-DO
-$$
-BEGIN
-ALTER TABLE ONLY t_menus
-    ADD CONSTRAINT t_menus_id_application_fkey FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
 END
@@ -862,7 +779,74 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
+		 
 
+DO
+$$
+BEGIN
+CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
+SELECT 
+ t.id_tag AS id_menu,
+ t.tag_name AS nom_menu,
+ t.tag_desc AS desc_menu,
+ c.id_application
+FROM utilisateurs.bib_tag_types b
+LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
+LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
+WHERE b.id_tag_type = 4
+EXCEPTION WHEN duplicate_object  THEN
+    -- do nothing, it's already there
+END
+$$;
+		 
+
+DO
+$$
+BEGIN
+CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
+SELECT 
+DISTINCT
+c.id_role,
+c.id_tag AS id_menu
+FROM utilisateurs.cor_role_tag c
+JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag		 
+EXCEPTION WHEN duplicate_object  THEN
+    -- do nothing, it's already there
+END
+$$;		 
+
+		 
+
+
+DO
+$$
+BEGIN
+CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
+SELECT 
+ t.id_tag AS id_droit,
+ t.tag_name AS nom_droit,
+ t.tag_desc AS desc_droit
+FROM utilisateurs.bib_tag_types b
+JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
+WHERE b.id_tag_type = 3		 
+EXCEPTION WHEN duplicate_object  THEN
+    -- do nothing, it's already there
+END
+$$;		 
+			 
+
+DO
+$$
+CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
+SELECT 
+ c.id_role,
+ c.id_tag as id_droit, 
+ c.id_application
+FROM utilisateurs.cor_role_tag_application c	 
+EXCEPTION WHEN duplicate_object  THEN
+    -- do nothing, it's already there
+END
+$$;			 
 -------------
 --FUNCTIONS--
 -------------
@@ -1007,23 +991,6 @@ $BODY$
 --------
 --DATA--
 --------
-DO
-$$
-BEGIN
-INSERT INTO bib_droits (id_droit, nom_droit, desc_droit) VALUES 
-(5, 'validateur', 'Il valide bien sur')
-,(4, 'modérateur', 'Peu utilisé')
-,(0, 'aucun', 'aucun droit.')
-,(1, 'utilisateur', 'Ne peut que consulter')
-,(2, 'rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements')
-,(6, 'administrateur', 'Il a tous les droits')
-,(3, 'référent', 'utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
-;
-EXCEPTION WHEN unique_violation  THEN
-        RAISE NOTICE 'Tentative d''insertion de valeur existante';
-END
-$$;
-
 
 DO
 $$
@@ -1096,51 +1063,6 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
-
-
-DO
-$$
-BEGIN 
-INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) 
-VALUES (1, 6, 1)
-,(1, 6, 2)
-,(1, 6, 14)
-,(20002, 3, 14)
-,(2, 2, 14)
-,(3, 1, 14)
-;
-EXCEPTION WHEN unique_violation  THEN
-        RAISE NOTICE 'Tentative d''insertion de valeur existante';
-END
-$$;
-
-
-DO
-$$
-BEGIN 
-INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) 
-VALUES (9, 'faune - Observateurs', 'Listes des observateurs faune', 14)
-,(10, 'flore - Observateurs', 'Liste des observateurs flore', 14)
-;
-PERFORM pg_catalog.setval('t_menus_id_menu_seq', 11, true);
-EXCEPTION WHEN unique_violation  THEN
-        RAISE NOTICE 'Tentative d''insertion de valeur existante';
-END
-$$;
-
-
-DO
-$$
-BEGIN
-INSERT INTO cor_role_menu (id_role, id_menu) VALUES 
-(1, 10)
-,(1, 9)
-;
-EXCEPTION WHEN unique_violation  THEN
-        RAISE NOTICE 'Tentative d''insertion de valeur existante';
-END
-$$;
-
 
 DO
 $$
