@@ -13,7 +13,12 @@
     <h2>{{name_list}}</h2>         
     <p>
         <a href="{{pathA}}"  ><button type="submit" class="btn btn-success btn-sm" >Ajouter {{name}}</button></a>
+
+        {% if tag_orga == 'True'%}
+            <a  href="{{ url_for('tags_types.tags_types') }}"><button type="submit" class="btn btn-success btn-sm" >Accéder aux types de tags</button></a>
+        {% endif %}
     </p>
+    
     </div>    
     <div class = "container">
     <div id='table'>

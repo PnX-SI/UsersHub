@@ -206,7 +206,7 @@ def cruved_user(id_role, id_application):
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_EXPORT,"id_tag_object":form_scope[scope],**form_data})
                         if scope == "scopeDelete": 
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_DELETE,"id_tag_object":form_scope[scope],**form_data})
-            return redirect(url_for(('cruved.CRUVED')))
+            return redirect(url_for('cruved.cruved_one', id_role = id_role))
         return render_template('CRUVED_forms.html', form = form,form_na = form_na)
     else :
         for c in cruved :
@@ -251,7 +251,7 @@ def cruved_user(id_role, id_application):
                         CorAppPrivileges.delete(CRUVED['D'],form_data['id_role'],form_data['id_application']) 
                         if form_scope[scope] !=0 :
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_DELETE,"id_tag_object":form_scope[scope],**form_data})
-            return redirect(url_for(('cruved.CRUVED')))
+            return redirect(url_for('cruved.cruved_one',  id_role = id_role))
         return render_template('CRUVED_forms.html', form = form,form_na = form_na, active = 'True')
 
 def pops(form):

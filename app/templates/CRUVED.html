@@ -63,9 +63,7 @@
                                             {% for name in fLineCruved %}
                                             <th scope="col">{{name}}</th>
                                             {% endfor %}
-                                            <th scope="col">
-                                                 <a href="{{pathA}}{{id_r}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Ajouter des Droits  </button></a>
-                                            </th>
+                                            <th></th>
                                         
                                     </tr> 
                 
@@ -85,7 +83,10 @@
                                     {% endfor %}
                                    
                                 </tbody>
+                                
+
                                 </table>
+                                <a href="{{pathA}}{{id_r}}"  > <button type="submit" class="btn btn-success btn-sm" >Ajouter un Cruved pour une application  </button></a>
                  </div>
                 </div>
                 
@@ -93,15 +94,3 @@
 </html>
 
 
-{#                      <th scope="col">Application</th>
-                        <th scope="col">Create</th>
-                        <th scope="col">Read</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Validate</th>
-                        <th scope="col">Export</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Modification</th>
-                        <th scope="col">Suppression</th>
-                        
-
-                        #}
