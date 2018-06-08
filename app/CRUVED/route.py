@@ -14,6 +14,7 @@ import config
 
 route =  Blueprint('cruved',__name__)
 
+
 """
 Route du Cruved
 """

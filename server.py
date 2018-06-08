@@ -41,6 +41,9 @@ with app.app_context():
     from app.CRUVED import route
     app.register_blueprint(route.route, url_prefix='/')
 
+    from app.API import route
+    app.register_blueprint(route.route, url_prefix='/api')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

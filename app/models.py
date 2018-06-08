@@ -119,29 +119,16 @@ class CorRoleTag(GenericRepository):
     
 
 
-
-
 @serializable
-class CorRoleMenu(GenericRepository):
-
-    """ Classe de correspondance entre la table t_roles et la table t_menus"""
+class CorRoleTagApplication(GenericRepository):
     
-    __tablename__= 'CorRoleMenu'
-    __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_menu = db.Column(db.Integer,ForeignKey('utilisateurs.t_menus.id_menu'), primary_key = True)
+    """Classe de correspondance entre la table t_roles, t_tags et t_applications"""
 
-@serializable
-class CorRoleDroitApplication(GenericRepository):
-
-    """ Classe de correspondance entre la table t_applications et la table bib_droits"""
-    
-    __tablename__ = 'cor_role_droit_application'
-    __table_args__= {'schema':'utilisateurs'}
+    __tablename__= "cor_role_tag_application"
+    __table_args__={'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_droit = db.Column(db.Integer,ForeignKey('utilisateurs.bib_droits.id_droit'), primary_key = True)
+    id_tag = db.Column(db.Integer,ForeignKey('utilisateurs.t_tags.id_tag'), primary_key = True)
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_application.id_application'), primary_key = True)
-
 
 @serializable
 class CorApplicationTag(GenericRepository):
@@ -595,19 +582,7 @@ class TTags(GenericRepository):
             choices.append((0,'Aucun'))
         return choices
    
-@serializable
-class TMenu(GenericRepository):
-    
-    """
-    Model de la table t_menus
-    """
 
-    __tablename__ = 't_menus'
-    __table_args__ = {'schema':'utilisateurs'}
-    id_menu = db.Column(db.Integer, primary_key = True)
-    nom_menu = db.Column(db.Unicode)
-    desc_menu = db.Column(db.Unicode)
-    id_application = db.Column(db.Unicode)
 
   
 @serializable
@@ -643,12 +618,46 @@ class BibTagTypes(GenericRepository):
     tag_type_desc = db.Column(db.Unicode)
 
 
+@serializable
+class CorRoleMenu(GenericRepository):
+
+    """Vue de correspondance entre la table t_roles et la vue t_menus"""
+    
+    __tablename__= 'cor_role_menu'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_menu = db.Column(db.Integer,ForeignKey('utilisateurs.t_menus.id_menu'), primary_key = True)
 
 @serializable
-class BibDroits(GenericRepository):
+class CorRoleDroitApplication(GenericRepository):
+
+    """ Vue de correspondance entre la table t_applications, t_roles et la vue bib_droits"""
+    
+    __tablename__ = 'cor_role_droit_application'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_droit = db.Column(db.Integer,ForeignKey('utilisateurs.bib_droits.id_droit'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_application.id_application'), primary_key = True)
+
+@serializable
+class VTMenu(GenericRepository):
+    
+    """
+    Model de la Vue t_menus
+    """
+
+    __tablename__ = 't_menus'
+    __table_args__ = {'schema':'utilisateurs'}
+    id_menu = db.Column(db.Integer, primary_key = True)
+    nom_menu = db.Column(db.Unicode)
+    desc_menu = db.Column(db.Unicode)
+    id_application = db.Column(db.Unicode)
+
+@serializable
+class VBibDroits(GenericRepository):
 
     """
-    Model de la table bib_droits
+    Model de la Vue bib_droits
     """
 
     __tablename__ = 'bib_droits'
@@ -656,6 +665,8 @@ class BibDroits(GenericRepository):
     id_droit = db.Column(db.Integer, primary_key = True)
     nom_droit = db.Column(db.Unicode)
     desc_droit = db.Column(db.Unicode)
+
+
 
 @serializable
 class VUsersactionForallGnModules(GenericRepository):
@@ -705,3 +716,4 @@ class VUsersactionForallGnModules(GenericRepository):
         user_as_dict = self.as_dict()
         user_as_dict['full_name'] = full_name
         return user_as_dict
+

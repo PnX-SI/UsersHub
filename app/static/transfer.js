@@ -4,8 +4,38 @@ $( document ).ready(function() {
     var tab_add = []
     var tab_del = []
 
-    $('#user').DataTable();
-    $('#adding_table').DataTable();
+    $('#user').DataTable({
+        "language": {
+            "lengthMenu": "Afficher _MENU_ éléments par page",
+            "zeroRecords": "Aucunes données trouvées - Désolé",
+            "info": "Affiche la page _PAGE_ sur _PAGES_",
+            "infoEmpty": "Aucunes données trouvées",
+            "infoFiltered": "(filtrer sur _MAX_ total d'éléments)",
+            "search":         "Recherche:",
+            "paginate": {
+                "first":      "Première",
+                "last":       "Dernière",
+                "next":       "Suivante",
+                "previous":   "Précédente"
+            },
+        }
+    } );
+    $('#adding_table').DataTable({
+        "language": {
+            "lengthMenu": "Afficher _MENU_ éléments par page",
+            "zeroRecords": "Aucunes données trouvées - Désolé",
+            "info": "Affiche la page _PAGE_ sur _PAGES_",
+            "infoEmpty": "Aucunes données trouvées",
+            "infoFiltered": "(filtrer sur _MAX_ total d'éléments)",
+            "search":         "Recherche:",
+            "paginate": {
+                "first":      "Première",
+                "last":       "Dernière",
+                "next":       "Suivante",
+                "previous":   "Précédente"
+            },
+        }
+    } );
    
     $("#add").click(function(){
         var tab = []
@@ -89,6 +119,20 @@ $( document ).ready(function() {
     function test(){
         console.log('test');
     };
+
+    $.ajax({
+        url : '/api/application',
+        type : 'get',
+        data : JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(response){
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
 
    
 }); 
