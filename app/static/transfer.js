@@ -3,6 +3,7 @@ $( document ).ready(function() {
 
     var tab_add = []
     var tab_del = []
+    var data_select = {}
 
     $('#user').DataTable({
         "language": {
@@ -36,12 +37,39 @@ $( document ).ready(function() {
             },
         }
     } );
+
+    var td_right = ''
+
+    $.ajax({
+        url : '/api/application',
+        type : 'get',
+        data : JSON.stringify(data_select),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(response){
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+    function fill_select(td_right,data_select){
+        td_right = '<td id = "right"><select class="custom-select", id="inputGroupSelect02">'
+        data_select.forEach(element => {
+            td_right = td_right + '<option value="'+ element["id_tag"]+'">"'+element["tag_name"]+'"</option>'
+        });
+        td_right = td_right + '</select></td>'
+        return td_right
+    }
    
+    console.log(td_right)
+
     $("#add").click(function(){
         var tab = []
         $('#user input[type="checkbox"]:checked').each(function(){
             console.log($(this));
-            var Row = $(this).parents('tr').append('<td><select class="custom-select" id="inputGroupSelect02" name="right"></select></td>');
+            var Row = $(this).parents('tr').append(fill_select(td_right,data_select));
             console.log(Row[0])
             tab.push(Row[0]);
             $("#user").find("input[type=checkbox]:checked").prop('checked', false);
@@ -119,20 +147,8 @@ $( document ).ready(function() {
     function test(){
         console.log('test');
     };
-
-    $.ajax({
-        url : '/api/application',
-        type : 'get',
-        data : JSON.stringify(data),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        success: function(response){
-            console.log(response);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
+    
+   
 
    
 }); 
