@@ -1,12 +1,14 @@
 # Database settings
 SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usershubdb"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+URL_APPLICATION = <my_server_url>
 
 SECRET_KEY = 'super secret key'
 
 """ ID of application Geonature"""
 
 ID_GEONATURE = 14
+
 
 
 """ ID of tag cruved in your database """ 
@@ -23,3 +25,7 @@ ID_TAG_DELETE = 16
 ID_TAG_MYDATA = 21
 ID_TAG_MYORGDATA = 22
 ID_TAG_ALLDATA = 23
+
+""" SERVER """
+PORT = 5001
+DEBUG = False

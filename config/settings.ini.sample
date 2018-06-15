@@ -11,3 +11,16 @@ db_name=usershubdb
 user_pg=geonatuser
 #user propriétaire de la base de l'application
 user_pg_pass=monpassachanger
+
+#Configuration python
+###########################
+#Notice: n'est compatible qu'avec python3
+python_path=/usr/bin/python3
+
+
+#####################
+### Gunicorn settings
+#####################
+gun_num_workers=4
+gun_host=0.0.0.0
+gun_port=5001
