@@ -190,11 +190,11 @@ def cruved_user(id_role, id_application):
                 form_scope = pops(form.data)
                 for scope in form_scope:
                     if form_scope[scope] != 0:
-                        print("id_tag_action")
-                        print(config.ID_TAG_CREATE)
-                        print("id_tag_object" )
-                        print(form_scope[scope])
-                        print(form_data)
+                        # print("id_tag_action")
+                        # print(config.ID_TAG_CREATE)
+                        # print("id_tag_object" )
+                        # print(form_scope[scope])
+                        # print(form_data)
                         if scope == "scopeCreate":
                             CorAppPrivileges.post({"id_tag_action":config.ID_TAG_CREATE,"id_tag_object":form_scope[scope],**form_data})
                         if scope == "scopeRead":

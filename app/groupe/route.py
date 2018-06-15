@@ -100,13 +100,10 @@ def membres(id_groupe):
 
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
     users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
-    print(users_in_group)
-    print(users_out_group)
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         new_users_in_group = data["tab_add"]
         new_users_out_group = data["tab_del"]
         CorRoles.add_cor(id_groupe,new_users_in_group)

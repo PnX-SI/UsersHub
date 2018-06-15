@@ -44,7 +44,7 @@ def tags():
     fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
     columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
     contents = TTags.get_all(columns)
-    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = '/tag/update/', pathD = '/tags/delete/', pathA = '/tag/add/new',pathP = "/tag/users/",pathO = "/tag/organisms/",pathApp = "/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
@@ -153,10 +153,10 @@ def tag_organismes(id_tag):
         new_orgs_out_tag = data["tab_del"]
         CorOrganismeTag.add_cor(id_tag,new_orgs_in_tag)
         CorOrganismeTag.del_cor(id_tag,new_orgs_out_tag)
-        print("ajout : ")
-        print(new_orgs_in_tag)
-        print("supp : ")
-        print( new_orgs_out_tag )
+        # print("ajout : ")
+        # print(new_orgs_in_tag)
+        # print("supp : ")
+        # print( new_orgs_out_tag )
     return render_template('tobelong.html', fLine = header, data = data, table = organismes_out_tag, table2 = organismes_in_tag)
 
 
@@ -184,10 +184,10 @@ def tag_applications(id_tag):
         new_apps_out_tag = data["tab_del"]
         CorApplicationTag.add_cor(id_tag,new_apps_in_tag)
         CorApplicationTag.del_cor(id_tag,new_apps_out_tag)
-        print("ajout : ")
-        print(new_apps_in_tag)
-        print("supp : ")
-        print( new_apps_out_tag )
+        # print("ajout : ")
+        # print(new_apps_in_tag)
+        # print("supp : ")
+        # print( new_apps_out_tag )
     return render_template('tobelong.html', fLine = header, data = data, table = applications_out_tag, table2 = applications_in_tag)
 
 

@@ -131,15 +131,15 @@ def users(id_application):
 
     
 
-@route.route('test')
-def test():
+# @route.route('test')
+# def test():
     
-    """
-    Route de test
-    """
-    a = TRoles.get_one(1, as_model= True)
-    print(a['full_name'])
-    return ''
+#     """
+#     Route de test
+#     """
+#     a = TRoles.get_one(1, as_model= True)
+#     print(a['full_name'])
+#     return ''
 
 # def compare
 
