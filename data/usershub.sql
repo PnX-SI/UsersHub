@@ -524,6 +524,46 @@ $$;
 ---------
 --VIEWS--
 ---------
+
+CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
+SELECT 
+ t.id_tag AS id_menu,
+ t.tag_name AS nom_menu,
+ t.tag_desc AS desc_menu,
+ c.id_application
+FROM utilisateurs.bib_tag_types b
+LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
+LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
+WHERE b.id_tag_type = 4;
+
+
+CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
+SELECT 
+DISTINCT
+c.id_role,
+c.id_tag AS id_menu
+FROM utilisateurs.cor_role_tag c
+JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag;		 
+
+
+CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
+SELECT 
+ t.id_tag AS id_droit,
+ t.tag_name AS nom_droit,
+ t.tag_desc AS desc_droit
+FROM utilisateurs.bib_tag_types b
+JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
+WHERE b.id_tag_type = 3;	 
+
+
+
+CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
+SELECT 
+ c.id_role,
+ c.id_tag as id_droit, 
+ c.id_application
+FROM utilisateurs.cor_role_tag_application c; 
+		
 DO
 $$
 BEGIN
@@ -779,74 +819,7 @@ EXCEPTION WHEN duplicate_object  THEN
 END
 $$;
 
-		 
-
-DO
-$$
-BEGIN
-CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
-SELECT 
- t.id_tag AS id_menu,
- t.tag_name AS nom_menu,
- t.tag_desc AS desc_menu,
- c.id_application
-FROM utilisateurs.bib_tag_types b
-LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
-LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
-WHERE b.id_tag_type = 4
-EXCEPTION WHEN duplicate_object  THEN
-    -- do nothing, it's already there
-END
-$$;
-		 
-
-DO
-$$
-BEGIN
-CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
-SELECT 
-DISTINCT
-c.id_role,
-c.id_tag AS id_menu
-FROM utilisateurs.cor_role_tag c
-JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag		 
-EXCEPTION WHEN duplicate_object  THEN
-    -- do nothing, it's already there
-END
-$$;		 
-
-		 
-
-
-DO
-$$
-BEGIN
-CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
-SELECT 
- t.id_tag AS id_droit,
- t.tag_name AS nom_droit,
- t.tag_desc AS desc_droit
-FROM utilisateurs.bib_tag_types b
-JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
-WHERE b.id_tag_type = 3		 
-EXCEPTION WHEN duplicate_object  THEN
-    -- do nothing, it's already there
-END
-$$;		 
 			 
-
-DO
-$$
-CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
-SELECT 
- c.id_role,
- c.id_tag as id_droit, 
- c.id_application
-FROM utilisateurs.cor_role_tag_application c	 
-EXCEPTION WHEN duplicate_object  THEN
-    -- do nothing, it's already there
-END
-$$;			 
 -------------
 --FUNCTIONS--
 -------------
