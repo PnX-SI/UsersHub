@@ -45,9 +45,15 @@
             
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                     <p><br/><br/><br/></p>
-                    <img id = 'add' src= {{ url_for('static', filename = "images/fleche_gauche.png") }} />
+                    {% if app == 'True'%}
+                    <img onclick="add('app')" id = 'add' src= {{ url_for('static', filename = "images/fleche_gauche.png") }} />
                     <p></p>
-                    <img id = 'delete' src= {{ url_for('static', filename = "images/fleche_gauche.png") }}/>
+                    <img onclick="del('app')" id = 'delete' src= {{ url_for('static', filename = "images/fleche_gauche.png") }}/>
+                    {% else %}
+                    <img onclick="add()" id = 'add' src= {{ url_for('static', filename = "images/fleche_gauche.png") }} />
+                    <p></p>
+                    <img onclick="del()" id = 'delete' src= {{ url_for('static', filename = "images/fleche_gauche.png") }}/>
+                    {% endif%}
             
             </div>
 
@@ -73,13 +79,13 @@
                                     {% for name in data %}  
                                     {% set groups = elt[group] %}  
                                     {% if groups == 'True' %}    
-                                        <td class = "table-success" >{{elt[name]}}</td>
+                                        <td class = "table-primary" >{{elt[name]}}</td>
                                     {% else %}
                                         <td >{{elt[name]}}</td>
                                     {% endif%}   
                                     {% endfor %}         
                                     {% if app == 'True'%}
-                                    <td id = "right">{{ form.right(class="custom-select", id="inputGroupSelect02") }} </td>
+                                    <td class = "right">{{ form.right(class="custom-select", id="inputGroupSelect02") }} </td>
                                     {% endif%}
                                 </tr>
                                 {%endfor%}
@@ -90,7 +96,7 @@
         
                     </div>
        
-        <button  id="update" class ="btn btn-success btn-sm">Enregistrer</button>
+        <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
         </div>
        
       

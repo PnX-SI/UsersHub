@@ -27,7 +27,7 @@
         <thead>
             <tr class="footable-filtering"></tr>
             <tr>
-                <th scope="col">#</th>
+                
                 {% for name in fLine %}
                 <th scope="col">{{name}}</th>
                 {% endfor %}
@@ -52,7 +52,7 @@
         <tbody>
             {% for elt in table %}
             <tr >   
-            <th scope="row">{{loop.index}}</th>
+            
                 {% for name in line %}  
                 {% set groups = elt[group] %}  
                 {% if groups == 'True' %}    
