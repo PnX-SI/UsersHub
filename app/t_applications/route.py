@@ -8,7 +8,7 @@ from app.models import TRoles
 from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
-import config
+from config import config
 
 
 route =  Blueprint('application',__name__)
@@ -37,7 +37,7 @@ def applications():
     fLine = ['ID','Nom','Description', 'ID Parent']
     columns = ['id_application','nom_application','desc_application','id_parent']
     contents = TApplications.get_all(columns)
-    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = "/application/update/", key= "id_application", pathD="/applications/delete/", pathA = '/application/add/new',pathP= '/application/users/', name = 'une application', name_list = "Listes des Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/application/update/", key= "id_application", pathD=config.URL_APPLICATION +"/applications/delete/", pathA = config.URL_APPLICATION +'/application/add/new',pathP= config.URL_APPLICATION +'/application/users/', name = 'une application', name_list = "Listes des Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])

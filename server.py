@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.env import db
-import config
+from config import config
 
 
 

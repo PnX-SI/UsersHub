@@ -6,7 +6,7 @@ from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, distinct, or_, desc
 from app.genericRepository import GenericRepository
-import config
+from config import config
 
 
 """Fichier contenant les models de la base de données"""

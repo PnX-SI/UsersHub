@@ -10,7 +10,7 @@ from app.env import db
 from sqlalchemy import distinct,tuple_, desc
 from pypnusershub.db.tools import cruved_for_user_in_app, get_or_fetch_user_cruved
 import shelve
-import config
+from config import config
 
 route =  Blueprint('cruved',__name__)
 
@@ -43,7 +43,7 @@ def CRUVED():
     q = q.order_by(desc(TRoles.groupe))
     data = TRoles.test_group([data.as_dict_full_name() for data in q.all()])
     if request.method == 'GET':
-        return render_template('CRUVED.html',fLine = fLine, line = columns,fLineCruved = fLineCruved, table = data, key = 'id_role', pathC = '/CRUVED/user/',pathU='',group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes')       
+        return render_template('CRUVED.html',fLine = fLine, line = columns,fLineCruved = fLineCruved, table = data, key = 'id_role', pathC = config.URL_APPLICATION +'/CRUVED/user/',pathU='',group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes')       
     if request.method =='POST':
         return redirect(url_for('cruved.cruved_one'))
 
@@ -89,7 +89,7 @@ def cruved_one(id_role):
         role = contents[0]
         app =  contents[0]['id_application']
     save_cruved(contents)
-    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU='/CRUVED/update/',pathUu = '/' ,pathA= '/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
+    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = config.URL_APPLICATION +'/' ,pathA= config.URL_APPLICATION +'/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
 
 # @route.route('CRUVED/add/new', defautls={'id_role':None,'id_application':None}, methods=['GET','POST'])
 # @route.route('CRUVED/update/<id_role>/<id_application>', methods=['GET','POST'])

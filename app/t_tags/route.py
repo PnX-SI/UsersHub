@@ -7,6 +7,7 @@ from app.t_tags import forms as t_tagsforms
 from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles, CorOrganismeTag, Bib_Organismes, CorApplicationTag
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
+from config import config
 
 route =  Blueprint('tags',__name__)
 

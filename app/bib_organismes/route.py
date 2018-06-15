@@ -5,6 +5,7 @@ Blueprint, request, session, flash
 from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
 from app.models import Bib_Organismes
+from config import config
 
 route =  Blueprint('organisme',__name__)
 
@@ -32,7 +33,7 @@ def organisms():
     fLine = [ 'ID','Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email']
     columns = ['id_organisme','nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme']
     contents = Bib_Organismes.get_all(columns)
-    return render_template('table_database.html', table = contents, fLine = fLine,line = columns, pathU = '/organism/update/', key= 'id_organisme', pathD = '/organisms/delete/', pathA= '/organism/add/new',name = "un organisme", name_list = "Listes des Organismes" )
+    return render_template('table_database.html', table = contents, fLine = fLine,line = columns, pathU = config.URL_APPLICATION +'/organism/update/', key= 'id_organisme', pathD = config.URL_APPLICATION + '/organisms/delete/', pathA= config.URL_APPLICATION +'/organism/add/new',name = "un organisme", name_list = "Listes des Organismes" )
 
 
 @route.route('organism/add/new', defaults={'id_organisme': None}, methods=['GET','POST'])

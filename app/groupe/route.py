@@ -9,6 +9,7 @@ from app.models import TRoles
 from app.models import Bib_Organismes, CorRoles
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
+from config import config
 
 route = Blueprint('groupe', __name__)
 
@@ -36,7 +37,7 @@ def groups():
     columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contents = TRoles.get_all(columns,filters)
-    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = "/group/update/", pathD = "/groups/delete/", pathA = '/group/add/new', pathP = '/groups/members/',name = "un groupe", name_list = "Liste des Groupes", otherCol = 'True', Members = "Membres",)
+    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = config.URL_APPLICATION +"/group/update/", pathD = config.URL_APPLICATION +"/groups/delete/", pathA = config.URL_APPLICATION +'/group/add/new', pathP = config.URL_APPLICATION +'/groups/members/',name = "un groupe", name_list = "Liste des Groupes", otherCol = 'True', Members = "Membres",)
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
