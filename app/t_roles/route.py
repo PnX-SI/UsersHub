@@ -141,10 +141,11 @@ def process(form,user):
     form.nom_role.process_data(user['nom_role'])
     form.prenom_role.process_data(user['prenom_role'])
     form.email.process_data(user['email'])
-    form.desc_role.process_data(user['desc_role'])
     form.remarques.process_data(user['remarques'])
     form.identifiant.process_data(user['identifiant'])
     return form
+
+    
 
 #  NON UTILISE
 

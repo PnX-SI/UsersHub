@@ -392,6 +392,7 @@ class TRoles(GenericRepository):
         Avec pour paramètres un id de role
         """
         q = db.session.query(cls)
+        q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoles)
         q = q.filter(id_groupe == CorRoles.id_role_groupe )
         data =  [data.as_dict_full_name() for data in q.all()]
@@ -406,6 +407,7 @@ class TRoles(GenericRepository):
         """
 
         q = db.session.query(cls).filter(cls.id_role != id_groupe)
+        q = q.order_by(desc(cls.groupe))
         subquery = db.session.query(CorRoles.id_role_utilisateur).filter(id_groupe == CorRoles.id_role_groupe )
         subquery2 = db.session.query(CorRoles.id_role_groupe).filter(CorRoles.id_role_utilisateur == id_groupe) #a vérifier (problème de récursivité)
         q = q.filter(cls.id_role.notin_(subquery))

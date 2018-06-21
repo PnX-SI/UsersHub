@@ -111,7 +111,7 @@ def get_cruved_one(id_role):
                                                         'full_name',
                                                         'id_application'
 
-    sauf si aucun rôle est associé à un droit cruveddans ce cas là la methode retourne un tableau vide                                                    
+    sauf si aucun rôle est associé à un droit cruved dans ce cas là la methode retourne un tableau vide                                                    
     """
 
     q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
