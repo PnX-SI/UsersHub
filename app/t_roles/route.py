@@ -36,10 +36,11 @@ def users():
                                             - un nom de listes --> name_list
     """
 
-    fLine = ['Id','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-    columns = ['id_role','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
+    fLine = ['Id','Identifiant', 'Nom','Prenom','Email', 'ID organisme', 'Remarques']
+    columns = ['id_role','identifiant','nom_role','prenom_role','email','id_organisme','remarques']
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns,filters)
+    print(contents)
     return render_template('table_database.html', fLine = fLine ,line = columns, table = contents,  key = 'id_role', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Liste des Utilisateurs")    
 
     
@@ -53,7 +54,7 @@ def addorupdate(id_role):
     Retourne un template accompagné du formulaire pré-rempli ou non selon le paramètre id_role
     Une fois le formulaire validé on retourne une redirection vers la liste de type de tag
     """
-
+    print("coucou")
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
     form.a_groupe.choices = TRoles.choix_group('id_role','nom_role',1)

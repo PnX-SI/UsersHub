@@ -12,10 +12,10 @@ class Application(FlaskForm):
 
     nom_application = StringField('Nom',validators=[DataRequired()])
     desc_application = StringField('Description')
-    id_parent = SelectField('Choix application parent',coerce=int ,choices = [])
+    id_parent = SelectField('Application parent',coerce=int ,choices = [])
     id_application = HiddenField('id')
-    submit = SubmitField('Envoyer')
-
+    submit = SubmitField('Enregistrer')
+    
 class AppRight(FlaskForm):
 
     """

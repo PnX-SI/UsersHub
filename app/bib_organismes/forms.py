@@ -21,4 +21,4 @@ class Organisme(FlaskForm):
     fax_organisme = StringField('Fax')
     email_organisme = StringField('Email')
     id_organisme = HiddenField('id')
-    submit = SubmitField('Envoyer')
+    submit = SubmitField('Enregistrer')

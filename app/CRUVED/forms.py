@@ -15,7 +15,7 @@ class Scope(FlaskForm):
     scopeExport = SelectField('Portee Export',coerce = int, choices = [],default = 0)
     scopeDelete = SelectField('Portee Delete',coerce = int, choices = [],default = 0)
     submit = SubmitField('Enregistrer')
-
+    
 class Name_App(FlaskForm):
 
     """

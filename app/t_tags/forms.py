@@ -16,4 +16,4 @@ class Tag(FlaskForm):
     tag_name = StringField('Nom', validators = [DataRequired()])
     tag_label = StringField('Label')
     tag_desc = StringField('Description')
-    submit = SubmitField('Envoyer')
+    submit = SubmitField('Enregistrer')

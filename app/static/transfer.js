@@ -153,6 +153,8 @@ $( document ).ready(function() {
                 "next":       "Suivante",
                 "previous":   "Précédente"
             },
+        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
+        "iDisplayLength": 25  
         }
     } );
     $('#adding_table').DataTable({
@@ -169,24 +171,28 @@ $( document ).ready(function() {
                 "next":       "Suivante",
                 "previous":   "Précédente"
             },
+        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
+        "iDisplayLength": 25  
         }
     } );
-    // $('#tri').DataTable({
-    //     "language": {
-    //         "lengthMenu": "Afficher _MENU_ éléments par page",
-    //         "zeroRecords": "Aucunes données trouvées - Désolé",
-    //         "info": "Affiche la page _PAGE_ sur _PAGES_",
-    //         "infoEmpty": "Aucunes données trouvées",
-    //         "infoFiltered": "(filtrer sur _MAX_ total d'éléments)",
-    //         "search":         "Recherche:",
-    //         "paginate": {
-    //             "first":      "Première",
-    //             "last":       "Dernière",
-    //             "next":       "Suivante",
-    //             "previous":   "Précédente"
-    //         },
-    //     }
-    // } );
+    $('#tri').DataTable({
+        "language": {
+            "lengthMenu": "Afficher _MENU_ éléments par page",
+            "zeroRecords": "Aucunes données trouvées - Désolé",
+            "info": "Affiche la page _PAGE_ sur _PAGES_",
+            "infoEmpty": "Aucunes données trouvées",
+            "infoFiltered": "(filtrer sur _MAX_ total d'éléments)",
+            "search":         "Recherche:",
+            "paginate": {
+                "first":      "Première",
+                "last":       "Dernière",
+                "next":       "Suivante",
+                "previous":   "Précédente"
+            },
+        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
+        "iDisplayLength": 25  
+        }
+    } );
 
    
    

@@ -19,8 +19,9 @@
         {% endif %}
     </p>
     
-    </div>    
-    <div class = "container">
+    </div>
+    <div class="container-fluid">
+    
     <div id='table'>
     
     <table class="table table-bordered table-striped table-sm " id = "tri">
@@ -67,7 +68,8 @@
             {% if type_tag == 4 %}
             {% if otherCol == 'True'%}
             <td>
-                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
+                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-user font-medium" aria-hidden="true"></i>
+                    </button></a>
 
             </td>
             {%endif%}
@@ -76,7 +78,8 @@
             {% if tag_orga == 'True'%}
 
             <td>
-                <a href="{{pathO}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >{{Organismes}}  </button></a>
+                <a href="{{pathO}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" ><i class="fa fa-university font-medium" aria-hidden="true"></i>
+                </button></a>
 
             </td>
             
@@ -85,7 +88,8 @@
             {% if tag_app == 'True'%}
 
             <td>
-                <a href="{{pathApp}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >{{App}}  </button></a>
+                <a href="{{pathApp}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" ><i class="fa fa-desktop font-medium" aria-hidden="true"></i>
+                </button></a>
 
             </td>
             
@@ -100,7 +104,7 @@
 
             {% if otherCol == 'True'%}
             <td>
-                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
+                    <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-user font-medium" aria-hidden="true"></i></button></a>
 
             </td>
             {%endif%}
@@ -109,7 +113,8 @@
 
             {% if elt['id_application'] != id_geonature and elt['id_parent']!= id_geonature %}
             <td>
-                <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " >{{Members}}  </button></a>
+                <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-user font-medium" aria-hidden="true"></i>
+                </button></a>
 
             </td>
 
@@ -118,11 +123,13 @@
             {%endif%}
 
                 <td>
-                        <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Modification  </button></a>
+                        <a href="{{pathU}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm" ><i class="fa fa-pencil font-medium" aria-hidden="true"></i>
+                        </button></a>
 
                 </td>
                 <td >
-                    <button onClick = "deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm" >Supprimer</button>
+                    <button onClick = "deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm" ><i class="fa fa-trash font-medium" aria-hidden="true"></i>
+                    </button>
                 </td>
                 
                   

@@ -1,7 +1,7 @@
 
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, SelectField, RadioField,SelectMultipleField, widgets, Form
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, SelectField, RadioField,SelectMultipleField,TextAreaField, widgets, Form
 from wtforms.validators import DataRequired, Email
 
 
@@ -17,18 +17,16 @@ class Utilisateur(FlaskForm):
 
     nom_role =  StringField('Nom', validators=[DataRequired()])
     prenom_role = StringField( 'Prenom')
-    id_organisme = SelectField('Choix Organisme',coerce=int ,choices = [], default = -1)
-    a_groupe = MultiCheckboxField('Choix Groupe', choices = [], coerce=int)
+    id_organisme = SelectField('Organisme',coerce=int ,choices = [], default = -1)
+    a_groupe = MultiCheckboxField('Groupe', choices = [], coerce=int)
     identifiant = StringField('Identifiant')
     pass_plus = PasswordField('Password')
     mdpconf = PasswordField('Confirmation')
-    desc_role = StringField('Description du role' )
     email = StringField('E-mail' )
     groupe = HiddenField('groupe', default = None)
-    remarques = StringField('Remarques')
+    remarques = TextAreaField('Remarques')
     id_role = HiddenField('id')
-    submit = SubmitField('Envoyer')
-   
+    submit = SubmitField('Enregistrer')   
     
 
 

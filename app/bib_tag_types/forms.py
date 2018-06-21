@@ -11,4 +11,4 @@ class TagTypes(FlaskForm):
     id_tag_type = StringField('ID', validators=[DataRequired()])
     tag_type_name = StringField('Nom', validators=[DataRequired()])
     tag_type_desc = StringField('Description', validators=[DataRequired()])
-    submit = SubmitField('Envoyer')
+    submit = SubmitField('Enregistrer')
