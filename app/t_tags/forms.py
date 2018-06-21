@@ -11,7 +11,7 @@ class Tag(FlaskForm):
     """
 
     id_tag = HiddenField('id')
-    id_tag_type = SelectField('ID type', coerce=int ,choices = [])
+    id_tag_type = SelectField('Type de tag', coerce=int ,choices = [])
     tag_code = StringField('Code')
     tag_name = StringField('Nom', validators = [DataRequired()])
     tag_label = StringField('Label')

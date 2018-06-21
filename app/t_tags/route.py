@@ -41,10 +41,17 @@ def tags():
                                             - nom affiché sur le bouton --> App  
     """
 
-    fLine =['ID','ID_type', 'CODE', 'Nom', 'Label', 'Description']
-    columns = ['id_tag','id_tag_type','tag_code','tag_name','tag_label','tag_desc']
-    contents = TTags.get_all(columns)
-    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = contents,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
+    fLine =['ID','Type', 'CODE', 'Nom', 'Label', 'Description']
+    columns = ['id_tag','name_type_tag','tag_code','tag_name','tag_label','tag_desc']
+    contents = TTags.get_all()
+    tab = []
+    i = 0
+    for data in contents:
+        type_tag = BibTagTypes.get_one(data['id_tag_type'])
+        data.update({'name_type_tag':type_tag['tag_type_name']})
+        if data['id_tag_type'] != 2 and data['id_tag_type']!= 5 : 
+            tab.append(data)
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = tab,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])

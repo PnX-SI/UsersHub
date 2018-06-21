@@ -34,10 +34,19 @@ def applications():
 
     """
 
-    fLine = ['ID','Nom','Description', 'ID Parent']
-    columns = ['id_application','nom_application','desc_application','id_parent']
-    contents = TApplications.get_all(columns)
+    fLine = ['ID','Nom','Description', ' Parent']
+    columns = ['id_application','nom_application','desc_application','app_parent']
+    contents = TApplications.get_all()
+    for data in contents :
+        if data['id_parent'] != None :
+            parent =  TApplications.get_one(data['id_parent'])
+            data.update({'app_parent' : parent['nom_application']})
+        else :
+            parent = ""
+            data.update({'app_parent' : parent})
     return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/application/update/", key= "id_application", pathD=config.URL_APPLICATION +"/applications/delete/", pathA = config.URL_APPLICATION +'/application/add/new',pathP= config.URL_APPLICATION +'/application/users/', name = 'une application', name_list = "Listes des Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
+
+
 
 @route.route('application/add/new',defaults={'id_application': None}, methods=['GET','POST'])
 @route.route('application/update/<id_application>',methods=['GET','POST'])
@@ -125,7 +134,8 @@ def users(id_application):
     form = t_applicationsforms.AppRight()
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
-    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True') 
+    app = TApplications.get_one(id_application)
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True', app_name = 'de '+app['nom_application']) 
 
 
 
