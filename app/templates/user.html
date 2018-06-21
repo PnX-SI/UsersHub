@@ -21,7 +21,7 @@
                         
                             <label>{{ form.nom_role.label }}</label>
                             {{ form.nom_role(size=32, class="form-control") }}
-                        
+                            <p></p>
                         </div>
                         
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -29,6 +29,7 @@
                             
                                 <label>{{ form.prenom_role.label }}</label>
                                 {{ form.prenom_role(size=32, class="form-control") }}
+                                <p></p>
                            
                         </div>
         
@@ -36,14 +37,16 @@
                         
                                 <label>{{ form.id_organisme.label }}</label>
                             {{ form.id_organisme(  class="custom-select", id="inputGroupSelect01") }}
-                        
+                            <p></p>                            
+
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         
                                 <label>{{ form.a_groupe.label }}</label>
-                            {{ form.a_groupe}}
-                        
+                            {{ form.a_groupe(  class="custom-select")}}
+                            <p></p>
+
                         </div>
                         
 
@@ -51,13 +54,15 @@
                             
                                     <label>{{ form.pass_plus.label }}</label>
                                 {{ form.pass_plus(size=32, class="form-control") }}
-                            
+                                                        <p></p>
+
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                                     
                                     <label>{{ form.mdpconf.label }}</label>
                                 {{ form.mdpconf(size=32, class="form-control") }}
-                                
+                                                            <p></p>
+
                             </div>
             
                             
@@ -66,20 +71,24 @@
                         
                                 <label>{{ form.identifiant.label }}</label>
                                 {{ form.identifiant(size=32, class="form-control")}}
-                                
+                                                            <p></p>
+
                             </div>
 
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     
                                 <label>{{ form.email.label }}</label>
                                 {{ form.email(size = 32, class="form-control")}}
-                             </div>
+                                <p></p>
+
+                            </div>
 
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 
                                 <label>{{ form.remarques.label }}</label>
                                 {{ form.remarques(size=32, class="form-control")}}
-                            
+                                <p></p>
+                                                            
                             </div>
         
                         
