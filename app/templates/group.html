@@ -6,9 +6,11 @@
 
         {% include "head-appli.html" %}
     
-    <form method="post">
+    <form method="post" class = "marge">
         {{ form.hidden_tag() }}
         {{ form.csrf_token }} 
+        <h3>{{title}}</h3>
+
         
             <div class = "row forms">
                 

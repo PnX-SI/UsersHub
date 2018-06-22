@@ -37,7 +37,7 @@ def groups():
     columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contents = TRoles.get_all(columns,filters)
-    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = config.URL_APPLICATION +"/group/update/", pathD = config.URL_APPLICATION +"/groups/delete/", pathA = config.URL_APPLICATION +'/group/add/new', pathP = config.URL_APPLICATION +'/groups/members/',name = "un groupe", name_list = "Liste des Groupes", otherCol = 'True', Members = "Membres",)
+    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = config.URL_APPLICATION +"/group/update/", pathD = config.URL_APPLICATION +"/groups/delete/", pathA = config.URL_APPLICATION +'/group/add/new', pathP = config.URL_APPLICATION +'/groups/members/',name = "un groupe", name_list = "Groupes", otherCol = 'True', Members = "Membres",)
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -64,7 +64,7 @@ def addorupdate(id_role):
                 errors =  form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('group.html', form = form)
+        return render_template('group.html', form = form, title = "Formulaire Groupe")
     else :
         group = TRoles.get_one(id_role)
         if request.method =='GET':
@@ -79,7 +79,7 @@ def addorupdate(id_role):
                 errors =  form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('group.html', form = form)
+        return render_template('group.html', form = form, title = "Formulaire Groupe")
 
 
 
@@ -100,6 +100,7 @@ def membres(id_groupe):
 
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
     users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
+    group = TRoles.get_one(id_groupe)
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
     if request.method == 'POST':
@@ -108,7 +109,7 @@ def membres(id_groupe):
         new_users_out_group = data["tab_del"]
         CorRoles.add_cor(id_groupe,new_users_in_group)
         CorRoles.del_cor(id_groupe,new_users_out_group)
-    return render_template("tobelong.html", fLine = header, data = data, table = users_out_group, table2 = users_in_group, group = 'groupe'  )
+    return render_template("tobelong.html", fLine = header, data = data, table = users_out_group, table2 = users_in_group, group = 'groupe', info = "Membres du groupe '"+group['nom_role']+"'" )
 
 
 

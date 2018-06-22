@@ -43,7 +43,7 @@ def CRUVED():
     q = q.order_by(desc(TRoles.groupe))
     data = TRoles.test_group([data.as_dict_full_name() for data in q.all()])
     if request.method == 'GET':
-        return render_template('CRUVED.html',fLine = fLine, line = columns,fLineCruved = fLineCruved, table = data, key = 'id_role', pathC = config.URL_APPLICATION +'/CRUVED/user/',pathU='',group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes')       
+        return render_template('CRUVED.html',fLine = fLine, line = columns,fLineCruved = fLineCruved, table = data, key = 'id_role', pathC = config.URL_APPLICATION +'/CRUVED/user/',pathU='',group = 'groupe',name_list = 'Utilisateurs et Groupes')       
     if request.method =='POST':
         return redirect(url_for('cruved.cruved_one'))
 

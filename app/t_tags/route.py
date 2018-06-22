@@ -51,7 +51,7 @@ def tags():
         data.update({'name_type_tag':type_tag['tag_type_name']})
         if data['id_tag_type'] != 2 and data['id_tag_type']!= 5 : 
             tab.append(data)
-    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = tab,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Liste des Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = tab,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])
@@ -90,7 +90,7 @@ def addorupdate(id_tag):
                 errors =  form.errors
                 if(errors['tag_name'] != None):
                     flash("Champ Nom vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('tag.html', form = form)
+        return render_template('tag.html', form = form, title = "Formulaire Tag")
     else:
         tag = TTags.get_one(id_tag)
         if request.method == 'GET':
@@ -105,7 +105,7 @@ def addorupdate(id_tag):
                 errors =  form.errors
                 if(errors['tag_name'] != None):
                     flash("Champ Nom vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('tag.html',form = form)
+        return render_template('tag.html',form = form, title = "Formulaire Tag")
 
 @route.route('tag/users/<id_tag>', methods=['GET','POST'])
 def tag_users(id_tag):
@@ -123,6 +123,7 @@ def tag_users(id_tag):
 
     users_in_tag = TRoles.test_group(TRoles.get_user_in_tag(id_tag))
     users_out_tag = TRoles.test_group(TRoles.get_user_out_tag(id_tag))
+    tag = TTags.get_one(id_tag)
     header = [ 'ID', 'Nom']
     data = ['id_role','full_name']
     if request.method == 'POST':
@@ -133,7 +134,7 @@ def tag_users(id_tag):
         CorRoleTag.add_cor(id_tag,new_users_in_tag)
         CorRoleTag.del_cor(id_tag,new_users_out_tag)
 
-    return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe')
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_tag, table2 = users_in_tag, group = 'groupe', info = "Tag '"+tag['tag_name']+ "' sur les utilisateurs et les groupes")
 
 
 @route.route('tag/organisms/<id_tag>', methods=['GET','POST'])
@@ -152,6 +153,7 @@ def tag_organismes(id_tag):
 
     organismes_in_tag = Bib_Organismes.get_orgs_in_tag(id_tag)
     organismes_out_tag = Bib_Organismes.get_orgs_out_tag(id_tag)
+    tag = TTags.get_one(id_tag)
     header = ['ID','Nom']
     data = ['id_organisme','nom_organisme']
     if request.method == 'POST':
@@ -164,7 +166,7 @@ def tag_organismes(id_tag):
         # print(new_orgs_in_tag)
         # print("supp : ")
         # print( new_orgs_out_tag )
-    return render_template('tobelong.html', fLine = header, data = data, table = organismes_out_tag, table2 = organismes_in_tag)
+    return render_template('tobelong.html', fLine = header, data = data, table = organismes_out_tag, table2 = organismes_in_tag, info= "Tag '"+tag['tag_name']+ "' sur les organismes")
 
 
 @route.route('tag/applications/<id_tag>',  methods=['GET','POST'])
@@ -183,6 +185,7 @@ def tag_applications(id_tag):
 
     applications_in_tag = TApplications.get_applications_in_tag(id_tag)
     applications_out_tag = TApplications.get_applications_out_tag(id_tag)
+    tag = TTags.get_one(id_tag)
     header = ['ID','Nom']
     data = ['id_application','nom_application']
     if request.method == 'POST':
@@ -195,7 +198,7 @@ def tag_applications(id_tag):
         # print(new_apps_in_tag)
         # print("supp : ")
         # print( new_apps_out_tag )
-    return render_template('tobelong.html', fLine = header, data = data, table = applications_out_tag, table2 = applications_in_tag)
+    return render_template('tobelong.html', fLine = header, data = data, table = applications_out_tag, table2 = applications_in_tag, info= "Tag '"+tag['tag_name']+ "' sur les applications")
 
 
 

@@ -44,7 +44,7 @@ def applications():
         else :
             parent = ""
             data.update({'app_parent' : parent})
-    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/application/update/", key= "id_application", pathD=config.URL_APPLICATION +"/applications/delete/", pathA = config.URL_APPLICATION +'/application/add/new',pathP= config.URL_APPLICATION +'/application/users/', name = 'une application', name_list = "Listes des Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/application/update/", key= "id_application", pathD=config.URL_APPLICATION +"/applications/delete/", pathA = config.URL_APPLICATION +'/application/add/new',pathP= config.URL_APPLICATION +'/application/users/', name = 'une application', name_list = "Applications", id_geonature = config.ID_GEONATURE ,app_geonature = 'True', Members = "Utilisateurs" )    
 
 
 
@@ -75,7 +75,7 @@ def addorupdate(id_application):
                 errors =  form.errors
                 if(errors['nom_application'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('application.html', form= form)
+        return render_template('application.html', form= form, title = "Formulaire Application")
     else :
         application = TApplications.get_one(id_application)
         form.id_parent.choices.remove((application['id_application'],application['nom_application'])) 
@@ -97,7 +97,7 @@ def addorupdate(id_application):
                 errors =  form.errors
                 if(errors['nom_application'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('application.html', form= form)
+        return render_template('application.html', form= form, title = "Formulaire Application")
         
 
 
@@ -132,10 +132,11 @@ def users(id_application):
     users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
     form = t_applicationsforms.AppRight()
+    appli = TApplications.get_one(id_application)
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
     app = TApplications.get_one(id_application)
-    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True', app_name = 'de '+app['nom_application']) 
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True', info = 'Droit des utilisateurs et des groupes sur  "'+app['nom_application']+'"') 
 
 
 

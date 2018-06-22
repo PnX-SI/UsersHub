@@ -34,7 +34,7 @@ def tags_types():
     fLine = ['ID', 'Nom', 'Description']
     columns = ['id_tag_type','tag_type_name','tag_type_desc']
     contents = BibTagTypes.get_all()
-    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/tag_type/update/", key = "id_tag_type", pathD = config.URL_APPLICATION +"/tags_types/delete/", pathA = config.URL_APPLICATION +'/tag_type/add/new',name = "type de tag", name_list = "Listes des Types de Tags")
+    return render_template('table_database.html', table = contents, fLine = fLine, line = columns, pathU = config.URL_APPLICATION +"/tag_type/update/", key = "id_tag_type", pathD = config.URL_APPLICATION +"/tags_types/delete/", pathA = config.URL_APPLICATION +'/tag_type/add/new',name = "type de tag", name_list = "Types de Tags")
 
 @route.route('tag_type/add/new',defaults={'id_tag_type' : None}, methods=['GET','POST'])
 @route.route('tag_type/update/<id_tag_type>', methods=['GET','POST'])
@@ -62,7 +62,7 @@ def addorupdate(id_tag_type):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
                 if(errors['tag_type_desc'] != None):
                     flash("Champ 'Description' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('tagtypes.html', form = form)
+        return render_template('tagtypes.html', form = form, title = "Formulaire Type Tag")
     else :
         tag_type = BibTagTypes.get_one(id_tag_type)
         if request.method == 'GET':
@@ -80,7 +80,7 @@ def addorupdate(id_tag_type):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
                 if(errors['tag_type_desc'] != None):
                     flash("Champ 'Description' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('tagtypes.html', form = form)
+        return render_template('tagtypes.html', form = form , title = "Formulaire Type Tag")
 
 
 

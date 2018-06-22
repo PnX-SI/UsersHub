@@ -46,7 +46,7 @@ def users():
         org['nom_organisme'] = data['organisme_rel']['nom_organisme']
         tab.append(org) 
     
-    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,  key = 'id_role', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Liste des Utilisateurs")    
+    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,  key = 'id_role', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")    
 
     
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -79,7 +79,7 @@ def addorupdate(id_role):
                 errors =  form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('user.html', form = form)
+        return render_template('user.html', form = form, title = "Formulaire Utilisateur")
     else:
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
@@ -100,7 +100,7 @@ def addorupdate(id_role):
                 errors =  form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('user.html',form = form)
+        return render_template('user.html',form = form, title = "Formulaire Utilisateur")
 
 
    
