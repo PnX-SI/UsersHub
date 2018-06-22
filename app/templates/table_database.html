@@ -9,7 +9,7 @@
         
 
      
-     <div class = "container">
+     <div class = "container main-zone ng-scope">
     <h2>{{name_list}}</h2>         
     <p>
         <a href="{{pathA}}"  ><button type="submit" class="btn btn-success btn-sm" >Ajouter {{name}}</button></a>
@@ -20,7 +20,8 @@
     </p>
     
     </div>
-    <div class="container-fluid">
+    <div class="container main-zone ng-scope ">
+    
     
     <div id='table'>
     
@@ -44,6 +45,9 @@
                 {% endif %}
                 {% if app_geonature == 'True' %}
                     <th scope="col">{{Members}}</th>
+                {%endif%}
+                {% if see == 'True'%}
+                    <th scope="col">Voir</th>
                 {%endif%}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
@@ -106,6 +110,11 @@
             <td>
                     <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-user font-medium" aria-hidden="true"></i></button></a>
 
+            </td>
+            {%endif%}
+            {% if see == 'True'%}
+            <td>
+                    <a href="{{pathI}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-eye font-medium" aria-hidden="true"></i></button></a>
             </td>
             {%endif%}
 

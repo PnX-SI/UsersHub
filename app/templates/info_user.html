@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+
+        <div class="container main-zone ng-scope ">
+
+           
+
+           <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h3>{{elt['nom_role']}}  {{elt['prenom_role']}}</h3></li>
+                <li class="list-group-item"><strong>ID :</strong> {{elt['identifiant']}}</li>
+                <li class="list-group-item"><strong>Email :</strong> {{elt['email']}}</li>
+                <li class="list-group-item"><strong>Groupe :</strong>
+                {% for gr in group %}
+                
+                {% endfor %}   
+                </li>
+                <li class="list-group-item">Vestibulum at eros</li>
+              </ul>
+
+
+
+
+
+
+        </div>
+
+    </body>
+</html>

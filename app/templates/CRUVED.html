@@ -5,18 +5,22 @@
    <body>
 
         {% include "head-appli.html" %}
-        <div class="row">
+        <div class= "container main-zone ng-scope">
+            <h2 class ="marge">
+                CRUVED
+            </h2>
+        <div class="row ">
                 <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-                <h2>{{name_list}}</h2>   <br></br>      
+                <h4>{{name_list}}</h4>   <br></br>      
                 </div>
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
                 
                 <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-                        <h3>{{name_role}}</h3> 
+                        <h4>{{name_role}}</h4> 
                 </div>
             </div>  
 
-        <div class="row marge">
+        <div class="row ">
         <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
         <table class="table table-bordered table-striped table-sm " id = "tri">
                 <thead>
@@ -57,7 +61,7 @@
             </div>
                 <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
                 
-                        <table class="table table-bordered table-striped table-sm " id = "tri">
+                        <table class="table table-bordered table-striped table-sm " >
                                 <thead>
                                     <tr>
                                             {% for name in fLineCruved %}
@@ -89,6 +93,7 @@
                                 <a href="{{pathA}}{{id_r}}"  > <button type="submit" class="btn btn-success btn-sm" >Ajouter un Cruved pour une application  </button></a>
                  </div>
                 </div>
+            </div>
                 
     </body>
 </html>

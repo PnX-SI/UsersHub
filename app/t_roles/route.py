@@ -31,9 +31,11 @@ def users():
                                             - le chemin de mise à jour --> pathU 
                                             - le chemin de suppression --> pathD
                                             - le chemin d'ajout --> pathA
+                                            - le chemin de la page d'information --> pathI
                                             - une clé (clé primaire dans la plupart des cas) --> key
                                             - un nom (nom de la table) pour le bouton ajout --> name
                                             - un nom de listes --> name_list
+                                            - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
 
     fLine = ['Id','Identifiant', 'Nom','Prenom','Email', 'Organisme', 'Remarques']
@@ -46,7 +48,7 @@ def users():
         org['nom_organisme'] = data['organisme_rel']['nom_organisme']
         tab.append(org) 
     
-    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,  key = 'id_role', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")    
+    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,see ='True',  key = 'id_role',pathI = config.URL_APPLICATION+'/user/info/', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")    
 
     
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -115,6 +117,20 @@ def deluser(id_role):
 
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
+@route.route('user/info/<id_role>', methods = ['GET','POST'])
+def get_info(id_role):
+    user = TRoles.get_one(id_role)
+    d_group = CorRoles.get_all(recursif = True,as_model = True)
+    print(d_group)
+    d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
+    group = [data.as_dict() for data in d_group.all()]
+    # if group != None:
+    #     tab_g = []
+    #     for g in group : 
+
+    print(group)
+    return render_template("info_user.html", elt = user, group = group)
+
 
 
 def pops(form):
