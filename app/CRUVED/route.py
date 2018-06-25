@@ -7,7 +7,7 @@ from app.CRUVED import forms as Cruvedforms
 from app.models import TTags,BibTagTypes, TApplications, CorRoleTag, TRoles, CorOrganismeTag, Bib_Organismes, CorApplicationTag, CorAppPrivileges, VUsersactionForallGnModules
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
-from sqlalchemy import distinct,tuple_, desc
+from sqlalchemy import distinct,tuple_, desc, or_
 from pypnusershub.db.tools import cruved_for_user_in_app, get_or_fetch_user_cruved
 import shelve
 from config import config
@@ -89,7 +89,7 @@ def cruved_one(id_role):
         role = contents[0]
         app =  contents[0]['id_application']
     save_cruved(contents)
-    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = config.URL_APPLICATION +'/' ,pathA= config.URL_APPLICATION +'/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
+    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' ,pathA= config.URL_APPLICATION +'/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
 
 # @route.route('CRUVED/add/new', defautls={'id_role':None,'id_application':None}, methods=['GET','POST'])
 # @route.route('CRUVED/update/<id_role>/<id_application>', methods=['GET','POST'])
@@ -114,22 +114,22 @@ def get_cruved_one(id_role):
     sauf si aucun rôle est associé à un droit cruved dans ce cas là la methode retourne un tableau vide                                                    
     """
 
-    q = db.session.query(distinct(CorAppPrivileges.id_application),TRoles).filter(CorAppPrivileges.id_role == id_role)
-    q = q.join(TRoles,CorAppPrivileges.id_role == TRoles.id_role)
-    App = []
-    role = []
-    for data in q.all():
-        App.append(data[0])
-        role.append(data[1].as_dict_full_name())
+    user = TRoles.get_one(id_role)
+    role = dict()
+    if  user['prenom_role'] != None :
+        role['full_name'] = user['nom_role'] + user['prenom_role']
+    else :
+        role['full_name'] = user['nom_role']
+    app = TApplications.get_all(as_model= True)
+    app = app.filter(or_(TApplications.id_parent == config.ID_GEONATURE,TApplications.id_application == config.ID_GEONATURE))
+    App = [data.as_dict() for data in app.all()]
+    print(App)
     tab_dict=[]
-    if role != []:
-        role = role[0]
-        cruved_dict = {}
-        for id_app in App:
-            app = TApplications.get_one(id_app)
-            cruved = cruved_for_user_in_app(role['id_role'],id_app,app['id_parent'])
+    for app_c in App:
+        cruved = cruved_for_user_in_app(id_role,app_c['id_application'],app_c['id_parent'])
+        if cruved != {'C': '0', 'D': '0', 'V': '0', 'U': '0', 'E': '0', 'R': '0'} :
             tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name','id_application'] 
-            d_data = [app['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],role['id_role'],role['full_name'],id_app]
+            d_data = [app_c['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],user['id_role'],role['full_name'],app_c['id_application']]
             tdict = dict(zip(tdict,d_data))
             tab_dict.append(tdict)
     return tab_dict 

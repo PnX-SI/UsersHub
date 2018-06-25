@@ -12,14 +12,47 @@
 
            <ul class="list-group list-group-flush">
                 <li class="list-group-item"><h3>{{elt['nom_role']}}  {{elt['prenom_role']}}</h3></li>
-                <li class="list-group-item"><strong>ID :</strong> {{elt['identifiant']}}</li>
+                <li class="list-group-item"><strong>Identifiant :</strong> {{elt['identifiant']}}</li>
                 <li class="list-group-item"><strong>Email :</strong> {{elt['email']}}</li>
                 <li class="list-group-item"><strong>Groupe :</strong>
                 {% for gr in group %}
-                
+                    {{gr}}, 
                 {% endfor %}   
                 </li>
-                <li class="list-group-item">Vestibulum at eros</li>
+                <li class="list-group-item"><strong>Organisme :</strong> {{org}}</li>
+                <li class="list-group-item"><strong>Tag :</strong>
+                {% for t in tag %}
+                    {{t}}, 
+                {% endfor %}  
+                </li>
+                <li class="list-group-item"><strong>CRUVED :</strong> <br></br>
+                <table class="table table-bordered table-striped table-sm " >
+                    <thead>
+                        <tr>
+                                {% for name in fLineCruved %}
+                                <th scope="col">{{name}}</th>
+                                {% endfor %}
+                                <th></th>
+                            
+                        </tr> 
+    
+                    </thead>
+                    <tbody>
+                        {% for elt in tableCruved %}
+                        <tr >   
+                            {% for name in lineCruved %}
+                                <td >{{elt[name]}}</td>
+                            {% endfor %}
+                        <td>
+                                <a href="{{pathU}}{{id_r}}{{pathUu}}{{id_app}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Editer  </button></a>
+        
+                        </td>
+                        </tr> 
+                        {%endfor%}
+                    </tbody>
+                    </table>       
+
+                </li>
               </ul>
 
 

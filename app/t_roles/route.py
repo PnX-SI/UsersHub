@@ -5,12 +5,13 @@ Blueprint, request, session, flash
 from app import genericRepository
 from app.t_roles import forms as t_rolesforms
 from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles
+from app.models import Bib_Organismes, CorRoles, CorRoleTag, TTags
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 from flask_bcrypt import (Bcrypt,
                           check_password_hash,
                           generate_password_hash)
+from app.CRUVED.route import get_cruved_one
 
 import bcrypt
 
@@ -117,19 +118,30 @@ def deluser(id_role):
 
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
+
+
 @route.route('user/info/<id_role>', methods = ['GET','POST'])
 def get_info(id_role):
     user = TRoles.get_one(id_role)
-    d_group = CorRoles.get_all(recursif = True,as_model = True)
-    print(d_group)
+    d_group = CorRoles.get_all(recursif = True, as_model = True)
     d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
     group = [data.as_dict() for data in d_group.all()]
-    # if group != None:
-    #     tab_g = []
-    #     for g in group : 
-
-    print(group)
-    return render_template("info_user.html", elt = user, group = group)
+    tab_g = []
+    if group != None:
+        for g in group : 
+            tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
+    org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
+    d_tag = CorRoleTag.get_all(recursif = True, as_model = True)
+    d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
+    tag = [data.as_dict() for data in d_tag.all()]
+    tab_t = []
+    if tag != None:
+        for t in tag:
+            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+    Cruved = get_cruved_one(id_role)
+    fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
+    columnsCruved = [ 'nom_application','C','R','U','V','E','D']
+    return render_template("info_user.html", elt = user, group = tab_g, org = org, tag = tab_t,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=Cruved, id_r = id_role, id_app = Cruved[0]['id_application'], pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' )
 
 
 
