@@ -5,11 +5,9 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
-
 CREATE SCHEMA IF NOT EXISTS utilisateurs;
 
 SET search_path = utilisateurs, pg_catalog;
-
 
 CREATE OR REPLACE FUNCTION modify_date_insert() RETURNS trigger
     LANGUAGE plpgsql
@@ -21,7 +19,6 @@ BEGIN
 END;
 $$;
 
-
 CREATE OR REPLACE FUNCTION modify_date_update() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
@@ -31,17 +28,13 @@ BEGIN
 END;
 $$;
 
-
 SET default_tablespace = '';
-
 SET default_with_oids = false;
-
 
 CREATE TABLE IF NOT EXISTS cor_roles (
     id_role_groupe integer NOT NULL,
     id_role_utilisateur integer NOT NULL
 );
-
 
 CREATE TABLE IF NOT EXISTS t_roles (
     groupe boolean DEFAULT false NOT NULL,
@@ -55,7 +48,6 @@ CREATE TABLE IF NOT EXISTS t_roles (
     pass_plus text,
     email character varying(250),
     id_organisme integer,
-    organisme character(32),
     id_unite integer,
     remarques text,
     pn boolean,
@@ -64,9 +56,6 @@ CREATE TABLE IF NOT EXISTS t_roles (
     date_update timestamp without time zone
 );
 
-DO
-$$
-BEGIN
 CREATE SEQUENCE t_roles_id_role_seq
     START WITH 1000000
     INCREMENT BY 1
@@ -75,11 +64,8 @@ CREATE SEQUENCE t_roles_id_role_seq
     CACHE 1;
 EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
-END
-$$;
 ALTER SEQUENCE t_roles_id_role_seq OWNED BY t_roles.id_role;
 ALTER TABLE ONLY t_roles ALTER COLUMN id_role SET DEFAULT nextval('t_roles_id_role_seq'::regclass);
-
 
 CREATE TABLE IF NOT EXISTS bib_organismes (
     uuid_organisme uuid NOT NULL DEFAULT public.uuid_generate_v4(),
@@ -94,9 +80,6 @@ CREATE TABLE IF NOT EXISTS bib_organismes (
     id_parent integer
 );
 
-DO
-$$
-BEGIN
 CREATE SEQUENCE bib_organismes_id_seq
     START WITH 1000000
     INCREMENT BY 1
@@ -105,8 +88,6 @@ CREATE SEQUENCE bib_organismes_id_seq
     CACHE 1;
 EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
-END
-$$;
 ALTER SEQUENCE bib_organismes_id_seq OWNED BY bib_organismes.id_organisme;
 ALTER TABLE ONLY bib_organismes ALTER COLUMN id_organisme SET DEFAULT nextval('bib_organismes_id_seq'::regclass);
 
@@ -121,10 +102,6 @@ CREATE TABLE IF NOT EXISTS bib_unites (
     id_unite integer NOT NULL
 );
 
-
-DO
-$$
-BEGIN
 CREATE SEQUENCE bib_unites_id_seq
     START WITH 1000000
     INCREMENT BY 1
@@ -133,19 +110,14 @@ CREATE SEQUENCE bib_unites_id_seq
     CACHE 1;
 EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
-END
-$$;
 ALTER SEQUENCE bib_unites_id_seq OWNED BY bib_unites.id_unite;
 ALTER TABLE ONLY bib_unites ALTER COLUMN id_unite SET DEFAULT nextval('bib_unites_id_seq'::regclass);
-
 
 CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
     id_role integer NOT NULL,
     id_tag integer NOT NULL,
     id_application integer NOT NULL
 );
-
-
 
 CREATE TABLE IF NOT EXISTS t_applications (
     id_application integer NOT NULL,
@@ -154,9 +126,6 @@ CREATE TABLE IF NOT EXISTS t_applications (
     id_parent integer
 );
 
-DO
-$$
-BEGIN
 CREATE SEQUENCE t_applications_id_application_seq
     START WITH 1000000
     INCREMENT BY 1
@@ -165,8 +134,6 @@ CREATE SEQUENCE t_applications_id_application_seq
     CACHE 1;
 EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
-END
-$$;
 ALTER SEQUENCE t_applications_id_application_seq OWNED BY t_applications.id_application;
 ALTER TABLE ONLY t_applications ALTER COLUMN id_application SET DEFAULT nextval('t_applications_id_application_seq'::regclass);
 
@@ -182,9 +149,6 @@ CREATE TABLE IF NOT EXISTS t_tags (
 );
 COMMENT ON TABLE t_tags IS 'Permet de créer des étiquettes ou tags ou labels, qu''il est possible d''attacher à différents objects de la base. Cela peut permettre par exemple de créer des groupes ou des listes d''utilisateurs';
 
-DO
-$$
-BEGIN
 CREATE SEQUENCE t_tags_id_tag_seq
     START WITH 1000000
     INCREMENT BY 1
@@ -193,11 +157,8 @@ CREATE SEQUENCE t_tags_id_tag_seq
     CACHE 1;
 EXCEPTION WHEN duplicate_table THEN
         -- do nothing, it's already there
-END
-$$;
 ALTER SEQUENCE t_tags_id_tag_seq OWNED BY t_tags.id_tag;
 ALTER TABLE ONLY t_tags ALTER COLUMN id_tag SET DEFAULT nextval('t_tags_id_tag_seq'::regclass);
-
 
 CREATE TABLE IF NOT EXISTS bib_tag_types (
     id_tag_type integer NOT NULL,
@@ -205,7 +166,6 @@ CREATE TABLE IF NOT EXISTS bib_tag_types (
     tag_type_desc character varying(255) NOT NULL
 );
 COMMENT ON TABLE bib_tag_types IS 'Permet de définir le type du tag';
-
 
 CREATE TABLE IF NOT EXISTS cor_tags_relations (
     id_tag_l integer NOT NULL,
@@ -226,13 +186,11 @@ CREATE TABLE IF NOT EXISTS cor_organism_tag (
 );
 COMMENT ON TABLE cor_organism_tag IS 'Permet d''attacher des étiquettes à des organismes';
 
-
 CREATE TABLE IF NOT EXISTS cor_application_tag (
     id_application integer NOT NULL,
     id_tag integer NOT NULL
 );
 COMMENT ON TABLE cor_organism_tag IS 'Permet d''attacher des étiquettes à des applications';
-
 
 CREATE TABLE IF NOT EXISTS cor_app_privileges (
     id_tag_action integer NOT NULL,
@@ -242,284 +200,140 @@ CREATE TABLE IF NOT EXISTS cor_app_privileges (
 );
 COMMENT ON TABLE cor_app_privileges IS 'Cette table centrale, permet de gérer les droits d''usage des données en fonction du profil de l''utilisateur. Elle établi une correspondance entre l''affectation de tags génériques du schéma utilisateurs à un role pour une application avec les droits d''usage  (CREATE, READ, UPDATE, VALID, EXPORT, DELETE) et le type des données GeoNature (MY DATA, MY ORGANISM DATA, ALL DATA)';
 
-
 ----------------
 --PRIMARY KEYS--
 ----------------
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_pkey PRIMARY KEY (id_role_groupe, id_role_utilisateur);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY bib_organismes ADD CONSTRAINT pk_bib_organismes PRIMARY KEY (id_organisme);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY bib_unites ADD CONSTRAINT pk_bib_services PRIMARY KEY (id_unite);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_roles ADD CONSTRAINT pk_roles PRIMARY KEY (id_role);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_applications ADD CONSTRAINT t_applications_pkey PRIMARY KEY (id_application);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_tags ADD CONSTRAINT pk_t_tags PRIMARY KEY (id_tag);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY bib_tag_types ADD CONSTRAINT pk_bib_tag_types PRIMARY KEY (id_tag_type);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_tags_relations ADD CONSTRAINT pk_cor_tags_relations PRIMARY KEY (id_tag_l, id_tag_r);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_organism_tag ADD CONSTRAINT pk_cor_organism_tag PRIMARY KEY (id_organism, id_tag);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_role_tag ADD CONSTRAINT pk_cor_role_tag PRIMARY KEY (id_role, id_tag);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_application_tag ADD CONSTRAINT pk_cor_application_tag PRIMARY KEY (id_application, id_tag);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT pk_cor_app_privileges PRIMARY KEY (id_tag_object, id_tag_action, id_application, id_role);
 EXCEPTION WHEN invalid_table_definition  THEN
         -- do nothing, it's already there
-END
-$$;
-
 
 ------------
 --TRIGGERS--
 ------------
-DO
-$$
-BEGIN
+
 CREATE TRIGGER tri_modify_date_insert_t_roles BEFORE INSERT ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_insert();
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 CREATE TRIGGER tri_modify_date_update_t_roles BEFORE UPDATE ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_update();
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 CREATE TRIGGER tri_modify_date_insert_t_tags BEFORE INSERT ON t_tags FOR EACH ROW EXECUTE PROCEDURE modify_date_insert();
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 CREATE TRIGGER tri_modify_date_update_t_tags BEFORE UPDATE ON t_tags FOR EACH ROW EXECUTE PROCEDURE modify_date_update();
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
-
 
 ----------------
 --FOREIGN KEYS--
 ----------------
-DO
-$$
-BEGIN
+
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_tag_fkey FOREIGN KEY (id_tag) REFERENCES utilisateurs.t_tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_id_role_groupe_fkey FOREIGN KEY (id_role_groupe) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_id_role_utilisateur_fkey FOREIGN KEY (id_role_utilisateur) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_roles ADD CONSTRAINT t_roles_id_organisme_fkey FOREIGN KEY (id_organisme) REFERENCES bib_organismes(id_organisme) ON UPDATE CASCADE;
 ALTER TABLE ONLY t_roles ADD CONSTRAINT t_roles_id_unite_fkey FOREIGN KEY (id_unite) REFERENCES bib_unites(id_unite) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY bib_organismes ADD CONSTRAINT fk_bib_organismes_id_parent FOREIGN KEY (id_parent) REFERENCES bib_organismes(id_organisme) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_applications ADD CONSTRAINT fk_t_applications_id_parent FOREIGN KEY (id_parent) REFERENCES t_applications(id_application) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY t_tags ADD CONSTRAINT fk_t_tags_id_tag_type FOREIGN KEY (id_tag_type) REFERENCES bib_tag_types(id_tag_type) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_tags_relations ADD CONSTRAINT fk_cor_tags_relations_id_tag_l FOREIGN KEY (id_tag_l) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_tags_relations ADD CONSTRAINT fk_cor_tags_relations_id_tag_r FOREIGN KEY (id_tag_r) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_organism_tag ADD CONSTRAINT fk_cor_organism_tag_id_organism FOREIGN KEY (id_organism) REFERENCES bib_organismes(id_organisme) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_organism_tag ADD CONSTRAINT fk_cor_organism_tag_id_tag FOREIGN KEY (id_tag) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_role_tag ADD CONSTRAINT fk_cor_role_tag_id_role FOREIGN KEY (id_role) REFERENCES t_roles(id_role) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_role_tag ADD CONSTRAINT fk_cor_role_tag_id_tag FOREIGN KEY (id_tag) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_application_tag ADD CONSTRAINT fk_cor_application_tag_t_applications_id_application FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_application_tag ADD CONSTRAINT fk_cor_application_tag_t_tags_id_tag FOREIGN KEY (id_tag) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT fk_cor_app_privileges_id_tag_object FOREIGN KEY (id_tag_object) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT fk_cor_app_privileges_id_tag_action FOREIGN KEY (id_tag_action) REFERENCES t_tags(id_tag) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT fk_cor_app_privileges_id_application FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE;
 ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT fk_cor_app_privileges_id_role FOREIGN KEY (id_role) REFERENCES t_roles(id_role) ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object  THEN
         -- do nothing, it's already there
-END
-$$;
-
 
 ---------
 --VIEWS--
@@ -536,7 +350,6 @@ LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
 WHERE b.id_tag_type = 4;
 
-
 CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
 SELECT 
 DISTINCT
@@ -544,7 +357,6 @@ c.id_role,
 c.id_tag AS id_menu
 FROM utilisateurs.cor_role_tag c
 JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag;		 
-
 
 CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
 SELECT 
@@ -555,18 +367,13 @@ FROM utilisateurs.bib_tag_types b
 JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 WHERE b.id_tag_type = 3;	 
 
-
-
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
  c.id_role,
  c.id_tag as id_droit, 
  c.id_application
 FROM utilisateurs.cor_role_tag_application c; 
-		
-DO
-$$
-BEGIN
+
 CREATE OR REPLACE VIEW v_userslist_forall_menu AS
  SELECT a.groupe,
     a.id_role,
@@ -636,12 +443,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
           WHERE u.groupe = false) a;
     EXCEPTION WHEN duplicate_object  THEN
     -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 CREATE OR REPLACE VIEW v_userslist_forall_applications AS 
  SELECT a.groupe,
     a.id_role,
@@ -711,12 +513,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
   EXCEPTION WHEN duplicate_object  THEN
     -- do nothing, it's already there
-END
-$$;
 
-DO
-$$
-BEGIN
 CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS 
  WITH p_user_tag AS (
          SELECT u.id_role,
@@ -816,9 +613,6 @@ CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS
   WHERE v.max_tag_object_code = v.tag_object_code::text;
 EXCEPTION WHEN duplicate_object  THEN
     -- do nothing, it's already there
-END
-$$;
-
 			 
 -------------
 --FUNCTIONS--
