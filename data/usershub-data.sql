@@ -7,7 +7,6 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 ,('Autre', '', '', '', '', '', '', -1)
 ;
 
-
 INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_unite, fax_unite, email_unite, id_unite) VALUES 
 ('Virtuel', NULL, NULL, NULL, NULL, NULL, NULL, 1)
 ,('Personnels partis', NULL, NULL, NULL, NULL, NULL, NULL, 2)
@@ -22,7 +21,6 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 ,('Autres', NULL, NULL, NULL, NULL, NULL, NULL, -1)
 ;
 
-
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'UsersHub', 'Application permettant d''administrer la présente base de données.',NULL)
 ,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.',NULL)
@@ -31,11 +29,10 @@ INSERT INTO t_applications (id_application, nom_application, desc_application, i
 ;
 PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
 
-
-INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
-(true, 20001, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu')
-,(true, 20002, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL,'groupe test')
-,(true, 20003, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL,'mastructure', -1, true, NULL, NULL, NULL, NULL,'Groupe à droit limité')
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
+(true, 20001, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu')
+,(true, 20002, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, -1, true, NULL, NULL, NULL, NULL,'groupe test')
+,(true, 20003, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, -1, true, NULL, NULL, NULL, NULL,'Groupe à droit limité')
 ;
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
 (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier', '$2y$13$TMuRXgvIg6/aAez0lXLLFu0lyPk4m8N55NDhvLoUHh/Ar3rFzjFT.')
@@ -45,14 +42,12 @@ INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_r
 ,(false,5, 'validateur', 'validateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ;
 
-
 INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
 VALUES (20002, 1)
 ,(20002, 2)
 ,(20002, 4)
 ,(20002, 5)
 ;
-
 
 INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 (1, 'Object', 'Define a type object. Usually to define privileges on an object')
@@ -61,7 +56,6 @@ INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 ,(4, 'Liste', 'Define a type liste for grouping anything')
 ,(5, 'Scope','Define a type scope for CRUVED data')
 ;
-
 
 INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
 (1, 3,'1','utilisateur', 'Utilisateur','Ne peut que consulter')
@@ -86,7 +80,6 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ;
 PERFORM pg_catalog.setval('t_tags_id_tag_seq', 103, true);
 
-
 INSERT INTO cor_role_tag (id_role, id_tag) VALUES
 --Liste des observateurs faune
 (1,101)
@@ -96,7 +89,6 @@ INSERT INTO cor_role_tag (id_role, id_tag) VALUES
 ,(2,100)
 ,(5,100)
 ;
-
 
 INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role) VALUES
 --Administrateur sur UsersHub et TaxHub
