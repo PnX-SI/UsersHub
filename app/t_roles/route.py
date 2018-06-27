@@ -71,7 +71,7 @@ def addorupdate(id_role):
                 form_user = pops(form.data)
                 form_user['groupe'] = False
                 form_user.pop('id_role')
-                if form.pass_plus.data == form.mdpconf.data:
+                if form.pass_plus.data == form.mdpconf.data and form.pass_plus.data != "":
                     form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
                     form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                     TRoles.post(form_user)

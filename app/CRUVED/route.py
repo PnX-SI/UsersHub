@@ -123,15 +123,19 @@ def get_cruved_one(id_role):
     app = TApplications.get_all(as_model= True)
     app = app.filter(or_(TApplications.id_parent == config.ID_GEONATURE,TApplications.id_application == config.ID_GEONATURE))
     App = [data.as_dict() for data in app.all()]
-    print(App)
     tab_dict=[]
+    test = cruved_for_user_in_app(1000148,14,14)
+    print(test)
+    print ("\n\n\n")
     for app_c in App:
         cruved = cruved_for_user_in_app(id_role,app_c['id_application'],app_c['id_parent'])
+        print(cruved)
         if cruved != {'C': '0', 'D': '0', 'V': '0', 'U': '0', 'E': '0', 'R': '0'} :
             tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name','id_application'] 
             d_data = [app_c['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],user['id_role'],role['full_name'],app_c['id_application']]
             tdict = dict(zip(tdict,d_data))
             tab_dict.append(tdict)
+    print(tab_dict)
     return tab_dict 
 
 
