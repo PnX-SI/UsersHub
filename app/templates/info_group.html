@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+   {% include "header.html" %}   
+
+   <body>
+
+        {% include "head-appli.html" %}
+
+        <div class="container main-zone ng-scope ">
+
+           
+
+           <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h3>{{elt['nom_role']}} </h3></li>
+                <li class="list-group-item"><strong>Description :</strong> {{elt['desc_role']}}</li>
+                <li class="list-group-item"><strong>Membre :</strong>
+                {% for usr in members %}
+                    {{usr}}, 
+                {% endfor %}   
+                </li>
+                <li class="list-group-item"><strong>Tag :</strong>
+                {% for t in tag %}
+                    {{t}}, 
+                {% endfor %}  
+                </li>
+                <li class="list-group-item"><strong>CRUVED :</strong> <br></br>
+                   
+                <table class="table table-bordered table-striped table-sm " >
+                    <thead>
+                        <tr>
+                            {% if CRUVED == 'False'%}
+                                {% for name in fLineCruved %}
+                                    <th scope="col">{{name}}</th>
+                                {% endfor %}
+                            {%endif%}
+                            
+                                {% for name in fLineCruved %}
+                                <th scope="col">{{name}}</th>
+                                {% endfor %}
+                                <th></th>
+                            
+                        </tr> 
+    
+                    </thead>
+                    <tbody>
+                        {% for elt in tableCruved %}
+                        <tr >   
+                            {% for name in lineCruved %}
+                                <td >{{elt[name]}}</td>
+                            {% endfor %}
+                        <td>
+                                <a href="{{pathU}}{{id_r}}{{pathUu}}{{id_app}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Editer  </button></a>
+        
+                        </td>
+                        </tr> 
+                        {%endfor%}
+                    </tbody>
+                    </table>       
+
+                </li>
+              </ul>
+
+
+
+
+
+
+        </div>
+
+    </body>
+</html>

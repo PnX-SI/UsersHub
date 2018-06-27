@@ -6,10 +6,12 @@ from app import genericRepository
 from app.t_roles import forms as t_rolesforms
 from app.groupe import forms as groupeforms
 from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles
+from app.models import Bib_Organismes, CorRoles, CorRoleTag, TTags
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 from config import config
+from app.CRUVED.route import get_cruved_one
+
 
 route = Blueprint('groupe', __name__)
 
@@ -37,7 +39,7 @@ def groups():
     columns = ['id_role', 'nom_role', 'desc_role']
     filters = [{'col': 'groupe', 'filter': 'True'}]
     contents = TRoles.get_all(columns,filters)
-    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role", pathU = config.URL_APPLICATION +"/group/update/", pathD = config.URL_APPLICATION +"/groups/delete/", pathA = config.URL_APPLICATION +'/group/add/new', pathP = config.URL_APPLICATION +'/groups/members/',name = "un groupe", name_list = "Groupes", otherCol = 'True', Members = "Membres",)
+    return render_template('table_database.html', fLine = fLine , line = columns, table = contents ,  key = "id_role",pathI = config.URL_APPLICATION+'/group/info/', pathU = config.URL_APPLICATION +"/group/update/", pathD = config.URL_APPLICATION +"/groups/delete/", pathA = config.URL_APPLICATION +'/group/add/new', pathP = config.URL_APPLICATION +'/groups/members/',name = "un groupe", name_list = "Groupes", otherCol = 'True', Members = "Membres",see = 'True')
 
 
 @route.route('group/add/new',defaults={'id_role': None}, methods=['GET','POST'])
@@ -125,6 +127,29 @@ def delete(id_groupe):
     TRoles.delete(id_groupe)
     return redirect(url_for('groupe.groups'))
 
+
+@route.route('group/info/<id_role>', methods = ['GET','POST'])
+def get_info(id_role):    
+    user = TRoles.get_one(id_role)
+    members = TRoles.get_user_in_group(id_role)
+    tab_usr = []
+    if members != None:
+        for usr in members : 
+            tab_usr.append(usr["full_name"])
+    d_tag = CorRoleTag.get_all(recursif = True, as_model = True)
+    d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
+    tag = [data.as_dict() for data in d_tag.all()]
+    tab_t = []
+    if tag != None:
+        for t in tag:
+            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+    Cruved = get_cruved_one(id_role)
+    fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
+    if Cruved != []: 
+        columnsCruved = [ 'nom_application','C','R','U','V','E','D']
+        return render_template("info_group.html", elt = user, members = tab_usr,tag = tab_t,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=Cruved, id_r = id_role, id_app = Cruved[0]['id_application'], pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' )
+    else :
+        return render_template("info_group.html", elt = user, members = tab_usr,tag = tab_t, Cruved = 'False', fLineCruved = fLineCruved)
 
 def pops(form):
 
