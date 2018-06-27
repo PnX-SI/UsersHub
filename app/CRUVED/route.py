@@ -124,7 +124,7 @@ def get_cruved_one(id_role):
     app = app.filter(or_(TApplications.id_parent == config.ID_GEONATURE,TApplications.id_application == config.ID_GEONATURE))
     App = [data.as_dict() for data in app.all()]
     tab_dict=[]
-    test = cruved_for_user_in_app(1000148,14,14)
+    test = cruved_for_user_in_app(1000148,14)
     print(test)
     print ("\n\n\n")
     for app_c in App:
@@ -179,7 +179,7 @@ def cruved_user(id_role, id_application):
     form.scopeExport.choices = tab_choices
     form.scopeDelete.choices = tab_choices
     form_na.app.choices = TApplications.choix_app_cruved('id_application','nom_application')
-    cruved = save_cruved()
+    cruved = get_cruved_one(id_role)
     data = request.get_json()
     if id_application == None:
         for c in cruved:

@@ -4,7 +4,7 @@ Blueprint, request, session, flash
 )
 from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
-from app.models import Bib_Organismes
+from app.models import Bib_Organismes, TRoles, CorOrganismeTag, TTags
 from config import config
 
 route =  Blueprint('organisme',__name__)
@@ -25,15 +25,17 @@ def organisms():
                                             - le chemin de mise à jour --> pathU 
                                             - le chemin de suppression --> pathD
                                             - le chemin d'ajout --> pathA
+                                            - le chemin de la page d'information --> pathI
                                             - une clé (clé primaire dans la plupart des cas) --> key
                                             - un nom (nom de la table) pour le bouton ajout --> name
                                             - un nom de listes --> name_list
+                                            - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
 
     fLine = [ 'ID','Nom', 'Adresse', 'Code_Postal', 'Ville', 'Telephone', 'Fax', 'Email']
     columns = ['id_organisme','nom_organisme','adresse_organisme', 'cp_organisme','ville_organisme','tel_organisme','fax_organisme','email_organisme']
     contents = Bib_Organismes.get_all(columns)
-    return render_template('table_database.html', table = contents, fLine = fLine,line = columns, pathU = config.URL_APPLICATION +'/organism/update/', key= 'id_organisme', pathD = config.URL_APPLICATION + '/organisms/delete/', pathA= config.URL_APPLICATION +'/organism/add/new',name = "un organisme", name_list = "Organismes" )
+    return render_template('table_database.html', table = contents, fLine = fLine,line = columns,pathI = config.URL_APPLICATION+'/organism/info/', pathU = config.URL_APPLICATION +'/organism/update/', key= 'id_organisme', pathD = config.URL_APPLICATION + '/organisms/delete/', pathA= config.URL_APPLICATION +'/organism/add/new',name = "un organisme", name_list = "Organismes" , see = 'True')
 
 
 @route.route('organism/add/new', defaults={'id_organisme': None}, methods=['GET','POST'])
@@ -90,6 +92,25 @@ def delete(id_organisme):
     Bib_Organismes.delete(id_organisme)
     return redirect(url_for('organisme.organisms'))
 
+
+@route.route('organism/info/<id_organisme>', methods = ['GET','POST'])
+def get_info(id_organisme):
+    org = Bib_Organismes.get_one(id_organisme)
+    array_user = TRoles.get_all(as_model = True)
+    array_user = array_user.filter(TRoles.id_organisme == id_organisme)
+    array_user = [data.as_dict_full_name() for data in array_user.all()]
+    tab_u = []
+    for user in array_user:
+        tab_u.append(user['full_name'])
+    d_tag = CorOrganismeTag.get_all(recursif = True, as_model = True)
+    d_tag = d_tag.filter(CorOrganismeTag.id_organism == id_organisme)
+    tag = [data.as_dict() for data in d_tag.all()]
+    tab_t = []
+    if tag != None:
+        for t in tag:
+            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+
+    return render_template('info_org.html', elt = org, tab_u = tab_u, tag = tab_t)
 
 def pops(form):
 
