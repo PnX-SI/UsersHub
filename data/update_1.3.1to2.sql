@@ -2,6 +2,9 @@
 -- pour que les anciennes applications continuent à fonctionner
 -- @TODO : ATTENTION, il manque les récupération des données avant de supprimer les anciennes tables
 
+-- Supprimer le champs organisme de t_roles (https://github.com/PnEcrins/UsersHub/issues/38)
+ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
+
 -- Associer les tags de type Liste à l'application GeoNature
 INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
 (14,100)
@@ -23,7 +26,6 @@ FROM utilisateurs.bib_tag_types b
 LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
 WHERE b.id_tag_type = 4
-
 
 -- Supprimer la table cor_role_menu
 DROP TABLE utilisateurs.cor_role_menu CASCADE;
@@ -61,8 +63,6 @@ FROM utilisateurs.bib_tag_types b
 JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 WHERE b.id_tag_type = 3
 
-
-
 --Table qui compense la table cor_role_droit_application de la V1
 CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
     id_role integer NOT NULL,
@@ -83,11 +83,9 @@ SELECT
  c.id_application
 FROM utilisateurs.cor_role_tag_application c
 
-
 -- Associe les portées des données à un type de tag "scope"
 INSERT INTO utilisateurs.bib_tag_types(id_tag_type,tag_type_name,tag_type_desc) VALUES
 (5,'scope','Define a type scope for CRUVED data')
-
 
 UPDATE utilisateurs.t_tags
 set 
@@ -121,7 +119,6 @@ tag_label = 'All data',
 tag_desc = 'Can do action on all data'
 where 
 id_tag = 23;
-
 
 --Correction de la Vue v_usersaction_forall_gn_modules afin d'obtenir le cruved de groupe
 
@@ -222,4 +219,3 @@ CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS
     v.max_tag_object_code::character varying(25) AS tag_object_code
    FROM all_users_tags v
   WHERE v.max_tag_object_code = v.tag_object_code::text;
-
