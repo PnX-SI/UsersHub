@@ -88,8 +88,7 @@ def cruved_one(id_role):
     else:
         role = contents[0]
         app =  contents[0]['id_application']
-    save_cruved(contents)
-    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',id_r=role['id_role'],id_app = app,  pathC = '', pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' ,pathA= config.URL_APPLICATION +'/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
+    return render_template('CRUVED.html',fLine = fLine, line = columns, table = data,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=contents, key = 'id_role',  key_app = 'id_application',id_r=role['id_role'],  pathC = '', pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' ,pathA= config.URL_APPLICATION +'/CRUVED/add/new/'  , group = 'groupe',name_list = 'Liste d\'Utilisateurs et de Groupes',name_role =role['full_name'])       
 
 # @route.route('CRUVED/add/new', defautls={'id_role':None,'id_application':None}, methods=['GET','POST'])
 # @route.route('CRUVED/update/<id_role>/<id_application>', methods=['GET','POST'])
@@ -117,7 +116,7 @@ def get_cruved_one(id_role):
     user = TRoles.get_one(id_role)
     role = dict()
     if  user['prenom_role'] != None :
-        role['full_name'] = user['nom_role'] + user['prenom_role']
+        role['full_name'] = user['nom_role'] +' '+ user['prenom_role']
     else :
         role['full_name'] = user['nom_role']
     app = TApplications.get_all(as_model= True)
@@ -125,35 +124,15 @@ def get_cruved_one(id_role):
     App = [data.as_dict() for data in app.all()]
     tab_dict=[]
     test = cruved_for_user_in_app(1000148,14)
-    print(test)
-    print ("\n\n\n")
     for app_c in App:
         cruved = cruved_for_user_in_app(id_role,app_c['id_application'],app_c['id_parent'])
-        print(cruved)
         if cruved != {'C': '0', 'D': '0', 'V': '0', 'U': '0', 'E': '0', 'R': '0'} :
             tdict = [ 'nom_application','C','R','U','V','E','D','id_role','full_name','id_application'] 
             d_data = [app_c['nom_application'],cruved['C'],cruved['R'],cruved['U'],cruved['V'],cruved['E'],cruved['D'],user['id_role'],role['full_name'],app_c['id_application']]
             tdict = dict(zip(tdict,d_data))
             tab_dict.append(tdict)
-    print(tab_dict)
     return tab_dict 
 
-
-def save_cruved(tab = None):
-
-    """
-    Methode qui sauvegarde le cruved entre 2 route
-    Si la methode recoit en paramètre un tableau  alors le tableau est sauvegardé
-    Si la methode est appelé sans paramètre alors celle-ci retourne le tableau stocké
-    """
-
-    d = shelve.open('cruvedtest')
-    if tab != None:
-        d['cruved'] = tab 
-        return None
-    else:
-        cruved = d['cruved']
-        return cruved
 
 
 
