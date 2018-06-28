@@ -1,26 +1,35 @@
-#config PostgreSQL
-# effacer la base de donnée existante lors de l'installation
-drop_apps_db=false
-#host de la base de données de l'application
-db_host=localhost
-#Port du serveur PostgreSQL
-pg_port=5432
-#nom de la base de données de l'application
-db_name=usershubdb
-#nom de l'utilisateur propriétaire de la base de l'application
-user_pg=geonatuser
-#user propriétaire de la base de l'application
-user_pg_pass=monpassachanger
-
-#Configuration python
 ###########################
-#Notice: n'est compatible qu'avec python3
+### PostgreSQL settings ###
+###########################
+
+# Effacer la base de donnée existante lors de l'installation
+drop_apps_db=false
+# Host de la base de données de l'application
+db_host=localhost
+# Port du serveur PostgreSQL
+pg_port=5432
+# Nom de la base de données de l'application
+db_name=usershubdb
+# Nom de l'utilisateur propriétaire de la BDD de l'application
+user_pg=geonatuser
+# User propriétaire de la BDD de l'application
+user_pg_pass=monpassachanger
+# Intégrer les données minimales (Applications et tags)
+insert_minimal_data=true
+# Intégrer les données exemple (Role, groupe, organismes et correspondances)
+insert_sample_data=true
+
+#######################
+### Python settings ###
+#######################
+
+# Notice: n'est compatible qu'avec python3
 python_path=/usr/bin/python3
 
+#########################
+### Gunicorn settings ###
+#########################
 
-#####################
-### Gunicorn settings
-#####################
 gun_num_workers=4
 gun_host=0.0.0.0
 gun_port=5001
