@@ -418,20 +418,20 @@ class TRoles(GenericRepository):
 
 
     @classmethod
-    def get_user_in_application(cls,id_application):
+    def get_user_right_in_application(cls,id_application):
 
         """
         Methode qui retourne un dictionnaire de roles ayant les droits sur une application donné
         Avec pour paramètre un id d'application
         """
 
-        q = db.session.query(cls)
+        q = db.session.query(cls, CorRoleTagApplication)
         q = q.order_by(desc(cls.groupe))
-        q = q.join(CorAppPrivileges, TRoles.id_role == CorAppPrivileges.id_role)
-        q = q.filter(id_application ==  CorAppPrivileges.id_application )
-        for data in q.all():
-            data.as_dict() 
-        data =  [data.as_dict_full_name() for data in q.all()]
+        q = q.join(CorRoleTagApplication, TRoles.id_role == CorRoleTagApplication.id_role)
+        q = q.filter(id_application ==  CorRoleTagApplication.id_application )
+        data = q.all()
+        data =  [{'role':d[0].as_dict_full_name(), 'right':d[1].as_dict()} for d in data]
+       
         return data 
 
     @classmethod
@@ -444,7 +444,7 @@ class TRoles(GenericRepository):
 
         q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
-        subquery = db.session.query(distinct(CorAppPrivileges.id_role)).filter(id_application == CorAppPrivileges.id_application)
+        subquery = db.session.query(distinct(CorRoleTagApplication.id_role)).filter(id_application == CorRoleTagApplication.id_application)
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
 
@@ -584,7 +584,23 @@ class TTags(GenericRepository):
             choices.append((0,'Aucun'))
         return choices
    
+    @classmethod
+    def choixSelectTag(cls,id,nom,aucun = None):
 
+        """
+        Methode qui retourne une tableau de tuples d'id de tag et de nom de tag de type privilège
+        Avec pour paramètres un id de tag et un nom de tag
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        """
+        
+        q = cls.get_all(as_model =True).filter(TTags.id_tag_type == 3)
+        data =[data.as_dict() for data in q.all()]
+        choices = []
+        for d in data :
+            choices.append((d[id], d[nom]))
+        if aucun != None :
+            choices.append((-1,'Aucun'))
+        return choices
 
   
 @serializable

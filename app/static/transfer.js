@@ -26,7 +26,6 @@ $.ajax({
  
 function fill_select(){
     td_right = '<td class = "right"><select class="custom-select", id="inputGroupSelect02">'
-    console.log(data_select)
     for(var i = 0; i< data_select.length; i++)
     {
         td_right = td_right + '<option value="'+ data_select[i]["id_tag"]+'">'+data_select[i]["tag_name"]+'</option>'
@@ -44,12 +43,14 @@ function addTab(tab,table){
     
 };
 
-    
+
+
 var add = function(app) {
     var tab = []
     $('#user input[type="checkbox"]:checked').each(function(){
         if (app != null){
             var Row = $(this).parents('tr').append(fill_select())
+            console.log(Row)
         }else{
             var Row = $(this).parents('tr').append()
         }
@@ -68,6 +69,7 @@ var add = function(app) {
     
     var table = $('#adding_table')
     addTab(tab,table)
+    console.log(addTab)
 
         
 };
@@ -93,6 +95,25 @@ var del = function(app){
     });
     var table = $('#user')
     addTab(tab,table)
+};
+
+var update = function(){
+    console.log("tableau d ajout : "+ tab_add);
+    console.log("tablea de suppression : "+ tab_del );
+    var data ={}
+    data["tab_add"] = tab_add;
+    data["tab_del"]= tab_del;
+
+    $.ajax({
+        url : $(location).attr('href'),
+        type : 'post',
+        data : JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json"
+    });
+
+    tab_add = []
+    tab_del = []
 };
 
 

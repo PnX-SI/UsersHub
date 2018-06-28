@@ -99,7 +99,17 @@
                                     {% endif%}   
                                     {% endfor %}         
                                     {% if app == 'True'%}
-                                    <td class = "right">{{ form.right(class="custom-select", id="inputGroupSelect02") }} </td>
+                                    <td class = "right">
+                                        <select class="custom-select", id="inputGroupSelect02">
+                                            {% for d in elt['value'] %}
+                                                {% if d[0] == elt['id_tag']%}
+                                                    <option selected value= {{d[0]}} > {{d[1]}}</option>
+                                                {%else%}
+                                                    <option value= {{d[0]}} > {{d[1]}}</option>
+                                                {%endif%}
+                                            {%endfor%}
+                                        </select>
+                                    </td>
                                     {% endif%}
                                 </tr>
                                 {%endfor%}
@@ -109,8 +119,11 @@
         
         
                     </div>
-       
-        <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
+                {% if app == 'True'%}
+                <button onclick = "update_right()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
+                {% else %}
+                <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
+                {% endif%}
         </div>
       
        

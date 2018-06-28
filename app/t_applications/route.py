@@ -5,7 +5,7 @@ Blueprint, request, session, flash
 from app import genericRepository
 from app.t_applications import forms as t_applicationsforms
 from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges
+from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges, TTags
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 from config import config
@@ -119,7 +119,7 @@ def delete(id_application):
 def users(id_application):
 
     """
-    Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui apparatiennent à celui ci.
+    Route affichant la liste des roles n'appartenant pas a l'application vis à vis de ceux qui appartiennent à celui ci.
     Avec pour paramètre un id d'application
     Retourne un template avec pour paramètres:
                                             - une entête des tableaux --> fLine
@@ -128,31 +128,25 @@ def users(id_application):
                                             - liste des roles appartenant à l'application--> table2
                                             - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group 
     """
-
-    users_in_app = TRoles.test_group(TRoles.get_user_in_application(id_application))
+    users_with_right = TRoles.get_user_right_in_application(id_application)
+    only_role = []
+    for role in users_with_right :
+        role['role']['id_tag'] = role['right']['id_tag']
+        role['role']['value'] = TTags.choixSelectTag('id_tag','tag_name')
+        only_role.append(role['role'])
+    users_in_app = TRoles.test_group(only_role)
     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
-    form = t_applicationsforms.AppRight()
-    appli = TApplications.get_one(id_application)
     header = ['ID', 'Nom']
     data = ['id_role','full_name']
     app = TApplications.get_one(id_application)
-    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe',form = form, app = 'True', info = 'Droit des utilisateurs et des groupes sur  "'+app['nom_application']+'"') 
-
-
-
+    if request.method == 'POST':
+        print("coucou")
     
 
-# @route.route('test')
-# def test():
-    
-#     """
-#     Route de test
-#     """
-#     a = TRoles.get_one(1, as_model= True)
-#     print(a['full_name'])
-#     return ''
 
-# def compare
+    return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe', app = 'True', info = 'Droit des utilisateurs et des groupes sur  "'+app['nom_application']+'"') 
+
+
 
 def pops(form):
 
