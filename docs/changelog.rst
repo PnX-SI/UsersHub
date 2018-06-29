@@ -25,7 +25,9 @@ Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par 
 
 **Note de version**
 
-* Exécuter le script de mise à jour de la BDD ``data/update_1.3.1to2.sql``
+* Version beta à ne pas utiliser en production
+* Installation : https://github.com/PnEcrins/UsersHub/issues/35
+* Exécuter le script de mise à jour de la BDD ``data/update_1.3.1to2.sql`` (attention il ne migre pas encore les données UsersHub V1)
 * Renseigner les fichiers ``settings.ini`` et ``config.py`` à partir des samples
 
 1.3.1 (2018-05-17)
