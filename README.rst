@@ -5,14 +5,14 @@ Application web de gestion centralisée des utilisateurs.
 
 UsersHub est une application web permettant de regrouper l'ensemble des utilisateurs d'applications web afin de gérer de manière différenciée et centralisée les droits d'accès à ces applications ainsi que le contenu des listes déroulantes d'observateurs. 
 
-Elle permet de gérer de manière centralisée **des utilisateurs** et de les placer dans **des groupes** ; de créer **différents niveaux de droits** et de les affecter aux utilisateurs et/ou aux groupes d'utilisateurs pour chacune de vos **applications**. Elle permet également de gérer **des organismes**, **des unités** et **des listes déroulantes** regroupant des utilisateurs ou des groupes d'utilisateurs.
+Elle permet de gérer de manière centralisée des **utilisateurs** et de les placer dans des **groupes**, de créer des **tags** (niveaux de droits, actions, portées, listes ...) et de les affecter aux utilisateurs et/ou aux groupes d'utilisateurs pour chacune de vos **applications**. Elle permet également de gérer des **organismes**.
 
-Compatible avec GeoNature (https://github.com/PnEcrins/GeoNature), TaxHub (https://github.com/PnX-SI/TaxHub), Police (https://github.com/PnEcrins/Police) et Geotrek (https://github.com/GeotrekCE/Geotrek-admin).
+Compatible avec GeoNature (https://github.com/PNX-SI/GeoNature), TaxHub (https://github.com/PnX-SI/TaxHub), Police (https://github.com/PnEcrins/Police) et Geotrek (https://github.com/GeotrekCE/Geotrek-admin).
 
 Présentation
 -----------
 
-Principe général : UsersHub permet de gérer et de synchroniser le contenu d'un ou plusieurs schéma "utilisateurs" d'une ou plusieurs bases PostgreSQL. A condition que le modèle mais aussi que toutes les données de ces bases soient identiques, UsersHub permet de maintenir le contenu du schéma "utilisateurs" de ces bases strictement identique.
+Principe général : UsersHub permet de gérer et de synchroniser le contenu d'un ou plusieurs schéma ``utilisateurs`` d'une ou plusieurs bases PostgreSQL. A condition que le modèle mais aussi que toutes les données de ces bases soient identiques, UsersHub permet de maintenir le contenu du schéma ``utilisateurs`` de ces bases strictement identique.
 
 Dans un système d'information, les applications web 'métier' nécessitent généralement une identification par login/pass. 
 Les applications disposent donc d'un dispositif de gestion des utilisateurs et de leur droits.
@@ -28,20 +28,20 @@ Mais vous pouvez aussi affecter des droits spécifiques à un utilisateurs pour 
 Si certains des utilisateurs ou groupe d'utilisateurs doivent figurer dans une liste déroulante de l'application (par exemple une liste d'observateurs ou de représentants), UsersHub permet de créer ces listes et d'en gérer le contenu. 
 Il ne vous reste alors plus qu'à utiliser cette liste dans votre application.
 
-.. image :: docs/images/capture-application.jpg
+.. image :: http://geonature.fr/img/uhv2-screenshot.png
 
 Installation
 -----------
 
 Consulter la documentation :  `<http://usershub.rtfd.org>`_
 
-Ou dans docs/installation.rst
+Ou dans ``docs/installation.rst``
 
 License
 -------
 
-* OpenSource - BSD
-* Copyright (c) 2015 - Parc National des Écrins
+* OpenSource - GPLv3
+* Copyright (c) 2015-2018 - Parc National des Écrins
 
 
 .. image:: http://geonature.fr/img/logo-pne.jpg
