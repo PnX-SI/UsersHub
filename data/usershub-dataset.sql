@@ -28,12 +28,12 @@ INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_r
 ,(true, 20002, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, -1, true, NULL, NULL, NULL, NULL,'groupe test')
 ,(true, 20003, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, -1, true, NULL, NULL, NULL, NULL,'Groupe à droit limité')
 ;
-INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
-(false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier', '$2y$13$TMuRXgvIg6/aAez0lXLLFu0lyPk4m8N55NDhvLoUHh/Ar3rFzjFT.')
-,(false, 2, 'agent', 'Agent', 'test', NULL, 'b33aed8f3134996703dc39f9a7c95783', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
-,(false, 3, 'partenaire', 'Partenaire', 'test', NULL, '5bd40a8524882d75f3083903f2c912fc', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
-,(false,4, 'pierre.paul', 'Paul', 'Pierre', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
-,(false,5, 'validateur', 'validateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
+INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
+(false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL,  -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier', '$2y$13$TMuRXgvIg6/aAez0lXLLFu0lyPk4m8N55NDhvLoUHh/Ar3rFzjFT.')
+,(false, 2, 'agent', 'Agent', 'test', NULL, 'b33aed8f3134996703dc39f9a7c95783', NULL,  -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
+,(false, 3, 'partenaire', 'Partenaire', 'test', NULL, '5bd40a8524882d75f3083903f2c912fc', NULL,  -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
+,(false,4, 'pierre.paul', 'Paul', 'Pierre', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL,  -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
+,(false,5, 'validateur', 'validateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL,  -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ;
 
 INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
@@ -57,10 +57,11 @@ INSERT INTO cor_role_tag_application (id_role, id_tag, id_application) VALUES
 ---Administrateur sur UsersHub et TaxHub
 (1,6,1)
 ,(1,6,2)
+;
 
 INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role) VALUES
 --Administrateur sur GeoNature
-,(11, 23, 14, 1)
+(11, 23, 14, 1)
 ,(12, 23, 14, 1)
 ,(13, 23, 14, 1)
 ,(14, 23, 14, 1)

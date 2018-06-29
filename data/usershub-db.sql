@@ -323,7 +323,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.pass_plus,
     a.email,
     a.id_organisme,
-    a.organisme,
     a.id_unite,
     a.remarques,
     a.pn,
@@ -387,7 +386,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
     a.pass_plus,
     a.email,
     a.id_organisme,
-    a.organisme,
     a.id_unite,
     a.remarques,
     a.pn,
@@ -440,7 +438,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_droit_application c ON c.id_role = g.id_role_groupe
           WHERE u.groupe = false) a
-  GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+  GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
 CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS 
  WITH p_user_tag AS (
