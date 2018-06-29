@@ -1,6 +1,8 @@
 UsersHub
 =========
 
+**Attention** : Refonte totale en cours (Python, Flask, Jinja, Bootstrap, Jquery) dans la branche dédiée : https://github.com/PnEcrins/UsersHub/tree/uhv2
+
 Application web de gestion centralisée des utilisateurs.
 
 UsersHub est une application web permettant de regrouper l'ensemble des utilisateurs d'applications web afin de gérer de manière différenciée et centralisée les droits d'accès à ces applications ainsi que le contenu des listes déroulantes d'observateurs. 
