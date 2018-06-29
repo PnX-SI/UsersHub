@@ -19,9 +19,9 @@ INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 ;
 
 INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
-(1, 3,'1','utilisateur', 'Utilisateur','Ne peut que consulter')
-,(2, 3, '2', 'rédacteur', 'Rédacteur','Il possède des droit d''écriture pour créer des enregistrements')
-,(3, 3, '3', 'référent', 'Référent','Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
+(1, 3, '1', 'utilisateur', 'Utilisateur', 'Ne peut que consulter')
+,(2, 3, '2', 'rédacteur', 'Rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements')
+,(3, 3, '3', 'référent', 'Référent', 'Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
 ,(4, 3, '4', 'modérateur', 'Modérateur', 'Peu utilisé')
 ,(5, 3, '5', 'validateur', 'Validateur', 'Il valide bien sur')
 ,(6, 3, '6', 'administrateur', 'Administrateur', 'Il a tous les droits')
