@@ -51,10 +51,12 @@ INSERT INTO cor_role_tag (id_role, id_tag) VALUES
 ,(5,100)
 ;
 
+INSERT INTO cor_role_tag_application (id_role, id_tag, id_application) VALUES
+---Administrateur sur UsersHub et TaxHub
+(1,6,1)
+,(1,6,2)
+
 INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role) VALUES
---Administrateur sur UsersHub et TaxHub
-(6,23,1,1)
-,(6,23,2,1)
 --Administrateur sur GeoNature
 ,(11, 23, 14, 1)
 ,(12, 23, 14, 1)
