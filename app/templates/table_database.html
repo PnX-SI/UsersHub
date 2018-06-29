@@ -67,9 +67,8 @@
                 {% endif%} 
                 {% endfor %}
 
-               
-            {% set type_tag = elt['id_tag_type'] %}
-            {% if type_tag == 4 %}
+            {% set type_tag = elt['id_tag_type'] %}  
+            {% if type_tag != ID_PRIVILEGE and type_tag != ID_OBJECT  %}
             {% if otherCol == 'True'%}
             <td>
                     <a href="{{pathP}}{{elt[key]}}"  > <button type="submit" class="btn btn-secondary btn-sm " ><i class="fa fa-user font-medium" aria-hidden="true"></i>

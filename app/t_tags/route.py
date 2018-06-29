@@ -49,9 +49,9 @@ def tags():
     for data in contents:
         type_tag = BibTagTypes.get_one(data['id_tag_type'])
         data.update({'name_type_tag':type_tag['tag_type_name']})
-        if data['id_tag_type'] != 2 and data['id_tag_type']!= 5 : 
+        if data['id_tag_type'] != config.ID_ACTION and data['id_tag_type']!= config.ID_SCOPE : 
             tab.append(data)
-    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = tab,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application")
+    return render_template('table_database.html' ,fLine = fLine ,line = columns,  table = tab,  key = 'id_tag', pathU = config.URL_APPLICATION +'/tag/update/', pathD = config.URL_APPLICATION +'/tags/delete/', pathA = config.URL_APPLICATION +'/tag/add/new',pathP = config.URL_APPLICATION +"/tag/users/",pathO = config.URL_APPLICATION +"/tag/organisms/",pathApp = config.URL_APPLICATION +"/tag/applications/",name = "un tag", name_list = "Tags", Members= "Utilisateurs", otherCol = 'True', tag_orga = 'True', Organismes = 'Organismes', tag_app = 'True', App = "Application", ID_OBJECT = config.ID_OBJECT, ID_ACTION = config.ID_ACTION, ID_PRIVILEGE = config.ID_PRIVILEGE, ID_SCOPE = config.ID_SCOPE)
 
 
 @route.route('tags/delete/<id_tag>',methods=['GET','POST'])

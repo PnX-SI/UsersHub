@@ -47,16 +47,18 @@ function addTab(tab,table){
 
 var add = function(app) {
     var tab = []
+    i=0
     $('#user input[type="checkbox"]:checked').each(function(){
         if (app != null){
             var Row = $(this).parents('tr').append(fill_select())
-            console.log(Row)
         }else{
             var Row = $(this).parents('tr').append()
         }
+        console.log(i++);
         tab.push(Row[0]);
         $("#user").find("input[type=checkbox]:checked").prop('checked', false);
         var ID=$(this).parents('tr').find('td:eq(1)').html();
+        console.log(ID);
         tab_add.push(ID);
         if (isInTabb(tab_del,ID) == true){
             tab_del.splice(tab_del.indexOf(ID),1);
@@ -69,7 +71,6 @@ var add = function(app) {
     
     var table = $('#adding_table')
     addTab(tab,table)
-    console.log(addTab)
 
         
 };
@@ -97,12 +98,30 @@ var del = function(app){
     addTab(tab,table)
 };
 
-var update = function(){
+
+var get_right = function(data){
+    var i = 0
+    data_id = data['tab_add']
+    $('#adding_table tr').each(function(){
+        var ID=$(this).find('td:eq(1)').html();
+        for( d in data_id){
+            if (ID == data_id[d]){
+            console.log('coucou')
+
+            }
+        } 
+    })
+
+};
+
+
+var update_right = function(){
     console.log("tableau d ajout : "+ tab_add);
-    console.log("tablea de suppression : "+ tab_del );
+    console.log("tableau de suppression : "+ tab_del );
     var data ={}
     data["tab_add"] = tab_add;
     data["tab_del"]= tab_del;
+    test = get_right(data)
 
     $.ajax({
         url : $(location).attr('href'),
