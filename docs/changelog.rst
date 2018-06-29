@@ -2,8 +2,11 @@
 CHANGELOG
 =========
 
-2.0.0.beta1 (2018-06-29)
-------------------------
+2.0.0-beta.2 (unreleased)
+-------------------------
+
+2.0.0-beta.1 (2018-06-29)
+-------------------------
 
 Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par @Laumond11u.
 
