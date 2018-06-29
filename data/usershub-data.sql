@@ -2,6 +2,8 @@
 --MINIMAL DATA--
 ----------------
 
+SET search_path = utilisateurs, pg_catalog;
+
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'UsersHub', 'Application permettant d''administrer la présente base de données.',NULL)
 ,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.',NULL)
