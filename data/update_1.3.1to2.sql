@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
     id_tag integer NOT NULL,
     id_application integer NOT NULL
 );
+COMMENT ON TABLE cor_role_tag_application IS 'Equivalent de l''ancienne cor_role_droit_application. Permet de stocker les droits par rôle et applications pour rester compatible avec UHV1';
 
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
 ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
