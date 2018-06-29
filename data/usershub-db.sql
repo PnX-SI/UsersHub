@@ -113,11 +113,12 @@ EXCEPTION WHEN duplicate_table THEN
 ALTER SEQUENCE bib_unites_id_seq OWNED BY bib_unites.id_unite;
 ALTER TABLE ONLY bib_unites ALTER COLUMN id_unite SET DEFAULT nextval('bib_unites_id_seq'::regclass);
 
-CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
+CREATE TABLE IF NOT EXISTS cor_role_tag_application (
     id_role integer NOT NULL,
     id_tag integer NOT NULL,
     id_application integer NOT NULL
 );
+COMMENT ON TABLE cor_role_tag_application IS 'Equivalent de l''ancienne cor_role_droit_application. Permet de stocker les droits par rôle et applications pour rester compatible avec UHV1';
 
 CREATE TABLE IF NOT EXISTS t_applications (
     id_application integer NOT NULL,
