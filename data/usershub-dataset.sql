@@ -2,6 +2,8 @@
 --SAMPLE DATA--
 ---------------
 
+SET search_path = utilisateurs, pg_catalog;
+
 INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, ville_organisme, tel_organisme, fax_organisme, email_organisme, id_organisme) VALUES 
 ('Parc National des Ecrins', 'Domaine de Charance', '05000', 'GAP', '04 92 40 20 10', '', '', 1)
 ,('Autre', '', '', '', '', '', '', -1)
