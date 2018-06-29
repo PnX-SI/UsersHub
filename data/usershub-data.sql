@@ -14,8 +14,8 @@ INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 (1, 'Object', 'Define a type object. Usually to define privileges on an object')
 ,(2, 'Action', 'Define a type action. Usually to define privileges for an action')
 ,(3, 'Privilege', 'Define a privilege level')
-,(4, 'Liste', 'Define a type liste for grouping anything')
-,(5, 'Scope','Define a type scope for CRUVED data')
+,(4, 'List', 'Define a type list to group anything')
+,(5, 'Scope', 'Define a type scope for CRUVED data')
 ;
 
 INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
