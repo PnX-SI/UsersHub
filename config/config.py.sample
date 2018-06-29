@@ -9,7 +9,13 @@ SECRET_KEY = 'super secret key'
 
 ID_GEONATURE = 14
 
+""" ID of type Tag """
 
+ID_OBJECT = 1
+ID_ACTION = 2
+ID_PRIVILEGE = 3
+ID_LIST = 4
+ID_SCOPE = 5
 
 """ ID of tag cruved in your database """ 
 
