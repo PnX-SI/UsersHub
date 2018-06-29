@@ -128,7 +128,21 @@ class CorRoleTagApplication(GenericRepository):
     __table_args__={'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_tag = db.Column(db.Integer,ForeignKey('utilisateurs.t_tags.id_tag'), primary_key = True)
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_application.id_application'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+
+    @classmethod
+    def add_cor(cls,id_app,tab_right):
+        dict_add = {}
+        for d in tab_right:
+            dict_add = {'id_role':d['id_role'],'id_tag':d['id_right'], 'id_application': id_app }
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_app,tab_right):
+       for t in tab_right:
+            print(t)
+            cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_tag == t['id_right']).filter(cls.id_application == id_app).delete()
+            db.session.commit() 
 
 @serializable
 class CorApplicationTag(GenericRepository):

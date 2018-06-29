@@ -2,6 +2,7 @@
 var tab_add = []
 var tab_del = []
 var data_select = []
+var right = []
 
 var lala = function(){
     console.log('lala')
@@ -54,11 +55,9 @@ var add = function(app) {
         }else{
             var Row = $(this).parents('tr').append()
         }
-        console.log(i++);
         tab.push(Row[0]);
         $("#user").find("input[type=checkbox]:checked").prop('checked', false);
         var ID=$(this).parents('tr').find('td:eq(1)').html();
-        console.log(ID);
         tab_add.push(ID);
         if (isInTabb(tab_del,ID) == true){
             tab_del.splice(tab_del.indexOf(ID),1);
@@ -79,14 +78,16 @@ var del = function(app){
     var tab = []
     $('#adding_table input[type="checkbox"]:checked').each(function(){
         var Row = $(this).parents('tr');
+        var ID=$(this).parents('tr').find('td:eq(1)').html();
+        var RIGHT = $(this).parents('tr').find("option:selected").val()
         if (app != null){
+            right.push({id_role : ID, id_right:RIGHT })
             Row.find('.right').remove()
             
         }
         var Row = $(this).parents('tr');
         tab.push(Row[0]);
         $("#adding_table").find("input[type=checkbox]:checked").prop('checked', false);
-        var ID=$(this).parents('tr').find('td:eq(1)').html();
         tab_del.push(ID)
         if (isInTabb(tab_add,ID) == true){
             tab_add.splice(tab_add.indexOf(ID),1);
@@ -96,24 +97,35 @@ var del = function(app){
     });
     var table = $('#user')
     addTab(tab,table)
+    
+
 };
 
 
 var get_right = function(data){
-    var i = 0
+    var tab = []
     data_id = data['tab_add']
     $('#adding_table tr').each(function(){
         var ID=$(this).find('td:eq(1)').html();
+        var RIGHT = $(this).find("option:selected").val();
         for( d in data_id){
             if (ID == data_id[d]){
-            console.log('coucou')
+                tab.push({id_role : ID, id_right: RIGHT});
 
             }
         } 
     })
-
+    return tab
 };
 
+var get_right_delete = function(data){
+    for(r in right){
+        if(isInTabb(data['tab_del'],r['id_role']) == true){
+            right.splice(right.indexOf(r),1)
+        }
+    }    
+
+};
 
 var update_right = function(){
     console.log("tableau d ajout : "+ tab_add);
@@ -121,7 +133,9 @@ var update_right = function(){
     var data ={}
     data["tab_add"] = tab_add;
     data["tab_del"]= tab_del;
-    test = get_right(data)
+    data["tab_add"] = get_right(data)
+    get_right_delete(data)
+    data["tab_del"] = right 
 
     $.ajax({
         url : $(location).attr('href'),
@@ -133,6 +147,7 @@ var update_right = function(){
 
     tab_add = []
     tab_del = []
+    tab_right = []
 };
 
 

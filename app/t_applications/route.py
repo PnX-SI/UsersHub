@@ -5,7 +5,7 @@ Blueprint, request, session, flash
 from app import genericRepository
 from app.t_applications import forms as t_applicationsforms
 from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges, TTags
+from app.models import Bib_Organismes, CorRoles, TApplications, CorAppPrivileges, TTags, CorRoleTagApplication
 from app.utils.utilssqlalchemy import json_resp
 from app.env import db
 from config import config
@@ -140,10 +140,12 @@ def users(id_application):
     data = ['id_role','full_name']
     app = TApplications.get_one(id_application)
     if request.method == 'POST':
-        print("coucou")
-    
-
-
+        data = request.get_json()
+        new_rights = data["tab_add"]
+        delete_rights = data["tab_del"]
+        print(delete_rights)
+        CorRoleTagApplication.add_cor(id_application,new_rights)
+        CorRoleTagApplication.del_cor(id_application,delete_rights)
     return render_template('tobelong.html', fLine = header, data = data, table = users_out_app, table2 = users_in_app, group = 'groupe', app = 'True', info = 'Droit des utilisateurs et des groupes sur  "'+app['nom_application']+'"') 
 
 
