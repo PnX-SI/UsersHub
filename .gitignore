@@ -7,3 +7,7 @@ venv
 __pycache__
 node_modules
 fontawesome*
+
+.vscode
+
+*.php

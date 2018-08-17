@@ -10,7 +10,7 @@ class GenericRepository(db.Model):
     """
 
     @classmethod
-    def get_one(cls,id, as_model = False):
+    def get_one(cls, id, as_model=False):
 
         """
         Methode qui retourne un dictionnaire d'un élément d'un Model
@@ -18,15 +18,15 @@ class GenericRepository(db.Model):
         Si as_model != False alors au lieu de retourner un dictionnaire on retourne une requête
         """
 
-        if as_model ==False :
+        if as_model == False:
             data = db.session.query(cls).get(id)
             return data.as_dict(True)
-        else :
+        else:
             return db.session.query(cls).get(id)
-            
+
     @classmethod
     def get_all(cls, columns=None, params = None, recursif = True,as_model = False):
-        
+
         """
         Methode qui retourne un dictionnaire de tout les éléments d'un Model
         Avec pour paramètres:
@@ -42,7 +42,7 @@ class GenericRepository(db.Model):
                 return [data.as_dict(recursif,columns) for data in db.session.query(cls).all()]
             else:
                 q = db.session.query(cls)
-                for param in params : 
+                for param in params :
                     nom_col = getattr(cls,param['col'])
                     q = q.filter(nom_col == param['filter'])
                 return [data.as_dict(recursif,columns) for data in q.all()]
@@ -65,7 +65,7 @@ class GenericRepository(db.Model):
     def update(cls, entity_dict):
 
         """
-        Methode qui met à jour un élément 
+        Methode qui met à jour un élément
         Avec pour paramètre un dictionnaire de cet élément
         """
 
@@ -87,9 +87,9 @@ class GenericRepository(db.Model):
     def choixSelect(cls,id,nom,aucun = None):
 
         """
-        Methode qui retourne une tableau de tuples d'id  et de nom 
-        Avec pour paramètres un id  et un nom 
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        Methode qui retourne une tableau de tuples d'id  et de nom
+        Avec pour paramètres un id  et un nom
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
         data = cls.get_all()
@@ -99,11 +99,11 @@ class GenericRepository(db.Model):
         if aucun != None :
             choices.append((-1,'Aucun'))
         return choices
-        
 
-  
-    
-   
+
+
+
+
     # def get_column_name(cls,columns=None):
     #     if columns:
     #         for col in cls.__table__.columns.keys()
@@ -112,4 +112,3 @@ class GenericRepository(db.Model):
 
 
 
-    

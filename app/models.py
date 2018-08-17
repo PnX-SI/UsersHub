@@ -668,7 +668,7 @@ class CorRoleDroitApplication(GenericRepository):
     __table_args__= {'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_droit = db.Column(db.Integer,ForeignKey('utilisateurs.bib_droits.id_droit'), primary_key = True)
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_application.id_application'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
 
 @serializable
 class VTMenu(GenericRepository):

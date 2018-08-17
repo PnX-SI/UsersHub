@@ -29,7 +29,7 @@ def users():
                                             - une entête de tableau --> fLine
                                             - le nom des colonnes de la base --> line
                                             - le contenu du tableau --> table
-                                            - le chemin de mise à jour --> pathU 
+                                            - le chemin de mise à jour --> pathU
                                             - le chemin de suppression --> pathD
                                             - le chemin d'ajout --> pathA
                                             - le chemin de la page d'information --> pathI
@@ -45,13 +45,13 @@ def users():
     contents = TRoles.get_all(columns,filters)
     tab = []
     for data in contents :
-        org = data 
+        org = data
         org['nom_organisme'] = data['organisme_rel']['nom_organisme']
-        tab.append(org) 
-    
-    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,see ='True',  key = 'id_role',pathI = config.URL_APPLICATION+'/user/info/', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")    
+        tab.append(org)
 
-    
+    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,see ='True',  key = 'id_role',pathI = config.URL_APPLICATION+'/user/info/', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")
+
+
 @route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
 @route.route('user/update/<id_role>', methods=['GET','POST'])
 def addorupdate(id_role):
@@ -88,9 +88,9 @@ def addorupdate(id_role):
         if request.method == 'GET':
             form = process(form,user)
         if request.method == 'POST':
-            if form.validate_on_submit() and form.validate():  
+            if form.validate_on_submit() and form.validate():
                 form_user = pops(form.data)
-                form_user['groupe'] = False      
+                form_user['groupe'] = False
                 if form.pass_plus.data == form.mdpconf.data:
                     form_user['id_role'] = user['id_role']
                     form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
@@ -106,7 +106,7 @@ def addorupdate(id_role):
         return render_template('user.html',form = form, title = "Formulaire Utilisateur")
 
 
-   
+
 @route.route('users/delete/<id_role>', methods = ['GET','POST'])
 def deluser(id_role):
 
@@ -128,7 +128,7 @@ def get_info(id_role):
     group = [data.as_dict() for data in d_group.all()]
     tab_g = []
     if group != None:
-        for g in group : 
+        for g in group :
             tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
     org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
     d_tag = CorRoleTag.get_all(recursif = True, as_model = True)
@@ -156,13 +156,13 @@ def pops(form):
     form.pop('submit')
     form.pop('csrf_token')
     form.pop('a_groupe')
-    return form 
+    return form
 
 def process(form,user):
-        
+
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire et un type de tag 
+    Avec pour paramètres un formulaire et un type de tag
     """
 
     form.id_organisme.process_data(user['id_organisme'])
@@ -173,11 +173,11 @@ def process(form,user):
     form.identifiant.process_data(user['identifiant'])
     return form
 
-    
+
 
 #  NON UTILISE
 
-    
+
 # @route.route('users/update/<id_role>',  methods=['GET','POST'])
 # def user_unique(id_role):
 #     entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
@@ -193,14 +193,14 @@ def process(form,user):
 #         print(formu.id_organisme.data)
 #         print('coucou')
 #     if request.method == 'POST':
-#         if formu.validate_on_submit() and formu.validate():  
-#             print('coucou2')             
+#         if formu.validate_on_submit() and formu.validate():
+#             print('coucou2')
 #             form_user = formu.data
-#             form_user['groupe'] = False      
+#             form_user['groupe'] = False
 #             form_user.pop('mdpconf')
 #             form_user.pop('submit')
 #             form_user.pop('csrf_token')
-#             form_user.pop('a_groupe')           
+#             form_user.pop('a_groupe')
 #             if formu.pass_plus.data == formu.mdpconf.data:
 #                 form_user['id_role'] = user['id_role']
 #                 form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
@@ -212,7 +212,7 @@ def process(form,user):
 #         else :
 #             flash(formu.errors)
 #     return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/users/update/', cheminS = '/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'], identifiant= user['identifiant'] )
- 
+
 
 # @route.route('/user', methods=['GET','POST'])
 # def user():
@@ -221,7 +221,7 @@ def process(form,user):
 #     if request.method == 'POST':
 #         if formu.validate_on_submit() and formu.validate():
 #             form_user = formu.data
-#             form_user['groupe'] = False           
+#             form_user['groupe'] = False
 #             form_user.pop('mdpconf')
 #             form_user.pop('submit')
 #             form_user.pop('csrf_token')
@@ -239,7 +239,7 @@ def process(form,user):
 
 
 # @route.route('/accueil',methods=['GET','POST'])
-# def accueil():   
+# def accueil():
 #     return render_template('accueil.html')
 
 # @route.route('/test')
