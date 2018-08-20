@@ -1,26 +1,32 @@
 from flask import (
-Flask, redirect, url_for, render_template,
-Blueprint, request, session, flash
+    Flask, redirect, url_for, render_template,
+    Blueprint, request, session, flash
 )
-from app import genericRepository
-from app.t_roles import forms as t_rolesforms
-from app.models import TRoles
-from app.models import Bib_Organismes, CorRoles, CorRoleTag, TTags
-from app.utils.utilssqlalchemy import json_resp
-from app.env import db
-from flask_bcrypt import (Bcrypt,
-                          check_password_hash,
-                          generate_password_hash)
-from app.CRUVED.route import get_cruved_one
 
-import bcrypt
+from flask_bcrypt import (
+    Bcrypt,
+    check_password_hash,
+    generate_password_hash
+)
+
+from app import genericRepository
+from app.env import db, URL_REDIRECT
+from app.t_roles import forms as t_rolesforms
+from app.models import (
+    TRoles, Bib_Organismes, CorRoles, CorRoleTag, TTags
+)
+from app.utils.utilssqlalchemy import json_resp
+from app.CRUVED.route import get_cruved_one
 
 from config import config
 
-route =  Blueprint('user',__name__)
+from pypnusershub import routes as fnauth
+
+route = Blueprint('user', __name__)
 
 
-@route.route('users/list',methods=['GET','POST'])
+@route.route('users/list', methods=['GET', 'POST'])
+@fnauth.check_auth(3, False, URL_REDIRECT)
 def users():
 
     """
@@ -52,8 +58,9 @@ def users():
     return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,see ='True',  key = 'id_role',pathI = config.URL_APPLICATION+'/user/info/', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")
 
 
-@route.route('user/add/new',defaults={'id_role': None}, methods=['GET','POST'])
-@route.route('user/update/<id_role>', methods=['GET','POST'])
+@route.route('user/add/new', defaults={'id_role': None}, methods=['GET', 'POST'])
+@route.route('user/update/<id_role>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
 def addorupdate(id_role):
 
     """
@@ -107,7 +114,8 @@ def addorupdate(id_role):
 
 
 
-@route.route('users/delete/<id_role>', methods = ['GET','POST'])
+@route.route('users/delete/<id_role>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
 def deluser(id_role):
 
 
@@ -120,7 +128,8 @@ def deluser(id_role):
     return redirect(url_for('user.users'))
 
 
-@route.route('user/info/<id_role>', methods = ['GET','POST'])
+@route.route('user/info/<id_role>', methods=['GET','POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
 def get_info(id_role):
     user = TRoles.get_one(id_role)
     d_group = CorRoles.get_all(recursif = True, as_model = True)

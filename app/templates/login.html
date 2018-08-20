@@ -1,26 +1,51 @@
 <!DOCTYPE html>
 <html>
-    {% include "header.html" %}  
+    {% include "header.html" %}
 
     <body>
 
             {% include "head-appli.html" %}
-            <p>
-                
-            </p>
-        <h2>Connexion</h2>
-        <form action="" method="post">
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.username.label }}<br>
-                    {{ form.username(size=32) }}
-                </p>
-                <p>
-                    {{ form.password.label }}<br>
-                    {{ form.password(size=32) }}
-                </p>
-                <p>{{ form.submit() }}</p>
-            </form>
+        <p>
 
+        </p>
+        <h2>Connexion</h2>
+        <div class="form-horizontal">
+            <input type="hidden" name="" id="user_app" value="{{id_app}}">
+            <div class="form-group">
+              <label for="user_id">Identifiant:</label>
+              <input type="text" class="form-control" id="user_id">
+            </div>
+            <div class="form-group">
+              <label for="pwd">Mot de passe:</label>
+              <input type="password" class="form-control" id="user_pwd">
+            </div>
+            <button onclick="login()" class="btn btn-default">Login</button>
+          </div>
     </body>
 </html>
+
+<script>
+
+login = function() {
+
+    $.post({
+        url : '/pypn/auth/login',
+        data : JSON.stringify ({
+            "id_application": $('#user_app').val(),
+            "login": $('#user_id').val(),
+            "password" : $('#user_pwd').val()
+        }),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(response){
+            console.log(response);
+            window.location.href = "/";
+        },
+        error: function(error){
+            // TODO
+            console.log(error);
+        }
+    });
+}
+
+</script>

@@ -1,13 +1,11 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, redirect, url_for
 from app.env import db
 from config import config
 
 
-
-""" Serveur de l'application UsersHub """
-
-
+"""
+    Serveur de l'application UsersHub
+"""
 class ReverseProxied(object):
 
     def __init__(self, app, script_name=None, scheme=None, server=None):
@@ -32,42 +30,64 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
-app = Flask(__name__, template_folder= "app/templates" , static_folder = 'app/static' )
+app = Flask(
+    __name__,
+    template_folder="app/templates",
+    static_folder='app/static'
+)
 
 app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
 
+app.config.from_pyfile('config/config.py')
 app.secret_key = config.SECRET_KEY
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+
 db.init_app(app)
+
 with app.app_context():
 
-    from app.t_roles import route
-    app.register_blueprint(route.route,  url_prefix='/')
+    if config.ACTIVATE_APP:
 
-    from app.bib_organismes import route
-    app.register_blueprint(route.route,  url_prefix='/')
+        @app.route('/')
+        def index():
+            ''' Route par défaut de l'application '''
+            return redirect(url_for('user.users'))
 
-    from app.groupe import route
-    app.register_blueprint(route.route,  url_prefix='/')
+        from pypnusershub import routes
+        app.register_blueprint(routes.routes, url_prefix='/pypn/auth')
 
-    from app.t_applications import route
-    app.register_blueprint(route.route, url_prefix='/')
+        from app.auth import route
+        app.register_blueprint(route.route,  url_prefix='/login')
 
-    from app.t_tags import route
-    app.register_blueprint(route.route, url_prefix='/')
+        from app.t_roles import route
+        app.register_blueprint(route.route,  url_prefix='/')
 
-    from app.bib_tag_types import route
-    app.register_blueprint(route.route, url_prefix='/')
+        from app.bib_organismes import route
+        app.register_blueprint(route.route,  url_prefix='/')
 
-    from app.auth import route
-    app.register_blueprint(route.route, url_prefix='/log')
+        from app.groupe import route
+        app.register_blueprint(route.route,  url_prefix='/')
 
-    from app.CRUVED import route
-    app.register_blueprint(route.route, url_prefix='/')
+        from app.t_applications import route
+        app.register_blueprint(route.route, url_prefix='/')
 
-    from app.API import route
-    app.register_blueprint(route.route, url_prefix='/api')
+        from app.t_tags import route
+        app.register_blueprint(route.route, url_prefix='/')
+
+        from app.bib_tag_types import route
+        app.register_blueprint(route.route, url_prefix='/')
+
+        from app.auth import route
+        app.register_blueprint(route.route, url_prefix='/log')
+
+        from app.CRUVED import route
+        app.register_blueprint(route.route, url_prefix='/')
+
+        from app.API import route
+        app.register_blueprint(route.route, url_prefix='/api')
+
+    if config.ACTIVATE_API:
+        from app.API import route_register
+        app.register_blueprint(route_register.route, url_prefix='/api_register')
 
 
 if __name__ == '__main__':

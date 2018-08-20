@@ -32,5 +32,4 @@ Werkzeug==0.14.1
 wrapt==1.10.11
 WTForms==2.1
 WTForms-Components==0.10.3
-
-https://github.com/PnX-SI/UsersHub-authentification-module/archive/1.1.0.zip
+git+https://github.com/PnX-SI/UsersHub-authentification-module@1.0.1

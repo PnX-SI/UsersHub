@@ -9,6 +9,15 @@ SECRET_KEY = 'super secret key'
 
 ID_GEONATURE = 14
 
+""" ID of application Userhub"""
+
+ID_APP = 1
+
+""" Authentification crypting method (hash or md5) """
+PASS_METHOD = 'hash'
+COOKIE_EXPIRATION = 3600
+COOKIE_AUTORENEW = True
+
 """ ID of type Tag """
 
 ID_OBJECT = 1
@@ -17,7 +26,7 @@ ID_PRIVILEGE = 3
 ID_LIST = 4
 ID_SCOPE = 5
 
-""" ID of tag cruved in your database """ 
+""" ID of tag cruved in your database """
 
 ID_TAG_CREATE = 11
 ID_TAG_READ = 12
@@ -35,3 +44,6 @@ ID_TAG_ALLDATA = 23
 """ SERVER """
 PORT = 5001
 DEBUG = False
+
+ACTIVATE_API = True
+ACTIVATE_APP = True
