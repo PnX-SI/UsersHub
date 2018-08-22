@@ -1,21 +1,17 @@
 from flask import (
-    Flask, redirect, url_for, render_template,
-    Blueprint, request, session, flash
+    redirect, url_for, render_template,
+    Blueprint, request, flash
 )
 
 from flask_bcrypt import (
-    Bcrypt,
-    check_password_hash,
     generate_password_hash
 )
 
-from app import genericRepository
-from app.env import db, URL_REDIRECT
+from app.env import URL_REDIRECT
 from app.t_roles import forms as t_rolesforms
 from app.models import (
     TRoles, Bib_Organismes, CorRoles, CorRoleTag, TTags
 )
-from app.utils.utilssqlalchemy import json_resp
 from app.CRUVED.route import get_cruved_one
 
 from config import config
@@ -44,18 +40,30 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-
-    fLine = ['Id','Identifiant', 'Nom','Prenom','Email', 'Organisme', 'Remarques']
-    columns = ['id_role','identifiant','nom_role','prenom_role','email','nom_organisme','remarques']
+    fLine = ['Id', 'Identifiant',  'Nom', 'Prenom', 'Email',  'Organisme',  'Remarques']  # noqa
+    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
-    contents = TRoles.get_all(columns,filters)
+    contents = TRoles.get_all(columns, filters)
     tab = []
-    for data in contents :
+    for data in contents:
         org = data
         org['nom_organisme'] = data['organisme_rel']['nom_organisme']
         tab.append(org)
 
-    return render_template('table_database.html', fLine = fLine ,line = columns, table = tab,see ='True',  key = 'id_role',pathI = config.URL_APPLICATION+'/user/info/', pathU = config.URL_APPLICATION +'/user/update/', pathD = config.URL_APPLICATION +'/users/delete/',pathA = config.URL_APPLICATION +"/user/add/new", name = 'un utilisateur', name_list = "Utilisateurs")
+    return render_template(
+        "table_database.html",
+        fLine=fLine,
+        line=columns,
+        table=tab,
+        see="True",
+        key="id_role",
+        pathI=config.URL_APPLICATION + "/user/info/",
+        pathU=config.URL_APPLICATION + "/user/update/",
+        pathD=config.URL_APPLICATION + "/users/delete/",
+        pathA=config.URL_APPLICATION + "/user/add/new",
+        name="un utilisateur",
+        name_list="Utilisateurs"
+    )
 
 
 @route.route('user/add/new', defaults={'id_role': None}, methods=['GET', 'POST'])
@@ -70,9 +78,12 @@ def addorupdate(id_role):
     Une fois le formulaire validé on retourne une redirection vers la liste de type de tag
     """
     form = t_rolesforms.Utilisateur()
-    form.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
-    form.a_groupe.choices = TRoles.choix_group('id_role','nom_role',1)
-    if id_role == None :
+    form.id_organisme.choices = Bib_Organismes.choixSelect(
+        'id_organisme',
+        'nom_organisme'
+    )
+    form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
+    if id_role is None:
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_user = pops(form.data)
@@ -83,17 +94,19 @@ def addorupdate(id_role):
                     form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                     TRoles.post(form_user)
                     return redirect(url_for('user.users'))
-                else :
+                else:
                     flash("mot de passe non identiques")
-            else :
-                errors =  form.errors
-                if(errors['nom_role'] != None):
+            else:
+                errors = form.errors
+                if(errors['nom_role'] is not None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('user.html', form = form, title = "Formulaire Utilisateur")
+        return render_template(
+            'user.html', form=form, title="Formulaire Utilisateur"
+        )
     else:
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
-            form = process(form,user)
+            form = process(form, user)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_user = pops(form.data)
@@ -107,51 +120,63 @@ def addorupdate(id_role):
                 else :
                     flash("mot de passe non identiques")
             else :
-                errors =  form.errors
+                errors = form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template('user.html',form = form, title = "Formulaire Utilisateur")
-
+        return render_template(
+            'user.html',
+            form=form,
+            title="Formulaire Utilisateur"
+        )
 
 
 @route.route('users/delete/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def deluser(id_role):
-
-
     """
     Route qui supprime un utilisateurs dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste d'utilisateurs
     """
-
     TRoles.delete(id_role)
     return redirect(url_for('user.users'))
 
 
-@route.route('user/info/<id_role>', methods=['GET','POST'])
+@route.route('user/info/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def get_info(id_role):
     user = TRoles.get_one(id_role)
-    d_group = CorRoles.get_all(recursif = True, as_model = True)
+    d_group = CorRoles.get_all(recursif=True, as_model=True)
     d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
     group = [data.as_dict() for data in d_group.all()]
     tab_g = []
     if group != None:
-        for g in group :
+        for g in group:
             tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
     org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
-    d_tag = CorRoleTag.get_all(recursif = True, as_model = True)
+    d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
     d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
     tag = [data.as_dict() for data in d_tag.all()]
     tab_t = []
     if tag != None:
         for t in tag:
             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-    Cruved = get_cruved_one(id_role)
-    fLineCruved = ['Application','Create','Read','Update','Validate','Export','Delete']
-    columnsCruved = [ 'nom_application','C','R','U','V','E','D']
-    return render_template("info_user.html", elt = user, group = tab_g, org = org, tag = tab_t,fLineCruved = fLineCruved,lineCruved = columnsCruved,tableCruved=Cruved, id_r = id_role, id_app = Cruved[0]['id_application'], pathU=config.URL_APPLICATION +'/CRUVED/update/',pathUu = '/' )
-
+    cruved = get_cruved_one(id_role)
+    f_lines_cruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']  # noqa
+    columns_cruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
+    return render_template(
+        "info_user.html",
+        elt=user,
+        group=tab_g,
+        org=org,
+        tag=tab_t,
+        fLineCruved=f_lines_cruved,
+        lineCruved=columns_cruved,
+        tableCruved=cruved,
+        id_r=id_role,
+        id_app=cruved[0]['id_application'],
+        pathU=config.URL_APPLICATION + '/CRUVED/update/',
+        pathUu='/'
+    )
 
 
 def pops(form):
@@ -160,15 +185,14 @@ def pops(form):
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
     """
-
     form.pop('mdpconf')
     form.pop('submit')
     form.pop('csrf_token')
     form.pop('a_groupe')
     return form
 
-def process(form,user):
 
+def process(form, user):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un type de tag
@@ -181,90 +205,3 @@ def process(form,user):
     form.remarques.process_data(user['remarques'])
     form.identifiant.process_data(user['identifiant'])
     return form
-
-
-
-#  NON UTILISE
-
-
-# @route.route('users/update/<id_role>',  methods=['GET','POST'])
-# def user_unique(id_role):
-#     entete = ['Id','Groupe','Identifiant', 'Nom','Prenom','Description','Email', 'ID organisme', 'Remarques']
-#     colonne = ['id_role','groupe','identifiant','nom_role','prenom_role','desc_role','email','id_organisme','remarques']
-#     filters = [{'col': 'groupe', 'filter': 'False'}]
-#     contenu = TRoles.get_all(colonne,filters)
-#     # test
-#     user = TRoles.get_one(id_role)
-#     formu = t_rolesforms.Utilisateur(request.form)
-#     formu.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
-#     if request.method == 'GET':
-#         formu.id_organisme.process_data(user['id_organisme'])
-#         print(formu.id_organisme.data)
-#         print('coucou')
-#     if request.method == 'POST':
-#         if formu.validate_on_submit() and formu.validate():
-#             print('coucou2')
-#             form_user = formu.data
-#             form_user['groupe'] = False
-#             form_user.pop('mdpconf')
-#             form_user.pop('submit')
-#             form_user.pop('csrf_token')
-#             form_user.pop('a_groupe')
-#             if formu.pass_plus.data == formu.mdpconf.data:
-#                 form_user['id_role'] = user['id_role']
-#                 form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
-#                 form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
-#                 TRoles.update(form_user)
-#                 return redirect(url_for('user.users'))
-#             else :
-#                 flash("mot de passe non identiques")
-#         else :
-#             flash(formu.errors)
-#     return render_template('affichebase.html', entete = entete ,ligne = colonne,  table = contenu,  cle = 'id_role', cheminM = '/users/update/', cheminS = '/user/delete/', test ='user_unique.html',form = formu, nom_role = user['nom_role'], prenom_role = user['prenom_role'],  email= user['email'],desc_role = user['desc_role'], remarques = user['remarques'], identifiant= user['identifiant'] )
-
-
-# @route.route('/user', methods=['GET','POST'])
-# def user():
-#     formu = t_rolesforms.Utilisateur()
-#     formu.id_organisme.choices = Bib_Organismes.choixSelect('id_organisme','nom_organisme')
-#     if request.method == 'POST':
-#         if formu.validate_on_submit() and formu.validate():
-#             form_user = formu.data
-#             form_user['groupe'] = False
-#             form_user.pop('mdpconf')
-#             form_user.pop('submit')
-#             form_user.pop('csrf_token')
-#             form_user.pop('id_role')
-#             if formu.pass_plus.data == formu.mdpconf.data:
-#                 form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].decode('utf-8'))
-#                 form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
-#                 TRoles.post(form_user)
-#                 return redirect(url_for('user.users'))
-#             else :
-#                 flash("mot de passe non identiques")
-#         else :
-#             flash(formu.errors)
-#     return render_template('user_unique.html', form = formu)
-
-
-# @route.route('/accueil',methods=['GET','POST'])
-# def accueil():
-#     return render_template('accueil.html')
-
-# @route.route('/test')
-# @json_resp
-# def test():
-#     filters = [{'col': 'id_role_utilisateur', 'filter':'5'}]
-#     return CorRoles.get_all(params = filters)
-
-
-# @route.route('/login', methods=['GET','POST'])
-# def login():
-#     form = t_rolesforms.LogUser()
-#     print(form.validate_on_submit())
-#     if form.validate_on_submit():
-#         if t_rolesrepository.admin_valide(form.username.data,form.password.data) :
-#             session['Pseudo']= (form.username.data, form.password.data)
-#             print(session.get('Pseudo')[0],session.get('Pseudo')[1])
-#             return redirect(url_for('user.accueil'))
-#     return render_template('login.html', form=form)

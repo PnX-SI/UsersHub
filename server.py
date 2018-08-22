@@ -1,4 +1,6 @@
-from flask import Flask, redirect, url_for
+import json
+
+from flask import Flask, redirect, url_for, request, session
 from app.env import db
 from config import config
 
@@ -51,6 +53,23 @@ with app.app_context():
         def index():
             ''' Route par défaut de l'application '''
             return redirect(url_for('user.users'))
+
+        @app.after_request
+        def after_login_method(response):
+
+            # Inutile car URL_REDIRECT dans fonction check_auth
+            if response.status_code == 403:
+                session["current_user"] = None
+                return redirect(url_for('login.auth'))
+
+            if request.endpoint == 'auth.login' and response.status_code == 200:
+                current_user = json.loads(response.get_data().decode('utf-8'))
+                session["current_user"] = current_user["user"]
+
+            if request.endpoint == 'auth.logout':
+                session["current_user"] = None
+
+            return response
 
         from pypnusershub import routes
         app.register_blueprint(routes.routes, url_prefix='/pypn/auth')
