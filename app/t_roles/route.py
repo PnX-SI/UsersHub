@@ -7,6 +7,8 @@ from flask_bcrypt import (
     generate_password_hash
 )
 
+from pypnusershub import routes as fnauth
+
 from app.env import URL_REDIRECT
 from app.t_roles import forms as t_rolesforms
 from app.models import (
@@ -16,7 +18,6 @@ from app.CRUVED.route import get_cruved_one
 
 from config import config
 
-from pypnusershub import routes as fnauth
 
 route = Blueprint('user', __name__)
 
@@ -117,9 +118,9 @@ def addorupdate(id_role):
                     form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
                     TRoles.update(form_user)
                     return redirect(url_for('user.users'))
-                else :
+                else:
                     flash("mot de passe non identiques")
-            else :
+            else:
                 errors = form.errors
                 if(errors['nom_role'] != None):
                     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
