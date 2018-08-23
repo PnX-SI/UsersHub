@@ -4,30 +4,35 @@
 
     <body>
 
-            {% include "head-appli.html" %}
-        <p>
+        {% include "head-appli.html" %}
 
-        </p>
-        <h2>Connexion</h2>
-        <div class="form-horizontal">
-            <input type="hidden" name="" id="user_app" value="{{id_app}}">
-            <div class="form-group">
-              <label for="user_id">Identifiant:</label>
-              <input type="text" class="form-control" id="user_id">
+        <div class="container main-zone ng-scope ">
+            <h2>Connexion</h2>
+
+            <div class="alert alert-danger" role="alert" id="login-error">
+                Paramètres de connexion invalides
             </div>
-            <div class="form-group">
-              <label for="pwd">Mot de passe:</label>
-              <input type="password" class="form-control" id="user_pwd">
+            <div class="form-horizontal">
+                <input type="hidden" name="" id="user_app" value="{{id_app}}">
+                <div class="form-group">
+                <label for="user_id">Identifiant:</label>
+                <input type="text" class="form-control" id="user_id">
+                </div>
+                <div class="form-group">
+                <label for="pwd">Mot de passe:</label>
+                <input type="password" class="form-control" id="user_pwd">
+                </div>
+                <button onclick="login()" class="btn btn-default">Login</button>
             </div>
-            <button onclick="login()" class="btn btn-default">Login</button>
-          </div>
+        </div>
     </body>
 </html>
 
 <script>
+$("#login-error").hide();
 
 login = function() {
-
+    $("#login-error").hide();
     $.post({
         url : '/pypn/auth/login',
         data : JSON.stringify ({
@@ -42,10 +47,10 @@ login = function() {
             window.location.href = "/";
         },
         error: function(error){
-            // TODO
+            $("#login-error" ).show();
             console.log(error);
         }
     });
-}
+};
 
 </script>
