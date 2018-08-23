@@ -2,39 +2,29 @@
 
 . config/settings.ini
 
-echo "Créer les fichiers de configurations en lien avec la base de données..."
-cp config/connecter.php.sample config/connecter.php
-cp config/dbconnexions.json.sample config/dbconnexions.json
-cp -n web/js/config.php.sample web/js/config.php
-cp -n web/js/settings.js.sample web/js/settings.js
-cp -n web/images/main_logo.png.sample web/images/main_logo.png
-cp -n web/images/bandeau_utilisateurs.png.sample web/images/bandeau_utilisateurs.png
+# Création des fichiers de configuration
+cd config
 
-
-echo "Configuration du fichier config/connecter.php..."
-sed -i "s/serveur='.*$/serveur='$db_host';/" config/connecter.php
-sed -i "s/user='.*$/user='$user_pg';/" config/connecter.php
-sed -i "s/passe='.*$/passe='$user_pg_pass';/" config/connecter.php
-sed -i "s/base='.*$/base='$db_name';/" config/connecter.php
-sed -i "s/port='.*$/port='$pg_port';/" config/connecter.php
-
-echo "Suppression des fichiers de log de l'installation..."
-sudo rm log/*.log
-
-
-APACHE_REP=/var/www/
-if /usr/sbin/apache2 -v | grep -q version.*2.4; then
-    echo apache 2.4
-	APACHE_REP=/var/www/html
+echo "Création du fichier de configuration ..."
+if [ ! -f config.py ]; then
+  cp config.py.sample config.py
 fi
 
+echo "préparation du fichier config.py..."
+sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
 
-if [ ! -h $APACHE_REP/usershub ]; then
-  echo "Configuration du répertoire web de l'application..."
-  cd web
-  sudo ln -s ${PWD}/ $APACHE_REP/usershub
-  cd ..
-else
-  echo "Le répertoire de l'application exite déjà"
-fi
-echo "Fin. Vous devez manuellement éditer le fichier config/dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
+cd ..
+
+# Installation de l'environement python
+
+echo "Installation du virtual env..."
+virtualenv -p /usr/bin/python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+deactivate
+
+# Installation de l'environement javascript
+
+cd app/static
+npm install
+cd ../..
