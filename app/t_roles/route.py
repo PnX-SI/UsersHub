@@ -159,6 +159,11 @@ def get_info(id_role):
         for t in tag:
             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
     cruved = get_cruved_one(id_role)
+    print(cruved)
+    if not cruved:
+        id_app = None
+    else:
+        id_app = cruved[0]['id_application']
     f_lines_cruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']  # noqa
     columns_cruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
     return render_template(
@@ -171,7 +176,7 @@ def get_info(id_role):
         lineCruved=columns_cruved,
         tableCruved=cruved,
         id_r=id_role,
-        id_app=cruved[0]['id_application'],
+        id_app=id_app,
         pathU=config.URL_APPLICATION + '/CRUVED/update/',
         pathUu='/'
     )
