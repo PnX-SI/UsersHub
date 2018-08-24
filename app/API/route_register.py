@@ -1,9 +1,11 @@
+"""
+    Route permettant de manipuler les données de UsersHub via une API
+"""
+
+import re
+
 from flask import (
     Blueprint, request
-)
-
-from flask_bcrypt import (
-    generate_password_hash
 )
 
 from app.env import db
@@ -35,8 +37,8 @@ def insert_one_t_role():
 
         curl --header "Content-Type: application/json" \
         --request POST \
-        --data '{"email": null, "groupe": false, "pn": true, "remarques": "utilisateur test api", "desc_role": null, "prenom_role": "test", "identifiant": "test_api", "id_unite": -1, "id_organisme": -1, "uuid_role": "c8f63c2d-e606-49c5-8865-edb0953c496f", "nom_role": "API", "pass_plus": "123456", "pass_plus_confirmation": "123456", "applications":[{"id_app":2, "id_droit":1}]}' \
-        http://localhost:5001/api/role
+        --data '{"email": "a@test.fr", "groupe": false, "pn": true, "remarques": "utilisateur test api", "desc_role": null, "prenom_role": "test", "identifiant": "test_api", "id_unite": -1, "id_organisme": -1, "uuid_role": "c8f63c2d-e606-49c5-8865-edb0953c496f", "nom_role": "API", "password": "123456", "password_confirmation": "123456", "applications":[{"id_app":2, "id_droit":1}]}' \
+        http://localhost:5001/api_register/role
     '''
     req_data = request.get_json()
 
@@ -45,13 +47,17 @@ def insert_one_t_role():
         if hasattr(TRoles, att):
             role_data[att] = req_data[att]
 
-    # Traitement du mot de passe
-    if req_data['pass_plus'] == req_data['pass_plus_confirmation'] and req_data['pass_plus'] != "": # noqa E501
-        role_data['pass_plus'] = generate_password_hash(req_data['pass_plus'].encode('utf-8')) # noqa E501
-    else:
-        return "mot de passe non identiques", 500
+    # Validation email
+    if re.search("[@.]", req_data['email']) is None:
+        return "email not valid", 500
 
     role = TRoles(**role_data)
+
+    if req_data['password']:
+        role.fill_password(
+            req_data['password'], req_data['password_confirmation']
+        )
+
     db.session.add(role)
     db.session.commit()
 

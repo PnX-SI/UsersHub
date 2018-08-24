@@ -295,6 +295,9 @@ class TRoles(GenericRepository):
     session_appli = (db.Unicode)
 
 
+    def fill_password(self, password, password_confirmation):
+        (self.pass_plus, self.pass_md5) = self.set_password( password, password_confirmation)
+
     @classmethod
     def set_password(cls, password, password_confirmation):
         if not password:
