@@ -120,7 +120,7 @@ def addorupdate(id_role):
 
         else:
             errors = form.errors
-            if(errors['nom_role'] is not None):
+            if('nom_role' in errors):
                 flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
 
     return render_template(
