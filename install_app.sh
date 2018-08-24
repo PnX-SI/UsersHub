@@ -28,3 +28,12 @@ deactivate
 cd app/static
 npm install
 cd ../..
+
+
+#Lancement de l'application
+DIR=$(readlink -e "${0%/*}")
+sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
+sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
+
+sudo -s supervisorctl reread
+sudo -s supervisorctl reload
