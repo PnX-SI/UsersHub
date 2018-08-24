@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, redirect, url_for, request, session
+from flask import Flask, redirect, url_for, request, session, render_template
 from app.env import db
 from config import config
 
@@ -46,13 +46,19 @@ app.secret_key = config.SECRET_KEY
 db.init_app(app)
 
 with app.app_context():
+    app.jinja_env.globals['url_application'] = app.config["URL_APPLICATION"]
 
     if config.ACTIVATE_APP:
-
         @app.route('/')
         def index():
             ''' Route par défaut de l'application '''
             return redirect(url_for('user.users'))
+
+        @app.route('/constants.js')
+        def constants_js():
+            ''' Route des constantes javascript '''
+            return render_template('constants.js')
+
 
         @app.after_request
         def after_login_method(response):
@@ -71,11 +77,10 @@ with app.app_context():
 
             return response
 
+
+
         from pypnusershub import routes
         app.register_blueprint(routes.routes, url_prefix='/pypn/auth')
-
-        from app.auth import route
-        app.register_blueprint(route.route,  url_prefix='/login')
 
         from app.t_roles import route
         app.register_blueprint(route.route,  url_prefix='/')
@@ -103,6 +108,9 @@ with app.app_context():
 
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')
+
+        from app.auth import route
+        app.register_blueprint(route.route,  url_prefix='/login')
 
     if config.ACTIVATE_API:
         from app.API import route_register

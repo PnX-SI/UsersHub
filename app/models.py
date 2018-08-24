@@ -1,7 +1,17 @@
+
+
+import hashlib
+
 from app.env import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
+
+
+from flask_bcrypt import (
+    generate_password_hash
+)
+
 from app.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, distinct, or_, desc
@@ -27,12 +37,12 @@ class CorOrganismeTag(GenericRepository):
 
         """
         Methode qui permet d'ajouter des relations organismes tags a la base
-        
+
         Avec pour paramètres un id de tag et un tableau d'id d'organismes
         """
 
         dict_add = dict()
-        dict_add["id_tag"] = id_tag 
+        dict_add["id_tag"] = id_tag
         for d in tab_id:
             dict_add["id_organism"] = d
             cls.post(dict_add)
@@ -42,7 +52,7 @@ class CorOrganismeTag(GenericRepository):
 
         """
         Methode qui permet de supprimer des relationss organismes tag à la base
-        
+
         Avec pour paramètres un id de tag et un tableau d'id d'organismes
         """
 
@@ -54,7 +64,7 @@ class CorOrganismeTag(GenericRepository):
 class CorTagsRelations(GenericRepository):
 
     """ Classe de correspondance entre tags"""
-    
+
     __tablename__ = 'cor_tags_relations'
     __table_args__ = {'schema':'utilisateurs'}
     id_tag_l = db.Column(db.Integer, primary_key = True)
@@ -66,11 +76,11 @@ class CorTagsRelations(GenericRepository):
     @classmethod
     def add_cor(cls,id_group,tab_id):
         dict_add = dict()
-        dict_add["id_role_groupe"] = id_group 
+        dict_add["id_role_groupe"] = id_group
         for d in tab_id:
             dict_add["id_role_utilisateur"] = d
             cls.post(dict_add)
-    
+
     @classmethod
     def del_cor(cls,id_group,tab_id):
         for d in tab_id:
@@ -82,7 +92,7 @@ class CorTagsRelations(GenericRepository):
 class CorRoleTag(GenericRepository):
 
     """ Classe de correspondance entre la table t_roles et la table t_tags"""
-    
+
     __tablename__ = 'cor_role_tag'
     __table_args__= {'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
@@ -94,34 +104,34 @@ class CorRoleTag(GenericRepository):
 
         """
         Methode qui ajoute des relations roles tag
-        
+
         Avec pour paramètres un id de tag et un tableau d'id de roles
         """
 
         dict_add = dict()
-        dict_add["id_tag"] = id_tag 
+        dict_add["id_tag"] = id_tag
         for d in tab_id:
             dict_add["id_role"] = d
             cls.post(dict_add)
-    
+
     @classmethod
     def del_cor(cls,id_tag,tab_id):
 
         """
         Methode qui supprime des relation roles tag
-        
+
         Avec pour paramètres un id de tag et un tableau d'id de roles
         """
 
         for d in tab_id:
             cls.query.filter(cls.id_tag == id_tag).filter(cls.id_role == d).delete()
             db.session.commit()
-    
+
 
 
 @serializable
 class CorRoleTagApplication(GenericRepository):
-    
+
     """Classe de correspondance entre la table t_roles, t_tags et t_applications"""
 
     __tablename__= "cor_role_tag_application"
@@ -142,13 +152,13 @@ class CorRoleTagApplication(GenericRepository):
        for t in tab_right:
             print(t)
             cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_tag == t['id_right']).filter(cls.id_application == id_app).delete()
-            db.session.commit() 
+            db.session.commit()
 
 @serializable
 class CorApplicationTag(GenericRepository):
 
     """ Classe de correspondance entre la table t_applications et la table t_tags"""
-    
+
     __tablename__ = "cor_application_tag"
     __table_args__ = {'schema':'utilisateurs'}
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
@@ -159,22 +169,22 @@ class CorApplicationTag(GenericRepository):
 
         """
         Methode qui ajoute des relations applications tag
-        
+
         Avec pour paramètres un id de tag et un tableau d'id d'applications
         """
 
         dict_add = dict()
-        dict_add["id_tag"] = id_tag 
+        dict_add["id_tag"] = id_tag
         for d in tab_id:
             dict_add["id_application"] = d
             cls.post(dict_add)
-    
+
     @classmethod
     def del_cor(cls,id_tag,tab_id):
 
         """
         Methode qui supprime des relations applications tag
-        
+
         Avec pour paramètres un id de tag et un tableau d'id d'applications
         """
 
@@ -187,9 +197,9 @@ class CorAppPrivileges(GenericRepository):
 
     """
     Classe de correspondance entre la table t_applications,la table t_tags, la table t_roles
-    
+
     Cette classe permet d'établir un Cruved à un role pour une application,
-    une ligne représente de la table représente une relation d'un tag sur un role pour une application avec une portée 
+    une ligne représente de la table représente une relation d'un tag sur un role pour une application avec une portée
     """
 
     __tablename__ = 'cor_app_privileges'
@@ -201,21 +211,21 @@ class CorAppPrivileges(GenericRepository):
 
     @classmethod
     def delete(cls,id_tag,id_role,id_app):
-        
+
         """
-        Methode qui permet la suppression d'une ligne de cette table, 
+        Methode qui permet la suppression d'une ligne de cette table,
         avec pour paramètres un id de tag, un id de role et un id d'application
         """
 
         cls.query.filter(cls.id_tag_object == id_tag).filter(cls.id_application == id_app).filter(cls.id_role == id_role).delete()
         db.session.commit()
-  
+
 @serializable
 class  Bib_Organismes(GenericRepository):
 
     """
     Model de la table Bib_Organismes
-    
+
     """
     __tablename__ = 'bib_organismes'
     __table_args__={'schema':'utilisateurs'}
@@ -227,7 +237,7 @@ class  Bib_Organismes(GenericRepository):
     ville_organisme = db.Column(db.Unicode)
     tel_organisme = db.Column(db.Unicode)
     fax_organisme = db.Column(db.Unicode)
-    email_organisme = db.Column(db.Unicode)    
+    email_organisme = db.Column(db.Unicode)
     id_parent = db.Column(db.Integer)
 
     @classmethod
@@ -235,21 +245,21 @@ class  Bib_Organismes(GenericRepository):
 
         """
         Méthode qui retourne les organismes étiqueté par un tag donné
-        Avec pour paramètre un id de tag 
+        Avec pour paramètre un id de tag
         """
 
         q =db.session.query(cls)
         q = q.join(CorOrganismeTag)
         q = q.filter(id_tag == CorOrganismeTag.id_tag)
         data =  [data.as_dict() for data in q.all()]
-        return data 
-    
+        return data
+
     @classmethod
     def get_orgs_out_tag(cls,id_tag):
 
         """
         Méthode qui retourne les organismes non étiqueté par un tag donné
-        Avec pour paramètre un id de tag 
+        Avec pour paramètre un id de tag
         """
 
         q = db.session.query(cls)
@@ -274,26 +284,42 @@ class TRoles(GenericRepository):
     nom_role = db.Column(db.Unicode)
     prenom_role = db.Column(db.Unicode)
     desc_role = db.Column(db.Unicode)
-    # pass = db.Column(db.Unicode)
+    pass_md5 = db.Column("pass", db.Unicode)
     pass_plus = db.Column(db.Unicode)
     email = db.Column(db.Unicode)
-    id_organisme =db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme')) 
+    id_organisme =db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme'))
     organisme_rel = relationship("Bib_Organismes")
     id_unite = db.Column(db.Integer)
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     session_appli = (db.Unicode)
-    
+
+
+    @classmethod
+    def set_password(cls, password, password_confirmation):
+        if not password:
+            raise ValueError("Password is null")
+        if password != password_confirmation:
+            raise ValueError("Password doesn't match")
+
+        try:
+            pass_plus = generate_password_hash(password.encode('utf-8')).decode('utf-8')
+            pass_md5 = hashlib.md5(password.encode('utf-8')).hexdigest()
+        except Exception as e:
+            raise e
+
+        return (pass_plus, pass_md5)
+
     @classmethod
     def choixSelect(cls,id,nom,aucun = None):
 
         """
         Methode qui retourne une tableau de tuples d'id de roles et de nom de roles
         Avec pour paramètres un id de role et un nom de role
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
-        q = cls.get_all(as_model =True) 
+        q = cls.get_all(as_model =True)
         data =[data.as_dict_full_name() for data in q.all()]
         choices = []
         for d in data :
@@ -301,14 +327,14 @@ class TRoles(GenericRepository):
         if aucun != None :
             choices.append((-1,'Aucun'))
         return choices
-   
+
     @classmethod
     def choix_group(cls,id,nom,aucun = None):
 
         """
         Methode qui retourne une tableau de tuples d'id de groupes et de nom de goupes
-        Avec pour paramètres un id de groupe et un nom de groupe 
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        Avec pour paramètres un id de groupe et un nom de groupe
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
         q = db.session.query(cls)
@@ -321,12 +347,12 @@ class TRoles(GenericRepository):
             choices.append((-1,'Aucun'))
         return choices
 
-    
+
     def get_full_name(self):
-        
+
         """
         Methode qui concatène le nom et prénom du role
-        retourne un nom complet 
+        retourne un nom complet
         """
 
         if self.prenom_role == None:
@@ -334,23 +360,23 @@ class TRoles(GenericRepository):
         else :
             full_name = self.nom_role + ' '+ self.prenom_role
         return full_name
-       
+
     def as_dict_full_name(self):
 
         """
         Methode qui ajout le nom complet d'un role au dictionnaire qui le défini
         retourne un dictionnaire d'un utilisateur avec une nouvelle 'full_name'
         """
-        
+
         full_name = self.get_full_name()
         user_as_dict = self.as_dict()
         user_as_dict['full_name'] = full_name
         return user_as_dict
-       
+
 
     @classmethod
     def test_group(cls,tab):
-        
+
         """
         Methode qui test si le tableau contient un élement groupe = False,
         Si c'est le cas alors on remplace le boolean par un string du même nom
@@ -373,13 +399,13 @@ class TRoles(GenericRepository):
         Methode qui retourne un dictionnaire de roles étiqueté par un tag donné
         Avec pour paramètre un id de tag
         """
-        
+
         q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoleTag)
-        q = q.filter(id_tag == CorRoleTag.id_tag  )        
+        q = q.filter(id_tag == CorRoleTag.id_tag  )
         data =  [data.as_dict_full_name() for data in q.all()]
-        return data   
+        return data
 
 
     @classmethod
@@ -413,7 +439,7 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_out_group(cls,id_groupe):
-        
+
         """
         Methode qui retourne un dictionnaire de role n'appartenant pas à un groupe donné
         Avec pour paramètre un id de role
@@ -444,8 +470,8 @@ class TRoles(GenericRepository):
         q = q.filter(id_application ==  CorRoleTagApplication.id_application )
         data = q.all()
         data =  [{'role':d[0].as_dict_full_name(), 'right':d[1].as_dict()} for d in data]
-       
-        return data 
+
+        return data
 
     @classmethod
     def get_user_out_application(cls,id_application):
@@ -483,11 +509,11 @@ class CorRoles(GenericRepository):
         """
 
         dict_add = dict()
-        dict_add["id_role_groupe"] = id_group 
+        dict_add["id_role_groupe"] = id_group
         for d in tab_id:
             dict_add["id_role_utilisateur"] = d
             cls.post(dict_add)
-    
+
     @classmethod
     def del_cor(cls,id_group,tab_id):
 
@@ -499,7 +525,7 @@ class CorRoles(GenericRepository):
         for d in tab_id:
             cls.query.filter(cls.id_role_groupe== id_group).filter(cls.id_role_utilisateur == d).delete()
             db.session.commit()
-    
+
 
 @serializable
 class TApplications(GenericRepository):
@@ -517,7 +543,7 @@ class TApplications(GenericRepository):
 
     @classmethod
     def get_applications_in_tag(cls, id_tag):
-        
+
         """
         Methode qui retourne un dictionnaire d'application étiqueté par un tag donné
         Avec pour paramètre un id de tag
@@ -525,14 +551,14 @@ class TApplications(GenericRepository):
 
         q = db.session.query(cls)
         q = q.join(CorApplicationTag)
-        q = q.filter(id_tag == CorApplicationTag.id_tag  )        
+        q = q.filter(id_tag == CorApplicationTag.id_tag  )
         data =  [data.as_dict() for data in q.all()]
-        return data   
+        return data
 
 
     @classmethod
     def get_applications_out_tag(cls,id_tag):
-        
+
         """
         Methode qui retourne un dictionnaire d'application non étiqueté par un tag donné
         Avec pour paramètre un id de tag
@@ -550,7 +576,7 @@ class TApplications(GenericRepository):
         """
         Methode qui retourne une tableau de tuples d'id d'applications et de nom d'applications
         Avec pour paramètres un id id d'application et un nom d'application
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
         q = cls.get_all(as_model = True).filter(or_(cls.id_application == config.ID_GEONATURE,cls.id_parent == config.ID_GEONATURE))
@@ -561,7 +587,7 @@ class TApplications(GenericRepository):
         if aucun != None :
             choices.append((-1,'Aucun'))
         return choices
-   
+
 
 @serializable
 class TTags(GenericRepository):
@@ -581,31 +607,31 @@ class TTags(GenericRepository):
 
     @classmethod
     def choixSelect(cls,tag_code,nom,aucun = None):
-        
+
         """
         Methode qui retourne une tableau de tuples de code de tags et de nom de tags
         Avec pour paramètres un code de tag et un nom de tag
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (0,Aucun) au tableau        
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (0,Aucun) au tableau
         """
-        
+
         data = cls.get_all()
         choices = []
         for d in data :
-            if d['id_tag_type'] == 5:  
+            if d['id_tag_type'] == 5:
                 choices.append((d[tag_code], d[nom]))
         if aucun != None :
             choices.append((0,'Aucun'))
         return choices
-   
+
     @classmethod
     def choixSelectTag(cls,id,nom,aucun = None):
 
         """
         Methode qui retourne une tableau de tuples d'id de tag et de nom de tag de type privilège
         Avec pour paramètres un id de tag et un nom de tag
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau        
+        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
-        
+
         q = cls.get_all(as_model =True).filter(TTags.id_tag_type == 3)
         data =[data.as_dict() for data in q.all()]
         choices = []
@@ -615,7 +641,7 @@ class TTags(GenericRepository):
             choices.append((-1,'Aucun'))
         return choices
 
-  
+
 @serializable
 class BibUnites(GenericRepository):
 
@@ -653,7 +679,7 @@ class BibTagTypes(GenericRepository):
 class CorRoleMenu(GenericRepository):
 
     """Vue de correspondance entre la table t_roles et la vue t_menus"""
-    
+
     __tablename__= 'cor_role_menu'
     __table_args__= {'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
@@ -663,7 +689,7 @@ class CorRoleMenu(GenericRepository):
 class CorRoleDroitApplication(GenericRepository):
 
     """ Vue de correspondance entre la table t_applications, t_roles et la vue bib_droits"""
-    
+
     __tablename__ = 'cor_role_droit_application'
     __table_args__= {'schema':'utilisateurs'}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
@@ -672,7 +698,7 @@ class CorRoleDroitApplication(GenericRepository):
 
 @serializable
 class VTMenu(GenericRepository):
-    
+
     """
     Model de la Vue t_menus
     """
@@ -727,7 +753,7 @@ class VUsersactionForallGnModules(GenericRepository):
 
         """
         Methode qui concatène le nom et prénom du role
-        retourne un nom complet 
+        retourne un nom complet
         """
 
         if self.prenom_role == None:
@@ -735,9 +761,9 @@ class VUsersactionForallGnModules(GenericRepository):
         else :
             full_name = self.nom_role + ' '+ self.prenom_role
         return full_name
-       
+
     def as_dict_full_name(self):
-        
+
         """
         Methode qui ajout le nom complet d'un role au dictionnaire qui le défini
         retourne un dictionnaire d'un utilisateur avec une nouvelle 'full_name'

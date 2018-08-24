@@ -84,51 +84,48 @@ def addorupdate(id_role):
         'nom_organisme'
     )
     form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
-    if id_role is None:
-        if request.method == 'POST':
-            if form.validate_on_submit() and form.validate():
-                form_user = pops(form.data)
-                form_user['groupe'] = False
-                form_user.pop('id_role')
-                if form.pass_plus.data == form.mdpconf.data and form.pass_plus.data != "":
-                    form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
-                    form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
-                    TRoles.post(form_user)
-                    return redirect(url_for('user.users'))
-                else:
-                    flash("mot de passe non identiques")
-            else:
-                errors = form.errors
-                if(errors['nom_role'] is not None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template(
-            'user.html', form=form, title="Formulaire Utilisateur"
-        )
-    else:
+
+    if id_role is not None:
         user = TRoles.get_one(id_role)
         if request.method == 'GET':
             form = process(form, user)
-        if request.method == 'POST':
-            if form.validate_on_submit() and form.validate():
-                form_user = pops(form.data)
-                form_user['groupe'] = False
-                if form.pass_plus.data == form.mdpconf.data:
-                    form_user['id_role'] = user['id_role']
-                    form_user['pass_plus'] = generate_password_hash(form_user['pass_plus'].encode('utf-8'))
-                    form_user['pass_plus'] = form_user['pass_plus'].decode('utf-8')
-                    TRoles.update(form_user)
-                    return redirect(url_for('user.users'))
-                else:
-                    flash("mot de passe non identiques")
+
+    if request.method == 'POST':
+        if form.validate_on_submit() and form.validate():
+            form_user = pops(form.data)
+            form_user['groupe'] = False
+            form_user.pop('id_role')
+
+            if form.pass_plus.data:
+                try:
+                    (
+                        form_user['pass_plus'], form_user['pass_md5']
+                    ) = TRoles.set_password(
+                        form.pass_plus.data, form.mdpconf.data
+                    )
+                except Exception as exp:
+                    flash(str(exp))
+                    return render_template(
+                        'user.html', form=form, title="Formulaire Utilisateur"
+                    )
             else:
-                errors = form.errors
-                if(errors['nom_role'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-        return render_template(
-            'user.html',
-            form=form,
-            title="Formulaire Utilisateur"
-        )
+                form_user.pop('pass_plus')
+
+            if id_role is not None:
+                form_user['id_role'] = user['id_role']
+                TRoles.update(form_user)
+            else:
+                TRoles.post(form_user)
+            return redirect(url_for('user.users'))
+
+        else:
+            errors = form.errors
+            if(errors['nom_role'] is not None):
+                flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+
+    return render_template(
+        'user.html', form=form, title="Formulaire Utilisateur"
+    )
 
 
 @route.route('users/delete/<id_role>', methods=['GET', 'POST'])

@@ -34,7 +34,7 @@ $("#login-error").hide();
 login = function() {
     $("#login-error").hide();
     $.post({
-        url : '/pypn/auth/login',
+        url : '{{url_application}}' + '/pypn/auth/login',
         data : JSON.stringify ({
             "id_application": $('#user_app').val(),
             "login": $('#user_id').val(),
@@ -44,7 +44,7 @@ login = function() {
         dataType:"json",
         success: function(response){
             console.log(response);
-            window.location.href = "/";
+            window.location.href = '{{url_application}}';
         },
         error: function(error){
             $("#login-error" ).show();

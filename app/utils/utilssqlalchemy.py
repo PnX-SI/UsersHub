@@ -146,7 +146,7 @@ def serializable(cls):
             )
         )
         for db_col in cls.__mapper__.c
-        if not db_col.type.__class__.__name__ == 'Geometry'
+        if not db_col.type.__class__.__name__ == 'Geometry' and getattr(cls, db_col.key, False)
     ]
 
     """

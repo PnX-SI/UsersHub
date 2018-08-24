@@ -9,7 +9,7 @@ var lala = function(){
 };
 
 $.ajax({
-    url : '/api/application',
+    url : url_app+ '/api/application',
     type : 'get',
     data : JSON.stringify(data_select),
     contentType:"application/json; charset=utf-8",
@@ -23,8 +23,8 @@ $.ajax({
         console.log(error);
     }
 });
-     
- 
+
+
 function fill_select(){
     td_right = '<td class = "right"><select class="custom-select", id="inputGroupSelect02">'
     for(var i = 0; i< data_select.length; i++)
@@ -38,10 +38,10 @@ function fill_select(){
 function addTab(tab,table){
     // table.find("input[type=checkbox]").attr('checked', false);
     for(var i = 0; i<tab.length;i++){
-        
+
         table.append(tab[i]);
-    }    
-    
+    }
+
 };
 
 
@@ -63,15 +63,15 @@ var add = function(app) {
             tab_del.splice(tab_del.indexOf(ID),1);
             tab_add.splice(tab_add.indexOf(ID),1);
         }
-        
+
 
 
     });
-    
+
     var table = $('#adding_table')
     addTab(tab,table)
 
-        
+
 };
 
 var del = function(app){
@@ -83,7 +83,7 @@ var del = function(app){
         if (app != null){
             right.push({id_role : ID, id_right:RIGHT })
             Row.find('.right').remove()
-            
+
         }
         var Row = $(this).parents('tr');
         tab.push(Row[0]);
@@ -93,11 +93,11 @@ var del = function(app){
             tab_add.splice(tab_add.indexOf(ID),1);
             tab_del.splice(tab_del.indexOf(ID),1);
         }
-        
+
     });
     var table = $('#user')
     addTab(tab,table)
-    
+
 
 };
 
@@ -113,7 +113,7 @@ var get_right = function(data){
                 tab.push({id_role : ID, id_right: RIGHT});
 
             }
-        } 
+        }
     })
     return tab
 };
@@ -123,7 +123,7 @@ var get_right_delete = function(data){
         if(isInTabb(data['tab_del'],r['id_role']) == true){
             right.splice(right.indexOf(r),1)
         }
-    }    
+    }
 
 };
 
@@ -135,7 +135,7 @@ var update_right = function(){
     data["tab_del"]= tab_del;
     data["tab_add"] = get_right(data)
     get_right_delete(data)
-    data["tab_del"] = right 
+    data["tab_del"] = right
 
     $.ajax({
         url : $(location).attr('href'),
@@ -151,7 +151,7 @@ var update_right = function(){
 };
 
 
-var update = function(){   
+var update = function(){
     console.log("tableau d ajout : "+ tab_add);
     console.log("tablea de suppression : "+ tab_del );
     var data ={}
@@ -180,15 +180,15 @@ function isInTabb(tab,id){
     return bool
 }
 
-var deleteRaw = function (path){        
+var deleteRaw = function (path){
     var c = confirm("Etes vous sur de vouloir supprimer cet élement ? ");
     if (c == true)
-       window.location.href = path;  
+       window.location.href = path;
 }
 
 
 
-$( document ).ready(function() {  
+$( document ).ready(function() {
 
     var tab_add = []
     var tab_del = []
@@ -209,7 +209,7 @@ $( document ).ready(function() {
                 "previous":   "Précédente"
             },
         "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25  
+        "iDisplayLength": 25
         }
     } );
     $('#adding_table').DataTable({
@@ -227,7 +227,7 @@ $( document ).ready(function() {
                 "previous":   "Précédente"
             },
         "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25  
+        "iDisplayLength": 25
         }
     } );
     $('#tri').DataTable({
@@ -245,27 +245,27 @@ $( document ).ready(function() {
                 "previous":   "Précédente"
             },
         "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25  
+        "iDisplayLength": 25
         }
     } );
 
-   
-   
 
 
-    
 
-    
+
+
+
+
 
 
     console.log('coucou');
-  
+
     function test(){
         console.log('test');
     };
-    
-   
 
-   
-}); 
+
+
+
+});
 
