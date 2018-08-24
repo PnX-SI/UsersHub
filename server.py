@@ -62,18 +62,12 @@ with app.app_context():
 
         @app.after_request
         def after_login_method(response):
-
-            # Inutile car URL_REDIRECT dans fonction check_auth
-            if response.status_code == 403:
+            if not request.cookies.get('token'):
                 session["current_user"] = None
-                return redirect(url_for('login.auth'))
 
             if request.endpoint == 'auth.login' and response.status_code == 200:
                 current_user = json.loads(response.get_data().decode('utf-8'))
                 session["current_user"] = current_user["user"]
-
-            if request.endpoint == 'auth.logout':
-                session["current_user"] = None
 
             return response
 
