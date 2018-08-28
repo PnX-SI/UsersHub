@@ -1,7 +1,10 @@
 # Database settings
 SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usershubdb"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-URL_APPLICATION = <my_server_url>
+URL_APPLICATION = 'http://localhost:5001'
+
+# liste de site depuis lequels on accepte des requetes croisées
+URLS_COR = ['http://localhost:5000']
 
 SECRET_KEY = 'super secret key'
 
