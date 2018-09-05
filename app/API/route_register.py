@@ -15,6 +15,10 @@ from app.models import (
     CorRoleDroitApplication
 )
 
+from flask_cors import cross_origin
+
+from config import config
+
 
 route = Blueprint('api_register', __name__)
 
@@ -30,6 +34,7 @@ def get_one_t_roles(id_role):
 
 
 @route.route('/role', methods=['POST'])
+@cross_origin(config.URLS_COR)
 @json_resp
 def insert_one_t_role():
     '''
