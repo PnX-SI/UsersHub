@@ -9,8 +9,8 @@ CREATE TABLE utilisateurs.t_synchro_logs (
 	table_name varchar(250) NOT NULL,
 	table_cor boolean NOT NULL,
 	id_name varchar(250),
-	id_object int
-  archive boolean DEFAULT (FALSE)
+	id_object int,
+    archive boolean DEFAULT (FALSE)
 );
 
 -- DROP TABLE utilisateurs.t_synchro_databases CASCADE;
