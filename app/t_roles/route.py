@@ -122,6 +122,8 @@ def addorupdate(id_role):
             errors = form.errors
             if('nom_role' in errors):
                 flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+            else:
+                flash(','.join([str(errors[k]) for k in errors]))
 
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur"

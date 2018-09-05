@@ -5,7 +5,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField, PasswordField, SubmitField, HiddenField, SelectField,
-    SelectMultipleField, TextAreaField, widgets
+    SelectMultipleField, TextAreaField, widgets,
+    validators
 )
 from wtforms.validators import DataRequired, Email
 
@@ -23,7 +24,7 @@ class Utilisateur(FlaskForm):
     identifiant = StringField('Identifiant')
     pass_plus = PasswordField('Password')
     mdpconf = PasswordField('Confirmation')
-    email = StringField('E-mail', validators=[Email()])
+    email = StringField('E-mail', validators=[validators.Optional(), Email()])
     groupe = HiddenField('groupe', default=None)
     remarques = TextAreaField('Remarques')
     id_role = HiddenField('id')
