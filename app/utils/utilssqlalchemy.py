@@ -11,11 +11,6 @@ from werkzeug.datastructures import Headers
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import create_engine, MetaData
 
-from geojson import Feature
-
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import to_shape
-
 
 
 # def testDataType(value, sqlType, paramName):
@@ -84,14 +79,6 @@ class GenericTable:
         return {
             item: _serializer(getattr(data, item)) for item, _serializer in self.serialize_columns
         }
-
-    def as_geo_feature(self, data):
-        geometry = to_shape(getattr(data, self.geometry_field))
-        feature = Feature(
-            geometry=geometry,
-            properties=self.as_dict(data)
-        )
-        return feature
 
 def serializeQuery(data, columnDef):
     rows = [
@@ -193,40 +180,6 @@ def serializable(cls):
         return out
 
     cls.as_dict = serializefn
-    return cls
-
-
-def geoserializable(cls):
-    """
-        Décorateur de classe
-        Permet de rajouter la fonction as_geofeature à une classe
-    """
-
-    def serializegeofn(self, geoCol, idCol, recursif=False, columns=()):
-        """
-        Méthode qui renvoie les données de l'objet sous la forme
-        d'une Feature geojson
-        Parameters
-        ----------
-           geoCol: string
-            Nom de la colonne géométrie
-           idCol: string
-            Nom de la colonne primary key
-           recursif: boolean
-            Spécifie si on veut que les sous objet (relationship) soit
-            également sérialisé
-           columns: liste
-            liste des columns qui doivent être prisent en compte
-        """
-        geometry = to_shape(getattr(self, geoCol))
-        feature = Feature(
-            id=getattr(self, idCol),
-            geometry=geometry,
-            properties=self.as_dict(recursif, columns)
-        )
-        return feature
-
-    cls.as_geofeature = serializegeofn
     return cls
 
 
