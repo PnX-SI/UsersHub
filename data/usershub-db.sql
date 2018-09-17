@@ -9,6 +9,10 @@ CREATE SCHEMA IF NOT EXISTS utilisateurs;
 
 SET search_path = utilisateurs, pg_catalog;
 
+-------------
+--FUNCTIONS--
+-------------
+
 CREATE OR REPLACE FUNCTION modify_date_insert() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
@@ -30,6 +34,10 @@ $$;
 
 SET default_tablespace = '';
 SET default_with_oids = false;
+
+----------------------
+--TABLES & SEQUENCES--
+----------------------
 
 CREATE TABLE IF NOT EXISTS cor_roles (
     id_role_groupe integer NOT NULL,
@@ -57,7 +65,7 @@ CREATE TABLE IF NOT EXISTS t_roles (
 );
 
 CREATE SEQUENCE t_roles_id_role_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -80,7 +88,7 @@ CREATE TABLE IF NOT EXISTS bib_organismes (
 );
 
 CREATE SEQUENCE bib_organismes_id_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -100,7 +108,7 @@ CREATE TABLE IF NOT EXISTS bib_unites (
 );
 
 CREATE SEQUENCE bib_unites_id_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -123,7 +131,7 @@ CREATE TABLE IF NOT EXISTS t_applications (
 );
 
 CREATE SEQUENCE t_applications_id_application_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -144,7 +152,7 @@ CREATE TABLE IF NOT EXISTS t_tags (
 COMMENT ON TABLE t_tags IS 'Permet de créer des étiquettes ou tags ou labels, qu''il est possible d''attacher à différents objects de la base. Cela peut permettre par exemple de créer des groupes ou des listes d''utilisateurs';
 
 CREATE SEQUENCE t_tags_id_tag_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -275,6 +283,7 @@ ALTER TABLE ONLY cor_app_privileges ADD CONSTRAINT fk_cor_app_privileges_id_role
 --VIEWS--
 ---------
 
+-- Vue permettant de simuler le contenu de la table "t_menus" de la V1
 CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
 SELECT 
  t.id_tag AS id_menu,
@@ -286,6 +295,7 @@ LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
 WHERE b.id_tag_type = 4;
 
+-- Vue permettant de simuler le contenu de la table "cor_role_menu" de la V1
 CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
 SELECT 
 DISTINCT
@@ -294,6 +304,7 @@ c.id_tag AS id_menu
 FROM utilisateurs.cor_role_tag c
 JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag;		 
 
+-- Vue permettant de simuler le contenu de la table "bib_droits" de la V1
 CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
 SELECT 
  t.id_tag AS id_droit,
@@ -303,6 +314,7 @@ FROM utilisateurs.bib_tag_types b
 JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 WHERE b.id_tag_type = 3;	 
 
+-- Vue permettant de simuler le contenu de la table "cor_role_droit_application" de la V1
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
  c.id_role,
@@ -310,6 +322,7 @@ SELECT
  c.id_application
 FROM utilisateurs.cor_role_tag_application c; 
 
+-- Vue permettant de retourner les utilisateurs des listes (menus)
 CREATE OR REPLACE VIEW v_userslist_forall_menu AS
  SELECT a.groupe,
     a.id_role,
@@ -375,6 +388,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
              JOIN utilisateurs.cor_role_menu c ON c.id_role = g.id_role_groupe
           WHERE u.groupe = false) a;
 
+-- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
 CREATE OR REPLACE VIEW v_userslist_forall_applications AS 
  SELECT a.groupe,
     a.id_role,
@@ -440,6 +454,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
           WHERE u.groupe = false) a
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
+-- Vue permettant de retourner les utilisateurs et leur CRUVED pour chaque modules GeoNature
 CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS 
  WITH p_user_tag AS (
          SELECT u.id_role,
@@ -550,9 +565,9 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
     mydataextend integer)
   RETURNS boolean AS
 $BODY$
--- the function say if the given user can do the requested action in the requested module on the resquested data
+-- the function say if the given user can do the requested action in the requested module on the requested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actionid,requested_moduleid,requested_dataextendid);
--- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
   BEGIN
     IF myaction IN (SELECT id_tag_action FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -571,9 +586,9 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
     mydataextend integer)
   RETURNS boolean AS
 $BODY$
--- the function say if the given user can do the requested action in the requested module on the resquested data
+-- the function say if the given user can do the requested action in the requested module on the requested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actioncode,requested_moduleid,requested_dataextendid);
--- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
   BEGIN
     IF myaction IN (SELECT tag_action_code FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -613,9 +628,9 @@ CREATE OR REPLACE FUNCTION user_max_accessible_data_level_in_module(
 $BODY$
 DECLARE
   themaxleveldatatype integer;
--- the function return the max accessible extend of data the given user can access in the requested module
+-- the function return the max accessible extend of data the given user can access in the given module
 -- USAGE : SELECT utilisateurs.user_max_accessible_data_level_in_module(requested_userid,requested_actioncode,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
+-- SAMPLE : SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
   BEGIN
   SELECT max(tag_object_code::int) INTO themaxleveldatatype FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND tag_action_code = myaction;
   RETURN themaxleveldatatype;
@@ -629,8 +644,8 @@ CREATE OR REPLACE FUNCTION find_all_modules_childs(myidapplication integer)
 $BODY$
  --Param : id_application d'un module ou d'une application quelque soit son rang
  --Retourne le id_application de tous les modules enfants + le module lui-même sous forme d'un jeu de données utilisable comme une table
- --Usage SELECT utilisateurs.find_all_modules_childs(14);
- --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(14))
+ --Usage : SELECT utilisateurs.find_all_modules_childs(14);
+ --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(14));
   DECLARE
     inf RECORD;
     c integer;
@@ -662,7 +677,7 @@ CREATE OR REPLACE FUNCTION cruved_for_user_in_module(
 $BODY$
 -- the function return user's CRUVED in the requested module
 -- USAGE : SELECT utilisateurs.cruved_for_user_in_module(requested_userid,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.cruved_for_user_in_module(2,14);
+-- SAMPLE : SELECT utilisateurs.cruved_for_user_in_module(2,14);
 DECLARE
   thecruved json;
   BEGIN
