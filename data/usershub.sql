@@ -1033,7 +1033,7 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 ,('Parc National des Ecrins', 'Domaine de Charance', '05000', 'GAP', '04 92 40 20 10', '', '', 2)
 ,('Autre', '', '', '', '', '', '', -1)
 ;
-PERFORM pg_catalog.setval('bib_organismes_id_seq', (SELECT max(id_organisme) FROM bib_organismes), true);
+PERFORM pg_catalog.setval('bib_organismes_id_seq', (SELECT max(id_organisme)+1 FROM bib_organismes), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1056,7 +1056,7 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 ,('Partenaire fournisseur', NULL, NULL, NULL, NULL, NULL, NULL, 10)
 ,('Autres', NULL, NULL, NULL, NULL, NULL, NULL, -1)
 ;
-PERFORM pg_catalog.setval('bib_unites_id_seq', (SELECT max(id_unite) FROM bib_unites), true);
+PERFORM pg_catalog.setval('bib_unites_id_seq', (SELECT max(id_unite)+1 FROM bib_unites), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1072,7 +1072,7 @@ INSERT INTO t_applications (id_application, nom_application, desc_application, i
 ,(3, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
 ,(4, 'contact (GeoNature2)', 'Module contact faune-flore-fonge de GeoNature', 3)
 ;
-PERFORM pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application) FROM t_applications), true);
+PERFORM pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application)+1 FROM t_applications), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1095,7 +1095,7 @@ INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_r
 ,(false,4, 'pierre.paul', 'Paul', 'Pierre', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ,(false,5, 'validateur', 'validateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ;
-PERFORM pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role) FROM t_roles), true);
+PERFORM pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role)+1 FROM t_roles), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1129,7 +1129,7 @@ INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application)
 VALUES (1, 'faune - Observateurs', 'Listes des observateurs faune', 3)
 ,(2, 'flore - Observateurs', 'Liste des observateurs flore', 3)
 ;
-PERFORM pg_catalog.setval('t_menus_id_menu_seq', (SELECT max(id_menu) FROM t_menus), true);
+PERFORM pg_catalog.setval('t_menus_id_menu_seq', (SELECT max(id_menu)+1 FROM t_menus), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1205,7 +1205,7 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(25, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
 ,(26, 4, NULL, 'observateurs aigle', 'Observateurs aigle', 'Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
 ;
-PERFORM pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag) FROM t_tags), true);
+PERFORM pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag)+1 FROM t_tags), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
