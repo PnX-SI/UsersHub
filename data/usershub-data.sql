@@ -6,10 +6,9 @@ SET search_path = utilisateurs, pg_catalog;
 
 -- Insérer les applications de base liées à GeoNature
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
-(1, 'UsersHub', 'Application permettant d''administrer la présente base de données.',NULL)
-,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.',NULL)
-,(3, 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
-,(4, 'OccTax (GeoNature2)', 'Module OccTax (contact faune-flore-fonge) de GeoNature', 3)
+(1, 'UsersHub', 'Application permettant d''administrer la présente base de données.', NULL)
+,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.', NULL)
+,(3, 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.', NULL)
 ;
 SELECT pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application)+1 FROM utilisateurs.t_applications), false);	
 
@@ -40,8 +39,6 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(21, 5, '1', 'my data', 'My data', 'Can do action only on my data')
 ,(22, 5, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
 ,(23, 5, '3', 'all data', 'All data', 'Can do action on all data')
-,(24, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
-,(25, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
-,(26, 4, NULL, 'observateurs aigle', 'Observateurs aigle','Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
+,(24, 4, NULL, 'observateurs occtax', 'Observateurs Occtax','Liste des observateurs dans le module Occtax')
 ;
 SELECT pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag)+1 FROM utilisateurs.t_tags), false);	
