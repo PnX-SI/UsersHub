@@ -47,7 +47,8 @@ SELECT pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role)+1 FROM util
 
 -- Affectation des utilisateurs exemple dans des groupes
 INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
-VALUES (7, 1)
+VALUES 
+(7, 1)
 ,(9, 1)
 ,(7, 2)
 ,(7, 4)
@@ -55,11 +56,9 @@ VALUES (7, 1)
 ;
 
 INSERT INTO cor_role_tag (id_role, id_tag) VALUES
--- Liste des observateurs faune
-(1,25)
-,(7,25)
-,(5,25)
--- Liste des observateurs flore
+-- Liste des observateurs Occtax
+(1,24)
+,(7,24)
 ,(2,24)
 ,(5,24)
 ;
@@ -81,8 +80,8 @@ INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id
 ,(16, 23, 3, 9)
 --Validateur général sur tout GeoNature
 ,(14, 23, 3, 5)
---Validateur pour son organisme sur contact
-,(14, 22, 15, 4)
+--Validateur pour son organisme sur Occtax
+--,(14, 22, 15, 4) --Droit supprimé car appli Occtax créé par l'installation du module
 --CRUVED du groupe en poste sur tout GeoNature
 ,(11, 23, 3, 7)
 ,(12, 22, 3, 7)
