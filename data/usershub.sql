@@ -103,7 +103,7 @@ DO
 $$
 BEGIN
 CREATE SEQUENCE bib_organismes_id_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -139,7 +139,7 @@ DO
 $$
 BEGIN
 CREATE SEQUENCE bib_unites_id_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -170,7 +170,7 @@ DO
 $$
 BEGIN
 CREATE SEQUENCE t_applications_id_application_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -195,7 +195,7 @@ DO
 $$
 BEGIN
 CREATE SEQUENCE t_menus_id_menu_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -224,7 +224,7 @@ DO
 $$
 BEGIN
 CREATE SEQUENCE t_tags_id_tag_seq
-    START WITH 1000000
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
@@ -877,7 +877,7 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
 $BODY$
 -- the function say if the given user can do the requested action in the requested module on the resquested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actionid,requested_moduleid,requested_dataextendid);
--- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,3,22);
   BEGIN
     IF myaction IN (SELECT id_tag_action FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -898,7 +898,7 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
 $BODY$
 -- the function say if the given user can do the requested action in the requested module on the resquested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actioncode,requested_moduleid,requested_dataextendid);
--- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE :SELECT utilisateurs.can_user_do_in_module(2,15,3,22);
   BEGIN
     IF myaction IN (SELECT tag_action_code FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -920,7 +920,7 @@ DECLARE
   themaxleveldatatype integer;
 -- the function return the max accessible extend of data the given user can access in the requested module
 -- USAGE : SELECT utilisateurs.user_max_accessible_data_level_in_module(requested_userid,requested_actionid,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
+-- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,3);
   BEGIN
   SELECT max(tag_object_code::int) INTO themaxleveldatatype FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_action = myaction;
   RETURN themaxleveldatatype;
@@ -940,7 +940,7 @@ DECLARE
   themaxleveldatatype integer;
 -- the function return the max accessible extend of data the given user can access in the requested module
 -- USAGE : SELECT utilisateurs.user_max_accessible_data_level_in_module(requested_userid,requested_actioncode,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
+-- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,3);
   BEGIN
   SELECT max(tag_object_code::int) INTO themaxleveldatatype FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND tag_action_code = myaction;
   RETURN themaxleveldatatype;
@@ -954,8 +954,8 @@ CREATE OR REPLACE FUNCTION find_all_modules_childs(myidapplication integer)
 $BODY$
  --Param : id_application d'un module ou d'une application quelque soit son rang
  --Retourne le id_application de tous les modules enfants + le module lui-même sous forme d'un jeu de données utilisable comme une table
- --Usage SELECT utilisateurs.find_all_modules_childs(14);
- --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(14))
+ --Usage SELECT utilisateurs.find_all_modules_childs(3);
+ --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(3))
   DECLARE
     inf RECORD;
     c integer;
@@ -987,7 +987,7 @@ CREATE OR REPLACE FUNCTION cruved_for_user_in_module(
 $BODY$
 -- the function return user's CRUVED in the requested module
 -- USAGE : SELECT utilisateurs.cruved_for_user_in_module(requested_userid,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.cruved_for_user_in_module(2,14);
+-- SAMPLE :SELECT utilisateurs.cruved_for_user_in_module(2,3);
 DECLARE
   thecruved json;
   BEGIN
@@ -1033,6 +1033,7 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 ,('Parc National des Ecrins', 'Domaine de Charance', '05000', 'GAP', '04 92 40 20 10', '', '', 2)
 ,('Autre', '', '', '', '', '', '', -1)
 ;
+PERFORM pg_catalog.setval('bib_organismes_id_seq', (SELECT max(id_organisme) FROM bib_organismes), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1055,6 +1056,7 @@ INSERT INTO bib_unites (nom_unite, adresse_unite, cp_unite, ville_unite, tel_uni
 ,('Partenaire fournisseur', NULL, NULL, NULL, NULL, NULL, NULL, 10)
 ,('Autres', NULL, NULL, NULL, NULL, NULL, NULL, -1)
 ;
+PERFORM pg_catalog.setval('bib_unites_id_seq', (SELECT max(id_unite) FROM bib_unites), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1067,10 +1069,10 @@ BEGIN
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'application utilisateurs', 'application permettant d''administrer la présente base de données.',NULL)
 ,(2, 'taxhub', 'application permettant d''administrer la liste des taxons.',NULL)
-,(14, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
-,(15, 'contact (GeoNature2)', 'Module contact faune-flore-fonge de GeoNature', 14)
+,(3, 'application geonature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
+,(4, 'contact (GeoNature2)', 'Module contact faune-flore-fonge de GeoNature', 3)
 ;
-PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
+PERFORM pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application) FROM t_applications), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1081,9 +1083,10 @@ DO
 $$
 BEGIN
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
-(true, 20001, NULL,   'grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu')
-,(true, 20002, NULL, 'grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL,'groupe test')
-,(true, 20003, NULL, 'grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL,'mastructure', -1, true, NULL, NULL, NULL, NULL,'Groupe à droit limité')
+(true, 6, NULL,   'grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu')
+,(true, 7, NULL, 'grp_en_poste', NULL, 'Tous les agents en poste au PN', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL,'groupe test')
+,(true, 8, NULL, 'grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL,'mastructure', -1, true, NULL, NULL, NULL, NULL,'Groupe à droit limité')
+,(true, 9, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
 ;
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
 (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier', '$2y$13$TMuRXgvIg6/aAez0lXLLFu0lyPk4m8N55NDhvLoUHh/Ar3rFzjFT.')
@@ -1092,6 +1095,7 @@ INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_r
 ,(false,4, 'pierre.paul', 'Paul', 'Pierre', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ,(false,5, 'validateur', 'validateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, false, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
 ;
+PERFORM pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role) FROM t_roles), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1104,10 +1108,13 @@ BEGIN
 INSERT INTO cor_role_droit_application (id_role, id_droit, id_application) 
 VALUES (1, 6, 1)
 ,(1, 6, 2)
-,(1, 6, 14)
-,(20002, 3, 14)
-,(2, 2, 14)
-,(3, 1, 14)
+,(1, 6, 3)
+,(7, 3, 3)
+,(2, 2, 3)
+,(3, 1, 3)
+,(9, 6, 1)
+,(9, 6, 2)
+,(9, 6, 3)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1119,10 +1126,10 @@ DO
 $$
 BEGIN 
 INSERT INTO t_menus (id_menu, nom_menu, desc_menu, id_application) 
-VALUES (9, 'faune - Observateurs', 'Listes des observateurs faune', 14)
-,(10, 'flore - Observateurs', 'Liste des observateurs flore', 14)
+VALUES (1, 'faune - Observateurs', 'Listes des observateurs faune', 3)
+,(2, 'flore - Observateurs', 'Liste des observateurs flore', 3)
 ;
-PERFORM pg_catalog.setval('t_menus_id_menu_seq', 11, true);
+PERFORM pg_catalog.setval('t_menus_id_menu_seq', (SELECT max(id_menu) FROM t_menus), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1133,8 +1140,8 @@ DO
 $$
 BEGIN
 INSERT INTO cor_role_menu (id_role, id_menu) VALUES 
-(1, 10)
-,(1, 9)
+(1, 1)
+,(1, 2)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1146,10 +1153,12 @@ DO
 $$
 BEGIN
 INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
-VALUES (20002, 1)
-,(20002, 2)
-,(20002, 4)
-,(20002, 5)
+VALUES 
+(7, 1)
+,(9, 1)
+,(7, 2)
+,(7, 4)
+,(7, 5)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1192,11 +1201,11 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(22, 3, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
 ,(23, 3, '3', 'all data', 'All data', 'Can do action on all data')
 
-,(100, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
-,(101, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
-,(102, 4, NULL, 'observateurs aigle', 'Observateurs aigle', 'Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
+,(24, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
+,(25, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
+,(26, 4, NULL, 'observateurs aigle', 'Observateurs aigle', 'Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
 ;
-PERFORM pg_catalog.setval('t_tags_id_tag_seq', 104, true);
+PERFORM pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag) FROM t_tags), true);
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -1208,12 +1217,12 @@ $$
 BEGIN
 INSERT INTO cor_role_tag (id_role, id_tag) VALUES
 --Liste des observateurs faune
-(1,101)
-,(20002,101)
-,(5,101)
+(1,25)
+,(7,25)
+,(5,25)
 -- --Liste des observateurs flore
-,(2,100)
-,(5,100)
+,(2,24)
+,(5,24)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1228,35 +1237,45 @@ INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id
 --Administrateur sur UsersHub et TaxHub
 (6,23,1,1)
 ,(6,23,2,1)
+--- Groupe administrateur sur UsersHub et TaxHub
+(6,23,1,9)
+,(6,23,2,9)
 --Administrateur sur GeoNature
-,(11, 23, 14, 1)
-,(12, 23, 14, 1)
-,(13, 23, 14, 1)
-,(14, 23, 14, 1)
-,(15, 23, 14, 1)
-,(16, 23, 14, 1)
+,(11, 23, 3, 1)
+,(12, 23, 3, 1)
+,(13, 23, 3, 1)
+,(14, 23, 3, 1)
+,(15, 23, 3, 1)
+,(16, 23, 3, 1)
+--- Groupe administrateur sur GeoNature
+,(11, 23, 3, 9)
+,(12, 23, 3, 9)
+,(13, 23, 3, 9)
+,(14, 23, 3, 9)
+,(15, 23, 3, 9)
+,(16, 23, 3, 9)
 --Validateur général sur tout GeoNature
-,(14, 23, 14, 5)
+,(14, 23, 3, 5)
 --Validateur pour son organisme sur contact
-,(14, 22, 15, 4)
+,(14, 22, 4, 4)
 --CRUVED du groupe en poste sur tout GeoNature
-,(11, 23, 14, 20002)
-,(12, 22, 14, 20002)
-,(13, 21, 14, 20002)
-,(15, 22, 14, 20002)
-,(16, 21, 14, 20002)
+,(11, 23, 3, 7)
+,(12, 22, 3, 7)
+,(13, 21, 3, 7)
+,(15, 22, 3, 7)
+,(16, 21, 3, 7)
 --Groupe bureau d''étude socle 2 sur tout GeoNature
-,(11, 23, 14, 20001)
-,(12, 22, 14, 20001)
-,(13, 21, 14, 20001)
-,(15, 22, 14, 20001)
-,(16, 21, 14, 20001)
+,(11, 23, 3, 6)
+,(12, 22, 3, 6)
+,(13, 21, 3, 6)
+,(15, 22, 3, 6)
+,(16, 21, 3, 6)
 --Groupe bureau d''étude socle 1 sur tout GeoNature
-,(11, 23, 14, 20003)
-,(12, 21, 14, 20003)
-,(13, 21, 14, 20003)
-,(15, 21, 14, 20003)
-,(16, 21, 14, 20003)
+,(11, 23, 3, 8)
+,(12, 21, 3, 8)
+,(13, 21, 3, 8)
+,(15, 21, 3, 8)
+,(16, 21, 3, 8)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
