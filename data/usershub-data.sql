@@ -8,10 +8,9 @@ SET search_path = utilisateurs, pg_catalog;
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'UsersHub', 'Application permettant d''administrer la présente base de données.',NULL)
 ,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.',NULL)
-,(14, 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
-,(15, 'OccTax (GeoNature2)', 'Module OccTax (contact faune-flore-fonge) de GeoNature', 14)
+,(3, 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
+,(4, 'OccTax (GeoNature2)', 'Module OccTax (contact faune-flore-fonge) de GeoNature', 3)
 ;
---PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
 SELECT pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application)+1 FROM utilisateurs.t_applications), false);	
 
 -- Insérer les types de tag utilisés par GeoNature
@@ -35,15 +34,14 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(12, 2, 'R', 'read', 'Read', 'Can read data')
 ,(13, 2, 'U', 'update', 'Update', 'Can update data')
 ,(14, 2, 'V', 'validate', 'Validate', 'Can validate data')
-,(15, 2, 'E', 'export', 'Export', 'Can export data')
+,(4, 2, 'E', 'export', 'Export', 'Can export data')
 ,(16, 2, 'D', 'delete', 'Delete', 'Can delete data')
 ,(20, 3, '0', 'nothing', 'Nothing', 'Cannot do anything')
 ,(21, 5, '1', 'my data', 'My data', 'Can do action only on my data')
 ,(22, 5, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
 ,(23, 5, '3', 'all data', 'All data', 'Can do action on all data')
-,(100, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
-,(101, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
-,(102, 4, NULL, 'observateurs aigle', 'Observateurs aigle','Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
+,(24, 4, NULL, 'observateurs flore', 'Observateurs flore','Liste des observateurs pour les protocoles flore')
+,(25, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
+,(26, 4, NULL, 'observateurs aigle', 'Observateurs aigle','Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
 ;
---PERFORM pg_catalog.setval('t_tags_id_tag_seq', 103, true);
 SELECT pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag)+1 FROM utilisateurs.t_tags), false);	

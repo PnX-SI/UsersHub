@@ -567,7 +567,7 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
 $BODY$
 -- the function say if the given user can do the requested action in the requested module on the requested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actionid,requested_moduleid,requested_dataextendid);
--- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,3,22);
   BEGIN
     IF myaction IN (SELECT id_tag_action FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -588,7 +588,7 @@ CREATE OR REPLACE FUNCTION can_user_do_in_module(
 $BODY$
 -- the function say if the given user can do the requested action in the requested module on the requested data
 -- USAGE : SELECT utilisateurs.can_user_do_in_module(requested_userid,requested_actioncode,requested_moduleid,requested_dataextendid);
--- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,14,22);
+-- SAMPLE : SELECT utilisateurs.can_user_do_in_module(2,15,3,22);
   BEGIN
     IF myaction IN (SELECT tag_action_code FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_object >= mydataextend) THEN
       RETURN true;
@@ -610,7 +610,7 @@ DECLARE
   themaxleveldatatype integer;
 -- the function return the max accessible extend of data the given user can access in the requested module
 -- USAGE : SELECT utilisateurs.user_max_accessible_data_level_in_module(requested_userid,requested_actionid,requested_moduleid);
--- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
+-- SAMPLE :SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,3);
   BEGIN
   SELECT max(tag_object_code::int) INTO themaxleveldatatype FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND id_tag_action = myaction;
   RETURN themaxleveldatatype;
@@ -630,7 +630,7 @@ DECLARE
   themaxleveldatatype integer;
 -- the function return the max accessible extend of data the given user can access in the given module
 -- USAGE : SELECT utilisateurs.user_max_accessible_data_level_in_module(requested_userid,requested_actioncode,requested_moduleid);
--- SAMPLE : SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,14);
+-- SAMPLE : SELECT utilisateurs.user_max_accessible_data_level_in_module(2,14,3);
   BEGIN
   SELECT max(tag_object_code::int) INTO themaxleveldatatype FROM utilisateurs.v_usersaction_forall_gn_modules WHERE id_role = myuser AND id_application = mymodule AND tag_action_code = myaction;
   RETURN themaxleveldatatype;
@@ -644,8 +644,8 @@ CREATE OR REPLACE FUNCTION find_all_modules_childs(myidapplication integer)
 $BODY$
  --Param : id_application d'un module ou d'une application quelque soit son rang
  --Retourne le id_application de tous les modules enfants + le module lui-même sous forme d'un jeu de données utilisable comme une table
- --Usage : SELECT utilisateurs.find_all_modules_childs(14);
- --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(14));
+ --Usage : SELECT utilisateurs.find_all_modules_childs(3);
+ --ou SELECT * FROM utilisateurs.t_applications WHERE id_application IN(SELECT * FROM utilisateurs.find_all_modules_childs(3));
   DECLARE
     inf RECORD;
     c integer;
@@ -677,7 +677,7 @@ CREATE OR REPLACE FUNCTION cruved_for_user_in_module(
 $BODY$
 -- the function return user's CRUVED in the requested module
 -- USAGE : SELECT utilisateurs.cruved_for_user_in_module(requested_userid,requested_moduleid);
--- SAMPLE : SELECT utilisateurs.cruved_for_user_in_module(2,14);
+-- SAMPLE : SELECT utilisateurs.cruved_for_user_in_module(2,3);
 DECLARE
   thecruved json;
   BEGIN

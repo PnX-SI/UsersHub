@@ -29,10 +29,10 @@ SELECT pg_catalog.setval('bib_organismes_id_seq', (SELECT max(id_organisme)+1 FR
 
 -- Insertion de roles de type GROUPE de base pour GeoNature
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
-(true, 20001, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu sur les données de son organisme')
-,(true, 20002, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste dans la structure', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe des agents de la structure avec droits d''écriture limité')
-,(true, 20003, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit limité sur ses données')
-,(true, 20004, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
+(true, 6, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu sur les données de son organisme')
+,(true, 7, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste dans la structure', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe des agents de la structure avec droits d''écriture limité')
+,(true, 8, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit limité sur ses données')
+,(true, 9, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
 ;
 -- Insertion de roles de type UTILISATEUR pour GeoNature
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
@@ -47,58 +47,58 @@ SELECT pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role)+1 FROM util
 
 -- Affectation des utilisateurs exemple dans des groupes
 INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
-VALUES (20002, 1)
-,(20004, 1)
-,(20002, 2)
-,(20002, 4)
-,(20002, 5)
+VALUES (7, 1)
+,(9, 1)
+,(7, 2)
+,(7, 4)
+,(7, 5)
 ;
 
 INSERT INTO cor_role_tag (id_role, id_tag) VALUES
 -- Liste des observateurs faune
-(1,101)
-,(20002,101)
-,(5,101)
+(1,25)
+,(7,25)
+,(5,25)
 -- Liste des observateurs flore
-,(2,100)
-,(5,100)
+,(2,24)
+,(5,24)
 ;
 
 INSERT INTO cor_role_tag_application (id_role, id_tag, id_application) VALUES
 --- Groupe administrateur sur UsersHub et TaxHub
-(20004,6,1)
-,(20004,6,2)
+(9,6,1)
+,(9,6,2)
 ;
 
 -- Exemples de CRUVED pour GeoNature
 INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role) VALUES
 --Administrateur sur GeoNature
-(11, 23, 14, 20004)
-,(12, 23, 14, 20004)
-,(13, 23, 14, 20004)
-,(14, 23, 14, 20004)
-,(15, 23, 14, 20004)
-,(16, 23, 14, 20004)
+(11, 23, 3, 9)
+,(12, 23, 3, 9)
+,(13, 23, 3, 9)
+,(14, 23, 3, 9)
+,(15, 23, 3, 9)
+,(16, 23, 3, 9)
 --Validateur général sur tout GeoNature
-,(14, 23, 14, 5)
+,(14, 23, 3, 5)
 --Validateur pour son organisme sur contact
 ,(14, 22, 15, 4)
 --CRUVED du groupe en poste sur tout GeoNature
-,(11, 23, 14, 20002)
-,(12, 22, 14, 20002)
-,(13, 21, 14, 20002)
-,(15, 22, 14, 20002)
-,(16, 21, 14, 20002)
+,(11, 23, 3, 7)
+,(12, 22, 3, 7)
+,(13, 21, 3, 7)
+,(15, 22, 3, 7)
+,(16, 21, 3, 7)
 --Groupe bureau d''étude socle 2 sur tout GeoNature
-,(11, 23, 14, 20001)
-,(12, 22, 14, 20001)
-,(13, 21, 14, 20001)
-,(15, 22, 14, 20001)
-,(16, 21, 14, 20001)
+,(11, 23, 3, 6)
+,(12, 22, 3, 6)
+,(13, 21, 3, 6)
+,(15, 22, 3, 6)
+,(16, 21, 3, 6)
 --Groupe bureau d''étude socle 1 sur tout GeoNature
-,(11, 23, 14, 20003)
-,(12, 21, 14, 20003)
-,(13, 21, 14, 20003)
-,(15, 21, 14, 20003)
-,(16, 21, 14, 20003)
+,(11, 23, 3, 8)
+,(12, 21, 3, 8)
+,(13, 21, 3, 8)
+,(15, 21, 3, 8)
+,(16, 21, 3, 8)
 ;
