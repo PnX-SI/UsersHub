@@ -4,14 +4,17 @@
 
 SET search_path = utilisateurs, pg_catalog;
 
+-- Insérer les applications de base liées à GeoNature
 INSERT INTO t_applications (id_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'UsersHub', 'Application permettant d''administrer la présente base de données.',NULL)
 ,(2, 'TaxHub', 'Application permettant d''administrer la liste des taxons.',NULL)
 ,(14, 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.',NULL)
 ,(15, 'OccTax (GeoNature2)', 'Module OccTax (contact faune-flore-fonge) de GeoNature', 14)
 ;
-PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
+--PERFORM pg_catalog.setval('t_applications_id_application_seq', 15, true);
+SELECT pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application)+1 FROM utilisateurs.t_applications), false);	
 
+-- Insérer les types de tag utilisés par GeoNature
 INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 (1, 'Object', 'Define a type object. Usually to define privileges on an object')
 ,(2, 'Action', 'Define a type action. Usually to define privileges for an action')
@@ -20,6 +23,7 @@ INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
 ,(5, 'Scope', 'Define a type scope for CRUVED data')
 ;
 
+-- 
 INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
 (1, 3, '1', 'utilisateur', 'Utilisateur', 'Ne peut que consulter')
 ,(2, 3, '2', 'rédacteur', 'Rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements')
@@ -41,4 +45,5 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(101, 4, NULL, 'observateurs faune', 'Observateurs faune','Liste des observateurs pour les protocoles faune')
 ,(102, 4, NULL, 'observateurs aigle', 'Observateurs aigle','Liste des observateurs pour le protocole suivi de la reproduction de l''aigle royal')
 ;
-PERFORM pg_catalog.setval('t_tags_id_tag_seq', 103, true);
+--PERFORM pg_catalog.setval('t_tags_id_tag_seq', 103, true);
+SELECT pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag)+1 FROM utilisateurs.t_tags), false);	
