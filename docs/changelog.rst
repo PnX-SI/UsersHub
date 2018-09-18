@@ -7,7 +7,7 @@ CHANGELOG
 
 **Corrections**
 
-* Installation : Nettoyage des données insérées et remise à 1 des séquences par défaut
+* Installation BDD : Nettoyage des données insérées et remise à 1 des séquences par défaut
 * Vérification que le mot de passe encrypté en md5 et sha soient cohérents (#34)
 
 1.3.1 (2018-05-17)
