@@ -1142,7 +1142,6 @@ $$
 BEGIN
 INSERT INTO cor_role_menu (id_role, id_menu) VALUES 
 (1, 1)
-,(1, 2)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1233,7 +1232,7 @@ INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id
 (6,23,1,1)
 ,(6,23,2,1)
 --- Groupe administrateur sur UsersHub et TaxHub
-(6,23,1,9)
+,(6,23,1,9)
 ,(6,23,2,9)
 --Administrateur sur GeoNature
 ,(11, 23, 3, 1)
