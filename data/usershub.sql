@@ -1141,7 +1141,8 @@ DO
 $$
 BEGIN
 INSERT INTO cor_role_menu (id_role, id_menu) VALUES 
-(1, 1)
+(7, 1) -- Ajouter le Grp_admin dans la liste des observateurs Occtax
+,(9, 1) -- Ajouter le Grp_en_poste dans la liste des observateurs Occtax
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
