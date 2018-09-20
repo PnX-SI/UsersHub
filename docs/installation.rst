@@ -35,7 +35,7 @@ Création de la base de données
 Configuration de l'application
 ==============================
 
-* Se loguer sur le serveur avec l'utilisateur linux ``synthese``
+* Se loguer sur le serveur avec  votre utilisateur linux (``synthese`` dans notre exemple)
    
 
 * Installation et configuration de l'application
@@ -45,11 +45,12 @@ Configuration de l'application
     cd /home/synthese/usershub
     ./install_app.sh
 
-Configuration apache
+Configuration Apache
 ====================
-Remplacer `MONUSER` par le nom de votre utilisateur linux.
 
-  ::  
+Remplacer `MONUSER` par le nom de votre utilisateur linux.
+ 
+::  
   
     sudo touch /etc/apache2/sites-available/usershub.conf
     sudo sh -c 'echo "# Configuration UsersHub" >> /etc/apache2/sites-available/usershub.conf'
@@ -64,8 +65,9 @@ Remplacer `MONUSER` par le nom de votre utilisateur linux.
     sudo a2ensite usershub
     sudo service apache2 restart
 
-Vous devez éditer le fichier dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub.
-Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez changer la première section de ce fichier pour obtenir quelque chose qui ressemble à ceci :
+Vous devez éditer le fichier ``dbconnexions.json`` et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub.
+
+Si vous avez changé l'utilisateur et le mot de passe par défaut, vous devez changer la première section de ce fichier pour obtenir quelque chose qui ressemble à ceci :
  
 ::  
   
@@ -77,11 +79,11 @@ Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez ch
     ,"pass":"monpassachanger"
     ...
 
-UsersHub peut fonctionner seul avec sa propre base de données mais il est configurer par défaut pour fonctionner avec GeoNature. Vous devez renseigner les paramêtres de connexion à la base de GeoNature.
+UsersHub peut fonctionner seul avec sa propre base de données mais il est configuré par défaut pour fonctionner avec GeoNature. Vous devez renseigner les paramêtres de connexion à la base de GeoNature.
 
 * Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub et les login et pass admin/admin
 
-* choisir le mode d'authentification dans le fichier ``config/config.php``
+* Choisir le mode d'authentification dans le fichier ``config/config.php``
 
 Mise à jour de l'application
 ----------------------------
