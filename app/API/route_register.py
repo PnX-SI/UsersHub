@@ -15,6 +15,8 @@ from app.models import (
     CorRoleDroitApplication
 )
 
+from pypnusershub import routes as fnauth
+
 from flask_cors import cross_origin
 
 from config import config
@@ -33,7 +35,18 @@ def get_one_t_roles(id_role):
     return role
 
 
+@route.route('/role_check_auth_error')
+def role_check_auth_error():
+
+    return "authentification error"
+
+
+
+    
+
+
 @route.route('/role', methods=['POST'])
+@fnauth.check_auth(4, False, '/role_check_auth_error')
 @cross_origin(config.URLS_COR)
 @json_resp
 def insert_one_t_role():
