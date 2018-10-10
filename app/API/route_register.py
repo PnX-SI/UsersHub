@@ -35,18 +35,15 @@ def get_one_t_roles(id_role):
     return role
 
 
-@route.route('/role_check_auth_error')
-def role_check_auth_error():
+# @route.route('/role_check_auth_error')
+# def role_check_auth_error():
 
-    return "authentification error"
+#     return "authentification error"
 
 
-
-    
-
+# @fnauth.check_auth(4, False, '/role_check_auth_error')
 
 @route.route('/role', methods=['POST'])
-@fnauth.check_auth(4, False, '/role_check_auth_error')
 @cross_origin(config.URLS_COR)
 @json_resp
 def insert_one_t_role():
