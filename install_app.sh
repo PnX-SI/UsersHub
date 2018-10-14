@@ -35,13 +35,10 @@ echo "        }" >> config/dbconnexions.json
 echo "    ]" >> config/dbconnexions.json
 echo "}" >> config/dbconnexions.json
 
-# configuration apache
+# Configuration Apache
 APACHE_REP=/var/www/
 if /usr/sbin/apache2 -v | grep -q version.*2.4; then
     echo apache 2.4
 	APACHE_REP=/var/www/html
 fi
 echo 'Répertoire root de apache :' $APACHE_REP
-echo 'Pensez à faire votre configuration apache (voir la documentation).'
-
-echo "Fin. Vous devez manuellement éditer le fichier config/dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub"
