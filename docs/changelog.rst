@@ -2,6 +2,14 @@
 CHANGELOG
 =========
 
+1.3.3 (2018-10-17)
+------------------
+
+**Corrections**
+
+* Suppression de ``cor_role_droit_application`` inutiles
+* ``install_app.sh`` : Suppression de messages portant à confusion
+
 1.3.2 (2018-09-20)
 ------------------
 
