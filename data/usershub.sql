@@ -1014,6 +1014,7 @@ $BODY$
 --------
 --DATA--
 --------
+
 DO
 $$
 BEGIN
@@ -1082,12 +1083,14 @@ $$;
 DO
 $$
 BEGIN
+-- Créer les groupes de base
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
 (true, 6, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu')
 ,(true, 7, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL,'Groupe des agents de la structure')
 ,(true, 8, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit limité')
 ,(true, 9, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, 'mastructure', -1, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
 ;
+-- Créer les utilisateurs de base
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, organisme, id_unite, pn, session_appli, date_insert, date_update, id_organisme, remarques, pass_plus) VALUES 
 (false, 1, 'admin', 'Administrateur', 'test', NULL, '21232f297a57a5a743894a0e4a801fc3', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier', '$2y$13$TMuRXgvIg6/aAez0lXLLFu0lyPk4m8N55NDhvLoUHh/Ar3rFzjFT.')
 ,(false, 2, 'agent', 'Agent', 'test', NULL, 'b33aed8f3134996703dc39f9a7c95783', NULL, 'Autre', -1, true, NULL, NULL, NULL, -1, 'utilisateur test à modifier ou supprimer', NULL)
@@ -1101,7 +1104,7 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
+-- Ajout des droits à l'admin et au grp_admin sur les applications UssersHub et TaxHub
 DO
 $$
 BEGIN 
@@ -1109,13 +1112,8 @@ INSERT INTO cor_role_droit_application (id_role, id_droit, id_application)
 VALUES 
 (1, 6, 1)
 ,(1, 6, 2)
-,(1, 6, 3)
-,(7, 3, 3)
-,(2, 2, 3)
-,(3, 1, 3)
 ,(9, 6, 1)
 ,(9, 6, 2)
-,(9, 6, 3)
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1149,7 +1147,7 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
+-- Associer les utilisateurs de base à des groupes
 DO
 $$
 BEGIN
@@ -1224,15 +1222,15 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
+-- Renseigner le CRUVED des utilisateurs et groupes
 DO
 $$
 BEGIN
 INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role) VALUES
---Administrateur sur UsersHub et TaxHub
+--Administrateur sur UsersHub et TaxHub / Non utilisé
 (6,23,1,1)
 ,(6,23,2,1)
---- Groupe administrateur sur UsersHub et TaxHub
+--- Groupe administrateur sur UsersHub et TaxHub / Non utilisé
 ,(6,23,1,9)
 ,(6,23,2,9)
 --Administrateur sur GeoNature
@@ -1251,7 +1249,7 @@ INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id
 ,(16, 23, 3, 9)
 --Validateur général sur tout GeoNature
 ,(14, 23, 3, 5)
---Validateur pour son organisme sur contact
+--Validateur pour son organisme sur Occtax
 --,(14, 22, 4, 4) -- Droits Occtax supprimés car c'est l'installation du module qui créé l'application
 --CRUVED du groupe en poste sur tout GeoNature
 ,(11, 23, 3, 7)
