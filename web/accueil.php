@@ -15,6 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="js/ext-3.2.0/multiselect/Multiselect.css"></link>
 	<link rel="stylesheet" type="text/css" href="css/main.css"></link>
 	<link rel="stylesheet" type="text/css" href="css/rowActions.css"></link>
+	<link rel="shortcut icon" href="images/favicon.png">
 
 	<script src="js/application.js" type="text/javascript"></script>
 	<script src="js/application.layout.js" type="text/javascript"></script>
