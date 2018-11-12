@@ -1,6 +1,7 @@
 *.*~
 log/
 
+usershub2.pid
 config.py
 venv
 *.pyc
