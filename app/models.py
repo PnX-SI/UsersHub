@@ -276,7 +276,7 @@ class TRoles(GenericRepository):
     """
 
     __tablename__ = 't_roles'
-    __table_args__={'schema':'utilisateurs'}
+    __table_args__={'schema':'utilisateurs', 'extend_existing': True}
     id_role = db.Column(db.Integer, primary_key = True)
     groupe = db.Column(db.Boolean)
     uuid_role = db.Column(UUID(as_uuid=True), default=select([func.uuid_generate_v4()]))
@@ -538,7 +538,7 @@ class TApplications(GenericRepository):
     """
 
     __tablename__='t_applications'
-    __table_args__ = {'schema':'utilisateurs'}
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
     id_application = db.Column(db.Integer, primary_key = True)
     nom_application = db.Column(db.Unicode)
     desc_application = db.Column(db.Unicode)
@@ -600,7 +600,7 @@ class TTags(GenericRepository):
     """
 
     __tablename__ = 't_tags'
-    __table_args__ = {'schema':'utilisateurs'}
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
     id_tag = db.Column(db.Integer,primary_key = True)
     id_tag_type = db.Column(db.Integer)
     tag_code = db.Column(db.Unicode)
@@ -694,7 +694,7 @@ class CorRoleDroitApplication(GenericRepository):
     """ Vue de correspondance entre la table t_applications, t_roles et la vue bib_droits"""
 
     __tablename__ = 'cor_role_droit_application'
-    __table_args__= {'schema':'utilisateurs'}
+    __table_args__= {'schema':'utilisateurs', 'extend_existing': True}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_droit = db.Column(db.Integer,ForeignKey('utilisateurs.bib_droits.id_droit'), primary_key = True)
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
@@ -721,7 +721,7 @@ class VBibDroits(GenericRepository):
     """
 
     __tablename__ = 'bib_droits'
-    __table_args__ = {'schema':'utilisateurs'}
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
     id_droit = db.Column(db.Integer, primary_key = True)
     nom_droit = db.Column(db.Unicode)
     desc_droit = db.Column(db.Unicode)
@@ -734,7 +734,7 @@ class VUsersactionForallGnModules(GenericRepository):
     Droit d'acces d'un user particulier a une application particuliere
     '''
     __tablename__ = 'v_usersaction_forall_gn_modules'
-    __table_args__ = {'schema': 'utilisateurs'}
+    __table_args__ = {'schema': 'utilisateurs', 'extend_existing': True}
     id_role = db.Column(db.Integer, primary_key=True)
     nom_role = db.Column(db.Unicode)
     prenom_role = db.Column(db.Unicode)
