@@ -1,59 +1,185 @@
 -- Ce script permet de recréer des tables qui simulent les tables de UsersHub V1 en se basant sur les tags
 -- pour que les anciennes applications continuent à fonctionner
--- @TODO : ATTENTION, il manque les récupération des données avant de supprimer les anciennes tables
-
--- Supprimer le champs organisme de t_roles (https://github.com/PnEcrins/UsersHub/issues/38)
-ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
 
 -- Associer les tags de type Liste à l'application GeoNature
-INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
-(14,100)
-,(14,101)
-,(14,102)
-;
+-- INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
+-- (3,100)
+-- ,(3,101)
+-- ,(3,102)
+-- ;
+--> GIL : pas compris à quoi ça sert et je ne trouve nulle part de tags avec les id 100,101,102
 
--- Supprimer la table t_menus
-DROP TABLE utilisateurs.t_menus CASCADE;
+CREATE SCHEMA save;
+
+
+----------------
+--APPLICATIONS--
+----------------
+--TODO : avant d'exécuter ce script, GeoNature et occtax + d'éventuels autres modules doivent être présents dans t_applications
+INSERT INTO utilisateurs.cor_application_tag (id_tag, id_application)
+SELECT t.id_tag, (SELECT id_application FROM utilisateurs.t_applications WHERE nom_application IN('occtax')) 
+FROM utilisateurs.t_tags t
+JOIN save.t_menus  m ON m.nom_menu = t.tag_name
+WHERE id_tag_type = 4
+AND tag_name ILIKE 'observateurs occtax';
+
+
+------------
+--TAGS GN2--
+------------
+--Insertion des tags V2 s'il n'existent pas déjà
+DO
+$$
+BEGIN
+INSERT INTO bib_tag_types (id_tag_type, tag_type_name, tag_type_desc) VALUES
+(1, 'Object', 'Define a type object. Usually to define privileges on an object')
+,(2, 'Action', 'Define a type action. Usually to define privileges for an action')
+,(3, 'Privilege', 'Define a privilege level')
+,(4, 'List', 'Define a type list to group anything')
+;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+-- nouveau type de tag "scope" fait séparément pour les bases comportant déjà les 4 premiers
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.bib_tag_types(id_tag_type, tag_type_name, tag_type_desc) VALUES
+(5, 'Scope', 'Define a type Scope. Usually to define a scope for a action');
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+--mise à jour du id_tag_type qui était à 3 pour les tags de type scope
+UPDATE utilisateurs.t_tags
+SET id_tag_type = 5
+WHERE tag_name IN('nothing','my data','my organism data','all data');
+
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
+(1, 3, '1', 'utilisateur', 'Utilisateur', 'Ne peut que consulter')
+,(2, 3, '2', 'rédacteur', 'Rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements')
+,(3, 3, '3', 'référent', 'Référent', 'Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
+,(4, 3, '4', 'modérateur', 'Modérateur', 'Peu utilisé')
+,(5, 3, '5', 'validateur', 'Validateur', 'Il valide bien sur')
+,(6, 3, '6', 'administrateur', 'Administrateur', 'Il a tous les droits')
+,(11, 2, 'C', 'create', 'Create', 'Can create/add new data')
+,(12, 2, 'R', 'read', 'Read', 'Can read data')
+,(13, 2, 'U', 'update', 'Update', 'Can update data')
+,(14, 2, 'V', 'validate', 'Validate', 'Can validate data')
+,(15, 2, 'E', 'export', 'Export', 'Can export data')
+,(16, 2, 'D', 'delete', 'Delete', 'Can delete data')
+,(20, 5, '0', 'nothing', 'Nothing', 'Cannot do anything')
+,(21, 5, '1', 'my data', 'My data', 'Can do action only on my data')
+,(22, 5, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
+,(23, 5, '3', 'all data', 'All data', 'Can do action on all data')
+,(24, 4, NULL, 'observateurs occtax', 'Observateurs Occtax','Liste des observateurs dans le module Occtax')
+;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+
+---------
+--MENUS--
+---------
+ALTER TABLE utilisateurs.t_menus SET SCHEMA save;
+ALTER TABLE utilisateurs.cor_role_menu SET SCHEMA save;
+--Récupérer les informations concernant les menus pour en faire des tags de type List
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.t_tags (id_tag, tag_code, id_tag_type, tag_name, tag_label, tag_desc)
+SELECT max(t.id_tag)+m.id_menu, m.id_menu::character varying, 4, m.nom_menu, m.nom_menu, m.desc_menu
+FROM utilisateurs.t_tags t, save.t_menus m
+GROUP BY m.id_menu, m.nom_menu, m.nom_menu, m.desc_menu;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.cor_application_tag (id_tag, id_application)
+SELECT t.id_tag, m.id_application 
+FROM utilisateurs.t_tags t
+JOIN save.t_menus  m ON m.nom_menu = t.tag_name
+WHERE id_tag_type = 4;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+--cas particulier d'occtax qui n'a pas d'enregistrement dans t_menus de la v1
+INSERT INTO utilisateurs.cor_application_tag (id_tag, id_application)
+SELECT t.id_tag, (SELECT id_application FROM utilisateurs.t_applications WHERE nom_application IN('occtax')) 
+FROM utilisateurs.t_tags t
+JOIN save.t_menus  m ON m.nom_menu = t.tag_name
+WHERE id_tag_type = 4
+AND tag_name ILIKE 'observateurs occtax';
+--TODO pour chaque module comme occtax. A creuser
+
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.cor_role_tag (id_role, id_tag)
+SELECT  crm.id_role, t.id_tag 
+FROM utilisateurs.t_tags t
+JOIN save.cor_role_menu crm ON crm.id_menu = t.tag_code::integer
+WHERE t.id_tag_type = 4;
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
 
 -- Vue recréant l'equivalent de t_menus
 CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
 SELECT 
- t.id_tag AS id_menu,
+ t.tag_code::integer AS id_menu,
  t.tag_name AS nom_menu,
  t.tag_desc AS desc_menu,
  c.id_application
 FROM utilisateurs.bib_tag_types b
 LEFT JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
 LEFT JOIN utilisateurs.cor_application_tag c ON c.id_tag = t.id_tag
-WHERE b.id_tag_type = 4
-
--- Supprimer la table cor_role_menu
-DROP TABLE utilisateurs.cor_role_menu CASCADE;
+WHERE b.id_tag_type = 4;
 
 -- Vue recréant l'equivalent de cor_role_menu
+--TODO : id_tag et id_menu ne sont pas correspondant updater les id_menu de cor_role_menu
 CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
 SELECT 
  DISTINCT
  c.id_role,
- c.id_tag AS id_menu
+ t.tag_code::integer AS id_menu
 FROM utilisateurs.cor_role_tag c
-JOIN utilisateurs.t_menus v ON v.id_menu = c.id_tag
+JOIN utilisateurs.t_tags t ON t.id_tag = c.id_tag;
 
+
+----------
+--DROITS--
+----------
+ALTER TABLE utilisateurs.bib_droits SET SCHEMA save;
+ALTER TABLE utilisateurs.cor_role_droit_application SET SCHEMA save;
 -- Associer des roles aux tags de type Droits V1
-INSERT INTO utilisateurs.cor_role_tag(id_role, id_tag) VALUES
-(20002,2)
-;
+-- INSERT INTO utilisateurs.cor_role_tag(id_role, id_tag) VALUES
+-- (20002,2)
+-- ;
 
 -- Associer les tags de type Droits V1 à l'application GeoNature
 -- Si il n'y a pas d'application définie, alors le tag devrait s'appliquer à toutes les applications
-INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
-(14,2)
-;
+-- INSERT INTO utilisateurs.cor_application_tag(id_application, id_tag) VALUES
+-- (3,2)
+-- ;
+--> GIL pas trop compris à quoi servent ces 2 insert
 
--- Supprimer la table bib_droits
-DROP TABLE utilisateurs.bib_droits CASCADE;
-
--- Vue recréant l'equivalent de bib_droits
+-- Vue recréant l'equivalent de bib_droits à partir des tags existants
 CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
 SELECT 
  t.id_tag AS id_droit,
@@ -61,68 +187,56 @@ SELECT
  t.tag_desc AS desc_droit
 FROM utilisateurs.bib_tag_types b
 JOIN utilisateurs.t_tags t ON b.id_tag_type = t.id_tag_type
-WHERE b.id_tag_type = 3
+WHERE b.id_tag_type = 3;
 
---Table qui compense la table cor_role_droit_application de la V1
-CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
-    id_role integer NOT NULL,
-    id_tag integer NOT NULL,
-    id_application integer NOT NULL
-);
-COMMENT ON TABLE cor_role_tag_application IS 'Equivalent de l''ancienne cor_role_droit_application. Permet de stocker les droits par rôle et applications pour rester compatible avec UHV1';
+--création d'un droit zéro existant en v1
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc) VALUES
+(0, 3, '0', 'aucun', 'aucun', 'aucun droit');
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
 
-ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
-ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_tag_fkey FOREIGN KEY (id_tag) REFERENCES utilisateurs.t_tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE;
-ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
+--Table qui remplace la table cor_role_droit_application de la V1
+-- CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_tag_application (
+--     id_role integer NOT NULL,
+--     id_tag integer NOT NULL,
+--     id_application integer NOT NULL
+-- );
+-- COMMENT ON TABLE cor_role_tag_application IS 'Equivalent de l''ancienne cor_role_droit_application. Permet de stocker les droits par rôle et applications pour rester compatible avec UHV1';
 
--- Vue recréant l'equivalent de cor_role_droit_application
+-- ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_pkey PRIMARY KEY (id_role, id_tag, id_application);
+-- ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_application_fkey FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
+-- ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_tag_fkey FOREIGN KEY (id_tag) REFERENCES utilisateurs.t_tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE;
+-- ALTER TABLE ONLY utilisateurs.cor_role_tag_application ADD CONSTRAINT cor_role_tag_application_id_role_fkey FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
+
+--> GIL : je préfère un mécanisme utilisant les tables existantes. La table cor_app_privileges permet de stocker ces infos
+--> A VOIR si interférences avec le cruved et si modif à faire pour dans GN2 et UHV2
+
+--on insert les informations de l'ancienne cor_role_droit_application dans cor_app_privileges
+--on postule que les id_tag de 0 à 6 et les id_droits sont correspondants
+--La numérotation des tags lors de leur création initiale avait intégré cette question de la migration UH1 to UH2
+INSERT INTO cor_app_privileges (id_tag_action, id_tag_object, id_application, id_role)
+SELECT id_droit as id_tag_action, 3 as id_tag_object, id_application, id_role
+FROM save.cor_role_droit_application;
+
+-- Vue recréant l'équivalent de cor_role_droit_application
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
- c.id_role,
- c.id_tag as id_droit, 
- c.id_application
-FROM utilisateurs.cor_role_tag_application c
+ cap.id_role,
+ cap.id_tag_action as id_droit, 
+ cap.id_application
+FROM utilisateurs.cor_app_privileges cap
+WHERE id_tag_action <=6;
 
--- Associe les portées des données à un type de tag "scope"
-INSERT INTO utilisateurs.bib_tag_types(id_tag_type,tag_type_name,tag_type_desc) VALUES
-(5,'scope','Define a type scope for CRUVED data')
 
-UPDATE utilisateurs.t_tags
-set 
-id_tag = 22,
-id_tag_type = 5,
-tag_code = '2',
-tag_name = 'my organism data',
-tag_label = 'My organism data',
-tag_desc = 'Can do action only on my data and on my organism data'
-where 
-id_tag = 22;
-
-UPDATE utilisateurs.t_tags
-set 
-id_tag = 21,
-id_tag_type = 5,
-tag_code = '1',
-tag_name = 'my data',
-tag_label = 'My data',
-tag_desc = 'Can do action only on my data'
-where 
-id_tag = 21;
-
-UPDATE utilisateurs.t_tags
-set 
-id_tag = 23,
-id_tag_type = 5,
-tag_code = '3',
-tag_name = 'all data',
-tag_label = 'All data',
-tag_desc = 'Can do action on all data'
-where 
-id_tag = 23;
-
+----------
+--AUTRES--
+----------
 --Correction de la Vue v_usersaction_forall_gn_modules afin d'obtenir le cruved de groupe
-
 CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS 
  WITH p_user_tag AS (
          SELECT u.id_role,
@@ -154,7 +268,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS
             c_1.id_tag_object,
             c_1.id_application
            FROM utilisateurs.t_roles u
-             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role OR g.id_role_groupe=u.id_role
+             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role OR g.id_role_groupe=u.id_role --seul point modifié, à vérifier
              JOIN utilisateurs.cor_app_privileges c_1 ON c_1.id_role = g.id_role_groupe
           WHERE (g.id_role_groupe IN ( SELECT DISTINCT cor_roles.id_role_groupe
                    FROM utilisateurs.cor_roles))
@@ -220,3 +334,20 @@ CREATE OR REPLACE VIEW utilisateurs.v_usersaction_forall_gn_modules AS
     v.max_tag_object_code::character varying(25) AS tag_object_code
    FROM all_users_tags v
   WHERE v.max_tag_object_code = v.tag_object_code::text;
+
+
+-- Supprimer le champs organisme de t_roles (https://github.com/PnEcrins/UsersHub/issues/38)
+ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
+
+--------
+--SAVE--
+--------
+--TABLES SUPPRIMABLES. A la discretion de chacun
+-- Supprimer la table t_menus
+--DROP TABLE save.t_menus;
+-- Supprimer la table cor_role_menu
+--DROP TABLE save.cor_role_menu;
+-- Supprime la table bib_droits
+--DROP TABLE save.bib_droits;
+-- Supprime la table cor_role_droit_application
+--DROP TABLE save.cor_role_droit_application;
