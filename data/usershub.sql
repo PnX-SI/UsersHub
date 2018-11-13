@@ -1175,6 +1175,7 @@ INSERT INTO bib_tag_types(id_tag_type, tag_type_name, tag_type_desc) VALUES
 ,(2, 'Action', 'Define a type action. Usually to define privileges for an action')
 ,(3, 'Privilege', 'Define a privilege level')
 ,(4, 'List', 'Define a type list to group anything')
+,(5, 'Scope', 'Define a type Scope. Usually to define a scope for a action')
 ;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -1197,10 +1198,10 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(14, 2, 'V', 'validate', 'Validate', 'Can validate data')
 ,(15, 2, 'E', 'export', 'Export', 'Can export data')
 ,(16, 2, 'D', 'delete', 'Delete', 'Can delete data')
-,(20, 3, '0', 'nothing', 'Nothing', 'Cannot do anything')
-,(21, 3, '1', 'my data', 'My data', 'Can do action only on my data')
-,(22, 3, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
-,(23, 3, '3', 'all data', 'All data', 'Can do action on all data')
+,(20, 5, '0', 'nothing', 'Nothing', 'Cannot do anything')
+,(21, 5, '1', 'my data', 'My data', 'Can do action only on my data')
+,(22, 5, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
+,(23, 5, '3', 'all data', 'All data', 'Can do action on all data')
 ,(24, 4, NULL, 'observateurs occtax', 'Observateurs Occtax', 'Liste des observateurs dans Occtax')
 ;
 PERFORM pg_catalog.setval('t_tags_id_tag_seq', (SELECT max(id_tag)+1 FROM t_tags), false);
