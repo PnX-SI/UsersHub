@@ -342,12 +342,21 @@ ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
 --------
 --SAVE--
 --------
---TABLES SUPPRIMABLES. A la discretion de chacun
--- Supprimer la table t_menus
---DROP TABLE save.t_menus;
+--TODO AVANT  SUPPRESSION : 
+--vérifier qu'il n'y pas besoin de cascade (vues liées ou autre)
+--vérifier que le "SET SCHEMA save" n'a pas modifier les FROM et les JOIN sur les vues qui références ces anciennes tables :
+--  v_userslist_forall_applications
+--  v_userslist_forall_menu
+--  contactfaune.v_nomade_observateurs_faune
+--  contactflore.v_nomade_observateurs_flore
+--  contactinv.v_nomade_observateurs_inv
+--TABLES SUPPRIMABLES (dans cet ordre). A la discretion de chacun
 -- Supprimer la table cor_role_menu
 --DROP TABLE save.cor_role_menu;
--- Supprime la table bib_droits
---DROP TABLE save.bib_droits;
+-- Supprimer la table t_menus
+--DROP TABLE save.t_menus;
 -- Supprime la table cor_role_droit_application
 --DROP TABLE save.cor_role_droit_application;
+-- Supprime la table bib_droits
+--DROP TABLE save.bib_droits;
+
