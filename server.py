@@ -46,6 +46,7 @@ app.config.from_pyfile('config/config.py')
 app.secret_key = config.SECRET_KEY
 
 db.init_app(app)
+app.config['DB'] = db
 
 # FIX BUG
 app.config['DB'] = db

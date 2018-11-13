@@ -277,6 +277,7 @@ class TRoles(GenericRepository):
 
     __tablename__ = 't_roles'
     __table_args__={'schema':'utilisateurs', 'extend_existing':True}
+
     id_role = db.Column(db.Integer, primary_key = True)
     groupe = db.Column(db.Boolean)
     uuid_role = db.Column(UUID(as_uuid=True), default=select([func.uuid_generate_v4()]))
@@ -539,6 +540,7 @@ class TApplications(GenericRepository):
 
     __tablename__='t_applications'
     __table_args__ = {'schema':'utilisateurs', 'extend_existing':True}
+
     id_application = db.Column(db.Integer, primary_key = True)
     nom_application = db.Column(db.Unicode)
     desc_application = db.Column(db.Unicode)
@@ -722,6 +724,7 @@ class VBibDroits(GenericRepository):
 
     __tablename__ = 'bib_droits'
     __table_args__ = {'schema':'utilisateurs', 'extend_existing':True}
+
     id_droit = db.Column(db.Integer, primary_key = True)
     nom_droit = db.Column(db.Unicode)
     desc_droit = db.Column(db.Unicode)
@@ -735,6 +738,7 @@ class VUsersactionForallGnModules(GenericRepository):
     '''
     __tablename__ = 'v_usersaction_forall_gn_modules'
     __table_args__ = {'schema': 'utilisateurs', 'extend_existing':True}
+
     id_role = db.Column(db.Integer, primary_key=True)
     nom_role = db.Column(db.Unicode)
     prenom_role = db.Column(db.Unicode)

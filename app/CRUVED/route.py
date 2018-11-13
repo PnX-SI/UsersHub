@@ -7,7 +7,7 @@ from pypnusershub import routes as fnauth
 from app.env import URL_REDIRECT
 from app.CRUVED import forms as Cruvedforms
 from app.models import (
-    TTags, TApplications, TRoles
+    TTags, TApplications, TRoles, CorAppPrivileges
 )
 from app.env import db
 from sqlalchemy import distinct, desc, or_
@@ -145,31 +145,28 @@ def get_cruved_one(id_role):
     sauf si aucun rôle est associé à un droit cruved dans ce cas là la methode retourne un tableau vide
     """
 
-    user = TRoles.get_one(id_role)
-    role = dict()
-    if user['prenom_role'] != None:
-        role['full_name'] = user['nom_role'] + ' ' + user['prenom_role']
-    else:
-        role['full_name'] = user['nom_role']
-    app = TApplications.get_all(as_model=True)
-    app = app.filter(
+    user = TRoles.get_one(id_role, as_model=True)
+    role = user.as_dict_full_name()
+    q = TApplications.get_all(as_model=True)
+    q = q.filter(
             or_(
                 TApplications.id_parent == config.ID_GEONATURE,
                 TApplications.id_application == config.ID_GEONATURE
             )
         )
-    App = [data.as_dict() for data in app.all()]
+    apps = q.all()
+    apps = [app.as_dict() for app in apps]
     tab_dict = []
-    test = cruved_for_user_in_app(1000148, 14)
-    for app_c in App:
+    for app_c in apps:
         cruved = cruved_for_user_in_app(id_role, app_c['id_application'], app_c['id_parent'])
         if cruved != {'C': '0', 'D': '0', 'V': '0', 'U': '0', 'E': '0', 'R': '0'}:
+
             tdict = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D', 'id_role', 'full_name', 'id_application']
             d_data = [
                 app_c['nom_application'],
                 cruved['C'], cruved['R'], cruved['U'], cruved['V'],
                 cruved['E'], cruved['D'],
-                user['id_role'], role['full_name'], app_c['id_application']
+                role['id_role'], role['full_name'], app_c['id_application']
             ]
             tdict = dict(zip(tdict, d_data))
             tab_dict.append(tdict)

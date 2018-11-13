@@ -45,18 +45,24 @@ Configuration de l'application
     cd /home/synthese/usershub
     ./install_app.sh
 
-Vous devez éditer le fichier dbconnexoins.json et y ajouter les paramètres de connexions à toutes les bases que vous souhaitez synchroniser avec UsersHub.
-Si vous avez changer l'utilisateur et le mot de passe par défaut, vous devez changer la première section de ce fichier pour obtenir quelque chose qui ressemble à ceci :
+Configuration apache
+====================
+
+Créer le fichier `/etc/apache2/sites-avalaible/usershub.conf` avec ce contenu
  
-::  
+  ::  
   
-    ...
-    "dbfunname":"Utilisateurs"
-    ,"host":"localhost"
-    ,"dbname":"usershubdb"
-    ,"user":"geonatuser"
-    ,"pass":"monpassachanger"
-    ...
+    <Location /usershub2>
+        ProxyPass  http://localhost:5001
+        ProxyPassReverse  http://localhost:5001
+    </Location>
+
+Activé le site et recharger la conf apache
+ 
+  ::  
+  
+    sudo a2ensite usershub
+    sudo service apache2 restart
 
 UsersHub peut fonctionner seul avec sa propre base de données mais il est configurer par défaut pour fonctionner avec GeoNature. Vous devez renseigner les paramêtres de connexion à la base de GeoNature.
 
