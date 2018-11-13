@@ -35,7 +35,7 @@ INSERT INTO t_tags (id_tag, id_tag_type, tag_code, tag_name, tag_label, tag_desc
 ,(14, 2, 'V', 'validate', 'Validate', 'Can validate data')
 ,(4, 2, 'E', 'export', 'Export', 'Can export data')
 ,(16, 2, 'D', 'delete', 'Delete', 'Can delete data')
-,(20, 3, '0', 'nothing', 'Nothing', 'Cannot do anything')
+,(20, 5, '0', 'nothing', 'Nothing', 'Cannot do anything')
 ,(21, 5, '1', 'my data', 'My data', 'Can do action only on my data')
 ,(22, 5, '2', 'my organism data', 'My organism data', 'Can do action only on my data and on my organism data')
 ,(23, 5, '3', 'all data', 'All data', 'Can do action on all data')

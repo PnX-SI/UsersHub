@@ -309,7 +309,7 @@ def get_tab_choice():
     Methode qui retourne le tableau de tuples des selectfield des portées
     """
 
-    tab_choices = TTags.choixSelect('id_tag','tag_name',0)
+    tab_choices = TTags.choixSelect('id_tag','tag_name')
     return tab_choices
 
 

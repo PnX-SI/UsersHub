@@ -609,12 +609,11 @@ class TTags(GenericRepository):
     tag_desc = db.Column(db.Unicode)
 
     @classmethod
-    def choixSelect(cls,tag_code,nom,aucun = None):
+    def choixSelect(cls,tag_code,nom):
 
         """
         Methode qui retourne un tableau de tuples de code de tags et de nom de tags
         Avec pour paramètres un code de tag et un nom de tag
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (0,Aucun) au tableau
         """
 
         data = cls.get_all()
@@ -622,8 +621,6 @@ class TTags(GenericRepository):
         for d in data :
             if d['id_tag_type'] == 5:
                 choices.append((d[tag_code], d[nom]))
-        if aucun != None :
-            choices.append((0,'Aucun'))
         return choices
 
     @classmethod

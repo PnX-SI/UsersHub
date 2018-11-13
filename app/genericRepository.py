@@ -87,8 +87,8 @@ class GenericRepository(db.Model):
     def choixSelect(cls,id,nom,aucun = None):
 
         """
-        Methode qui retourne une tableau de tuples d'id  et de nom
-        Avec pour paramètres un id  et un nom
+        Methode qui retourne un tableau de tuples d'id  et de nom
+        Avec pour paramètres un id et un nom
         Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
