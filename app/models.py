@@ -199,7 +199,7 @@ class CorAppPrivileges(GenericRepository):
     Classe de correspondance entre la table t_applications,la table t_tags, la table t_roles
 
     Cette classe permet d'établir un Cruved à un role pour une application,
-    une ligne représente de la table représente une relation d'un tag sur un role pour une application avec une portée
+    une ligne de la table représente une relation d'un tag sur un role pour une application avec une portée
     """
 
     __tablename__ = 'cor_app_privileges'
@@ -612,7 +612,7 @@ class TTags(GenericRepository):
     def choixSelect(cls,tag_code,nom,aucun = None):
 
         """
-        Methode qui retourne une tableau de tuples de code de tags et de nom de tags
+        Methode qui retourne un tableau de tuples de code de tags et de nom de tags
         Avec pour paramètres un code de tag et un nom de tag
         Le paramètre aucun si il a une valeur permet de rajouter le tuple (0,Aucun) au tableau
         """

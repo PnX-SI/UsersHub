@@ -249,23 +249,8 @@ $( document ).ready(function() {
         }
     } );
 
-
-
-
-
-
-
-
-
-
-    console.log('coucou');
-
     function test(){
         console.log('test');
     };
-
-
-
-
 });
 
