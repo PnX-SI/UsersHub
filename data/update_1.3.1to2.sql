@@ -402,6 +402,114 @@ EXCEPTION WHEN undefined_table  THEN
         RAISE NOTICE 'Cet vue n''existe pas';
 END
 $$;
+--vues mobile.
+DO
+$$
+BEGIN
+DROP VIEW utilisateurs.v_nomade_observateurs_all;
+CREATE OR REPLACE VIEW utilisateurs.v_nomade_observateurs_all AS 
+        (        ( SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role, 'fauna'::text AS mode
+                   FROM utilisateurs.t_roles r
+                  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+                           FROM utilisateurs.cor_roles cr
+                          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                                   FROM utilisateurs.cor_role_menu crm
+                                  WHERE crm.id_menu = 11))
+                          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+                           FROM utilisateurs.cor_role_menu crm
+                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+                  ORDER BY r.nom_role, r.prenom_role, r.id_role)
+        UNION 
+                ( SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role, 'flora'::text AS mode
+                   FROM utilisateurs.t_roles r
+                  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+                           FROM utilisateurs.cor_roles cr
+                          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                                   FROM utilisateurs.cor_role_menu crm
+                                  WHERE crm.id_menu = 5))
+                          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+                           FROM utilisateurs.cor_role_menu crm
+                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
+                  ORDER BY r.nom_role, r.prenom_role, r.id_role))
+UNION 
+        ( SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role, 'inv'::text AS mode
+           FROM utilisateurs.t_roles r
+          WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+                   FROM utilisateurs.cor_roles cr
+                  WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                           FROM utilisateurs.cor_role_menu crm
+                          WHERE crm.id_menu = 11))
+                  ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+                   FROM utilisateurs.cor_role_menu crm
+              JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+          ORDER BY r.nom_role, r.prenom_role, r.id_role);
+EXCEPTION WHEN undefined_table  THEN
+        RAISE NOTICE 'Cet vue n''existe pas';
+END
+$$;
+
+DO
+$$
+BEGIN
+DROP VIEW utilisateurs.v_observateurs;
+CREATE OR REPLACE VIEW utilisateurs.v_observateurs AS 
+ SELECT DISTINCT r.id_role AS codeobs, (r.nom_role::text || ' '::text) || r.prenom_role::text AS nomprenom
+   FROM utilisateurs.t_roles r
+  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+           FROM utilisateurs.cor_roles cr
+          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                   FROM utilisateurs.cor_role_menu crm
+                  WHERE crm.id_menu = 5))
+          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+           FROM utilisateurs.cor_role_menu crm
+      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
+  ORDER BY (r.nom_role::text || ' '::text) || r.prenom_role::text, r.id_role;
+  EXCEPTION WHEN undefined_table  THEN
+        RAISE NOTICE 'Cet vue n''existe pas';
+END
+$$;
+
+DO
+$$
+BEGIN
+DROP VIEW contactfaune.v_nomade_observateurs_faune;
+CREATE OR REPLACE VIEW contactfaune.v_nomade_observateurs_faune AS 
+ SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
+   FROM utilisateurs.t_roles r
+  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+           FROM utilisateurs.cor_roles cr
+          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                   FROM utilisateurs.cor_role_menu crm
+                  WHERE crm.id_menu = 11))
+          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+           FROM utilisateurs.cor_role_menu crm
+      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+  ORDER BY r.nom_role, r.prenom_role, r.id_role;
+EXCEPTION WHEN undefined_table  THEN
+        RAISE NOTICE 'Cet vue n''existe pas';
+END
+$$;
+
+DO
+$$
+BEGIN
+DROP VIEW contactinv.v_nomade_observateurs_inv;
+CREATE OR REPLACE VIEW contactinv.v_nomade_observateurs_inv AS 
+ SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
+   FROM utilisateurs.t_roles r
+  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+           FROM utilisateurs.cor_roles cr
+          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+                   FROM utilisateurs.cor_role_menu crm
+                  WHERE crm.id_menu = 11))
+          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+           FROM utilisateurs.cor_role_menu crm
+      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+  ORDER BY r.nom_role, r.prenom_role, r.id_role;
+  EXCEPTION WHEN undefined_table  THEN
+        RAISE NOTICE 'Cet vue n''existe pas';
+END
+$$;
 
 -- Supprimer le champs organisme de t_roles (https://github.com/PnEcrins/UsersHub/issues/38)
 ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
