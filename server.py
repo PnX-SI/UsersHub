@@ -6,6 +6,7 @@
 import json
 
 from flask import Flask, redirect, url_for, request, session, render_template
+from flask_bootstrap import Bootstrap
 from app.env import db
 from config import config
 
@@ -39,6 +40,8 @@ app = Flask(
     template_folder="app/templates",
     static_folder='app/static'
 )
+
+Bootstrap(app)
 
 app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
 

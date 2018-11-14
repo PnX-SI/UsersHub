@@ -1,133 +1,40 @@
-<!DOCTYPE html>
-<html>
-   {% include "header.html" %}   
 
-   <body>
+  {% extends "bootstrap/base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
 
-        {% include "head-appli.html" %}
-
-       
-
-            <form method="post" class = "marge">
-                {{ form.hidden_tag() }}
-
-                <h3>{{title}}</h3>
-                
-                    <div class = "row forms">
-                        
-                        
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                              
-                        
-                            <label>{{ form.nom_role.label }}</label>
-                            {{ form.nom_role(size=32, class="form-control") }}
-                            <p></p>
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                                <label>{{ form.prenom_role.label }}</label>
-                                {{ form.prenom_role(size=32, class="form-control") }}
-                                <p></p>
-                           
-                        </div>
-        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                <label>{{ form.id_organisme.label }}</label>
-                            {{ form.id_organisme(  class="custom-select", id="inputGroupSelect01") }}
-                            <p></p>                            
-
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                <label>{{ form.a_groupe.label }}</label>
-                            {{ form.a_groupe(  class="custom-select")}}
-                            <p></p>
-
-                        </div>
-                        
-
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            
-                                    <label>{{ form.pass_plus.label }}</label>
-                                {{ form.pass_plus(size=32, class="form-control") }}
-                                                        <p></p>
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                                    
-                                    <label>{{ form.mdpconf.label }}</label>
-                                {{ form.mdpconf(size=32, class="form-control") }}
-                                                            <p></p>
-
-                            </div>
-            
-                            
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                          
-                        
-                                <label>{{ form.identifiant.label }}</label>
-                                {{ form.identifiant(size=32, class="form-control")}}
-                                                            <p></p>
-
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    
-                                <label>{{ form.email.label }}</label>
-                                {{ form.email(size = 32, class="form-control")}}
-                                <p></p>
-
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                
-                                <label>{{ form.remarques.label }}</label>
-                                {{ form.remarques(size=32, class="form-control")}}
-                                <p></p>
-                                                            
-                            </div>
-        
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                               
-                            
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <script>
-                                    var messages = {{ messages | safe  }};
-                                    for (var i=0; i<messages.length; i++) {
-                                      alert(messages[i]);
-                                    }
-                                </script>
-                            {% endif %}
-                            {% endwith %}
-                        
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <p></p>
-                            </div>
-                        
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                        
-                    
-                    <div class="row justify-content-center">
-    
-                        {{ form.submit(class="form-control btn-success") }}    
-                    </div>           
-          
-                     </div>
-                    </form>
+    {% include "head-appli.html" %}
+    {% include "header.html" %}
 
 
-               
-</body>
-</html>
+{% block content %}
+
+    <form method="POST" class="container" novalidate>
+      <h3 class="margin-neg">{{ title }}</h3>
+
+      {{ form.hidden_tag() }}
+
+      <div class="row forms card">
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+               <div class="alert alert-danger" role="alert">
+                    Veuillez remplir les champs obligatoires
+               </div>
+           {% endif %}
+       {% endwith %}
+
+        {{ wtf.form_field(form.nom_role) }}
+        {{ wtf.form_field(form.prenom_role) }}
+        {{ wtf.form_field(form.identifiant) }}
+        {{ wtf.form_field(form.id_organisme, id="inputGroupSelect01") }}
+        {{ wtf.form_field(form.a_groupe) }}
+        {{ wtf.form_field(form.pass_plus) }}
+        {{ wtf.form_field(form.mdpconf) }}
+        {{ wtf.form_field(form.email) }}
+        {{ wtf.form_field(form.remarques) }}
+        {{ wtf.form_field(form.submit, class="btn btn-success") }}
+
+      </div>
+    </form>
+
+{% endblock %}

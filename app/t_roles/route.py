@@ -22,7 +22,7 @@ from config import config
 route = Blueprint('user', __name__)
 
 
-@route.route('users/list', methods=['GET', 'POST'])
+@route.route('users/list', methods=['GET'])
 @fnauth.check_auth(3, False, URL_REDIRECT)
 def users():
 
@@ -120,10 +120,13 @@ def addorupdate(id_role):
 
         else:
             errors = form.errors
-            if('nom_role' in errors):
-                flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-            else:
-                flash(','.join([str(errors[k]) for k in errors]))
+            flash(errors)
+            # for r in errors:
+            #     print(r)
+            # if('nom_role' in errors):
+            #     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+            # else:
+            #     flash(','.join([str(errors[k]) for k in errors]))
 
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur"

@@ -22,7 +22,7 @@
                 <label for="pwd">Mot de passe:</label>
                 <input type="password" class="form-control" id="user_pwd">
                 </div>
-                <button onclick="login()" class="btn btn-default">Login</button>
+                <button onclick="login()" id="submit" class="btn btn-default">Login</button>
             </div>
         </div>
     </body>
@@ -31,7 +31,14 @@
 <script>
 $("#login-error").hide();
 
+$(window).keypress(function(event) {
+    if (event.keyCode == 13 || event.which == 13) {
+        login();
+    }
+})
+
 login = function() {
+    console.log('enter in post')
     $("#login-error").hide();
     $.post({
         url : '{{url_application}}' + '/pypn/auth/login',
