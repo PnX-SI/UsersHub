@@ -1,113 +1,25 @@
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
+include "header.html" %} {% include "head-appli.html" %} {% block content %}
 
-<!DOCTYPE html>
-<html>
-   {% include "header.html" %}   
+<form method="post" class="container" novalidate>
+  {{ form.hidden_tag() }} {{ form.csrf_token }}
+  <h3 class="margin-neg">{{ title }}</h3>
 
-   <body>
+  <div class="row forms card">
+    {% with messages = get_flashed_messages() %} {% if messages %}
 
-        {% include "head-appli.html" %}
-        
+    <div class="alert alert-danger" role="alert">
+      Veuillez remplir les champs obligatoires
+    </div>
+    {% endif %} {% endwith %}
 
-            <form method="post" class = "marge">
-                {{ form.hidden_tag() }}
-                {{ form.csrf_token }}
-                <h3>{{title}}</h3>
- 
-                
-                    <div class = "row forms">
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                              
-                        
-                            <label>{{ form.nom_organisme.label }}</label>
-                            {{ form.nom_organisme(size=32, class="form-control") }}
-                            <p></p>
-                        
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                             <label>{{ form.adresse_organisme.label }}</label>
-                            {{ form.adresse_organisme(size=32, class="form-control") }}
-                            <p></p>
-                           
-                        </div>
-        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                            <label>{{ form.cp_organisme.label }}</label>
-                            {{ form.cp_organisme(  class="form-control") }}
-                            <p></p>
-                        
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    
-                                <label>{{ form.ville_organisme.label }}</label>
-                                {{ form.ville_organisme(size = 32, class="form-control")}}
-                                <p></p>
-                             </div>
-                            
-            
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                <label>{{ form.tel_organisme.label }}</label>
-                                {{ form.tel_organisme(size=32, class="form-control") }}
-                                <p></p>
-                            
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                                    
-                            <label>{{ form.fax_organisme.label }}</label>
-                            {{ form.fax_organisme(size=32, class="form-control") }}
-                            <p></p>
-                                
-                        </div>
-            
-                            
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                
-                            <label>{{ form.email_organisme.label }}</label>
-                            {{ form.email_organisme(size=32, class="form-control" )}}
-                            <p></p>
-                            
-                        </div>
-        
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                
-                            
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <script>
-                                    var messages = {{ messages | safe  }};
-                                    for (var i=0; i<messages.length; i++) {
-                                      alert(messages[i]);
-                                    }
-                                </script>
-                            {% endif %}
-                            {% endwith %}
-                        
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <p></p>
-                            </div>
-                            
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                    
-        
-                        <div class="row justify-content-center">
-
-                            {{ form.submit(class="form-control btn-success") }}    
-                        </div>        
-                     </div>
-                    </form>
-
-
-                </body>
-                </html>    
+    {{ wtf.form_field(form.nom_organisme) }}
+    {{ wtf.form_field(form.adresse_organisme) }}
+    {{ wtf.form_field(form.cp_organisme) }}
+    {{ wtf.form_field(form.ville_organisme) }}
+    {{ wtf.form_field(form.tel_organisme) }}
+    {{ wtf.form_field(form.email_organisme) }}
+    {{ wtf.form_field(form.submit, class="form-control btn-success") }}
+  </div>
+</form>
+{% endblock %}

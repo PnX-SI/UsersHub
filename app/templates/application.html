@@ -1,86 +1,19 @@
-<!DOCTYPE html>
-<html>
-   {% include "header.html" %}   
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
+include "header.html" %} {% include "head-appli.html" %} {% block content %}
 
-   <body>
+<form method="post" class="container" novalidate>
+  {{ form.hidden_tag() }} {{ form.csrf_token }}
+  <h3 class="margin-neg">{{ title }}</h3>
 
-        {% include "head-appli.html" %}
-
-            <form method="post" class = "marge">
-                {{ form.hidden_tag() }}
-                {{ form.csrf_token }} 
-                <h3>{{title}}</h3>
-
-                
-                    <div class = "row forms">
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                              
-                        
-                            <label>{{ form.nom_application.label }}</label>
-                            {{ form.nom_application(size=32, class="form-control") }}
-                            <p></p>
-                        
-                        </div>
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                                <label>{{ form.desc_application.label }}</label>
-                                {{ form.desc_application(size=32, class="form-control") }}
-                                <p></p>
-                           
-                        </div>
-
-                       
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                <label>{{ form.id_parent.label }}</label>
-                            {{ form.id_parent(  class="custom-select", id="inputGroupSelect01") }}
-                            <p></p>
-                        
-                        </div>
-                                              
-                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                    
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                               
-                            
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <script>
-                                    var messages = {{ messages | safe  }};
-                                    for (var i=0; i<messages.length; i++) {
-                                      alert(messages[i]);
-                                    }
-                                </script>
-                            {% endif %}
-                            {% endwith %}
-                        
-                        </div>
-                        
-                       
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                        
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <p></p>
-                                    </div>
-                            
-                        
-                        <div class="row justify-content-center">
-
-                                {{ form.submit(class="form-control btn-success") }}    
-                            </div>              
-                     </div>
-                    </form>
-
-
-                </body>
-                </html>
+  <div class="row forms card">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alert alert-danger" role="alert">
+      Veuillez remplir les champs obligatoires
+    </div>
+    {% endif %} {% endwith %} {{ wtf.form_field(form.nom_application) }}
+    {{ wtf.form_field(form.desc_application) }}
+    {{ wtf.form_field(form.id_parent) }}
+    {{ wtf.form_field(form.submit, class="form-control btn-success") }}
+  </div>
+</form>
+{% endblock %}

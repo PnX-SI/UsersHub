@@ -1,113 +1,22 @@
-<!DOCTYPE html>
-<html>
-   {% include "header.html" %}   
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
+include "header.html" %} {% include "head-appli.html" %} {% block content %}
 
-   <body>
+<form method="post" class="container" novalidate>
+  {{ form.hidden_tag() }} {{ form.csrf_token }}
 
-        {% include "head-appli.html" %}
+  <h3>{{ title }}</h3>
 
-       
+  <div class="row forms card">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alert alert-danger" role="alert">
+      Veuillez remplir les champs obligatoires
+    </div>
+    {% endif %} {% endwith %}
 
-            <form method="post" class="marge">
-                {{ form.hidden_tag() }}
-                {{ form.csrf_token }}
-                
-                <h3>{{title}}</h3>
-
-                
-                    <div class = "row forms">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                                <label>{{ form.tag_name.label }}</label>
-                                {{ form.tag_name(size=32, class="form-control") }}
-                                <p></p>
-                           
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                                <label>{{ form.tag_label.label }}</label>
-                                {{ form.tag_label(size=32, class="form-control") }}
-                                <p></p>
-                           
-                        </div>
-                        
-
-                        
-
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                              
-                        
-                            <label>{{ form.tag_code.label }}</label>
-                            {{ form.tag_code(size=32, class="form-control") }}
-                            <p></p>
-                        
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                             
-                            
-                                <label>{{ form.tag_desc.label }}</label>
-                                {{ form.tag_desc(size=32, class="form-control") }}
-                                <p></p>
-                           
-                        </div>
-                        
-                        
-
-                       
-
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                                <label>{{ form.id_tag_type.label }}</label>
-                            {{ form.id_tag_type(  class="custom-select", id="inputGroupSelect01") }}
-                            <p></p>
-                        
-                        </div>
-                                              
-                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                    
-                        
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        
-                               
-                            
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <script>
-                                    var messages = {{ messages | safe  }};
-                                    for (var i=0; i<messages.length; i++) {
-                                      alert(messages[i]);
-                                    }
-                                </script>
-                            {% endif %}
-                            {% endwith %}
-                        
-                        </div>
-                        
-                       
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <p></p>
-                                </div>
-                        
-                        
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <p></p>
-                                    </div>
-                            
-                        
-                        <div class="row justify-content-center">
-
-                            {{ form.submit(class="form-control btn-success") }}    
-                        </div>               
-                     </div>
-                    </form>
-
-
-</body>
-</html>
+    {{ wtf.form_field(form.tag_name) }} {{ wtf.form_field(form.tag_label) }}
+    {{ wtf.form_field(form.tag_code) }} {{ wtf.form_field(form.tag_desc) }}
+    {{ wtf.form_field(form.id_tag_type) }}
+    {{ wtf.form_field(form.submit, class="form-control btn-success") }}
+  </div>
+</form>
+{% endblock %}
