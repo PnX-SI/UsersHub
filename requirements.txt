@@ -22,4 +22,5 @@ validators==0.12.2
 Werkzeug==0.14.1
 WTForms==2.2.1
 WTForms-Components==0.10.3
+
 git+https://github.com/joelclems/UsersHub-authentification-module@develop
