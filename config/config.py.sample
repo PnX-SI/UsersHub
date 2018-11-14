@@ -17,7 +17,7 @@ ID_GEONATURE = 3
 ID_APP = 1
 
 """ Authentification crypting method (hash or md5) """
-PASS_METHOD = 'hash'
+PASS_METHOD = 'md5'
 COOKIE_EXPIRATION = 3600
 COOKIE_AUTORENEW = True
 
