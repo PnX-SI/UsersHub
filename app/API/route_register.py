@@ -29,7 +29,7 @@ from datetime import datetime, timedelta
 route = Blueprint('api_register', __name__)
 
 
-@route.route('/role/<id_role>', methods=['GET'])
+@route.route('/role/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(1, False, '/api_register/role_check_auth_error')
 @json_resp
 def get_one_t_roles(id_role):
@@ -41,17 +41,19 @@ def get_one_t_roles(id_role):
     return role
 
 
-@route.route('/role_check_auth_error')
+@route.route('/role_check_auth_error', methods=['GET', 'POST'])
+@json_resp
 def role_check_auth_error():
 
-    return "authentification error", 401
+    return {'msg': 'UsersHub authentification error'}, 422
 
 
-@route.route("/test_connexion", methods=['GET'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@route.route("/test_connexion", methods=['GET', 'POST'])
+@fnauth.check_auth(1, False, config.URL_APPLICATION + '/api_register/role_check_auth_error')
+@json_resp
 def test_connexion():
 
-    return "connexion ok"
+    return {'msg': "connexion ok"}
 
 
 @route.route("/create_temp_user", methods=['POST'])
@@ -107,16 +109,7 @@ def create_temp_user():
 
     else:
 
-        user_dict = user.as_dict(recursif=True)
-        is_app_right = sum([user_app['id_application'] == config.ID_APP for user_app in user_dict.get('app_users', None)])
-
-        if is_app_right:
-
-            return "l'utilisateur l'identifiant " + user_dict['identifiant'] + "existe déjà", 422
-
-        else:
-
-            return "Un utilisateur avec l'identifiant existe déjà pour une autre application.", 422
+        return {msg: "Un utilisateur avec l'identifiant existe déjà."}, 422
 
 
 @route.route('valid_temp_user', methods=['POST'])
@@ -133,7 +126,7 @@ def valid_temp_user():
 
     id_application = data_in['id_application']
 
-    id_droit = data_in.get('id_droit', 1)
+    id_droit = 1 # toujours un par défaut
 
     # recherche de l'utilsateur temporaire correspondant au token
     temp_user = db.session.query(TempUser).filter(token == TempUser.token_role).first()
@@ -194,10 +187,22 @@ def valid_temp_user():
 @fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
 @json_resp
 def create_cor_role_token():
+    '''
+        route pour la creation d'un token associé a un id_role
+        parametres post : email
+    '''
 
     data = request.get_json()
 
-    id_role = data['id_role']
+    email = data['email']
+
+    role = db.session.query(TRoles).filter(email == TRoles.email).first()
+
+    if not role:
+
+        return {'msg', 'Pas de role trouvé pour l''email : ' + email}, 400
+
+    id_role = role.id_role
 
     token = str(random.getrandbits(128))
 
@@ -210,7 +215,7 @@ def create_cor_role_token():
     db.session.add(cor)
     db.session.commit()
 
-    return {'token': token}
+    return {'token': token, 'id_role': id_role}
 
 
 @route.route("/change_password", methods=['POST'])
@@ -261,6 +266,38 @@ def change_password():
     return role.as_dict()
 
 
+@route.route('/change_application_right', methods=['POST'])
+@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@json_resp
+def change_application_right():
+    '''
+    '''
+
+    req_data = request.get_json()
+
+    id_application = req_data.get('id_application', None)
+    id_droit = req_data.get('id_droit', None)
+    id_role = req_data.get('id_role', None)
+
+    if not id_application or not id_role or not id_droit:
+
+        return {'msg': 'Problème de paramètres POST'}, 400
+
+    cor = db.session.query(CorRoleDroitApplication).filter(
+        id_role == CorRoleDroitApplication.id_role).filter(
+        id_application == CorRoleDroitApplication.id_application).first()
+
+    if not cor:
+
+        return {'msg': 'Pas de droit pour l user ' + id_role + ' pour l application ' + id_application}, 500
+
+    cor.id_droit = id_droit
+
+    db.session.commit()
+
+    return {'id_role': id_role, 'id_droit': id_droit, 'id_application': id_application}
+
+
 @route.route('/add_application_right_to_role', methods=['POST'])
 @fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
 @json_resp
@@ -275,7 +312,7 @@ def add_application_right_to_role():
     pwd = req_data.get('password', None)
 
     id_application = req_data.get('id_application', None)
-    id_droit = req_data.get('id_droit', 1)
+    id_droit = 1
 
     if not identifiant or not pwd or not id_application or not id_droit:
 
@@ -324,8 +361,40 @@ def add_application_right_to_role():
     return role.as_dict(recursif=True)
 
 
-@route.route('/role', methods=['POST'])
+@route.route('/update_user', methods=['POST'])
 @fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@json_resp
+def update_user():
+    req_data = request.get_json()
+
+    id_role = req_data.get('id_role', None)
+
+    if not id_role:
+
+        return {'msg': "Pas d'id_role"}, 400
+
+    # role = db.session.query(TRoles).filter(TRoles.id_role == id_role).first()
+
+    # if not role:
+
+    #     return {'msg': 'Pas de role pour id_role :' + id_role}, 400
+
+    role_data = {}
+    for att in req_data:
+        if hasattr(TRoles, att):
+            role_data[att] = req_data[att]
+            role_data[att] = req_data[att]
+
+    role = TRoles(**role_data)
+
+    db.session.merge(role)
+    db.session.commit()
+
+    return role.as_dict(recursif=True)
+
+
+@route.route('/role', methods=['POST'])
+@fnauth.check_auth(6, False, '/api_register/role_check_auth_error')
 @json_resp
 def insert_one_t_role():
     '''
