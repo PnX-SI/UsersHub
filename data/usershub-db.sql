@@ -6,8 +6,8 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
---ensure to have uuid-ossp extention installed before running this script
---you must be superuser to add a extension in your database 
+--Ensure to have uuid-ossp extension installed before running this script
+--You must be superuser to add an extension in your database 
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE SCHEMA IF NOT EXISTS utilisateurs;
@@ -83,7 +83,7 @@ CREATE TABLE  IF NOT EXISTS t_listes
   nom_liste character varying(50) NOT NULL,
   desc_liste text
 );
-COMMENT ON TABLE t_listes IS 'table des listes déroulantes des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans une liste sont gérés dans la table cor_role_liste.';
+COMMENT ON TABLE t_listes IS 'Table des listes déroulantes des applications. Les roles (groupes ou utilisateurs) devant figurer dans une liste sont gérés dans la table cor_role_liste';
 
 CREATE TABLE IF NOT EXISTS t_applications (
     id_application integer NOT NULL,
@@ -108,13 +108,13 @@ CREATE TABLE IF NOT EXISTS t_profils (
     nom_profil character varying(255),
     desc_profil text
 );
-COMMENT ON TABLE t_profils IS 'Permet de créer des profils d''utilisateurs génériques ou applicatifs, qui seront ensuite attaché à des utilisateurs et des applications.';
+COMMENT ON TABLE t_profils IS 'Table des profils d''utilisateurs génériques ou applicatifs, qui seront ensuite attachés à des roles et des applications';
 
 CREATE TABLE IF NOT EXISTS cor_role_liste (
     id_role integer NOT NULL,
     id_liste integer NOT NULL
 );
-COMMENT ON TABLE cor_role_liste IS 'Equivalent de l''ancienne cor_role_menu. Permet de créer des listes d''utilisateur (observateurs par ex.), sans notion de permission.';
+COMMENT ON TABLE cor_role_liste IS 'Equivalent de l''ancienne cor_role_menu. Permet de créer des listes de roles (observateurs par ex.), sans notion de permission';
 
 CREATE TABLE IF NOT EXISTS cor_roles (
     id_role_groupe integer NOT NULL,
@@ -132,11 +132,12 @@ CREATE TABLE IF NOT EXISTS cor_role_app_profil (
     id_application integer NOT NULL,
     id_profil integer NOT NULL
 );
-COMMENT ON TABLE cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils et à des utilisateurs ou des groupes d''utilisateurs.';
+COMMENT ON TABLE cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils par application';
 
 ----------------
 --PRIMARY KEYS--
 ----------------
+
 ALTER TABLE ONLY bib_organismes ADD CONSTRAINT pk_bib_organismes PRIMARY KEY (id_organisme);
 
 ALTER TABLE ONLY t_roles ADD CONSTRAINT pk_t_roles PRIMARY KEY (id_role);
@@ -159,6 +160,7 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMA
 ------------
 --TRIGGERS--
 ------------
+
 CREATE TRIGGER tri_modify_date_insert_t_roles BEFORE INSERT ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_insert();
 
 CREATE TRIGGER tri_modify_date_update_t_roles BEFORE UPDATE ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_update();
@@ -167,6 +169,7 @@ CREATE TRIGGER tri_modify_date_update_t_roles BEFORE UPDATE ON t_roles FOR EACH 
 ----------------
 --FOREIGN KEYS--
 ----------------
+
 ALTER TABLE ONLY t_roles ADD CONSTRAINT t_roles_id_organisme_fkey FOREIGN KEY (id_organisme) REFERENCES bib_organismes(id_organisme) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY cor_roles ADD CONSTRAINT cor_roles_id_role_groupe_fkey FOREIGN KEY (id_role_groupe) REFERENCES t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
