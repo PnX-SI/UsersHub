@@ -1,22 +1,98 @@
 -- Ce script permet de recréer des tables qui simulent les tables de UsersHub V1
 -- pour que les anciennes applications continuent à fonctionner
 
---TODO : test this script
-
 CREATE SCHEMA save;
+
+-----------------------
+--Compléter le schéma--
+-----------------------
+CREATE TABLE  IF NOT EXISTS utilisateurs.t_listes
+(
+  id_liste serial NOT NULL,
+  code_liste character varying(20) NOT NULL,
+  nom_liste character varying(50) NOT NULL,
+  desc_liste text
+);
+COMMENT ON TABLE utilisateurs.t_listes IS 'table des listes déroulantes des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans une liste sont gérés dans la table cor_role_liste.';
+
+CREATE TABLE IF NOT EXISTS utilisateurs.t_profils (
+    id_profil serial NOT NULL,
+    code_profil character varying(20),
+    nom_profil character varying(255),
+    desc_profil text
+);
+COMMENT ON TABLE utilisateurs.t_profils IS 'Permet de créer des profils d''utilisateurs génériques ou applicatifs, qui seront ensuite attaché à des utilisateurs et des applications.';
+
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_liste (
+    id_role integer NOT NULL,
+    id_liste integer NOT NULL
+);
+COMMENT ON TABLE utilisateurs.cor_role_liste IS 'Equivalent de l''ancienne cor_role_menu. Permet de créer des listes d''utilisateur (observateurs par ex.), sans notion de permission.';
+
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_profil_for_app (
+    id_profil integer NOT NULL,
+    id_application integer NOT NULL
+);
+COMMENT ON TABLE utilisateurs.cor_profil_for_app IS 'Permet d''attribuer et limiter les profils disponibles pour chacune des applications';
+
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_app_profil (
+    id_role integer NOT NULL,
+    id_application integer NOT NULL,
+    id_profil integer NOT NULL
+);
+COMMENT ON TABLE utilisateurs.cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils et à des utilisateurs ou des groupes d''utilisateurs.';
+
+ALTER TABLE ONLY utilisateurs.t_listes ADD CONSTRAINT pk_t_listes PRIMARY KEY (id_liste);
+ALTER TABLE ONLY utilisateurs.t_profils ADD CONSTRAINT pk_t_profils PRIMARY KEY (id_profil);
+ALTER TABLE ONLY utilisateurs.cor_role_liste ADD CONSTRAINT pk_cor_role_liste PRIMARY KEY (id_liste, id_role);
+ALTER TABLE ONLY utilisateurs.cor_profil_for_app ADD CONSTRAINT pk_cor_profil_for_app PRIMARY KEY (id_application, id_profil);
+ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMARY KEY (id_role, id_application, id_profil);
+
+ALTER TABLE ONLY utilisateurs.cor_role_liste ADD CONSTRAINT fk_cor_role_liste_id_liste FOREIGN KEY (id_liste) REFERENCES utilisateurs.t_listes(id_liste) ON UPDATE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_liste ADD CONSTRAINT fk_cor_role_liste_id_role FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_profil_for_app ADD CONSTRAINT fk_cor_profil_for_app_id_application FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_profil_for_app ADD CONSTRAINT fk_cor_profil_for_app_id_profil FOREIGN KEY (id_profil) REFERENCES utilisateurs.t_profils(id_profil) ON UPDATE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_role FOREIGN KEY (id_role) REFERENCES utilisateurs.t_roles(id_role) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_application FOREIGN KEY (id_application) REFERENCES utilisateurs.t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_profil FOREIGN KEY (id_profil) REFERENCES utilisateurs.t_profils(id_profil) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--------------
+--ORGANISMES--
+--------------
+--Organismes génériques
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.bib_organismes(nom_organisme, id_organisme) VALUES
+('Autre', -1);
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
+
+DO
+$$
+BEGIN
+INSERT INTO utilisateurs.bib_organismes(uuid_organisme, nom_organisme, adresse_organisme, id_organisme) VALUES
+('fd3c2619-0505-4a75-97e7-8cc37d096247', 'ALL', 'Représente tous les organismes', 0);
+EXCEPTION WHEN unique_violation  THEN
+        RAISE NOTICE 'Tentative d''insertion de valeur existante';
+END
+$$;
 
 
 ----------------
 --APPLICATIONS--
 ----------------
---TODO : avant d'exécuter ce script, GeoNature et occtax + d'éventuels autres modules doivent être présents dans t_applications
-INSERT INTO utilisateurs.cor_application_tag (id_tag, id_application)
-SELECT t.id_tag, (SELECT id_application FROM utilisateurs.t_applications WHERE nom_application IN('occtax')) 
-FROM utilisateurs.t_tags t
-JOIN utilisateurs.t_menus  m ON m.nom_menu = t.tag_name
-WHERE id_tag_type = 4
-AND tag_name ILIKE 'observateurs occtax';
+ALTER TABLE utilisateurs.t_applications ADD COLUMN code_application character varying(20);
 
+UPDATE utilisateurs.t_applications SET code_application = id_application::character varying;
+UPDATE utilisateurs.t_applications SET code_application = 'UH' WHERE nom_application ilike 'usershub' OR nom_application ilike 'application utilisateurs';
+UPDATE utilisateurs.t_applications SET code_application = 'TH' WHERE nom_application ilike 'taxhub';
+UPDATE utilisateurs.t_applications SET code_application = 'GN' WHERE nom_application ilike 'geonature';
+
+ALTER TABLE utilisateurs.t_applications ALTER COLUMN code_application SET NOT NULL;
 
 ---------
 --MENUS--
@@ -53,7 +129,7 @@ DO
 $$
 BEGIN
 INSERT INTO utilisateurs.cor_role_liste (id_role, id_liste)
-SELECT id_role, id_liste
+SELECT id_role, id_menu
 FROM save.cor_role_menu;
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
@@ -132,20 +208,55 @@ SELECT
  id_application
 FROM utilisateurs.cor_role_app_profil;
 
-----------------
---APPLICATIONS--
-----------------
-ALTER TABLE utilisateurs.t_applications ADD COLUMN code_application character varying(20);
-ALTER TABLE utilisateurs.t_applications ALTER COLUMN code_application SET NOT NULL;
-UPDATE utilisateurs.t_applications SET code_application = id_application::character varying;
-UPDATE utilisateurs.t_applications SET code_application = 'UH' WHERE nom_application ilike 'usershub' OR nom_application ilike 'application utilisateurs';
-UPDATE utilisateurs.t_applications SET code_application = 'TH' WHERE nom_application ilike 'taxhub';
-UPDATE utilisateurs.t_applications SET code_application = 'GN' WHERE nom_application ilike 'geonature';
+INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
+(6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH'))
+,(2, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
+,(3, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
+,(4, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
+,(6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
+,(1, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'GN'))
+;
+--Cette table doit être complétées pour les applications spécifiques de votre structure
 
+---------
+--VIEWS--
+---------
 
-----------
---AUTRES--
-----------
+-- Vue permettant de simuler le contenu de la table "t_menus" de la V1
+CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
+SELECT 
+ id_liste AS id_menu,
+ nom_liste AS nom_menu,
+ desc_liste AS desc_menu,
+ null::integer AS id_application
+FROM utilisateurs.t_listes
+;
+
+-- Vue permettant de simuler le contenu de la table "cor_role_menu" de la V1
+CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
+SELECT 
+DISTINCT
+crl.id_role,
+crl.id_liste AS id_menu
+FROM utilisateurs.cor_role_liste crl;	 
+
+-- Vue permettant de simuler le contenu de la table "bib_droits" de la V1
+CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
+SELECT 
+ id_profil AS id_droit,
+ nom_profil AS nom_droit,
+ desc_profil AS desc_droit
+FROM utilisateurs.t_profils
+WHERE id_profil <= 6;	 
+
+-- Vue permettant de simuler le contenu de la table "cor_role_droit_application" de la V1
+CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
+SELECT 
+ id_role,
+ id_profil as id_droit, 
+ id_application
+FROM utilisateurs.cor_role_app_profil; 
+
 -- Vue permettant de retourner les utilisateurs des listes (menus)
 DROP VIEW utilisateurs.v_userslist_forall_menu;
 CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_menu AS
@@ -357,69 +468,6 @@ EXCEPTION WHEN undefined_table  THEN
 END
 $$;
 
-DO
-$$
-BEGIN
-DROP VIEW utilisateurs.v_observateurs;
-CREATE OR REPLACE VIEW utilisateurs.v_observateurs AS 
- SELECT DISTINCT r.id_role AS codeobs, (r.nom_role::text || ' '::text) || r.prenom_role::text AS nomprenom
-   FROM utilisateurs.t_roles r
-  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
-           FROM utilisateurs.cor_roles cr
-          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
-                   FROM utilisateurs.cor_role_menu crm
-                  WHERE crm.id_menu = 5))
-          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
-           FROM utilisateurs.cor_role_menu crm
-      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
-  ORDER BY (r.nom_role::text || ' '::text) || r.prenom_role::text, r.id_role;
-  EXCEPTION WHEN undefined_table  THEN
-        RAISE NOTICE 'Cet vue n''existe pas';
-END
-$$;
-
-DO
-$$
-BEGIN
-DROP VIEW contactfaune.v_nomade_observateurs_faune;
-CREATE OR REPLACE VIEW contactfaune.v_nomade_observateurs_faune AS 
- SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
-   FROM utilisateurs.t_roles r
-  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
-           FROM utilisateurs.cor_roles cr
-          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
-                   FROM utilisateurs.cor_role_menu crm
-                  WHERE crm.id_menu = 11))
-          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
-           FROM utilisateurs.cor_role_menu crm
-      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
-  ORDER BY r.nom_role, r.prenom_role, r.id_role;
-EXCEPTION WHEN undefined_table  THEN
-        RAISE NOTICE 'Cet vue n''existe pas';
-END
-$$;
-
-DO
-$$
-BEGIN
-DROP VIEW contactinv.v_nomade_observateurs_inv;
-CREATE OR REPLACE VIEW contactinv.v_nomade_observateurs_inv AS 
- SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
-   FROM utilisateurs.t_roles r
-  WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
-           FROM utilisateurs.cor_roles cr
-          WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
-                   FROM utilisateurs.cor_role_menu crm
-                  WHERE crm.id_menu = 11))
-          ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
-           FROM utilisateurs.cor_role_menu crm
-      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
-  ORDER BY r.nom_role, r.prenom_role, r.id_role;
-  EXCEPTION WHEN undefined_table  THEN
-        RAISE NOTICE 'Cet vue n''existe pas';
-END
-$$;
-
 
 -------------
 --NETTOYAGE--
@@ -441,16 +489,103 @@ ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
 
 ALTER TABLE utilisateurs.bib_unites SET SCHEMA save;
 
+--Rupture des liens entre le schéma save et utilisateurs
+ALTER TABLE save.cor_app_privileges DROP CONSTRAINT fk_cor_app_privileges_id_application;
+ALTER TABLE save.cor_app_privileges DROP CONSTRAINT fk_cor_app_privileges_id_role;
+ALTER TABLE save.cor_app_privileges DROP CONSTRAINT fk_cor_app_privileges_id_tag_action;
+ALTER TABLE save.cor_app_privileges DROP CONSTRAINT fk_cor_app_privileges_id_tag_object;
+ALTER TABLE save.cor_organism_tag DROP CONSTRAINT fk_cor_organism_tag_id_organism;
+ALTER TABLE save.cor_organism_tag DROP CONSTRAINT fk_cor_organism_tag_id_tag;
+ALTER TABLE save.cor_role_droit_application DROP CONSTRAINT cor_role_droit_application_id_application_fkey;
+ALTER TABLE save.cor_role_droit_application DROP CONSTRAINT cor_role_droit_application_id_droit_fkey;
+ALTER TABLE save.cor_role_droit_application DROP CONSTRAINT cor_role_droit_application_id_role_fkey;
+ALTER TABLE save.cor_role_menu DROP CONSTRAINT cor_role_menu_application_id_menu_fkey;
+ALTER TABLE save.cor_role_menu DROP CONSTRAINT cor_role_menu_application_id_role_fkey;
+ALTER TABLE save.cor_role_tag DROP CONSTRAINT fk_cor_role_tag_id_role;
+ALTER TABLE save.cor_role_tag DROP CONSTRAINT fk_cor_role_tag_id_tag;
+ALTER TABLE save.cor_tags_relations DROP CONSTRAINT fk_cor_tags_relations_id_tag_l;
+ALTER TABLE save.cor_tags_relations DROP CONSTRAINT fk_cor_tags_relations_id_tag_r;
+ALTER TABLE save.t_menus DROP CONSTRAINT t_menus_id_application_fkey;
+ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
+
 
 --------
 --SAVE--
 --------
-
+-------
+--GN1--
+-------
 --TODO AVANT  SUPPRESSION : 
 --recréer les vues de GN1
 --  contactfaune.v_nomade_observateurs_faune
 --  contactflore.v_nomade_observateurs_flore
 --  contactinv.v_nomade_observateurs_inv
+-- à compléter
+
+-- DO
+-- $$
+-- BEGIN
+-- DROP VIEW utilisateurs.v_observateurs;
+-- CREATE OR REPLACE VIEW utilisateurs.v_observateurs AS 
+--  SELECT DISTINCT r.id_role AS codeobs, (r.nom_role::text || ' '::text) || r.prenom_role::text AS nomprenom
+--    FROM utilisateurs.t_roles r
+--   WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+--            FROM utilisateurs.cor_roles cr
+--           WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+--                    FROM utilisateurs.cor_role_menu crm
+--                   WHERE crm.id_menu = 5))
+--           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+--            FROM utilisateurs.cor_role_menu crm
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
+--   ORDER BY (r.nom_role::text || ' '::text) || r.prenom_role::text, r.id_role;
+--   EXCEPTION WHEN undefined_table  THEN
+--         RAISE NOTICE 'Cet vue n''existe pas';
+-- END
+-- $$;
+
+-- DO
+-- $$
+-- BEGIN
+-- DROP VIEW contactfaune.v_nomade_observateurs_faune;
+-- CREATE OR REPLACE VIEW contactfaune.v_nomade_observateurs_faune AS 
+--  SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
+--    FROM utilisateurs.t_roles r
+--   WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+--            FROM utilisateurs.cor_roles cr
+--           WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+--                    FROM utilisateurs.cor_role_menu crm
+--                   WHERE crm.id_menu = 11))
+--           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+--            FROM utilisateurs.cor_role_menu crm
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+--   ORDER BY r.nom_role, r.prenom_role, r.id_role;
+-- EXCEPTION WHEN undefined_table  THEN
+--         RAISE NOTICE 'Cet vue n''existe pas';
+-- END
+-- $$;
+
+-- DO
+-- $$
+-- BEGIN
+-- DROP VIEW contactinv.v_nomade_observateurs_inv;
+-- CREATE OR REPLACE VIEW contactinv.v_nomade_observateurs_inv AS 
+--  SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role
+--    FROM utilisateurs.t_roles r
+--   WHERE (r.id_role IN ( SELECT DISTINCT cr.id_role_utilisateur
+--            FROM utilisateurs.cor_roles cr
+--           WHERE (cr.id_role_groupe IN ( SELECT crm.id_role
+--                    FROM utilisateurs.cor_role_menu crm
+--                   WHERE crm.id_menu = 11))
+--           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
+--            FROM utilisateurs.cor_role_menu crm
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+--   ORDER BY r.nom_role, r.prenom_role, r.id_role;
+--   EXCEPTION WHEN undefined_table  THEN
+--         RAISE NOTICE 'Cet vue n''existe pas';
+-- END
+-- $$;
+
+
 
 --Rechercher les vues qui doivent être réécrites car pointant sur les tables déplacées dans le schéma save
 SELECT dependent_ns.nspname as dependent_schema
@@ -490,4 +625,6 @@ ORDER BY 1,2;
 --DROP TABLE save.cor_app_privileges;
 --DROP TABLE save.t_tags;
 --DROP TABLE save.bib_tag_types;
+
+
 
