@@ -21,3 +21,12 @@ INSERT INTO t_profils (id_profil, code_profil, nom_profil, desc_profil) VALUES
 ,(5, '5', 'validateur', 'Il valide bien sur')
 ,(6, '6', 'administrateur', 'Il a tous les droits');
 SELECT pg_catalog.setval('t_profils_id_profil_seq', (SELECT max(id_profil)+1 FROM utilisateurs.t_profils), false);
+
+INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
+(6, 1)
+,(2, 2)
+,(3, 2)
+,(4, 2)
+,(6, 2)
+,(1, 3)
+;

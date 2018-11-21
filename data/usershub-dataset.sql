@@ -6,9 +6,10 @@ SET search_path = utilisateurs, pg_catalog;
 
 -- Insertion de 2 organismes 
 INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, ville_organisme, tel_organisme, fax_organisme, email_organisme, id_organisme) VALUES 
-('Parc National des Ecrins', 'Domaine de Charance', '05000', 'GAP', '04-92-40-20-10', '', '', 1)
-,('Autre', '', '', '', '', '', '', -1)
+('Autre', '', '', '', '', '', '', -1)
 ;
+INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, ville_organisme, tel_organisme) VALUES 
+('ma structure test', 'Rue des bois', '00000', 'VILLE', '00-00-99-00-99');
 
 -- Insertion de roles de type GROUPE de base pour GeoNature
 --TODO revoir l'insertion des organisme et des identifiants
