@@ -1,4 +1,5 @@
--- Ce script permet de recréer des tables qui simulent les tables de UsersHub V1
+-- Ce script permet de mettre à jour la structure et le contenu du schéma "utilisateurs" de UsersHub
+-- et de recréer des vues qui simulent les tables de UsersHub V1
 -- pour que les anciennes applications continuent à fonctionner
 
 CREATE SCHEMA save;
@@ -6,6 +7,9 @@ CREATE SCHEMA save;
 -----------------------
 --Compléter le schéma--
 -----------------------
+
+-- Creation des nouvelles tables
+
 CREATE TABLE  IF NOT EXISTS utilisateurs.t_listes
 (
   id_liste serial NOT NULL,
@@ -13,7 +17,7 @@ CREATE TABLE  IF NOT EXISTS utilisateurs.t_listes
   nom_liste character varying(50) NOT NULL,
   desc_liste text
 );
-COMMENT ON TABLE utilisateurs.t_listes IS 'table des listes déroulantes des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans une liste sont gérés dans la table cor_role_liste.';
+COMMENT ON TABLE utilisateurs.t_listes IS 'Table des listes déroulantes des applications. Les roles de niveau groupes ou utilisateurs devant figurer dans une liste sont gérés dans la table cor_role_liste.';
 
 CREATE TABLE IF NOT EXISTS utilisateurs.t_profils (
     id_profil serial NOT NULL,
@@ -21,13 +25,13 @@ CREATE TABLE IF NOT EXISTS utilisateurs.t_profils (
     nom_profil character varying(255),
     desc_profil text
 );
-COMMENT ON TABLE utilisateurs.t_profils IS 'Permet de créer des profils d''utilisateurs génériques ou applicatifs, qui seront ensuite attaché à des utilisateurs et des applications.';
+COMMENT ON TABLE utilisateurs.t_profils IS 'Table des profils d''utilisateurs génériques ou applicatifs, qui seront ensuite attachés à des roles et des applications.';
 
 CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_liste (
     id_role integer NOT NULL,
     id_liste integer NOT NULL
 );
-COMMENT ON TABLE utilisateurs.cor_role_liste IS 'Equivalent de l''ancienne cor_role_menu. Permet de créer des listes d''utilisateur (observateurs par ex.), sans notion de permission.';
+COMMENT ON TABLE utilisateurs.cor_role_liste IS 'Equivalent de l''ancienne cor_role_menu. Permet de créer des listes de roles (observateurs par ex.), sans notion de permission.';
 
 CREATE TABLE IF NOT EXISTS utilisateurs.cor_profil_for_app (
     id_profil integer NOT NULL,
@@ -40,7 +44,9 @@ CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_app_profil (
     id_application integer NOT NULL,
     id_profil integer NOT NULL
 );
-COMMENT ON TABLE utilisateurs.cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils et à des utilisateurs ou des groupes d''utilisateurs.';
+COMMENT ON TABLE utilisateurs.cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils par application.';
+
+-- Ajout des contraintes
 
 ALTER TABLE ONLY utilisateurs.t_listes ADD CONSTRAINT pk_t_listes PRIMARY KEY (id_liste);
 ALTER TABLE ONLY utilisateurs.t_profils ADD CONSTRAINT pk_t_profils PRIMARY KEY (id_profil);
@@ -60,7 +66,9 @@ ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app
 --------------
 --ORGANISMES--
 --------------
---Organismes génériques
+
+-- Creation des organismes génériques si ils ne sont pas deja dans la BDD
+
 DO
 $$
 BEGIN
@@ -81,10 +89,10 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-
 ----------------
 --APPLICATIONS--
 ----------------
+
 ALTER TABLE utilisateurs.t_applications ADD COLUMN code_application character varying(20);
 
 UPDATE utilisateurs.t_applications SET code_application = id_application::character varying;
@@ -97,6 +105,8 @@ ALTER TABLE utilisateurs.t_applications ALTER COLUMN code_application SET NOT NU
 ---------
 --MENUS--
 ---------
+
+-- Basculer les anciennes tables dans le schema "save"
 ALTER TABLE utilisateurs.cor_role_menu SET SCHEMA save;
 ALTER TABLE utilisateurs.t_menus SET SCHEMA save;
 ALTER TABLE utilisateurs.cor_role_tag SET SCHEMA save;
@@ -117,7 +127,7 @@ DO
 $$
 BEGIN
 INSERT INTO utilisateurs.t_listes (code_liste, nom_liste, desc_liste)
-VALUES('obsocctax','observateurs occtax','Liste des observateurs du module occtax');
+VALUES('obsocctax','Observateurs Occtax','Liste des observateurs du module Occtax');
 EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
@@ -136,12 +146,12 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
---cas particulier d'occtax qui n'a pas d'enregistrement dans t_menus de la v1
+--Cas particulier d'Occtax qui n'a pas d'enregistrement dans t_menus de la v1
 INSERT INTO utilisateurs.cor_role_liste (id_role, id_liste)
 SELECT crt.id_role, (SELECT id_liste FROM utilisateurs.t_listes WHERE code_liste = 'obsocctax') AS id_liste 
 FROM save.cor_role_tag crt
 WHERE crt.id_tag = (SELECT id_tag FROM utilisateurs.t_tags WHERE tag_name ILIKE 'observateurs occtax');
---TODO pour chaque module comme occtax. A creuser
+--TODO pour chaque module comme Occtax. A creuser
 
 -- Vue recréant l'equivalent de t_menus
 CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
@@ -165,6 +175,8 @@ FROM utilisateurs.cor_role_liste crl;
 ----------
 --DROITS--
 ----------
+
+-- Basculer les anciennes tables dans le schema "save"
 ALTER TABLE utilisateurs.bib_droits SET SCHEMA save;
 ALTER TABLE utilisateurs.cor_role_droit_application SET SCHEMA save;
 
@@ -199,7 +211,6 @@ SELECT
 FROM utilisateurs.t_profils
 WHERE id_profil <= 6;
 
-
 -- Vue recréant l'équivalent de cor_role_droit_application
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
@@ -208,6 +219,7 @@ SELECT
  id_application
 FROM utilisateurs.cor_role_app_profil;
 
+-- Association des profils aux applications
 INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
 (6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH'))
 ,(2, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
@@ -216,7 +228,7 @@ INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
 ,(6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'TH'))
 ,(1, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'GN'))
 ;
---Cette table doit être complétées pour les applications spécifiques de votre structure
+--Cette table doit être complétée pour les applications spécifiques de votre structure
 
 ---------
 --VIEWS--
@@ -418,11 +430,11 @@ OR (r.id_role IN (
         )
 ORDER BY (r.nom_role::text || ' '::text) || r.prenom_role::text, r.id_role;
 EXCEPTION WHEN undefined_table  THEN
-        RAISE NOTICE 'Cet vue n''existe pas';
+        RAISE NOTICE 'Cette vue n''existe pas';
 END
 $$;
 
---vues mobile.
+--Vues mobile.
 DO
 $$
 BEGIN
@@ -464,7 +476,7 @@ UNION
               JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
           ORDER BY r.nom_role, r.prenom_role, r.id_role);
 EXCEPTION WHEN undefined_table  THEN
-        RAISE NOTICE 'Cet vue n''existe pas';
+        RAISE NOTICE 'Cette vue n''existe pas';
 END
 $$;
 
@@ -472,6 +484,7 @@ $$;
 -------------
 --NETTOYAGE--
 -------------
+
 DROP VIEW utilisateurs.v_usersaction_forall_gn_modules;
 
 ALTER TABLE utilisateurs.cor_application_tag SET SCHEMA save;
@@ -481,8 +494,8 @@ ALTER TABLE utilisateurs.cor_app_privileges SET SCHEMA save;
 ALTER TABLE utilisateurs.t_tags SET SCHEMA save;
 ALTER TABLE utilisateurs.bib_tag_types SET SCHEMA save;
 
--- Supprimer la table bib_unités inutilisée
--- Supprimer la FK vers bib_unités dans t_roles
+-- Supprimer la table bib_unites inutilisée
+-- Supprimer la FK vers bib_unites dans t_roles
 ALTER TABLE utilisateurs.t_roles DROP COLUMN id_unite RESTRICT;
 -- Supprimer le champs organisme de t_roles (https://github.com/PnEcrins/UsersHub/issues/38)
 ALTER TABLE utilisateurs.t_roles DROP COLUMN organisme RESTRICT;
@@ -625,6 +638,3 @@ ORDER BY 1,2;
 --DROP TABLE save.cor_app_privileges;
 --DROP TABLE save.t_tags;
 --DROP TABLE save.bib_tag_types;
-
-
-
