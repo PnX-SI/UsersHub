@@ -6,10 +6,8 @@ from flask import (
 from app.env import URL_REDIRECT
 from app.t_applications import forms as t_applicationsforms
 from app.models import TRoles
-from app.models import (
-    TApplications,
-    TTags, CorRoleTagApplication
-)
+from app.models import TApplications
+
 from config import config
 
 from pypnusershub import routes as fnauth
@@ -94,7 +92,9 @@ def addorupdate(id_application):
             else:
                 errors = form.errors
                 if(errors['nom_application'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                    flash("Le nom de l'application est obligatoire. ")
+                if(errors['code_application'] != None):
+                    flash("Le code de l'application est obligatoire.")
         return render_template('application.html', form=form, title="Formulaire Application")
     else:
         application = TApplications.get_one(id_application)
@@ -119,7 +119,9 @@ def addorupdate(id_application):
             else:
                 errors = form.errors
                 if(errors['nom_application'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                    flash("Le nom de l'application est obligatoire")
+                if(errors['code_application'] != None):
+                    flash("Le code de l'application est obligatoire.")
         return render_template('application.html', form=form, title="Formulaire Application")
 
 
@@ -136,48 +138,48 @@ def delete(id_application):
     return redirect(url_for('application.applications'))
 
 
-@route.route('application/users/<id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
-def users(id_application):
+# @route.route('application/users/<id_application>', methods=['GET', 'POST'])
+# @fnauth.check_auth(6, False, URL_REDIRECT)
+# def users(id_application):
 
-    """
-    Route affichant la liste des roles n'appartenant pas a l'application vis à vis de ceux qui appartiennent à celui ci.
-    Avec pour paramètre un id d'application
-    Retourne un template avec pour paramètres:
-                                            - une entête des tableaux --> fLine
-                                            - le nom des colonnes de la base --> data
-                                            - liste des roles n'appartenant pas à l'application --> table
-                                            - liste des roles appartenant à l'application--> table2
-                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
-    """
-    users_with_right = TRoles.get_user_right_in_application(id_application)
-    only_role = []
-    for role in users_with_right:
-        role['role']['id_tag'] = role['right']['id_tag']
-        role['role']['value'] = TTags.choixSelectTag('id_tag','tag_name')
-        only_role.append(role['role'])
-    users_in_app = TRoles.test_group(only_role)
-    users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
-    header = ['ID', 'Nom']
-    data = ['id_role', ' full_name']
-    app = TApplications.get_one(id_application)
-    if request.method == 'POST':
-        data = request.get_json()
-        new_rights = data["tab_add"]
-        delete_rights = data["tab_del"]
-        print(delete_rights)
-        CorRoleTagApplication.add_cor(id_application, new_rights)
-        CorRoleTagApplication.del_cor(id_application, delete_rights)
-    return render_template(
-        'tobelong.html',
-        fLine=header,
-        data=data,
-        table=users_out_app,
-        table2=users_in_app,
-        group='groupe',
-        app='True',
-        info='Droit des utilisateurs et des groupes sur  "' + app['nom_application'] + '"'
-    )
+#     """
+#     Route affichant la liste des roles n'appartenant pas a l'application vis à vis de ceux qui appartiennent à celui ci.
+#     Avec pour paramètre un id d'application
+#     Retourne un template avec pour paramètres:
+#                                             - une entête des tableaux --> fLine
+#                                             - le nom des colonnes de la base --> data
+#                                             - liste des roles n'appartenant pas à l'application --> table
+#                                             - liste des roles appartenant à l'application--> table2
+#                                             - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
+#     """
+#     users_with_right = TRoles.get_user_right_in_application(id_application)
+#     only_role = []
+#     for role in users_with_right:
+#         role['role']['id_tag'] = role['right']['id_tag']
+#         role['role']['value'] = TTags.choixSelectTag('id_tag','tag_name')
+#         only_role.append(role['role'])
+#     users_in_app = TRoles.test_group(only_role)
+#     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
+#     header = ['ID', 'Nom']
+#     data = ['id_role', ' full_name']
+#     app = TApplications.get_one(id_application)
+#     if request.method == 'POST':
+#         data = request.get_json()
+#         new_rights = data["tab_add"]
+#         delete_rights = data["tab_del"]
+#         print(delete_rights)
+#         CorRoleTagApplication.add_cor(id_application, new_rights)
+#         CorRoleTagApplication.del_cor(id_application, delete_rights)
+#     return render_template(
+#         'tobelong.html',
+#         fLine=header,
+#         data=data,
+#         table=users_out_app,
+#         table2=users_in_app,
+#         group='groupe',
+#         app='True',
+#         info='Droit des utilisateurs et des groupes sur  "' + app['nom_application'] + '"'
+#     )
 
 
 def pops(form):

@@ -5,7 +5,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField, PasswordField, SubmitField, HiddenField, SelectField,
-    SelectMultipleField, TextAreaField, widgets,
+    RadioField, SelectMultipleField, TextAreaField, widgets,
     validators
 )
 from wtforms.validators import DataRequired, Email
@@ -17,8 +17,10 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class Utilisateur(FlaskForm):
+    active = RadioField('Actif', choices=[('true','actif'),('false','inactif')])
     nom_role = StringField('Nom', validators=[DataRequired()])
     prenom_role = StringField('Prenom')
+    desc_role = TextAreaField('Prenom')
     id_organisme = SelectField('Organisme', coerce=int, choices=[], default=-1)
     a_groupe = SelectMultipleField('Groupe', choices=[], coerce=int)
     identifiant = StringField('Identifiant', validators=[DataRequired()])

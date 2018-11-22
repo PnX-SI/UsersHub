@@ -89,23 +89,20 @@ with app.app_context():
         from app.bib_organismes import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.groupe import route
-        app.register_blueprint(route.route, url_prefix='/')
+        # from app.groupe import route
+        # app.register_blueprint(route.route, url_prefix='/')
 
         from app.t_applications import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.t_tags import route
-        app.register_blueprint(route.route, url_prefix='/')
-
-        from app.bib_tag_types import route
+        from app.t_profils import route
         app.register_blueprint(route.route, url_prefix='/')
 
         from app.auth import route
         app.register_blueprint(route.route, url_prefix='/log')
 
-        from app.CRUVED import route
-        app.register_blueprint(route.route, url_prefix='/')
+        # from app.CRUVED import route
+        # app.register_blueprint(route.route, url_prefix='/')
 
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')

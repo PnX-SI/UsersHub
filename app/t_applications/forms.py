@@ -11,6 +11,7 @@ class Application(FlaskForm):
     """
 
     nom_application = StringField('Nom',validators=[DataRequired()])
+    code_application = StringField('Code',validators=[DataRequired()])
     desc_application = StringField('Description')
     id_parent = SelectField('Application parent',coerce=int ,choices = [])
     id_application = HiddenField('id')

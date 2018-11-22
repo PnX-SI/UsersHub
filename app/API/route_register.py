@@ -12,7 +12,7 @@ from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import (
     TRoles,
-    CorRoleDroitApplication
+    CorRoleAppProfil
 )
 
 from flask_cors import cross_origin
@@ -67,9 +67,9 @@ def insert_one_t_role():
     db.session.commit()
 
     for app in req_data['applications']:
-        cor = CorRoleDroitApplication(
+        cor = CorRoleAppProfil(
             id_role=role.id_role,
-            id_droit=app['id_droit'],
+            id_profil=app['id_profil'],
             id_application=app['id_app']
         )
         db.session.add(cor)
