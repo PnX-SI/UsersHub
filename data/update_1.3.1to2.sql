@@ -63,10 +63,16 @@ ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app
 ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_profil FOREIGN KEY (id_profil) REFERENCES utilisateurs.t_profils(id_profil) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
+---------
+--USERS--
+---------
+ALTER TABLE utilisateurs.t_roles ADD COLUMN active boolean;
+ALTER TABLE utilisateurs.t_roles ALTER COLUMN active SET DEFAULT true;
+
+
 --------------
 --ORGANISMES--
 --------------
-
 -- Creation d'un organisme générique s'il n'est pas deja dans la BDD
 DO
 $$
