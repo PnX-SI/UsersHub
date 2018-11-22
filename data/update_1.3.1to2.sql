@@ -132,6 +132,7 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
+SELECT setval('utilisateurs.t_listes_id_liste_seq', (SELECT max(id_liste)+1 FROM utilisateurs.t_listes), false);
 --TODO : récupérer la liste des observateurs occtax
 
 --Récupérer les informations associant menu et utilisateurs
@@ -190,6 +191,7 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
+SELECT setval('utilisateurs.t_profils_id_profil_seq', (SELECT max(id_profil)+1 FROM utilisateurs.t_profils), false);
 
 DO
 $$
