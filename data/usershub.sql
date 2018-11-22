@@ -228,7 +228,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             u.pass_plus,
             u.email,
             u.id_organisme,
-            o.nom_organisme AS organisme
+            o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
             u.pn,
@@ -252,7 +252,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             u.pass_plus,
             u.email,
             u.id_organisme,
-            o.nom_organisme AS organisme
+            o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
             u.pn,
@@ -297,7 +297,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
-            o.nom_organisme AS organisme
+            o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
             u.pn,
@@ -321,7 +321,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
-            o.nom_organisme AS organisme
+            o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
             u.pn,
