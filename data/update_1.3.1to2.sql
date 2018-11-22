@@ -67,18 +67,7 @@ ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app
 --ORGANISMES--
 --------------
 
--- Creation des organismes génériques si ils ne sont pas deja dans la BDD
-
-DO
-$$
-BEGIN
-INSERT INTO utilisateurs.bib_organismes(nom_organisme, id_organisme) VALUES
-('Autre', -1);
-EXCEPTION WHEN unique_violation  THEN
-        RAISE NOTICE 'Tentative d''insertion de valeur existante';
-END
-$$;
-
+-- Creation d'un organisme générique s'il n'est pas deja dans la BDD
 DO
 $$
 BEGIN
@@ -88,6 +77,9 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
+-- Ajout de 2 champs url pour l'organisme et son logo
+ALTER TABLE utilisateurs.bib_organismes ADD COLUMN url_organisme character varying(255);
+ALTER TABLE utilisateurs.bib_organismes ADD COLUMN url_logo character varying(255);
 
 ----------------
 --APPLICATIONS--
@@ -203,23 +195,6 @@ EXCEPTION WHEN unique_violation  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
 $$;
-
--- Vue recréant l'équivalent de bib_droits à partir des tags existants
-CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
-SELECT 
- id_profil AS id_droit,
- nom_profil AS nom_droit,
- desc_profil AS desc_droit
-FROM utilisateurs.t_profils
-WHERE id_profil <= 6;
-
--- Vue recréant l'équivalent de cor_role_droit_application
-CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
-SELECT 
- id_role,
- id_profil as id_droit, 
- id_application
-FROM utilisateurs.cor_role_app_profil;
 
 -- Association des profils aux applications
 INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
@@ -375,10 +350,10 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_droit,
+            c.id_profil AS id_droit,
             c.id_application
            FROM utilisateurs.t_roles u
-             JOIN utilisateurs.cor_role_droit_application c ON c.id_role = u.id_role
+             JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
           WHERE u.groupe = false
         UNION
          SELECT u.groupe,
@@ -397,11 +372,11 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_droit,
+            c.id_profil AS id_droit,
             c.id_application
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
-             JOIN utilisateurs.cor_role_droit_application c ON c.id_role = g.id_role_groupe
+             JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
           WHERE u.groupe = false) a
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 

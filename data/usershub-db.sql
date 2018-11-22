@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS bib_organismes (
     tel_organisme character varying(14),
     fax_organisme character varying(14),
     email_organisme character varying(100),
+    url_organisme character varying(255),
+    url_logo character varying(255),
     id_parent integer
 );
 
@@ -192,44 +194,8 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_pr
 ---------
 --VIEWS--
 ---------
-
--- Vue permettant de simuler le contenu de la table "t_menus" de la V1
-CREATE OR REPLACE VIEW t_menus AS 
-SELECT 
- id_liste AS id_menu,
- nom_liste AS nom_menu,
- desc_liste AS desc_menu,
- null::integer AS id_application
-FROM utilisateurs.t_listes
-;
-
--- Vue permettant de simuler le contenu de la table "cor_role_menu" de la V1
-CREATE OR REPLACE VIEW cor_role_menu AS 
-SELECT 
-DISTINCT
-crl.id_role,
-crl.id_liste AS id_menu
-FROM utilisateurs.cor_role_liste crl;	 
-
--- Vue permettant de simuler le contenu de la table "bib_droits" de la V1
-CREATE OR REPLACE VIEW bib_droits AS 
-SELECT 
- id_profil AS id_droit,
- nom_profil AS nom_droit,
- desc_profil AS desc_droit
-FROM utilisateurs.t_profils
-WHERE id_profil <= 6;	 
-
--- Vue permettant de simuler le contenu de la table "cor_role_droit_application" de la V1
-CREATE OR REPLACE VIEW cor_role_droit_application AS 
-SELECT 
- id_role,
- id_profil as id_droit, 
- id_application
-FROM utilisateurs.cor_role_app_profil; 
-
--- Vue permettant de retourner les utilisateurs des listes (menus)
-CREATE OR REPLACE VIEW v_userslist_forall_menu AS
+-- Vue permettant de retourner les utilisateurs des listes
+CREATE OR REPLACE VIEW v_userslist_forall_listes AS
  SELECT a.groupe,
     a.id_role,
     a.uuid_role,
@@ -248,7 +214,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.session_appli,
     a.date_insert,
     a.date_update,
-    a.id_menu
+    a.id_liste
    FROM ( SELECT u.groupe,
             u.id_role,
             u.uuid_role,
@@ -266,7 +232,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_liste AS id_menu
+            c.id_liste
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_liste c ON c.id_role = u.id_role
           WHERE u.groupe = false
@@ -288,7 +254,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_liste AS id_menu
+            c.id_liste
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_liste c ON c.id_role = g.id_role_groupe
@@ -330,10 +296,10 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_droit,
+            c.id_profil AS id_droit,
             c.id_application
            FROM utilisateurs.t_roles u
-             JOIN utilisateurs.cor_role_droit_application c ON c.id_role = u.id_role
+             JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
           WHERE u.groupe = false
         UNION
          SELECT u.groupe,
@@ -352,11 +318,11 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_droit,
+            c.id_profil AS id_droit,
             c.id_application
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
-             JOIN utilisateurs.cor_role_droit_application c ON c.id_role = g.id_role_groupe
+             JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
           WHERE u.groupe = false) a
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
