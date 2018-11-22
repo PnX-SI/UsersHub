@@ -14,7 +14,7 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 -- Insertion de roles de type GROUPE de base pour GeoNature
 --TODO revoir l'insertion des organisme et des identifiants
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
-,(true, 7, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste dans la structure', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe des agents de la structure avec droits d''écriture limité')
+(true, 7, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste dans la structure', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe des agents de la structure avec droits d''écriture limité')
 ,(true, 9, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
 ;
 -- Insertion de roles de type UTILISATEUR pour GeoNature
