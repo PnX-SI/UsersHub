@@ -196,7 +196,7 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_pr
 --VIEWS--
 ---------
 -- Vue permettant de retourner les utilisateurs des listes
-CREATE OR REPLACE VIEW v_userslist_forall_listes AS
+CREATE OR REPLACE VIEW v_userslist_forall_menu AS
  SELECT a.groupe,
     a.id_role,
     a.uuid_role,
@@ -209,13 +209,14 @@ CREATE OR REPLACE VIEW v_userslist_forall_listes AS
     a.pass_plus,
     a.email,
     a.id_organisme,
+    a.organisme,
     a.id_unite,
     a.remarques,
     a.pn,
     a.session_appli,
     a.date_insert,
     a.date_update,
-    a.id_liste
+    a.id_menu
    FROM ( SELECT u.groupe,
             u.id_role,
             u.uuid_role,
@@ -227,15 +228,17 @@ CREATE OR REPLACE VIEW v_userslist_forall_listes AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+            o.nom_organisme AS organisme
             0 AS id_unite,
             u.remarques,
             u.pn,
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_liste
+            c.id_liste AS id_menu
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_liste c ON c.id_role = u.id_role
+             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           WHERE u.groupe = false
         UNION
          SELECT u.groupe,
@@ -249,16 +252,18 @@ CREATE OR REPLACE VIEW v_userslist_forall_listes AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+            o.nom_organisme AS organisme
             0 AS id_unite,
             u.remarques,
             u.pn,
             u.session_appli,
             u.date_insert,
             u.date_update,
-            c.id_liste
+            c.id_liste AS id_menu
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_liste c ON c.id_role = g.id_role_groupe
+             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           WHERE u.groupe = false) a;
 
 -- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
@@ -273,6 +278,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
     a.pass_plus,
     a.email,
     a.id_organisme,
+    a.organisme,
     a.id_unite,
     a.remarques,
     a.pn,
@@ -291,6 +297,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+            o.nom_organisme AS organisme
             0 AS id_unite,
             u.remarques,
             u.pn,
@@ -301,7 +308,8 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             c.id_application
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
-          WHERE u.groupe = false
+             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
+           WHERE u.groupe = false
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -313,6 +321,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+            o.nom_organisme AS organisme
             0 AS id_unite,
             u.remarques,
             u.pn,
@@ -324,6 +333,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
+             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           WHERE u.groupe = false) a
-  GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+  GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 

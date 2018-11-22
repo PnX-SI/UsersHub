@@ -7,8 +7,6 @@ SET search_path = utilisateurs, pg_catalog;
 -- Insérer les applications de base liées à GeoNature
 INSERT INTO t_applications (id_application, code_application, nom_application, desc_application, id_parent) VALUES 
 (1, 'UH', 'UsersHub', 'Application permettant d''administrer la présente base de données.', NULL)
-,(2, 'TH', 'TaxHub', 'Application permettant d''administrer la liste des taxons.', NULL)
-,(3, 'GN', 'GeoNature', 'Application permettant la consultation et la gestion des relevés faune et flore.', NULL)
 ;
 SELECT pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_application)+1 FROM utilisateurs.t_applications), false);	
 
@@ -24,9 +22,5 @@ SELECT pg_catalog.setval('t_profils_id_profil_seq', (SELECT max(id_profil)+1 FRO
 
 INSERT INTO utilisateurs.cor_profil_for_app (id_profil, id_application) VALUES
 (6, 1)
-,(2, 2)
-,(3, 2)
-,(4, 2)
-,(6, 2)
-,(1, 3)
+,(3, 1)
 ;

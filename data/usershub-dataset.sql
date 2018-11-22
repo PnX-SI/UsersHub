@@ -14,9 +14,7 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 -- Insertion de roles de type GROUPE de base pour GeoNature
 --TODO revoir l'insertion des organisme et des identifiants
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
-(true, 6, NULL, 'Grp_socle 2', NULL, 'Bureau d''étude socle 2', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe à droit étendu sur les données de son organisme')
 ,(true, 7, NULL, 'Grp_en_poste', NULL, 'Tous les agents en poste dans la structure', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe des agents de la structure avec droits d''écriture limité')
-,(true, 8, NULL, 'Grp_socle 1', NULL, 'Bureau d''étude socle 1', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe à droit limité sur ses données')
 ,(true, 9, NULL, 'Grp_admin', NULL, 'Tous les administrateurs', NULL, NULL, true, NULL, NULL, NULL, NULL, 'Groupe à droit total')
 ;
 -- Insertion de roles de type UTILISATEUR pour GeoNature
@@ -31,8 +29,7 @@ INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_r
 SELECT pg_catalog.setval('t_roles_id_role_seq', (SELECT max(id_role)+1 FROM utilisateurs.t_roles), false);
 
 -- Affectation des utilisateurs exemple dans des groupes
-INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) 
-VALUES 
+INSERT INTO cor_roles (id_role_groupe, id_role_utilisateur) VALUES 
 (7, 1)
 ,(9, 1)
 ,(7, 2)
@@ -40,9 +37,6 @@ VALUES
 ,(7, 5)
 ;
 
-INSERT INTO cor_role_app_profil (id_role, id_application, id_profil)
-VALUES
+INSERT INTO cor_role_app_profil (id_role, id_application, id_profil) VALUES
 (9, 1, 6) --admin UsersHub
-,(9, 2, 6) --admin Taxhub
-,(9, 3, 1) --Accès à GeoNature (les permissions spécifiques sont gérées dans l'admin GeoNature)
 ;
