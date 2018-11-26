@@ -37,27 +37,22 @@ def get_one_t_roles(id_role):
         Fonction qui retourne les données concernant un utilisateur
     '''
     role = TRoles.get_one(id_role)
-    return 1
+
     return role
 
 
-@route.route('/role_check_auth_error', methods=['GET', 'POST'])
-@json_resp
-def role_check_auth_error():
-
-    return {'msg': 'UsersHub authentification error'}, 422
-
-
 @route.route("/test_connexion", methods=['GET', 'POST'])
-@fnauth.check_auth(1, False, config.URL_APPLICATION + '/api_register/role_check_auth_error')
+@fnauth.check_auth(1)
 @json_resp
 def test_connexion():
-
+    '''
+        route pour tester la connexion
+    '''
     return {'msg': "connexion ok"}
 
 
 @route.route("/create_temp_user", methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def create_temp_user():
     '''
@@ -77,14 +72,14 @@ def create_temp_user():
 
     if not is_temp_user_valid:
 
-        return msg, 412
+        return {'msg': msg}, 400
 
     # on efface les comptes doublons
     db.session.query(TempUser).filter(TempUser.identifiant == temp_user.identifiant).delete()
     db.session.commit()
 
-    # on efface les compte de plus de 24h
-    db.session.query(TempUser).filter(TempUser.date_insert <= (datetime.now() - timedelta(days=1))).delete()
+    # on efface les compte de plus de 168h
+    db.session.query(TempUser).filter(TempUser.date_insert <= (datetime.now() - timedelta(days=7))).delete()
     db.session.commit()
 
     # verification si on a un utilisateur qui a le meme email et les memes droits
@@ -109,11 +104,11 @@ def create_temp_user():
 
     else:
 
-        return {msg: "Un utilisateur avec l'identifiant existe déjà."}, 422
+        return {'msg': "Un utilisateur avec l'identifiant existe déjà."}, 422
 
 
 @route.route('valid_temp_user', methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def valid_temp_user():
     '''
@@ -126,14 +121,14 @@ def valid_temp_user():
 
     id_application = data_in['id_application']
 
-    id_droit = 1 # toujours un par défaut
+    id_droit = 1  # toujours un par défaut
 
     # recherche de l'utilsateur temporaire correspondant au token
     temp_user = db.session.query(TempUser).filter(token == TempUser.token_role).first()
 
     if not temp_user:
 
-        return "pas d'utilisateur avec le token user demandé", 422
+        return {"msg": "pas d'utilisateur trouvé avec le token user demandé"}, 422
 
     temp_user.decrypt_password(config.SECRET_KEY)
 
@@ -156,7 +151,7 @@ def valid_temp_user():
 
     # Validation email
     if re.search("[@.]", req_data['email']) is None:
-        return "email not valid", 500
+        return {"msg": "email not valid"}, 500
 
     role = TRoles(**role_data)
 
@@ -184,7 +179,7 @@ def valid_temp_user():
 
 
 @route.route("/create_cor_role_token", methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def create_cor_role_token():
     '''
@@ -199,8 +194,7 @@ def create_cor_role_token():
     role = db.session.query(TRoles).filter(email == TRoles.email).first()
 
     if not role:
-
-        return {'msg', 'Pas de role trouvé pour l''email : ' + email}, 400
+        return {'msg': "Pas de role trouvé pour l'email : " + email}, 400
 
     id_role = role.id_role
 
@@ -219,7 +213,7 @@ def create_cor_role_token():
 
 
 @route.route("/change_password", methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def change_password():
 
@@ -229,24 +223,24 @@ def change_password():
 
     if not token:
 
-        return "token non defini dans paramètre POST", 500
+        return {"msg": "token non defini dans paramètre POST"}, 500
 
     password = data.get('password', None)
     password_confirmation = data.get('password_confirmation', None)
 
     if not password_confirmation or not password:
 
-        return "password non defini dans paramètres POST", 500
+        return {"msg": "password non defini dans paramètres POST"}, 500
 
     if not password_confirmation == password:
 
-        return "password et password_confirmation sont différents", 500
+        return {"msg": "password et password_confirmation sont différents"}, 500
 
     res = db.session.query(CorRoleToken.id_role).filter(CorRoleToken.token == token).first()
 
     if not res:
 
-        return "pas d'id role associée au token", 500
+        return {"msg": "pas d'id role associée au token"}, 500
 
     id_role = res[0]
 
@@ -254,7 +248,7 @@ def change_password():
 
     if not role:
 
-        return "pas d'utilisateur correspondant à id_role", 500
+        return {"msg": "pas d'utilisateur correspondant à id_role"}, 500
 
     role.fill_password(password, password)
     db.session.commit()
@@ -267,7 +261,7 @@ def change_password():
 
 
 @route.route('/change_application_right', methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def change_application_right():
     '''
@@ -278,6 +272,8 @@ def change_application_right():
     id_application = req_data.get('id_application', None)
     id_droit = req_data.get('id_droit', None)
     id_role = req_data.get('id_role', None)
+
+    role = db.session.query(TRoles).filter(TRoles.id_role == id_role).first()
 
     if not id_application or not id_role or not id_droit:
 
@@ -295,11 +291,11 @@ def change_application_right():
 
     db.session.commit()
 
-    return {'id_role': id_role, 'id_droit': id_droit, 'id_application': id_application}
+    return {'id_role': id_role, 'id_droit': id_droit, 'id_application': id_application, "role": role.as_dict()}
 
 
 @route.route('/add_application_right_to_role', methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def add_application_right_to_role():
     '''
@@ -316,13 +312,13 @@ def add_application_right_to_role():
 
     if not identifiant or not pwd or not id_application or not id_droit:
 
-        return "les parametres sont mal renseignés", 500
+        return {"msg": "les parametres sont mal renseignés"}, 500
 
     role = db.session.query(TRoles).filter(TRoles.identifiant == identifiant).first()
 
     if not role:
 
-        return "pas d'user pour l'identifiant " + str(identifiant), 500
+        return {"msg": "pas d'user pour l'identifiant " + str(identifiant)}, 500
 
     id_role = role.id_role
 
@@ -332,7 +328,7 @@ def add_application_right_to_role():
 
     if not role.pass_md5 == pwd_hash:
 
-        return "password false", 500
+        return {"msg": "password false"}, 500
 
     # on regarder les droits que possede cet utilisateur
     cor = db.session.query(CorRoleDroitApplication).filter(
@@ -362,9 +358,12 @@ def add_application_right_to_role():
 
 
 @route.route('/update_user', methods=['POST'])
-@fnauth.check_auth(5, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(5)
 @json_resp
 def update_user():
+    '''
+        route pour changer des paramètres d'utilisateur
+    '''
     req_data = request.get_json()
 
     id_role = req_data.get('id_role', None)
@@ -372,12 +371,6 @@ def update_user():
     if not id_role:
 
         return {'msg': "Pas d'id_role"}, 400
-
-    # role = db.session.query(TRoles).filter(TRoles.id_role == id_role).first()
-
-    # if not role:
-
-    #     return {'msg': 'Pas de role pour id_role :' + id_role}, 400
 
     role_data = {}
     for att in req_data:
@@ -394,7 +387,7 @@ def update_user():
 
 
 @route.route('/role', methods=['POST'])
-@fnauth.check_auth(6, False, '/api_register/role_check_auth_error')
+@fnauth.check_auth(6)
 @json_resp
 def insert_one_t_role():
     '''
@@ -415,7 +408,7 @@ def insert_one_t_role():
 
     # Validation email
     if re.search("[@.]", req_data['email']) is None:
-        return "email not valid", 500
+        return {"msg": "email not valid"}, 500
 
     role = TRoles(**role_data)
 

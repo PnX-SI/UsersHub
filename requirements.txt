@@ -24,3 +24,4 @@ WTForms==2.2.1
 WTForms-Components==0.10.3
 
 git+https://github.com/joelclems/UsersHub-authentification-module@develop
+
