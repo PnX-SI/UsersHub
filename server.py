@@ -48,9 +48,6 @@ app.secret_key = config.SECRET_KEY
 db.init_app(app)
 app.config['DB'] = db
 
-# FIX BUG
-app.config['DB'] = db
-
 with app.app_context():
     app.jinja_env.globals['url_application'] = app.config["URL_APPLICATION"]
 
