@@ -42,7 +42,7 @@ def users():
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
     fLine = ['Actif', 'Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques']  # noqa
-    columns = ['Active', 'id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
+    columns = ['active', 'id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
     tab = []
@@ -206,6 +206,7 @@ def process(form, user):
     Avec pour paramètres un formulaire et un user
     """
 
+    form.active.process_data(user['active'])
     form.id_organisme.process_data(user['id_organisme'])
     form.nom_role.process_data(user['nom_role'])
     form.prenom_role.process_data(user['prenom_role'])

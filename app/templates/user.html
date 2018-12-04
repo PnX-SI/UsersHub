@@ -23,6 +23,7 @@
            {% endif %}
        {% endwith %}
 
+        {{ wtf.form_field(form.active) }}
         {{ wtf.form_field(form.nom_role) }}
         {{ wtf.form_field(form.prenom_role) }}
         {{ wtf.form_field(form.identifiant) }}

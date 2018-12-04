@@ -9,12 +9,6 @@
           <a href="{{pathA}}"><button type="submit" class="btn btn-success btn-sm">
               Ajouter {{ name }}
             </button></a>
-      
-          {% if tag_orga == 'True'%}
-          <a href="{{ url_for('tags_types.tags_types') }}"><button type="submit" class="btn btn-success btn-sm">
-              Accéder aux types de tags
-            </button></a>
-          {% endif %}
         </p>
       </div>
       <div class="container main-zone ng-scope ">
@@ -24,18 +18,23 @@
               <tr class="footable-filtering"></tr>
               <tr>
                 {% for name in fLine %}
-                <th scope="col">{{ name }}</th>
-                {% endfor %} {#{% set otherCols = otherCol %}#} {% if otherCol ==
-                'True'%}
-                <th scope="col">{{ Members }}</th>
-                {%endif%} {% if tag_orga == 'True'%}
-                <th scope="col">{{ Organismes }}</th>
-                {% endif %} {% if tag_app == 'True'%}
-                <th scope="col">{{ App }}</th>
-                {% endif %} {% if app_geonature == 'True' %}
-                <th scope="col">{{ Members }}</th>
-                {%endif%} {% if see == 'True'%}
-                <th scope="col">Voir</th>
+                  <th scope="col">{{ name }}</th>
+                {% endfor %} 
+                {#{% set otherCols = otherCol %}#} 
+                {% if otherCol == 'True'%}
+                  <th scope="col">{{ Members }}</th>
+                {%endif%} 
+                {% if tag_orga == 'True'%}
+                  <th scope="col">{{ Organismes }}</th>
+                {% endif %} 
+                {% if tag_app == 'True'%}
+                  <th scope="col">{{ App }}</th>
+                {% endif %} 
+                {% if app_geonature == 'True' %}
+                  <th scope="col">{{ Members }}</th>
+                {%endif%} 
+                {% if see == 'True'%}
+                  <th scope="col">Voir</th>
                 {%endif%}
                 <th scope="col">Modification</th>
                 <th scope="col">Suppression</th>
