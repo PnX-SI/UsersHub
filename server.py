@@ -77,7 +77,6 @@ with app.app_context():
             if request.endpoint == 'auth.login' and response.status_code == 200: # noqa
                 current_user = json.loads(response.get_data().decode('utf-8'))
                 session["current_user"] = current_user["user"]
-
             return response
 
         from pypnusershub import routes
@@ -89,8 +88,8 @@ with app.app_context():
         from app.bib_organismes import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        # from app.groupe import route
-        # app.register_blueprint(route.route, url_prefix='/')
+        from app.groupe import route
+        app.register_blueprint(route.route, url_prefix='/')
 
         from app.t_applications import route
         app.register_blueprint(route.route, url_prefix='/')
@@ -101,14 +100,16 @@ with app.app_context():
         from app.auth import route
         app.register_blueprint(route.route, url_prefix='/log')
 
+        from app.auth import route
+        app.register_blueprint(route.route, url_prefix='/login')
+
         # from app.CRUVED import route
         # app.register_blueprint(route.route, url_prefix='/')
 
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')
 
-        from app.auth import route
-        app.register_blueprint(route.route, url_prefix='/login')
+        
 
     if config.ACTIVATE_API:
         from app.API import route_register
@@ -116,4 +117,5 @@ with app.app_context():
 
 
 if __name__ == '__main__':
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(debug=config.DEBUG, port=config.PORT)

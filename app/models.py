@@ -168,7 +168,6 @@ class TRoles(GenericRepository):
     email = db.Column(db.Unicode)
     id_organisme =db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme'))
     organisme_rel = relationship("Bib_Organismes")
-    id_unite = db.Column(db.Integer)
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)

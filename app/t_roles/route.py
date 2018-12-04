@@ -41,7 +41,7 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Actif', 'Id', 'Identifiant',  'Nom', 'Prenom', 'Email',  'Organisme',  'Remarques']  # noqa
+    fLine = ['Actif', 'Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques']  # noqa
     columns = ['Active', 'id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)

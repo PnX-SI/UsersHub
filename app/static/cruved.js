@@ -1,8 +1,8 @@
 
 $( document ).ready(function() { 
 
-    console.log($("#inputGroupSelect03").val())
-    console.log($("#inputGroupSelect04").val())
+    // console.log($("#inputGroupSelect03").val())
+    // console.log($("#inputGroupSelect04").val())
  
         
         // var data = {}
