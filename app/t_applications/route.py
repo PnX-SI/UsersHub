@@ -37,8 +37,8 @@ def applications():
 
     """
 
-    fLine = ['ID', 'Nom', 'Description', ' Parent']
-    columns = ['id_application', 'nom_application', 'desc_application', 'app_parent']
+    fLine = ['ID', 'Code', 'Nom', 'Description', ' Parent']
+    columns = ['id_application', 'code_application', 'nom_application', 'desc_application', 'app_parent']
     contents = TApplications.get_all()
     for data in contents:
         if data['id_parent'] != None:
@@ -54,7 +54,7 @@ def applications():
         line=columns,
         pathU=config.URL_APPLICATION + "/application/update/",
         key="id_application",
-        pathD=config.URL_APPLICATION + "/applications/delete/",
+        pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
         pathP=config.URL_APPLICATION + "/application/users/",
         name="une application",
@@ -89,12 +89,6 @@ def addorupdate(id_application):
                 form_app.pop('id_application')
                 TApplications.post(form_app)
                 return redirect(url_for('application.applications'))
-            else:
-                errors = form.errors
-                if(errors['nom_application'] != None):
-                    flash("Le nom de l'application est obligatoire. ")
-                if(errors['code_application'] != None):
-                    flash("Le code de l'application est obligatoire.")
         return render_template('application.html', form=form, title="Formulaire Application")
     else:
         application = TApplications.get_one(id_application)
@@ -116,16 +110,10 @@ def addorupdate(id_application):
                 form_app['id_application'] = application['id_application']
                 TApplications.update(form_app)
                 return redirect(url_for('application.applications'))
-            else:
-                errors = form.errors
-                if(errors['nom_application'] != None):
-                    flash("Le nom de l'application est obligatoire")
-                if(errors['code_application'] != None):
-                    flash("Le code de l'application est obligatoire.")
         return render_template('application.html', form=form, title="Formulaire Application")
 
 
-@route.route('applications/delete/<id_application>', methods=['GET', 'POST'])
+@route.route('application/delete/<id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_application):
 
@@ -202,5 +190,6 @@ def process(form, application):
     """
 
     form.nom_application.process_data(application['nom_application'])
+    form.code_application.process_data(application['code_application'])
     form.desc_application.process_data(application['desc_application'])
     return form

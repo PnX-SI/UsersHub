@@ -188,7 +188,6 @@ def deluser(id_role):
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
