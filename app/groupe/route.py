@@ -105,16 +105,15 @@ def addorupdate(id_role):
 @route.route('groups/members/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def membres(id_groupe):
-
     """
     Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui appartiennent à celui ci.
     Avec pour paramètre un id de groupe (id_role)
     Retourne un template avec pour paramètres:
-                                            - une entête des tableaux --> fLine
-                                            - le nom des colonnes de la base --> data
-                                            - liste des roles n'appartenant pas au groupe --> table
-                                            - liste des roles appartenant au groupe --> table2
-                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
+        - une entête des tableaux --> fLine
+        - le nom des colonnes de la base --> data
+        - liste des roles n'appartenant pas au groupe --> table
+        - liste des roles appartenant au groupe --> table2
+        - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
     """
 
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
@@ -142,7 +141,6 @@ def membres(id_groupe):
 @route.route('groups/delete/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_groupe):
-
     """
     Route qui supprime un groupe dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste de groupe
@@ -197,7 +195,6 @@ def delete(id_groupe):
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -209,7 +206,6 @@ def pops(form):
 
 
 def process(form, group):
-
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un groupe

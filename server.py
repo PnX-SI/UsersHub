@@ -91,6 +91,9 @@ with app.app_context():
         from app.groupe import route
         app.register_blueprint(route.route, url_prefix='/')
 
+        from app.liste import route
+        app.register_blueprint(route.route, url_prefix='/')
+
         from app.t_applications import route
         app.register_blueprint(route.route, url_prefix='/')
 

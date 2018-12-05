@@ -1,104 +1,89 @@
 <!DOCTYPE html>
 <html>
    {% include "header.html" %}   
-
    <body>
-
         {% include "head-appli.html" %}
         <div class = "row forms" >
-            <h2>{{info}} </h2>
-        </br></br>
+            <h2>{{info}}</h2>
+            </br></br>
         </div>
+
         <div class="row forms">
-            
             <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-             
-             <table  id="user" class="table table-bordered table-sm" >
+                <table  id="user" class="table table-bordered table-sm" >
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             {% for name in fLine %}
-                            <th scope="col">{{name}}</th>
+                                <th scope="col">{{name}}</th>
                             {% endfor %}
                         </tr> 
-            
                     </thead>
                     <tbody>
-                        
-
                         {% for elt in table %}
                             <tr>
                                  <td><input id="checkBox" type="checkbox"> </td>    
-                            {% for name in data %}
-                                {% set groups = elt[group] %}  
-                                {% if groups == 'True' %}    
-                                    <td class = "table-primary" >{{elt[name]}}</td>
-                                {% else %}
-                                    <td >{{elt[name]}}</td>
-                                {% endif%}
-                                
-                                {% endfor %}
-                                    
-                            {% endfor %}
-                        </tr>
+                                {% for name in data %}
+                                    {% set groups = elt[group] %}  
+                                    {% if groups == 'True' %}    
+                                        <td class = "table-primary" >{{elt[name]}}</td>
+                                    {% else %}
+                                        <td >{{elt[name]}}</td>
+                                    {% endif%}
+                                {% endfor %} 
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>   
             </div>
             
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <p><br/><br/><br/></p>
-                    {% if app == 'True'%}
+                <p><br/><br/><br/></p>
+                {% if app == 'True'%}
                     <button onclick="add('app')" type="button" class="btn btn-light " >
                         <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
-  
                     </button>
                     <p></p>
                     <button onclick="del('app')" type="button" class="btn btn-light " >
                         <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
-  
                     </button>
-                    {% else %}
+                {% else %}
                     <button onclick="add()" type="button" class="btn btn-light " >
                         <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
-  
                     </button>
                     <p></p>
                     <button onclick="del()" type="button" class="btn btn-light " >
                         <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
-  
                     </button>                    
-                    {% endif%}
-            
+                {% endif%}
             </div>
 
             <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-
-                    <table  id="adding_table"  class="table table-bordered table-sm" data-filtering="true" >
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    {% for name in fLine %}
-                                    <th scope="col" >{{name}}</th>
-                                    {% endfor %}
-                                    {% if app == 'True'%}
-                                    <th scope="col">Droit</th>
-                                    {% endif%}
-                                </tr> 
-                    
-                            </thead>
-                            <tbody>
-                                {% for elt in table2 %}
-                                <tr>   
-                                    <td><input id="checkBox" type="checkbox"> </td>
-                                    {% for name in data %}  
+                <table  id="adding_table"  class="table table-bordered table-sm" data-filtering="true" >
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            {% for name in fLine %}
+                                <th scope="col" >{{name}}</th>
+                            {% endfor %}
+                            {% if app == 'True'%}
+                                <th scope="col">Droit</th>
+                            {% endif%}
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        {% for elt in table2 %}
+                            <tr>   
+                                <td><input id="checkBox" type="checkbox"> </td>
+                                {% for name in data %}  
                                     {% set groups = elt[group] %}  
                                     {% if groups == 'True' %}    
                                         <td class = "table-primary" >{{elt[name]}}</td>
                                     {% else %}
                                         <td >{{elt[name]}}</td>
                                     {% endif%}   
-                                    {% endfor %}         
-                                    {% if app == 'True'%}
+                                {% endfor %}         
+                                {% if app == 'True'%}
                                     <td class = "right">
                                         <select class="custom-select", id="inputGroupSelect02">
                                             {% for d in elt['value'] %}
@@ -110,28 +95,21 @@
                                             {%endfor%}
                                         </select>
                                     </td>
-                                    {% endif%}
-                                </tr>
-                                {%endfor%}
-                                
-                            </tbody>
-                        </table>
-        
-        
-                    </div>
-                {% if app == 'True'%}
+                                {% endif%}
+                            </tr>
+                        {%endfor%}   
+                    </tbody>
+                </table>
+            </div>
+
+            {% if app == 'True'%}
                 <button onclick = "update_right()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
-                {% else %}
+            {% else %}
                 <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
-                {% endif%}
+            {% endif%}
+
         </div>
-      
-       
-
-        
-
-    
-</body>
+    </body>
 </html>
     
     

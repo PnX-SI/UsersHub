@@ -24,7 +24,6 @@ from config import config
 
 @serializable
 class CorRoleListe(GenericRepository):
-
     """ Classe de correspondance entre la table t_roles et la table t_listes"""
 
     __tablename__ = 'cor_role_liste'
@@ -35,7 +34,6 @@ class CorRoleListe(GenericRepository):
 
     @classmethod
     def add_cor(cls,id_liste,ids_role):
-
         """
         Methode qui ajoute des relations roles <-> liste
 
@@ -50,7 +48,6 @@ class CorRoleListe(GenericRepository):
 
     @classmethod
     def del_cor(cls,id_liste,ids_role):
-
         """
         Methode qui supprime des relations roles <-> liste
 
@@ -89,7 +86,6 @@ class CorRoleAppProfil(GenericRepository):
 
 @serializable
 class CorProfilForApp(GenericRepository):
-
     """ Classe de correspondance entre la table t_applications et la table t_profils"""
 
     __tablename__ = "cor_profil_for_app"
@@ -99,7 +95,6 @@ class CorProfilForApp(GenericRepository):
 
     @classmethod
     def add_cor(cls,id_profil,ids_app):
-
         """
         Methode qui ajoute des relations applications <-> profil
 
@@ -114,7 +109,6 @@ class CorProfilForApp(GenericRepository):
 
     @classmethod
     def del_cor(cls,id_profil,ids_app):
-
         """
         Methode qui supprime des relations applications <-> profil
 
@@ -127,7 +121,6 @@ class CorProfilForApp(GenericRepository):
 
 @serializable
 class  Bib_Organismes(GenericRepository):
-
     """
     Model de la table Bib_Organismes
 
@@ -149,7 +142,6 @@ class  Bib_Organismes(GenericRepository):
 
 @serializable
 class TRoles(GenericRepository):
-
     """
     Model de la table t_roles
     """
@@ -194,7 +186,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def choixSelect(cls,id,nom,aucun = None):
-
         """
         Methode qui retourne une tableau de tuples d'id de roles et de nom de roles
         Avec pour paramètres un id de role et un nom de role
@@ -212,7 +203,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def choix_group(cls,id,nom,aucun = None):
-
         """
         Methode qui retourne une tableau de tuples d'id de groupes et de nom de goupes
         Avec pour paramètres un id de groupe et un nom de groupe
@@ -231,7 +221,6 @@ class TRoles(GenericRepository):
 
 
     def get_full_name(self):
-
         """
         Methode qui concatène le nom et prénom du role
         retourne un nom complet
@@ -244,7 +233,6 @@ class TRoles(GenericRepository):
         return full_name
 
     def as_dict_full_name(self):
-
         """
         Methode qui ajout le nom complet d'un role au dictionnaire qui le défini
         retourne un dictionnaire d'un utilisateur avec une nouvelle 'full_name'
@@ -255,10 +243,8 @@ class TRoles(GenericRepository):
         user_as_dict['full_name'] = full_name
         return user_as_dict
 
-
     @classmethod
     def test_group(cls,tab):
-
         """
         Methode qui test si le tableau contient un élement groupe = False,
         Si c'est le cas alors on remplace le boolean par un string du même nom
@@ -275,23 +261,36 @@ class TRoles(GenericRepository):
         return table
 
     @classmethod
-    def get_user_in_liste(cls, id_liste):
-
+    def get_user_in_list(cls, id_liste):
         """
         Methode qui retourne un dictionnaire des roles d'une liste
         Avec pour paramètre un id_liste
         """
 
         q = db.session.query(cls)
-        q = q.order_by(desc(cls.groupe))
+        q = q.order_by(desc(cls.nom_role))
         q = q.join(CorRoleListe)
         q = q.filter(id_liste == CorRoleListe.id_liste  )
         data =  [data.as_dict_full_name() for data in q.all()]
         return data
 
     @classmethod
-    def get_user_in_group(cls, id_groupe):
+    def get_user_out_list(cls,id_liste):
+        """
+        Methode qui retourne un dictionnaire de roles n'appartenant pas à une liste
+        Avec pour paramètre un id_liste
+        """
 
+        q = db.session.query(cls)
+        q = q.order_by(desc(cls.nom_role))
+        subquery = db.session.query(CorRoleListe.id_role).filter(CorRoleListe.id_liste == id_liste)
+        q = q.filter(cls.id_role.notin_(subquery))
+        #TODO filtrer les roles actifs
+        data =  [data.as_dict_full_name() for data in q.all()]
+        return data
+
+    @classmethod
+    def get_user_in_group(cls, id_groupe):
         """
         Methode qui retourne un dictionnaire de role appartenant à un groupe
         Avec pour paramètres un id de role
@@ -305,7 +304,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_out_group(cls,id_groupe):
-
         """
         Methode qui retourne un dictionnaire de role n'appartenant pas à un groupe donné
         Avec pour paramètre un id de role
@@ -393,6 +391,22 @@ class CorRoles(GenericRepository):
 
 
 @serializable
+class TListes(GenericRepository):
+
+    """
+    Model de la table t_listes
+    """
+
+    __tablename__='t_listes'
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
+    id_liste = db.Column(db.Integer, primary_key = True)
+    code_liste = db.Column(db.Unicode)
+    nom_liste = db.Column(db.Unicode)
+    desc_liste = db.Column(db.Unicode)
+
+
+
+@serializable
 class TApplications(GenericRepository):
 
     """
@@ -428,7 +442,6 @@ class TApplications(GenericRepository):
 
 @serializable
 class TProfils(GenericRepository):
-
     """
     Model de la classe t_profils
     """

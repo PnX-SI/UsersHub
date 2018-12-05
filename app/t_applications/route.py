@@ -18,7 +18,6 @@ route = Blueprint('application', __name__)
 @route.route('applications/list', methods=['GET', 'POST'])
 @fnauth.check_auth(3, False, URL_REDIRECT)
 def applications():
-
     """
     Route qui affiche la liste des applications
     Retourne un template avec pour paramètres :
@@ -69,7 +68,6 @@ def applications():
 @route.route('application/update/<id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def addorupdate(id_application):
-
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
     L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
@@ -116,7 +114,6 @@ def addorupdate(id_application):
 @route.route('application/delete/<id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_application):
-
     """
     Route qui supprime une application dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste de groupe
@@ -129,7 +126,6 @@ def delete(id_application):
 # @route.route('application/users/<id_application>', methods=['GET', 'POST'])
 # @fnauth.check_auth(6, False, URL_REDIRECT)
 # def users(id_application):
-
 #     """
 #     Route affichant la liste des roles n'appartenant pas a l'application vis à vis de ceux qui appartiennent à celui ci.
 #     Avec pour paramètre un id d'application
@@ -171,7 +167,6 @@ def delete(id_application):
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -183,7 +178,6 @@ def pops(form):
 
 
 def process(form, application):
-
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et une application
