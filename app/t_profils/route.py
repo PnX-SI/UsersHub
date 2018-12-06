@@ -51,24 +51,19 @@ def profils():
         table=tab,
         key='id_profil',
         pathU=config.URL_APPLICATION + '/profil/update/',
-        pathD=config.URL_APPLICATION + '/profils/delete/',
+        pathD=config.URL_APPLICATION + '/profil/delete/',
         pathA=config.URL_APPLICATION + '/profil/add/new',
-        pathP=config.URL_APPLICATION + "/profil/users/",
-        pathO=config.URL_APPLICATION + "/profil/organisms/",
-        pathApp=config.URL_APPLICATION + "/profil/applications/",
         name="un profil",
         name_list="Profils",
-        Members="Utilisateurs",
-        otherCol='True',
+        otherCol='False',
         profil_app='True',
         App="Application"
      )
 
 
-@route.route('profils/delete/<id_profil>', methods=['GET', 'POST'])
+@route.route('profil/delete/<id_profil>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_profil):
-
     """
     Route qui supprime un profil dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste de profil
@@ -82,7 +77,6 @@ def delete(id_profil):
 @route.route('profil/update/<id_profil>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def addorupdate(id_profil):
-
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un profil
     L'envoie du formulaire permet l'ajout ou la maj du profil dans la base
@@ -98,10 +92,6 @@ def addorupdate(id_profil):
                 form_profil.pop('id_profil')
                 TProfils.post(form_profil)
                 return redirect(url_for('profils.profils'))
-            else:
-                errors = form.errors
-                if(errors['nom_profil'] != None):
-                    flash("Le nom du profil est obligatoire.")
         return render_template('profil.html', form=form, title="Formulaire Profil")
     else:
         profil = TProfils.get_one(id_profil)
@@ -113,56 +103,12 @@ def addorupdate(id_profil):
                 form_profil['id_profil'] = profil['id_profil']
                 TProfils.update(form_profil)
                 return redirect(url_for('profils.profils'))
-            else:
-                errors = form.errors
-                if(errors['nom_profil'] != None):
-                    flash("Le nom du profil est obligatoire.")
         return render_template('profil.html', form=form, title="Formulaire Profil")
-
-
-@route.route('profil/users/<id_profil>', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
-def profil_users(id_profil):
-
-    """
-    Route affichant la liste des roles n'appartenant pas au profil vis à vis de ceux qui apparatiennent à celui ci.
-    Avec pour paramètre un id de profil.
-    Retourne un template avec pour paramètres:
-                                            - une entête des tableaux --> fLine
-                                            - le nom des colonnes de la base --> data
-                                            - liste des roles non étiquetés par le profil --> table
-                                            - liste des roles étiquetés par le profil --> table2
-                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
-    """
-
-    users_in_profil = TRoles.test_group(TRoles.get_user_in_profil(id_profil))
-    users_out_profil = TRoles.test_group(TRoles.get_user_out_profil(id_profil))
-    profil = TProfils.get_one(id_profil)
-    header = ['ID', 'Nom']
-    data = ['id_role', 'full_name']
-    if request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        new_users_in_profil = data["tab_add"]
-        new_users_out_profil = data["tab_del"]
-        CorRoleAppProfil.add_cor(id_profil, new_users_in_profil, id_application)
-        CorRoleAppProfil.del_cor(id_profil, new_users_out_profil, id_application)
-
-    return render_template(
-        'tobelong.html',
-        fLine=header,
-        data=data,
-        table=users_out_profil,
-        table2=users_in_profil,
-        group='groupe',
-        info="Profil '" + profil['nom_profil'] + "' sur les utilisateurs et les groupes"
-     )
 
 
 # @route.route('tag/applications/<id_tag>',  methods=['GET', 'POST'])
 # @fnauth.check_auth(3, False, URL_REDIRECT)
 # def tag_applications(id_tag):
-
 #     """
 #     Route affichant la liste des applications non étiquetés par le tag vis à vis de ceux étiquetés par celui ci.
 #     Avec pour paramètre un id de tag.
@@ -200,7 +146,6 @@ def profil_users(id_profil):
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -212,7 +157,6 @@ def pops(form):
 
 
 def process(form, profil):
-
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un profil
