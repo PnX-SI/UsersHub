@@ -1,5 +1,3 @@
-
-
 import hashlib
 
 from app.env import db
@@ -62,7 +60,6 @@ class CorRoleListe(GenericRepository):
 
 @serializable
 class CorRoleAppProfil(GenericRepository):
-
     """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
 
     __tablename__= "cor_role_app_profil"
@@ -72,16 +69,16 @@ class CorRoleAppProfil(GenericRepository):
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
 
     @classmethod
-    def add_cor(cls,id_app,tab_right):
+    def add_cor(cls,id_app,tab_profil):
         dict_add = {}
-        for d in tab_right:
-            dict_add = {'id_role':d['id_role'],'id_profil':d['id_right'], 'id_application': id_app }
+        for d in tab_profil:
+            dict_add = {'id_role':d['id_role'],'id_profil':d['id_profil'], 'id_application': id_app }
             cls.post(dict_add)
 
     @classmethod
-    def del_cor(cls,id_app,tab_right):
-       for t in tab_right:
-            cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_profil == t['id_right']).filter(cls.id_application == id_app).delete()
+    def del_cor(cls,id_app,tab_profil):
+       for t in tab_profil:
+            cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_profil == t['id_profil']).filter(cls.id_application == id_app).delete()
             db.session.commit()
 
 @serializable
@@ -320,24 +317,25 @@ class TRoles(GenericRepository):
         return data
 
     @classmethod
-    def get_user_right_in_application(cls,id_application):
+    def get_user_profil_in_app(cls,id_application):
 
         """
-        Methode qui retourne un dictionnaire de roles ayant les droits sur une application donné
+        Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
         """
 
-        q = db.session.query(cls, CorRoleAppProfil)
+        # q = db.session.query(cls)
+        q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
-        q = q.join(CorRoleAppProfil, TRoles.id_role == CorRoleAppProfil.id_role)
-        q = q.filter(id_application ==  CorRoleAppProfil.id_application )
-        data = q.all()
-        data =  [{'role':d[0].as_dict_full_name(), 'right':d[1].as_dict()} for d in data]
-
-        return data
+        q = q.join(CorRoleAppProfil, cls.id_role == CorRoleAppProfil.id_role)
+        q = q.join(TProfils, TProfils.id_profil == CorRoleAppProfil.id_profil)
+        q = q.filter(CorRoleAppProfil.id_application == id_application)
+        print ([data.as_dict_full_name() for data in q.all()])
+        return [data.as_dict_full_name() for data in q.all()]
+        # return [{'role':data[0].as_dict_full_name(), 'profil':data[1].as_dict()} for data in q.all()]
 
     @classmethod
-    def get_user_out_application(cls,id_application):
+    def get_user_profil_out_app(cls,id_application):
 
         """
         Methode qui retourne un dictionnaire de roles n'ayant pas de droits sur une application
@@ -346,7 +344,7 @@ class TRoles(GenericRepository):
 
         q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
-        subquery = db.session.query(distinct(CorRoleAppProfil.id_role)).filter(id_application == CorRoleAppProfil.id_application)
+        subquery = db.session.query(distinct(CorRoleAppProfil.id_role)).filter(CorRoleAppProfil.id_application == id_application)
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
 
@@ -421,23 +419,23 @@ class TApplications(GenericRepository):
     desc_application = db.Column(db.Unicode)
     id_parent = db.Column(db.Unicode)
 
-    @classmethod
-    def choix_app_cruved(cls,id_app,nom,aucun = None):
+    # @classmethod
+    # def choix_app_cruved(cls,id_app,nom,aucun = None):
 
-        """
-        Methode qui retourne une tableau de tuples d'id d'applications et de nom d'applications
-        Avec pour paramètres un id id d'application et un nom d'application
-        Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
-        """
+    #     """
+    #     Methode qui retourne une tableau de tuples d'id d'applications et de nom d'applications
+    #     Avec pour paramètres un id d'application et un nom d'application
+    #     Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
+    #     """
 
-        q = cls.get_all(as_model = True).filter(or_(cls.id_application == config.ID_GEONATURE,cls.id_parent == config.ID_GEONATURE))
-        data = [data.as_dict() for data in q.all()]
-        choices = []
-        for d in data :
-            choices.append((d[id_app], d[nom]))
-        if aucun != None :
-            choices.append((-1,'Aucun'))
-        return choices
+    #     q = cls.get_all(as_model = True).filter(or_(cls.id_application == config.ID_GEONATURE,cls.id_parent == config.ID_GEONATURE))
+    #     data = [data.as_dict() for data in q.all()]
+    #     choices = []
+    #     for d in data :
+    #         choices.append((d[id_app], d[nom]))
+    #     if aucun != None :
+    #         choices.append((-1,'Aucun'))
+    #     return choices
 
 
 @serializable
