@@ -94,7 +94,7 @@ class CorProfilForApp(GenericRepository):
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
 
     @classmethod
-    def add_cor(cls,id_profil,ids_app):
+    def add_cor(cls,id_application,ids_profil):
         """
         Methode qui ajoute des relations applications <-> profil
 
@@ -102,25 +102,25 @@ class CorProfilForApp(GenericRepository):
         """
 
         dict_add = dict()
-        dict_add["id_profil"] = id_profil
-        for d in ids_app:
-            dict_add["id_application"] = d
+        dict_add["id_application"] = id_application
+        for d in ids_profil:
+            dict_add["id_profil"] = d
             cls.post(dict_add)
 
     @classmethod
-    def del_cor(cls,id_profil,ids_app):
+    def del_cor(cls,id_application,ids_profil):
         """
         Methode qui supprime des relations applications <-> profil
 
         Avec pour paramètres un id profil et un tableau d'id d'applications
         """
 
-        for d in ids_app:
-            cls.query.filter(cls.id_profil == id_profil).filter(cls.id_application == d).delete()
+        for d in ids_profil:
+            cls.query.filter(cls.id_application == id_application).filter(cls.id_profil == d).delete()
             db.session.commit()
 
 @serializable
-class  Bib_Organismes(GenericRepository):
+class Bib_Organismes(GenericRepository):
     """
     Model de la table Bib_Organismes
 
@@ -454,34 +454,31 @@ class TProfils(GenericRepository):
     desc_profil = db.Column(db.Unicode)
 
     @classmethod
-    def get_profils_for_app(cls, id_application):
-
+    def get_profils_in_app(cls, id_application):
         """
-        Methode qui retourne un dictionnaire des profils utilisable pour une application
+        Methode qui retourne un dictionnaire des profils utilisables pour une application
         Avec pour paramètre un id de l'application
         """
 
         q = db.session.query(cls)
         q = q.join(CorProfilForApp)
-        q = q.filter(id_profil == CorProfilForApp.id_application)
+        q = q.filter(id_application == CorProfilForApp.id_application)
         return  [data.as_dict() for data in q.all()]
 
     @classmethod
     def get_profils_out_app(cls, id_application):
-
         """
         Methode qui retourne un dictionnaire des profils non utilisés pour une application
         Avec pour paramètre un id application
         """
 
         q = db.session.query(cls)
-        subquery = db.session.query(CorProfilForApp.id_application).filter(id_application == CorProfilForApp.id_application)
+        subquery = db.session.query(CorProfilForApp.id_profil).filter(id_application == id_application)
         q = q.filter(cls.id_profil.notin_(subquery)) 
         return [data.as_dict() for data in q.all()]
     
     @classmethod
     def choixSelect(cls,code_profil,nom_profil):
-
         """
         Methode qui retourne un tableau de tuples de code profil et de nom de profil
         Avec pour paramètres un code de tag et un nom de tag

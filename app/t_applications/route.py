@@ -5,8 +5,7 @@ from flask import (
 
 from app.env import URL_REDIRECT
 from app.t_applications import forms as t_applicationsforms
-from app.models import TRoles
-from app.models import TApplications
+from app.models import TApplications, TProfils, CorProfilForApp
 
 from config import config
 
@@ -51,16 +50,16 @@ def applications():
         table=contents,
         fLine=fLine,
         line=columns,
-        pathU=config.URL_APPLICATION + "/application/update/",
         key="id_application",
+        pathU=config.URL_APPLICATION + "/application/update/",
         pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
-        pathP=config.URL_APPLICATION + "/application/users/",
+        pathP=config.URL_APPLICATION + "/application/profils/",
         name="une application",
         name_list="Applications",
         id_geonature=config.ID_GEONATURE,
         app_geonature="True",
-        Members="Utilisateurs"
+        Members="Profils"
     )
 
 
@@ -123,47 +122,37 @@ def delete(id_application):
     return redirect(url_for('application.applications'))
 
 
-# @route.route('application/users/<id_application>', methods=['GET', 'POST'])
-# @fnauth.check_auth(6, False, URL_REDIRECT)
-# def users(id_application):
-#     """
-#     Route affichant la liste des roles n'appartenant pas a l'application vis à vis de ceux qui appartiennent à celui ci.
-#     Avec pour paramètre un id d'application
-#     Retourne un template avec pour paramètres:
-#                                             - une entête des tableaux --> fLine
-#                                             - le nom des colonnes de la base --> data
-#                                             - liste des roles n'appartenant pas à l'application --> table
-#                                             - liste des roles appartenant à l'application--> table2
-#                                             - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
-#     """
-#     users_with_right = TRoles.get_user_right_in_application(id_application)
-#     only_role = []
-#     for role in users_with_right:
-#         role['role']['id_tag'] = role['right']['id_tag']
-#         role['role']['value'] = TTags.choixSelectTag('id_tag','tag_name')
-#         only_role.append(role['role'])
-#     users_in_app = TRoles.test_group(only_role)
-#     users_out_app = TRoles.test_group(TRoles.get_user_out_application(id_application))
-#     header = ['ID', 'Nom']
-#     data = ['id_role', ' full_name']
-#     app = TApplications.get_one(id_application)
-#     if request.method == 'POST':
-#         data = request.get_json()
-#         new_rights = data["tab_add"]
-#         delete_rights = data["tab_del"]
-#         print(delete_rights)
-#         CorRoleTagApplication.add_cor(id_application, new_rights)
-#         CorRoleTagApplication.del_cor(id_application, delete_rights)
-#     return render_template(
-#         'tobelong.html',
-#         fLine=header,
-#         data=data,
-#         table=users_out_app,
-#         table2=users_in_app,
-#         group='groupe',
-#         app='True',
-#         info='Droit des utilisateurs et des groupes sur  "' + app['nom_application'] + '"'
-#     )
+@route.route('application/profils/<id_application>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def profils(id_application):
+    """
+    Route affichant la liste des profils utilisables par l'application et ceux dispobles.
+    Avec pour paramètre un id d'application
+    Retourne un template avec pour paramètres:
+        - une entête des tableaux --> fLine
+        - le nom des colonnes de la base --> data
+        - liste des profils utilisables --> table
+        - liste des profils non utilisables mais disponibles --> table2
+    """
+    profils_in_app = TProfils.get_profils_in_app(id_application)
+    profils_out_app = TProfils.get_profils_out_app(id_application)
+    header = ['ID', 'Profil']
+    data = ['id_profil', 'nom_profil']
+    app = TApplications.get_one(id_application)
+    if request.method == 'POST':
+        data = request.get_json()
+        new_profils = data["tab_add"] #TODO in js
+        delete_profils = data["tab_del"] #TODO in js
+        CorProfilForApp.add_cor(id_application, new_profils)
+        CorProfilForApp.del_cor(id_application, delete_profils)
+    return render_template(
+        'app_profils.html',
+        fLine=header,
+        data=data,
+        table=profils_out_app,
+        table2=profils_in_app,
+        info="Profils utilisables dans l'application  '" + app['nom_application'] + '"'
+    )
 
 
 def pops(form):

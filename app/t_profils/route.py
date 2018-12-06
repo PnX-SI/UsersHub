@@ -16,14 +16,13 @@ from config import config
 route = Blueprint('profils', __name__)
 
 """
-Route des profils
+Routes des profils
 """
 
 
 @route.route('profils/list', methods=['GET', 'POST'])
 @fnauth.check_auth(3, False, URL_REDIRECT)
 def profils():
-
     """
     Route qui affiche la liste des profils
     Retourne un template avec pour paramètres :
