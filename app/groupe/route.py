@@ -7,9 +7,9 @@ from pypnusershub import routes as fnauth
 from app.env import URL_REDIRECT
 from app.groupe import forms as groupeforms
 from app.models import TRoles
-from app.models import CorRoles, CorRoleTag, TTags
+from app.models import CorRoles
 from config import config
-from app.CRUVED.route import get_cruved_one
+# from app.CRUVED.route import get_cruved_one
 
 
 route = Blueprint('groupe', __name__)
@@ -105,16 +105,15 @@ def addorupdate(id_role):
 @route.route('groups/members/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def membres(id_groupe):
-
     """
     Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui appartiennent à celui ci.
     Avec pour paramètre un id de groupe (id_role)
     Retourne un template avec pour paramètres:
-                                            - une entête des tableaux --> fLine
-                                            - le nom des colonnes de la base --> data
-                                            - liste des roles n'appartenant pas au groupe --> table
-                                            - liste des roles appartenant au groupe --> table2
-                                            - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
+        - une entête des tableaux --> fLine
+        - le nom des colonnes de la base --> data
+        - liste des roles n'appartenant pas au groupe --> table
+        - liste des roles appartenant au groupe --> table2
+        - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
     """
 
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
@@ -142,7 +141,6 @@ def membres(id_groupe):
 @route.route('groups/delete/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_groupe):
-
     """
     Route qui supprime un groupe dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste de groupe
@@ -152,52 +150,51 @@ def delete(id_groupe):
     return redirect(url_for('groupe.groups'))
 
 
-@route.route('group/info/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
-def get_info(id_role):
-    user = TRoles.get_one(id_role)
-    members = TRoles.get_user_in_group(id_role)
-    tab_usr = []
-    if members != None:
-        for usr in members:
-            tab_usr.append(usr["full_name"])
-    d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
-    d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
-    tag = [data.as_dict() for data in d_tag.all()]
-    tab_t = []
-    if tag != None:
-        for t in tag:
-            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-    Cruved = get_cruved_one(id_role)
-    fLineCruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']
-    if Cruved != []:
-        columnsCruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
-        return render_template(
-            "info_group.html",
-            elt=user,
-            members=tab_usr,
-            tag=tab_t,
-            fLineCruved=fLineCruved,
-            lineCruved=columnsCruved,
-            tableCruved=Cruved,
-            id_r=id_role,
-            id_app=Cruved[0]['id_application'],
-            pathU=config.URL_APPLICATION + '/CRUVED/update/',
-            pathUu='/'
-        )
-    else:
-        return render_template(
-            "info_group.html",
-            elt=user,
-            members=tab_usr,
-            tag=tab_t,
-            Cruved='False',
-            fLineCruved=fLineCruved
-         )
+# @route.route('group/info/<id_role>', methods=['GET', 'POST'])
+# @fnauth.check_auth(3, False, URL_REDIRECT)
+# def get_info(id_role):
+#     user = TRoles.get_one(id_role)
+#     members = TRoles.get_user_in_group(id_role)
+#     tab_usr = []
+#     if members != None:
+#         for usr in members:
+#             tab_usr.append(usr["full_name"])
+#     d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
+#     d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
+#     tag = [data.as_dict() for data in d_tag.all()]
+#     tab_t = []
+#     if tag != None:
+#         for t in tag:
+#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+#     Cruved = get_cruved_one(id_role)
+#     fLineCruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']
+#     if Cruved != []:
+#         columnsCruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
+#         return render_template(
+#             "info_group.html",
+#             elt=user,
+#             members=tab_usr,
+#             tag=tab_t,
+#             fLineCruved=fLineCruved,
+#             lineCruved=columnsCruved,
+#             tableCruved=Cruved,
+#             id_r=id_role,
+#             id_app=Cruved[0]['id_application'],
+#             pathU=config.URL_APPLICATION + '/CRUVED/update/',
+#             pathUu='/'
+#         )
+#     else:
+#         return render_template(
+#             "info_group.html",
+#             elt=user,
+#             members=tab_usr,
+#             tag=tab_t,
+#             Cruved='False',
+#             fLineCruved=fLineCruved
+#          )
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -209,7 +206,6 @@ def pops(form):
 
 
 def process(form, group):
-
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un groupe

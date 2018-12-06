@@ -1,16 +1,23 @@
-{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
-include "header.html" %} {% include "head-appli.html" %} {% block content %}
+{% extends "bootstrap/base.html" %} 
+{% import "bootstrap/wtf.html" as wtf %} 
+{% include "header.html" %} 
+{% include "head-appli.html" %} 
+{% block content %}
 
 <form method="post" class="container" novalidate>
   {{ form.hidden_tag() }} {{ form.csrf_token }}
   <h3 class="margin-neg">{{ title }}</h3>
 
   <div class="row forms card">
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="alert alert-danger" role="alert">
-      Veuillez remplir les champs obligatoires
-    </div>
-    {% endif %} {% endwith %} {{ wtf.form_field(form.nom_application) }}
+    {% with messages = get_flashed_messages() %} 
+      {% if messages %}
+        <div class="alert alert-danger" role="alert">
+          Veuillez remplir les champs obligatoires
+        </div>
+      {% endif %} 
+    {% endwith %} 
+    {{ wtf.form_field(form.nom_application) }}
+    {{ wtf.form_field(form.code_application) }}
     {{ wtf.form_field(form.desc_application) }}
     {{ wtf.form_field(form.id_parent) }}
     {{ wtf.form_field(form.submit, class="form-control btn-success") }}

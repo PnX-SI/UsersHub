@@ -9,7 +9,7 @@ db_host=localhost
 # Port du serveur PostgreSQL
 pg_port=5432
 # Nom de la base de données de l'application
-db_name=usershubdb
+db_name=referentielsdb
 # Nom de l'utilisateur propriétaire de la BDD de l'application
 user_pg=geonatuser
 # User propriétaire de la BDD de l'application

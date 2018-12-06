@@ -20,5 +20,7 @@ class Organisme(FlaskForm):
     # tel_organisme = PhoneNumberField('Numero de telephone',country_code='FI', display_format='national')
     fax_organisme = StringField('Fax')
     email_organisme = StringField('Email')
+    url_organisme = StringField('Url :')
+    url_logo = StringField('Logo (url) :')
     id_organisme = HiddenField('id')
     submit = SubmitField('Enregistrer')

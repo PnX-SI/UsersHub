@@ -12,9 +12,9 @@ from pypnusershub import routes as fnauth
 from app.env import URL_REDIRECT
 from app.t_roles import forms as t_rolesforms
 from app.models import (
-    TRoles, Bib_Organismes, CorRoles, CorRoleTag, TTags
+    TRoles, Bib_Organismes, CorRoles
 )
-from app.CRUVED.route import get_cruved_one
+# from app.CRUVED.route import get_cruved_one
 
 from config import config
 
@@ -41,8 +41,8 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Id', 'Identifiant',  'Nom', 'Prenom', 'Email',  'Organisme',  'Remarques']  # noqa
-    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
+    fLine = ['Actif', 'Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques']  # noqa
+    columns = ['active', 'id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
     tab = []
@@ -144,51 +144,50 @@ def deluser(id_role):
     return redirect(url_for('user.users'))
 
 
-@route.route('user/info/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
-def get_info(id_role):
-    user = TRoles.get_one(id_role)
-    d_group = CorRoles.get_all(recursif=True, as_model=True)
-    d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
-    group = [data.as_dict() for data in d_group.all()]
-    tab_g = []
-    if group != None:
-        for g in group:
-            tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
-    org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
-    d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
-    d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
-    tag = [data.as_dict() for data in d_tag.all()]
-    tab_t = []
-    if tag != None:
-        for t in tag:
-            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-    cruved = get_cruved_one(id_role)
-    print(cruved)
-    if not cruved:
-        id_app = None
-    else:
-        id_app = cruved[0]['id_application']
-    f_lines_cruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']  # noqa
-    columns_cruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
-    return render_template(
-        "info_user.html",
-        elt=user,
-        group=tab_g,
-        org=org,
-        tag=tab_t,
-        fLineCruved=f_lines_cruved,
-        lineCruved=columns_cruved,
-        tableCruved=cruved,
-        id_r=id_role,
-        id_app=id_app,
-        pathU=config.URL_APPLICATION + '/CRUVED/update/',
-        pathUu='/'
-    )
+# @route.route('user/info/<id_role>', methods=['GET', 'POST'])
+# @fnauth.check_auth(6, False, URL_REDIRECT)
+# def get_info(id_role):
+#     user = TRoles.get_one(id_role)
+#     d_group = CorRoles.get_all(recursif=True, as_model=True)
+#     d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
+#     group = [data.as_dict() for data in d_group.all()]
+#     tab_g = []
+#     if group != None:
+#         for g in group:
+#             tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
+#     org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
+#     d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
+#     d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
+#     tag = [data.as_dict() for data in d_tag.all()]
+#     tab_t = []
+#     if tag != None:
+#         for t in tag:
+#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+#     cruved = get_cruved_one(id_role)
+#     print(cruved)
+#     if not cruved:
+#         id_app = None
+#     else:
+#         id_app = cruved[0]['id_application']
+#     f_lines_cruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']  # noqa
+#     columns_cruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
+#     return render_template(
+#         "info_user.html",
+#         elt=user,
+#         group=tab_g,
+#         org=org,
+#         tag=tab_t,
+#         fLineCruved=f_lines_cruved,
+#         lineCruved=columns_cruved,
+#         tableCruved=cruved,
+#         id_r=id_role,
+#         id_app=id_app,
+#         pathU=config.URL_APPLICATION + '/CRUVED/update/',
+#         pathUu='/'
+#     )
 
 
 def pops(form):
-
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -203,9 +202,10 @@ def pops(form):
 def process(form, user):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire et un type de tag
+    Avec pour paramètres un formulaire et un user
     """
 
+    form.active.process_data(user['active'])
     form.id_organisme.process_data(user['id_organisme'])
     form.nom_role.process_data(user['nom_role'])
     form.prenom_role.process_data(user['prenom_role'])

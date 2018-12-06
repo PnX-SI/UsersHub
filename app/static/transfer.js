@@ -4,10 +4,6 @@ var tab_del = []
 var data_select = []
 var right = []
 
-var lala = function(){
-    console.log('lala')
-};
-
 $.ajax({
     url : url_app+ '/api/application',
     type : 'get',
@@ -41,10 +37,7 @@ function addTab(tab,table){
 
         table.append(tab[i]);
     }
-
 };
-
-
 
 var add = function(app) {
     var tab = []
@@ -59,19 +52,14 @@ var add = function(app) {
         $("#user").find("input[type=checkbox]:checked").prop('checked', false);
         var ID=$(this).parents('tr').find('td:eq(1)').html();
         tab_add.push(ID);
+        
         if (isInTabb(tab_del,ID) == true){
             tab_del.splice(tab_del.indexOf(ID),1);
             tab_add.splice(tab_add.indexOf(ID),1);
         }
-
-
-
     });
-
     var table = $('#adding_table')
     addTab(tab,table)
-
-
 };
 
 var del = function(app){
@@ -93,12 +81,9 @@ var del = function(app){
             tab_add.splice(tab_add.indexOf(ID),1);
             tab_del.splice(tab_del.indexOf(ID),1);
         }
-
     });
     var table = $('#user')
     addTab(tab,table)
-
-
 };
 
 
@@ -124,7 +109,6 @@ var get_right_delete = function(data){
             right.splice(right.indexOf(r),1)
         }
     }
-
 };
 
 var update_right = function(){
@@ -150,11 +134,10 @@ var update_right = function(){
     tab_right = []
 };
 
-
 var update = function(){
     console.log("tableau d ajout : "+ tab_add);
-    console.log("tablea de suppression : "+ tab_del );
-    var data ={}
+    console.log("tableau de suppression : "+ tab_del );
+    var data ={};
     data["tab_add"] = tab_add;
     data["tab_del"]= tab_del;
 
@@ -166,8 +149,8 @@ var update = function(){
         dataType:"json"
     });
 
-    tab_add = []
-    tab_del = []
+    tab_add = [];
+    tab_del = [];
 };
 
 function isInTabb(tab,id){
@@ -185,8 +168,6 @@ var deleteRaw = function (path){
     if (c == true)
        window.location.href = path;
 }
-
-
 
 $( document ).ready(function() {
 
@@ -208,10 +189,11 @@ $( document ).ready(function() {
                 "next":       "Suivante",
                 "previous":   "Précédente"
             },
-        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25
+            "aLengthMenu": [[10, 25, 50, 75, -1], [10, 25, 50, 75, "All"]],
+            "iDisplayLength": 25
         }
-    } );
+    });
+
     $('#adding_table').DataTable({
         "language": {
             "lengthMenu": "Afficher _MENU_ éléments par page",
@@ -226,10 +208,11 @@ $( document ).ready(function() {
                 "next":       "Suivante",
                 "previous":   "Précédente"
             },
-        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25
+            "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
+            "iDisplayLength": 25
         }
     } );
+
     $('#tri').DataTable({
         "language": {
             "lengthMenu": "Afficher _MENU_ éléments par page",
@@ -244,13 +227,9 @@ $( document ).ready(function() {
                 "next":       "Suivante",
                 "previous":   "Précédente"
             },
-        "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
-        "iDisplayLength": 25
+            "aLengthMenu": [[10,25, 50, 75, -1], [10,25, 50, 75, "All"]],
+            "iDisplayLength": 25
         }
-    } );
-
-    function test(){
-        console.log('test');
-    };
+    });
 });
 

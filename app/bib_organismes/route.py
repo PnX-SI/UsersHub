@@ -9,7 +9,7 @@ from app.env import URL_REDIRECT
 
 from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
-from app.models import Bib_Organismes, TRoles, CorOrganismeTag, TTags
+from app.models import Bib_Organismes, TRoles
 from config import config
 
 
@@ -115,25 +115,25 @@ def delete(id_organisme):
     return redirect(url_for('organisme.organisms'))
 
 
-@route.route('organism/info/<id_organisme>', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
-def get_info(id_organisme):
-    org = Bib_Organismes.get_one(id_organisme)
-    array_user = TRoles.get_all(as_model=True)
-    array_user = array_user.filter(TRoles.id_organisme == id_organisme)
-    array_user = [data.as_dict_full_name() for data in array_user.all()]
-    tab_u = []
-    for user in array_user:
-        tab_u.append(user['full_name'])
-    d_tag = CorOrganismeTag.get_all(recursif=True, as_model=True)
-    d_tag = d_tag.filter(CorOrganismeTag.id_organism == id_organisme)
-    tag = [data.as_dict() for data in d_tag.all()]
-    tab_t = []
-    if tag != None:
-        for t in tag:
-            tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
+# @route.route('organism/info/<id_organisme>', methods=['GET', 'POST'])
+# @fnauth.check_auth(3, False, URL_REDIRECT)
+# def get_info(id_organisme):
+#     org = Bib_Organismes.get_one(id_organisme)
+#     array_user = TRoles.get_all(as_model=True)
+#     array_user = array_user.filter(TRoles.id_organisme == id_organisme)
+#     array_user = [data.as_dict_full_name() for data in array_user.all()]
+#     tab_u = []
+#     for user in array_user:
+#         tab_u.append(user['full_name'])
+#     d_tag = CorOrganismeTag.get_all(recursif=True, as_model=True)
+#     d_tag = d_tag.filter(CorOrganismeTag.id_organism == id_organisme)
+#     tag = [data.as_dict() for data in d_tag.all()]
+#     tab_t = []
+#     if tag != None:
+#         for t in tag:
+#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
 
-    return render_template('info_org.html', elt=org, tab_u=tab_u, tag=tab_t)
+#     return render_template('info_org.html', elt=org, tab_u=tab_u, tag=tab_t)
 
 
 def pops(form):
@@ -160,4 +160,6 @@ def process(form, org):
     form.tel_organisme.process_data(org['tel_organisme'])
     form.fax_organisme.process_data(org['fax_organisme'])
     form.email_organisme.process_data(org['email_organisme'])
+    form.email_organisme.process_data(org['url_organisme'])
+    form.email_organisme.process_data(org['url_logo'])
     return form

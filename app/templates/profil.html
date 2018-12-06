@@ -17,8 +17,9 @@
         {% endif %} 
       {% endwith %}
 
-      {{ wtf.form_field(form.nom_role) }}
-      {{ wtf.form_field(form.desc_role) }}
+      {{ wtf.form_field(form.nom_profil) }}
+      {{ wtf.form_field(form.code_profil) }}
+      {{ wtf.form_field(form.desc_profil) }}
       {{ wtf.form_field(form.submit, class="form-control btn-success") }}
     </div>
   </form>

@@ -1,7 +1,6 @@
 from flask import current_app,Blueprint, jsonify
 from app.env import db
-from app.models import TRoles
-from app.models import Bib_Organismes
+from app.models import TRoles, Bib_Organismes
 
 
 def admin_valide(id,pw):
