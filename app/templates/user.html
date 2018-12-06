@@ -1,40 +1,25 @@
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
+include "head-appli.html" %} {% include "header.html" %} {% block content %}
 
-  {% extends "bootstrap/base.html" %}
-  {% import "bootstrap/wtf.html" as wtf %}
+<form method="POST" class="container" novalidate>
+  <h3 class="margin-neg">{{ title }}</h3>
 
-    {% include "head-appli.html" %}
-    {% include "header.html" %}
+  {{ form.hidden_tag() }}
 
+  <div class="row forms card">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alert alert-danger" role="alert">
+      Veuillez remplir les champs obligatoires
+    </div>
+    {% endif %} {% endwith %}
 
-{% block content %}
-
-    <form method="POST" class="container" novalidate>
-      <h3 class="margin-neg">{{ title }}</h3>
-
-      {{ form.hidden_tag() }}
-
-      <div class="row forms card">
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-               <div class="alert alert-danger" role="alert">
-                    Veuillez remplir les champs obligatoires
-               </div>
-           {% endif %}
-       {% endwith %}
-
-        {{ wtf.form_field(form.nom_role) }}
-        {{ wtf.form_field(form.prenom_role) }}
-        {{ wtf.form_field(form.identifiant) }}
-        {{ wtf.form_field(form.id_organisme, id="inputGroupSelect01") }}
-        {{ wtf.form_field(form.a_groupe) }}
-        {{ wtf.form_field(form.pass_plus) }}
-        {{ wtf.form_field(form.mdpconf) }}
-        {{ wtf.form_field(form.email) }}
-        {{ wtf.form_field(form.remarques) }}
-        {{ wtf.form_field(form.submit, class="btn btn-success") }}
-
-      </div>
-    </form>
+    {{ wtf.form_field(form.nom_role) }} {{ wtf.form_field(form.prenom_role) }}
+    {{ wtf.form_field(form.identifiant) }} {{ wtf.form_field(form.email) }}
+    {{ wtf.form_field(form.id_organisme, id="inputGroupSelect01") }}
+    {{ wtf.form_field(form.a_groupe) }} {{ wtf.form_field(form.pass_plus) }}
+    {{ wtf.form_field(form.mdpconf) }} {{ wtf.form_field(form.remarques) }}
+    {{ wtf.form_field(form.submit, class="btn btn-success") }}
+  </div>
+</form>
 
 {% endblock %}

@@ -16,7 +16,7 @@ class Organisme(FlaskForm):
     adresse_organisme = StringField('Adresse')
     cp_organisme = StringField('Code Postal')
     ville_organisme = StringField ('Ville')
-    tel_organisme = StringField('Tel :')
+    tel_organisme = StringField('Téléphone')
     # tel_organisme = PhoneNumberField('Numero de telephone',country_code='FI', display_format='national')
     fax_organisme = StringField('Fax')
     email_organisme = StringField('Email')
