@@ -12,7 +12,7 @@ SELECT pg_catalog.setval('t_applications_id_application_seq', (SELECT max(id_app
 
 INSERT INTO t_profils (id_profil, code_profil, nom_profil, desc_profil) VALUES
 (0, '0', 'Aucun', 'Aucun droit')
-,(1, '1', 'Utilisateur', 'Ne peut que consulter/ou acceder')
+,(1, '1', 'Lecteur', 'Ne peut que consulter/ou acceder')
 ,(2, '2', 'Rédacteur', 'Il possède des droit d''écriture pour créer des enregistrements')
 ,(3, '3', 'Référent', 'Utilisateur ayant des droits complémentaires au rédacteur (par exemple exporter des données ou autre)')
 ,(4, '4', 'Modérateur', 'Peu utilisé')
