@@ -201,17 +201,6 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
-DO
-$$
-BEGIN
--- insertion des utilisateurs qui avaient des droits dans cor_app_privilege dans cor_role_app_profil
-INSERT INTO utilisateurs.cor_role_app_profil
-SELECT DISTINCT id_role, app.id_application, 1
-FROM utilisateurs.cor_app_privileges cor
-JOIN utilisateurs.t_applications app ON app.id_application = cor.id_application
-WHERE nom_application ILIKE 'geonature';
-END
-$$;
 
 
 
