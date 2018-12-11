@@ -185,6 +185,11 @@ END
 $$;
 SELECT setval('utilisateurs.t_profils_id_profil_seq', (SELECT max(id_profil)+1 FROM utilisateurs.t_profils), false);
 
+UPDATE utilisateurs.t_profils 
+SET nom_profil = 'Lecteur' 
+,desc_profil = 'Ne peut que consulter/ou acceder' 
+WHERE code_profil = '1';
+
 DO
 $$
 BEGIN
