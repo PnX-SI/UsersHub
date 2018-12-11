@@ -84,10 +84,10 @@
                                     {% endif%}   
                                 {% endfor %}         
                                 {% if app == 'True'%}
-                                    <td class = "right">
+                                    <td class = "profil">
                                         <select class="custom-select", id="inputGroupSelect02">
                                             {% for d in elt['value'] %}
-                                                {% if d[0] == elt['id_tag']%}
+                                                {% if d[0] == elt['id_profil']%}
                                                     <option selected value= {{d[0]}} > {{d[1]}}</option>
                                                 {%else%}
                                                     <option value= {{d[0]}} > {{d[1]}}</option>

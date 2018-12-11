@@ -8,10 +8,6 @@ URLS_COR = ['http://localhost:5000']
 
 SECRET_KEY = 'super secret key'
 
-""" ID of application Geonature"""
-
-ID_GEONATURE = 3
-
 """ ID of application Userhub"""
 
 ID_APP = 1

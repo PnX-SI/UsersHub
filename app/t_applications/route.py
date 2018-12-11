@@ -5,7 +5,10 @@ from flask import (
 
 from app.env import URL_REDIRECT
 from app.t_applications import forms as t_applicationsforms
-from app.models import TApplications, TProfils, CorProfilForApp
+from app.models import (
+    TApplications, TRoles, TProfils, 
+    CorProfilForApp, CorRoleAppProfil
+)
 
 from config import config
 
@@ -29,8 +32,7 @@ def applications():
                                             - une clé (clé primaire dans la plupart des cas) --> key
                                             - un nom (nom de la table) pour le bouton ajout --> name
                                             - un nom de liste --> name_list
-                                            - empeche l'ajout de droits à des utilisateurs pour l'application géonature ou les applications filles --> id_geonature
-                                            - ajoute une colonne de bouton ('True doit être de type string) --> app_geonature
+                                            - ajoute une colonne de bouton ('True doit être de type string) --> permissions
                                             - nom affiché sur le bouton --> Members
 
     """
@@ -55,10 +57,12 @@ def applications():
         pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
         pathP=config.URL_APPLICATION + "/application/profils/",
+        pathR=config.URL_APPLICATION + "/application/rights/",
         name="une application",
         name_list="Applications",
-        id_geonature=config.ID_GEONATURE,
-        app_geonature="True",
+        otherCol='True',
+        permissions="True",
+        Right="Permissions",
         Members="Profils"
     )
 
@@ -141,8 +145,8 @@ def profils(id_application):
     app = TApplications.get_one(id_application)
     if request.method == 'POST':
         data = request.get_json()
-        new_profils = data["tab_add"] #TODO in js
-        delete_profils = data["tab_del"] #TODO in js
+        new_profils = data["tab_add"]
+        delete_profils = data["tab_del"]
         CorProfilForApp.add_cor(id_application, new_profils)
         CorProfilForApp.del_cor(id_application, delete_profils)
     return render_template(
@@ -152,6 +156,39 @@ def profils(id_application):
         table=profils_out_app,
         table2=profils_in_app,
         info="Profils utilisables dans l'application  '" + app['nom_application'] + '"'
+    )
+
+
+@route.route('application/rights/<id_application>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def rights(id_application):
+    """
+    Route affichant le formulaire permettant de définir les permission des utilisateurs.
+    Avec pour paramètre un id d'application
+    Retourne un template avec pour paramètres:
+        - une entête des tableaux --> fLine
+        - le nom des colonnes de la base --> data
+        - liste des roles sans permissions mais disponibles --> table
+        - liste des roles avec des permissions --> table2
+    """
+    users_in_app = TRoles.get_user_profil_in_app(id_application)
+    users_out_app = TRoles.get_user_profil_out_app(id_application)
+    header = ['ID', 'Nom']
+    data = ['id_role', 'full_name']
+    app = TApplications.get_one(id_application)
+    if request.method == 'POST':
+        data = request.get_json()
+        new_users = data["tab_add"]
+        delete_users = data["tab_del"]
+        CorRoleAppProfil.add_cor(id_application, new_users)
+        CorRoleAppProfil.del_cor(id_application, delete_users)
+    return render_template(
+        'tobelong.html',
+        fLine=header,
+        data=data,
+        table=users_out_app,
+        table2=users_in_app,
+        info="Permissions dans l'application  '" + app['nom_application'] + '"'
     )
 
 

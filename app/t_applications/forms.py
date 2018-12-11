@@ -16,9 +16,9 @@ class Application(FlaskForm):
     id_application = HiddenField('id')
     submit = SubmitField('Enregistrer')
     
-class AppRight(FlaskForm):
+class AppProfil(FlaskForm):
     """
     Classe du formulaire de droit d'un role pour une appli
     """
 
-    right = SelectField('Droit application',coerce=int ,choices = [])
+    profil = SelectField('Profil',coerce=int ,choices = [])

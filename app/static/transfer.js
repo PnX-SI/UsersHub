@@ -2,7 +2,7 @@
 var tab_add = []
 var tab_del = []
 var data_select = []
-var right = []
+var profil = []
 
 $.ajax({
     url : url_app+ '/api/application',
@@ -22,19 +22,17 @@ $.ajax({
 
 
 function fill_select(){
-    td_right = '<td class = "right"><select class="custom-select", id="inputGroupSelect02">'
+    td_profil = '<td class = "profil"><select class="custom-select", id="inputGroupSelect02">'
     for(var i = 0; i< data_select.length; i++)
     {
-        td_right = td_right + '<option value="'+ data_select[i]["id_tag"]+'">'+data_select[i]["tag_name"]+'</option>'
+        td_profil = td_profil + '<option value="'+ data_select[i]["id_tag"]+'">'+data_select[i]["tag_name"]+'</option>'
     }
-    td_right = td_right + '</select></td>'
-    return td_right
+    td_profil = td_profil + '</select></td>'
+    return td_profil
 };
 
 function addTab(tab,table){
-    // table.find("input[type=checkbox]").attr('checked', false);
     for(var i = 0; i<tab.length;i++){
-
         table.append(tab[i]);
     }
 };
@@ -67,10 +65,10 @@ var del = function(app){
     $('#adding_table input[type="checkbox"]:checked').each(function(){
         var Row = $(this).parents('tr');
         var ID=$(this).parents('tr').find('td:eq(1)').html();
-        var RIGHT = $(this).parents('tr').find("option:selected").val()
+        var PROFIL = $(this).parents('tr').find("option:selected").val()
         if (app != null){
-            right.push({id_role : ID, id_right:RIGHT })
-            Row.find('.right').remove()
+            profil.push({id_role : ID, id_profil:PROFIL })
+            Row.find('.profil').remove()
 
         }
         var Row = $(this).parents('tr');
@@ -87,15 +85,15 @@ var del = function(app){
 };
 
 
-var get_right = function(data){
+var get_profil = function(data){
     var tab = []
     data_id = data['tab_add']
     $('#adding_table tr').each(function(){
         var ID=$(this).find('td:eq(1)').html();
-        var RIGHT = $(this).find("option:selected").val();
+        var PROFIL = $(this).find("option:selected").val();
         for( d in data_id){
             if (ID == data_id[d]){
-                tab.push({id_role : ID, id_right: RIGHT});
+                tab.push({id_role : ID, id_profil: PROFIL});
 
             }
         }
@@ -103,10 +101,10 @@ var get_right = function(data){
     return tab
 };
 
-var get_right_delete = function(data){
-    for(r in right){
+var get_profil_delete = function(data){
+    for(r in profil){
         if(isInTabb(data['tab_del'],r['id_role']) == true){
-            right.splice(right.indexOf(r),1)
+            profil.splice(profil.indexOf(r),1)
         }
     }
 };
@@ -117,9 +115,9 @@ var update_right = function(){
     var data ={}
     data["tab_add"] = tab_add;
     data["tab_del"]= tab_del;
-    data["tab_add"] = get_right(data)
-    get_right_delete(data)
-    data["tab_del"] = right
+    data["tab_add"] = get_profil(data)
+    get_profil_delete(data)
+    data["tab_del"] = profil
 
     $.ajax({
         url : $(location).attr('href'),
@@ -131,7 +129,7 @@ var update_right = function(){
 
     tab_add = []
     tab_del = []
-    tab_right = []
+    tab_profil = []
 };
 
 var update = function(){
