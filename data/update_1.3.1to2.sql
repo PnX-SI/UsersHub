@@ -320,7 +320,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_menu AS
 
 -- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
 DROP VIEW utilisateurs.v_userslist_forall_applications;
-CREATE OR REPLACE VIEW v_userslist_forall_applications AS 
+CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
  SELECT a.groupe,
     a.id_role,
     a.identifiant,
@@ -588,25 +588,25 @@ ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
 
 
 --Rechercher les vues qui doivent être réécrites car pointant sur les tables déplacées dans le schéma save
-SELECT dependent_ns.nspname as dependent_schema
-, dependent_view.relname as dependent_view 
-, source_ns.nspname as source_schema
-, source_table.relname as source_table
-, pg_attribute.attname as column_name
-FROM pg_depend 
-JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid 
-JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid 
-JOIN pg_class as source_table ON pg_depend.refobjid = source_table.oid 
-JOIN pg_attribute ON pg_depend.refobjid = pg_attribute.attrelid 
-    AND pg_depend.refobjsubid = pg_attribute.attnum 
-JOIN pg_namespace dependent_ns ON dependent_ns.oid = dependent_view.relnamespace
-JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
-WHERE 
-source_ns.nspname = 'save'
-AND source_table.relname IN('cor_role_menu', 't_menus', 'bib_droits', 'cor_role_droit_application')
-AND pg_attribute.attnum > 0 
---AND pg_attribute.attname = 'my_column'
-ORDER BY 1,2;
+-- SELECT dependent_ns.nspname as dependent_schema
+-- , dependent_view.relname as dependent_view 
+-- , source_ns.nspname as source_schema
+-- , source_table.relname as source_table
+-- , pg_attribute.attname as column_name
+-- FROM pg_depend 
+-- JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid 
+-- JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid 
+-- JOIN pg_class as source_table ON pg_depend.refobjid = source_table.oid 
+-- JOIN pg_attribute ON pg_depend.refobjid = pg_attribute.attrelid 
+--     AND pg_depend.refobjsubid = pg_attribute.attnum 
+-- JOIN pg_namespace dependent_ns ON dependent_ns.oid = dependent_view.relnamespace
+-- JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
+-- WHERE 
+-- source_ns.nspname = 'save'
+-- AND source_table.relname IN('cor_role_menu', 't_menus', 'bib_droits', 'cor_role_droit_application')
+-- AND pg_attribute.attnum > 0 
+-- --AND pg_attribute.attname = 'my_column'
+-- ORDER BY 1,2;
 
 
 --TABLES SUPPRIMABLES (dans cet ordre). A la discretion de chacun
