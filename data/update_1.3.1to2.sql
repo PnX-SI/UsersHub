@@ -145,12 +145,6 @@ EXCEPTION WHEN unique_violation  THEN
 END
 $$;
 
---Cas particulier d'Occtax qui n'a pas d'enregistrement dans t_menus de la v1
-INSERT INTO utilisateurs.cor_role_liste (id_role, id_liste)
-SELECT crt.id_role, (SELECT id_liste FROM utilisateurs.t_listes WHERE code_liste = 'obsocctax') AS id_liste 
-FROM save.cor_role_tag crt
-WHERE crt.id_tag = (SELECT id_tag FROM utilisateurs.t_tags WHERE tag_name ILIKE 'observateurs occtax');
---TODO pour chaque module comme Occtax. A creuser
 
 -- Vue recréant l'equivalent de t_menus
 CREATE OR REPLACE VIEW utilisateurs.t_menus AS 
