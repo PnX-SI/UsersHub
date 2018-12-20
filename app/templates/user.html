@@ -16,7 +16,9 @@
       {% with messages = get_flashed_messages() %}
           {% if messages %}
             <div class="alert alert-danger" role="alert">
-                Veuillez remplir les champs obligatoires
+                 {% for mess in messages %}
+                    {{ mess }}
+                 {% endfor %}
             </div>
           {% endif %}
       {% endwith %}

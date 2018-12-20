@@ -59,10 +59,10 @@ def groups():
     )
 
 
-@route.route('group/add/new', defaults={'id_role': None}, methods=['GET', 'POST'])
+@route.route('group/add/new', methods=['GET', 'POST'])
 @route.route('group/update/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-def addorupdate(id_role):
+def addorupdate(id_role=None):
 
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un groupe
@@ -70,7 +70,6 @@ def addorupdate(id_role):
     Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_role
     Une fois le formulaire validé on retourne une redirection vers la liste de groupe
     """
-
     form = groupeforms.Group()
     form.groupe.process_data(True)
     if id_role == None:
@@ -82,8 +81,6 @@ def addorupdate(id_role):
                 return redirect(url_for('groupe.groups'))
             else:
                 errors = form.errors
-                if(errors['nom_role'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
         return render_template('group.html', form=form, title="Formulaire Groupe")
     else:
         group = TRoles.get_one(id_role)
@@ -97,8 +94,7 @@ def addorupdate(id_role):
                 return redirect(url_for('groupe.groups'))
             else:
                 errors = form.errors
-                if(errors['nom_role'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                flash(errors)
         return render_template('group.html', form=form, title="Formulaire Groupe")
 
 

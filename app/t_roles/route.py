@@ -67,11 +67,10 @@ def users():
     )
 
 
-@route.route('user/add/new', defaults={'id_role': None}, methods=['GET', 'POST'])
+@route.route('user/add/new', methods=['GET', 'POST'])
 @route.route('user/update/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-def addorupdate(id_role):
-
+def addorupdate(id_role=None):
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un utilisateurs
     L'envoie du formulaire permet l'ajout ou la mise à jour de l'utilisateur dans la base
@@ -96,20 +95,19 @@ def addorupdate(id_role):
             form_user['groupe'] = False
             form_user.pop('id_role')
 
-            if form.pass_plus.data:
-                try:
-                    (
-                        form_user['pass_plus'], form_user['pass_md5']
-                    ) = TRoles.set_password(
-                        form.pass_plus.data, form.mdpconf.data
-                    )
-                except Exception as exp:
-                    flash(str(exp))
-                    return render_template(
-                        'user.html', form=form, title="Formulaire Utilisateur"
-                    )
-            else:
-                form_user.pop('pass_plus')
+            try:
+                (
+                    form_user['pass_plus'], form_user['pass_md5']
+                ) = TRoles.set_password(
+                    form.pass_plus.data, form.mdpconf.data
+                )
+            except Exception as exp:
+                flash(str(exp))
+                return render_template(
+                    'user.html', form=form, title="Formulaire Utilisateur"
+                )
+            # pop pass_plus
+            form_user.pop('pass_plus')
 
             if id_role is not None:
                 form_user['id_role'] = user['id_role']
@@ -119,15 +117,7 @@ def addorupdate(id_role):
             return redirect(url_for('user.users'))
 
         else:
-            errors = form.errors
-            flash(errors)
-            # for r in errors:
-            #     print(r)
-            # if('nom_role' in errors):
-            #     flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
-            # else:
-            #     flash(','.join([str(errors[k]) for k in errors]))
-
+            flash(form.errors)
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur"
     )
