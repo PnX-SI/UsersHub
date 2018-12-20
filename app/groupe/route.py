@@ -1,8 +1,9 @@
 from flask import (
     redirect, url_for, render_template,
-    Blueprint, request, flash
+    Blueprint, request, flash, jsonify
 )
 from pypnusershub import routes as fnauth
+
 
 from app.env import URL_REDIRECT
 from app.groupe import forms as groupeforms
@@ -121,8 +122,12 @@ def membres(id_groupe):
         data = request.get_json()
         new_users_in_group = data["tab_add"]
         new_users_out_group = data["tab_del"]
-        CorRoles.add_cor(id_groupe, new_users_in_group)
-        CorRoles.del_cor(id_groupe, new_users_out_group)
+        try:
+            CorRoles.add_cor(id_groupe, new_users_in_group)
+            CorRoles.del_cor(id_groupe, new_users_out_group)
+        except Exception as e:
+            return jsonify(str(e)), 500
+        return jsonify({'redirect': url_for('groupe.groups')}), 200
     return render_template(
         "tobelong.html",
         fLine=header,
