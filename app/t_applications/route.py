@@ -37,8 +37,8 @@ def applications():
 
     """
 
-    fLine = ['ID', 'Code', 'Nom', 'Description', ' Parent']
-    columns = ['id_application', 'code_application', 'nom_application', 'desc_application', 'app_parent']
+    fLine = ['ID', 'Code', 'Nom', 'Description']
+    columns = ['id_application', 'code_application', 'nom_application', 'desc_application']
     contents = TApplications.get_all()
     for data in contents:
         if data['id_parent'] != None:
@@ -61,9 +61,8 @@ def applications():
         name="une application",
         name_list="Applications",
         otherCol='True',
-        permissions="True",
-        Right="Permissions",
-        Members="Profils"
+        permissions="False",
+        Members="Gérer les utilisateurs"
     )
 
 
@@ -111,7 +110,12 @@ def addorupdate(id_application):
                 form_app['id_application'] = application['id_application']
                 TApplications.update(form_app)
                 return redirect(url_for('application.applications'))
-        return render_template('application.html', form=form, title="Formulaire Application")
+        return render_template(
+            'application.html',
+             form=form,
+             title="Formulaire Application",
+             id_application=id_application
+             )
 
 
 @route.route('application/delete/<id_application>', methods=['GET', 'POST'])

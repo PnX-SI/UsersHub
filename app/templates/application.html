@@ -4,9 +4,16 @@
 {% include "head-appli.html" %} 
 {% block content %}
 
-<form method="post" class="container" novalidate>
+<div class=container>
+
+
+<form method="post"  novalidate>
   {{ form.hidden_tag() }} {{ form.csrf_token }}
-  <h3 class="margin-neg">{{ title }}</h3>
+  <h3 class="margin-neg">{{ title }}
+    {% if id_application %}
+    <a href=" {{url_for('application.profils', id_application=id_application)}} "> <button  class="btn btn-primary"> Editer les profils disponible dans l'application</button> </a>
+    {% endif %}
+  </h3>
 
   <div class="row forms card">
     {% with messages = get_flashed_messages() %} 
@@ -23,4 +30,6 @@
     {{ wtf.form_field(form.submit, class="form-control btn-success") }}
   </div>
 </form>
+
+</div>
 {% endblock %}
