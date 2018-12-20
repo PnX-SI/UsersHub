@@ -1,6 +1,6 @@
 from flask import (
     Flask, redirect, url_for, render_template,
-    Blueprint, request, session, flash
+    Blueprint, request, session, flash, current_app
 )
 from app import genericRepository
 from app.auth import forms as authforms
@@ -17,4 +17,4 @@ route = Blueprint('login', __name__)
 
 @route.route('/', methods=['GET'])
 def auth():
-    return render_template('login.html', id_app=1)
+    return render_template('login.html', id_app=current_app.config['ID_APP'])

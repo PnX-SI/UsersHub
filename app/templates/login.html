@@ -38,7 +38,6 @@ $(window).keypress(function(event) {
 })
 
 login = function() {
-    console.log('enter in post')
     $("#login-error").hide();
     $.post({
         url : '{{url_application}}' + '/pypn/auth/login',

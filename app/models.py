@@ -216,6 +216,18 @@ class TRoles(GenericRepository):
             choices.append((-1,'Aucun'))
         return choices
 
+    @classmethod
+    def get_users_groupe(cls, id_role):
+        """
+        Get all groups of a user
+        Parameters:
+            id_role (int): the user's id
+        Return:
+            Array<TRoles>
+        """
+        cor_role_query = db.session.query(CorRoles.id_role_groupe).filter(CorRoles.id_role_utilisateur == id_role)
+        return db.session.query(TRoles).filter(TRoles.id_role.in_(cor_role_query)).all()
+
 
     def get_full_name(self):
         """

@@ -3,70 +3,73 @@
    {% include "header.html" %}   
    <body>
         {% include "head-appli.html" %}
-        <div class = "row forms" >
-            <h2>{{info}}</h2>
-            </br></br>
-        </div>
-
-        <div class="row forms">
-            <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-                <table  id="user" class="table table-bordered table-sm" >
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            {% for name in fLine %}
-                                <th scope="col">{{name}}</th>
-                            {% endfor %}
-                        </tr> 
-                    </thead>
-                    <tbody>
-                        {% for elt in table %}
+        <div class="container card" style="margin-top: 15px;">
+            <div class = "row forms" >
+                <h2>{{info}}</h2>
+                </br></br>
+            </div>
+    
+            <div class="row forms">
+                <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
+                    <table  id="user" class="table table-bordered table-sm" >
+                        <thead>
                             <tr>
-                                 <td><input id="checkBox" type="checkbox"> </td>    
-                                {% for name in data %}
-                                    <td >{{elt[name]}}</td>
-                                {% endfor %} 
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>   
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <p><br/><br/><br/></p>
-                <button onclick="add()" type="button" class="btn btn-light " >
-                    <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
-                </button>
-                <p></p>
-                <button onclick="del()" type="button" class="btn btn-light " >
-                    <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
-                </button>                    
-            </div>
-
-            <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
-                <table  id="adding_table"  class="table table-bordered table-sm" data-filtering="true" >
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            {% for name in fLine %}
-                                <th scope="col" >{{name}}</th>
-                            {% endfor %}
-                        </tr> 
-                    </thead>
-                    <tbody>
-                        {% for elt in table2 %}
-                            <tr>   
-                                <td><input id="checkBox" type="checkbox"> </td>
-                                {% for name in data %}  
-                                    <td >{{elt[name]}}</td>
+                                <th scope="col">#</th>
+                                {% for name in fLine %}
+                                    <th scope="col">{{name}}</th>
                                 {% endfor %}
-                            </tr>
-                        {%endfor%}   
-                    </tbody>
-                </table>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for elt in table %}
+                                <tr>
+                                     <td><input id="checkBox" type="checkbox"> </td>    
+                                    {% for name in data %}
+                                        <td >{{elt[name]}}</td>
+                                    {% endfor %} 
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>   
+                </div>
+                
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <p><br/><br/><br/></p>
+                    <button onclick="add()" type="button" class="btn btn-light " >
+                        <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
+                    </button>
+                    <p></p>
+                    <button onclick="del()" type="button" class="btn btn-light " >
+                        <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
+                    </button>                    
+                </div>
+    
+                <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
+                    <table  id="adding_table"  class="table table-bordered table-sm" data-filtering="true" >
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                {% for name in fLine %}
+                                    <th scope="col" >{{name}}</th>
+                                {% endfor %}
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {% for elt in table2 %}
+                                <tr>   
+                                    <td><input id="checkBox" type="checkbox"> </td>
+                                    {% for name in data %}  
+                                        <td >{{elt[name]}}</td>
+                                    {% endfor %}
+                                </tr>
+                            {%endfor%}   
+                        </tbody>
+                    </table>
+                </div>
+                <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
             </div>
-            <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
         </div>
+        
     </body>
 </html>
     

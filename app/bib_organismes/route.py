@@ -59,7 +59,7 @@ def organisms():
         pathA=config.URL_APPLICATION + '/organism/add/new',
         name="un organisme",
         name_list="Organismes",
-        see='True'
+        see='False'
     )
 
 

@@ -41,22 +41,21 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Actif', 'Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques']  # noqa
-    columns = ['active', 'id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques']  # noqa
+    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif']  # noqa
+    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
     tab = []
     for data in contents:
-        org = data
-        org['nom_organisme'] = data['organisme_rel']['nom_organisme']
-        tab.append(org)
+        data['nom_organisme'] = data['organisme_rel']['nom_organisme']
+        tab.append(data)
 
     return render_template(
         "table_database.html",
         fLine=fLine,
         line=columns,
         table=tab,
-        see="True",
+        see="False",
         key="id_role",
         pathI=config.URL_APPLICATION + "/user/info/",
         pathU=config.URL_APPLICATION + "/user/update/",
@@ -86,8 +85,10 @@ def addorupdate(id_role=None):
 
     if id_role is not None:
         user = TRoles.get_one(id_role)
+        # format group to prepfil the form
+        formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
         if request.method == 'GET':
-            form = process(form, user)
+            form = process(form, user, formated_groups)
 
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
@@ -95,19 +96,22 @@ def addorupdate(id_role=None):
             form_user['groupe'] = False
             form_user.pop('id_role')
 
-            try:
-                (
-                    form_user['pass_plus'], form_user['pass_md5']
-                ) = TRoles.set_password(
-                    form.pass_plus.data, form.mdpconf.data
-                )
-            except Exception as exp:
-                flash(str(exp))
-                return render_template(
-                    'user.html', form=form, title="Formulaire Utilisateur"
-                )
-            # pop pass_plus
-            form_user.pop('pass_plus')
+            # if a password is set
+            # check they are the same
+            if form.pass_plus.data:
+                try:
+                    (
+                        form_user['pass_plus'], form_user['pass_md5']
+                    ) = TRoles.set_password(
+                        form.pass_plus.data, form.mdpconf.data
+                    )
+                except Exception as exp:
+                    flash(str(exp))
+                    return render_template(
+                        'user.html', form=form, title="Formulaire Utilisateur"
+                    )
+                # pop pass_plus
+                form_user.pop('pass_plus')
 
             if id_role is not None:
                 form_user['id_role'] = user['id_role']
@@ -119,7 +123,7 @@ def addorupdate(id_role=None):
         else:
             flash(form.errors)
     return render_template(
-        'user.html', form=form, title="Formulaire Utilisateur"
+        'user.html', form=form, title="Formulaire Utilisateur", id_role=id_role
     )
 
 
@@ -189,7 +193,7 @@ def pops(form):
     return form
 
 
-def process(form, user):
+def process(form, user, groups):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un user
@@ -202,4 +206,5 @@ def process(form, user):
     form.email.process_data(user['email'])
     form.remarques.process_data(user['remarques'])
     form.identifiant.process_data(user['identifiant'])
+    form.a_groupe.process_data(groups)
     return form

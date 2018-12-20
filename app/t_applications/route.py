@@ -159,7 +159,7 @@ def profils(id_application):
         data=data,
         table=profils_out_app,
         table2=profils_in_app,
-        info="Profils utilisables dans l'application  '" + app['nom_application'] + '"'
+        info="Profils utilisables dans l'application " + app['nom_application']
     )
 
 
