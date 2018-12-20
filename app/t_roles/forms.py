@@ -17,16 +17,20 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class Utilisateur(FlaskForm):
-    active = BooleanField('Actif', validators=[DataRequired()], default=True, description='Utilisateur actif ?')
-    nom_role = StringField('Nom', validators=[DataRequired()])
+    active = BooleanField(
+        'Actif',
+        validators=[DataRequired(message='Ce champ est obligatoire')],
+        default=True
+    )
+    nom_role = StringField('Nom', validators=[DataRequired(message='Ce champ est obligatoire')])
     prenom_role = StringField('Prenom')
     desc_role = TextAreaField('Prenom')
     id_organisme = SelectField('Organisme', coerce=int, choices=[], default=-1)
     a_groupe = SelectMultipleField('Groupe', choices=[], coerce=int)
-    identifiant = StringField('Identifiant', validators=[DataRequired()])
-    pass_plus = PasswordField('Mot de passe', validators=[DataRequired()])
-    mdpconf = PasswordField('Confirmation', validators=[DataRequired()])
-    email = StringField('E-mail', validators=[validators.Optional(), Email()])
+    identifiant = StringField('Identifiant', validators=[DataRequired(message='Ce champ est obligatoire')])
+    pass_plus = PasswordField('Mot de passe', validators=[DataRequired(message='Ce champ est obligatoire')])
+    mdpconf = PasswordField('Confirmation', validators=[DataRequired(message='Ce champ est obligatoire')])
+    email = StringField('E-mail', validators=[validators.Optional(), Email(message="L'email est incorect")])
     groupe = HiddenField('groupe', default=None)
     remarques = TextAreaField('Commentaire')
     id_role = HiddenField('id')
