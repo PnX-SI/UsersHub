@@ -56,7 +56,7 @@ def groups():
         name_list="Groupes",
         otherCol='True',
         Members="Membres",
-        see='True'
+        see='False'
     )
 
 
@@ -167,7 +167,6 @@ def delete(id_groupe):
 #     if tag != None:
 #         for t in tag:
 #             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-#     Cruved = get_cruved_one(id_role)
 #     fLineCruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']
 #     if Cruved != []:
 #         columnsCruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']

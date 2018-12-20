@@ -50,7 +50,7 @@ def lists():
         name_list="Listes",
         otherCol='True',
         Members="Membres",
-        see='True'
+        see='False'
     )
 
 
