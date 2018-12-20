@@ -1,3 +1,7 @@
+"""
+Route des Organismes
+"""
+
 from flask import (
     Blueprint, redirect, url_for, render_template,
     request, flash
@@ -14,10 +18,6 @@ from config import config
 
 
 route = Blueprint('organisme', __name__)
-
-"""
-Route des Organismes
-"""
 
 
 @route.route('organisms/list', methods=['GET', 'POST'])
@@ -89,7 +89,8 @@ def addorupdate(id_organisme):
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method == 'GET':
-            form = process(form, org)
+            print(org)
+            form = bib_organismeforms.Organisme(**org)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_org = pops(form.data)
@@ -144,22 +145,4 @@ def pops(form):
     """
     form.pop('submit')
     form.pop('csrf_token')
-    return form
-
-def process(form, org):
-
-    """
-    Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire et un organisme
-    """
-
-    form.nom_organisme.process_data(org['nom_organisme'])
-    form.cp_organisme.process_data(org['cp_organisme'])
-    form.adresse_organisme.process_data(org['adresse_organisme'])
-    form.ville_organisme.process_data(org['ville_organisme'])
-    form.tel_organisme.process_data(org['tel_organisme'])
-    form.fax_organisme.process_data(org['fax_organisme'])
-    form.email_organisme.process_data(org['email_organisme'])
-    form.email_organisme.process_data(org['url_organisme'])
-    form.email_organisme.process_data(org['url_logo'])
     return form

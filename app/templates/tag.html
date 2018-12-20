@@ -9,7 +9,7 @@ include "header.html" %} {% include "head-appli.html" %} {% block content %}
   <div class="row forms card">
     {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="alert alert-danger" role="alert">
-      Veuillez remplir les champs obligatoires
+      Certains champs contiennent des erreurs
     </div>
     {% endif %} {% endwith %}
 
