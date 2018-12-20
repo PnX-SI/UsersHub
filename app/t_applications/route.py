@@ -56,13 +56,12 @@ def applications():
         pathU=config.URL_APPLICATION + "/application/update/",
         pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
-        pathP=config.URL_APPLICATION + "/application/profils/",
-        pathR=config.URL_APPLICATION + "/application/rights/",
+        pathP=config.URL_APPLICATION + "/application/rights/",
         name="une application",
         name_list="Applications",
         otherCol='True',
+        Members="Gérer les utilisateurs",
         permissions="False",
-        Members="Gérer les utilisateurs"
     )
 
 
@@ -176,6 +175,12 @@ def rights(id_application):
         - liste des roles avec des permissions --> table2
     """
     users_in_app = TRoles.get_user_profil_in_app(id_application)
+    profils_in_app = [
+        (profil.id_profil, profil.nom_profil)
+        for profil in  TProfils.get_profils_in_app(id_application)
+    ]
+    for user in users_in_app:
+        print(user)
     users_out_app = TRoles.get_user_profil_out_app(id_application)
     header = ['ID', 'Nom']
     data = ['id_role', 'full_name']
@@ -192,7 +197,9 @@ def rights(id_application):
         data=data,
         table=users_out_app,
         table2=users_in_app,
-        info="Permissions dans l'application  '" + app['nom_application'] + '"'
+        info="Permissions dans l'application " + app['nom_application'],
+        profils_in_app=profils_in_app,
+        app='True'
     )
 
 

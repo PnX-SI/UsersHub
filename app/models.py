@@ -329,20 +329,31 @@ class TRoles(GenericRepository):
         return data
 
     @classmethod
-    def get_user_profil_in_app(cls,id_application):
+    def get_user_profil_in_app(cls, id_application):
 
         """
         Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
         Ne retourne que les utilisateurs actifs
-        """
-
-        q = db.session.query(cls).filter(cls.active == True)
-        q = q.order_by(desc(cls.groupe))
-        q = q.join(CorRoleAppProfil, cls.id_role == CorRoleAppProfil.id_role)
-        q = q.join(TProfils, TProfils.id_profil == CorRoleAppProfil.id_profil)
-        q = q.filter(CorRoleAppProfil.id_application == id_application)
-        return [data.as_dict_full_name() for data in q.all()]
+        """   
+        # get the user
+        data = db.session.query(
+            cls, CorRoleAppProfil
+        ).join(
+            CorRoleAppProfil, cls.id_role == CorRoleAppProfil.id_role
+        ).filter(
+            cls.active == True
+        ).filter(
+            CorRoleAppProfil.id_application == id_application
+        ).order_by(
+            desc(cls.groupe)
+        ).all()
+        user_with_profil = []
+        for d in data:
+            user = d[0].as_dict_full_name()
+            user['id_profil'] = d[1].id_profil
+            user_with_profil.append(user)
+        return user_with_profil
 
     @classmethod
     def get_user_profil_out_app(cls,id_application):
@@ -468,10 +479,20 @@ class TProfils(GenericRepository):
         Avec pour paramètre un id de l'application
         """
 
-        q = db.session.query(cls)
-        q = q.join(CorProfilForApp)
-        q = q.filter(id_application == CorProfilForApp.id_application)
-        return  [data.as_dict() for data in q.all()]
+        '''
+        Methode qui retourne tous les profils autorisés dans une app
+        Parameters:
+            id_app (int): l'id de l'application
+        Returns:
+            Array<TProfils>
+        '''
+        return db.session.query(
+            TProfils
+        ).join(
+            CorProfilForApp, CorProfilForApp.id_profil == TProfils.id_profil
+        ).filter(
+            CorProfilForApp.id_application == id_application
+        ).all()
 
     @classmethod
     def get_profils_out_app(cls, id_application):

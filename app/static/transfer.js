@@ -3,22 +3,6 @@ var tab_del = [];
 var data_select = [];
 var profil = [];
 
-$.ajax({
-  url: url_app + "/api/application",
-  type: "get",
-  data: JSON.stringify(data_select),
-  contentType: "application/json; charset=utf-8",
-  dataType: "json",
-  success: function(response) {
-    console.log(response);
-    data_select = response;
-    console.log(data_select);
-  },
-  error: function(error) {
-    console.log(error);
-  }
-});
-
 function fill_select() {
   td_profil =
     '<td class = "profil"><select class="custom-select", id="inputGroupSelect02">';
@@ -26,12 +10,13 @@ function fill_select() {
     td_profil =
       td_profil +
       '<option value="' +
-      data_select[i]["id_tag"] +
+      data_select[i]["id_profil"] +
       '">' +
-      data_select[i]["tag_name"] +
+      data_select[i]["nom_profil"] +
       "</option>";
   }
   td_profil = td_profil + "</select></td>";
+  console.log(data_select);
   return td_profil;
 }
 
@@ -134,8 +119,6 @@ var get_profil_delete = function(data) {
 // TODO: pourquoi faire une requeste AJAX pour ce post ?
 // est-ce qu'on pourrait pas utiliser un formulaire simple ?
 var update_right = function() {
-  console.log("tableau d ajout : " + tab_add);
-  console.log("tableau de suppression : " + tab_del);
   var data = {};
   data["tab_add"] = tab_add;
   data["tab_del"] = tab_del;
@@ -162,9 +145,6 @@ var update_right = function() {
 };
 
 var update = function() {
-  console.log("tableau d ajout : " + tab_add);
-  console.log("tableau de suppression : " + tab_del);
-  console.log("UPDATE");
   var data = {};
   data["tab_add"] = tab_add;
   data["tab_del"] = tab_del;
@@ -202,17 +182,44 @@ var deleteRaw = function(path) {
   if (c == true) window.location.href = path;
 };
 
+// MAIN executed
+
+// get the app profils
+// TODO: ne devrait être déclenché que quand on en a besoin
+// parse the url to get the id_application
+var current_url = window.location.href;
+url_array = current_url.split("/");
+if (
+  url_array.indexOf("application") != -1 &&
+  url_array.indexOf("rights") != -1
+) {
+  id_application = url_array[url_array.length - 1];
+  console.log(id_application);
+  $.ajax({
+    url: url_app + "/api/profils?id_application=" + id_application,
+    type: "get",
+    data: JSON.stringify(data_select),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(response) {
+      data_select = response;
+    },
+    error: function(error) {}
+  });
+}
+
 $(document).ready(function() {
   var tab_add = [];
   var tab_del = [];
   var data_select = {};
 
+  // init the left table
   $("#user").DataTable({
     language: {
       lengthMenu: "Afficher _MENU_ éléments par page",
-      zeroRecords: "Aucunes données",
+      zeroRecords: "Aucune donnée",
       info: "Affiche la page _PAGE_ sur _PAGES_",
-      infoEmpty: "Aucunes données trouvées",
+      infoEmpty: "Aucune donnée",
       infoFiltered: "(filtrer sur _MAX_ total d'éléments)",
       search: "Recherche:",
       paginate: {
@@ -226,12 +233,13 @@ $(document).ready(function() {
     }
   });
 
+  // init the right table
   $("#adding_table").DataTable({
     language: {
       lengthMenu: "Afficher _MENU_ éléments par page",
-      zeroRecords: "Aucunes données trouvées",
+      zeroRecords: "Aucune donnée",
       info: "Affiche la page _PAGE_ sur _PAGES_",
-      infoEmpty: "Aucunes données",
+      infoEmpty: "Aucune donnée",
       infoFiltered: "(filtrer sur _MAX_ total d'éléments)",
       search: "Recherche:",
       paginate: {
@@ -245,12 +253,13 @@ $(document).ready(function() {
     }
   });
 
+  // init table from table_database.html
   $("#tri").DataTable({
     language: {
       lengthMenu: "Afficher _MENU_ éléments par page",
-      zeroRecords: "Aucunes données",
+      zeroRecords: "Aucune donnée",
       info: "Affiche la page _PAGE_ sur _PAGES_",
-      infoEmpty: "Aucunes données trouvées",
+      infoEmpty: "Aucune donnée",
       infoFiltered: "(filtrer sur _MAX_ total d'éléments)",
       search: "Recherche:",
       paginate: {
@@ -263,4 +272,6 @@ $(document).ready(function() {
       iDisplayLength: 25
     }
   });
+
+  // end main
 });
