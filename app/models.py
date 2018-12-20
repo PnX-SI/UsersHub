@@ -276,7 +276,7 @@ class TRoles(GenericRepository):
         Avec pour paramètre un id_liste
         """
 
-        q = db.session.query(cls)
+        q = db.session.query(cls).filter(cls.active == True)
         q = q.order_by(desc(cls.nom_role))
         q = q.join(CorRoleListe)
         q = q.filter(id_liste == CorRoleListe.id_liste  )
@@ -304,7 +304,7 @@ class TRoles(GenericRepository):
         Methode qui retourne un dictionnaire de role appartenant à un groupe
         Avec pour paramètres un id de role
         """
-        q = db.session.query(cls)
+        q = db.session.query(cls).filter(cls.active == True)
         q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoles)
         q = q.filter(id_groupe == CorRoles.id_role_groupe )
@@ -334,17 +334,15 @@ class TRoles(GenericRepository):
         """
         Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
+        Ne retourne que les utilisateurs actifs
         """
 
-        # q = db.session.query(cls)
-        q = db.session.query(cls)
+        q = db.session.query(cls).filter(cls.active == True)
         q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoleAppProfil, cls.id_role == CorRoleAppProfil.id_role)
         q = q.join(TProfils, TProfils.id_profil == CorRoleAppProfil.id_profil)
         q = q.filter(CorRoleAppProfil.id_application == id_application)
-        print ([data.as_dict_full_name() for data in q.all()])
         return [data.as_dict_full_name() for data in q.all()]
-        # return [{'role':data[0].as_dict_full_name(), 'profil':data[1].as_dict()} for data in q.all()]
 
     @classmethod
     def get_user_profil_out_app(cls,id_application):

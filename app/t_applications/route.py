@@ -134,7 +134,7 @@ def delete(id_application):
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def profils(id_application):
     """
-    Route affichant la liste des profils utilisables par l'application et ceux dispobles.
+    Route affichant la liste des profils utilisables par l'application et ceux disponibles.
     Avec pour paramètre un id d'application
     Retourne un template avec pour paramètres:
         - une entête des tableaux --> fLine
