@@ -1,0 +1,26 @@
+
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% include "head-appli.html" %}
+{% include "header.html" %}
+
+
+{% block content %}
+
+<form method="POST" class="container" novalidate>
+    <h3 class="margin-neg"> {{title}} </h3>
+
+    <div class="row forms card">
+        {{ form.hidden_tag() }}
+        {% if id_role == None %}
+            {{ wtf.form_field(form.role) }}
+        {% else %}
+        {{ wtf.form_field(form.role, disabled=True) }}
+        {% endif %}
+        {{ wtf.form_field(form.profil) }}
+        {{ wtf.form_field(form.submit, class="btn btn-success") }}
+    </div>
+
+</form>
+
+{% endblock %}

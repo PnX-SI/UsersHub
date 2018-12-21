@@ -25,7 +25,7 @@ class GenericRepository(db.Model):
             return db.session.query(cls).get(id)
 
     @classmethod
-    def get_all(cls, columns=None, params = None, recursif = True,as_model = False):
+    def get_all(cls, columns=None, params=None, recursif = True,as_model = False):
 
         """
         Methode qui retourne un dictionnaire de tout les éléments d'un Model
@@ -57,9 +57,12 @@ class GenericRepository(db.Model):
         Methode qui ajoute un élément à une table
         Avec pour paramètres un dictionnaire de cet élément
         """
-
-        db.session.add(cls(**entity_dict))
-        db.session.commit()
+        try:
+            db.session.add(cls(**entity_dict))
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
 
     @classmethod
     def update(cls, entity_dict):
@@ -68,9 +71,14 @@ class GenericRepository(db.Model):
         Methode qui met à jour un élément
         Avec pour paramètre un dictionnaire de cet élément
         """
-
-        db.session.merge(cls(**entity_dict))
-        db.session.commit()
+        try:
+            db.session.merge(cls(**entity_dict))
+            db.session.commit()
+        except Exception as e:
+            print('LAAAAAAAAAAA')
+            print(e)
+            db.session.rollback()
+            raise
 
     @classmethod
     def delete(cls,id):
@@ -79,9 +87,12 @@ class GenericRepository(db.Model):
         Methode qui supprime un élement d'une table à partir d'un id donné
         Avec pour paramètre un id (clé primaire)
         """
-
-        db.session.delete(db.session.query(cls).get(id))
-        db.session.commit()
+        try:
+            db.session.delete(db.session.query(cls).get(id))
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
 
     @classmethod
     def choixSelect(cls,id,nom,aucun = None):

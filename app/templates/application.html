@@ -11,7 +11,9 @@
   {{ form.hidden_tag() }} {{ form.csrf_token }}
   <h3 class="margin-neg">{{ title }}
     {% if id_application %}
-    <a href=" {{url_for('application.profils', id_application=id_application)}} "> <button  class="btn btn-primary"> Editer les profils disponible dans l'application</button> </a>
+    <a href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
+       <button  class="btn btn-primary"> Editer les profils disponibles dans l'application</button>
+    </a>
     {% endif %}
   </h3>
 

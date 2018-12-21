@@ -13,3 +13,4 @@ class Profil(FlaskForm):
     nom_profil = StringField('Nom', validators = [DataRequired(message = 'Le code du profil est obligatoire')])
     desc_profil = StringField('Description')
     submit = SubmitField('Enregistrer')
+

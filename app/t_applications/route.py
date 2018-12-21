@@ -1,6 +1,6 @@
 from flask import (
     redirect, url_for, render_template,
-    Blueprint, request, flash
+    Blueprint, request, flash, jsonify
 )
 
 from app.env import URL_REDIRECT
@@ -9,7 +9,6 @@ from app.models import (
     TApplications, TRoles, TProfils, 
     CorProfilForApp, CorRoleAppProfil
 )
-
 from config import config
 
 from pypnusershub import routes as fnauth
@@ -56,7 +55,7 @@ def applications():
         pathU=config.URL_APPLICATION + "/application/update/",
         pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
-        pathP=config.URL_APPLICATION + "/application/rights/",
+        pathP=config.URL_APPLICATION + "/application_roles_profil/",
         name="une application",
         name_list="Applications",
         otherCol='True',
@@ -124,14 +123,13 @@ def delete(id_application):
     Route qui supprime une application dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste de groupe
     """
-
     TApplications.delete(id_application)
     return redirect(url_for('application.applications'))
 
 
 @route.route('application/profils/<id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-def profils(id_application):
+def profils_for_app(id_application):
     """
     Route affichant la liste des profils utilisables par l'application et ceux disponibles.
     Avec pour paramètre un id d'application
@@ -162,44 +160,119 @@ def profils(id_application):
     )
 
 
-@route.route('application/rights/<id_application>', methods=['GET', 'POST'])
+
+@route.route('application_roles_profil/<id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-def rights(id_application):
+def profils_in_app(id_application):
     """
-    Route affichant le formulaire permettant de définir les permission des utilisateurs.
-    Avec pour paramètre un id d'application
-    Retourne un template avec pour paramètres:
-        - une entête des tableaux --> fLine
-        - le nom des colonnes de la base --> data
-        - liste des roles sans permissions mais disponibles --> table
-        - liste des roles avec des permissions --> table2
+    Route affichant la liste des roles ayant un profil pour une application
+    Retourne un template avec pour paramètres :
+                                        - une entête de tableau --> fLine
+                                        - le nom des colonnes de la base --> line
+                                        - le contenu du tableau --> table
+                                        - le chemin de mise à jour --> pathU
+                                        - le chemin de suppression --> pathD
+                                        - le chemin d'ajout --> pathA
+                                        - une clé (clé primaire dans la plupart des cas) --> key
+                                        - l'id_application pour construire l'url de redirection -> key2
+                                        - un nom (nom de la table) pour le bouton ajout --> name
+                                        - un nom de liste --> name_list
+                                        - ajoute une colonne de bouton ('True doit être de type string) --> permissions
+                                        - nom affiché sur le bouton --> Members
     """
     users_in_app = TRoles.get_user_profil_in_app(id_application)
-    profils_in_app = [
-        (profil.id_profil, profil.nom_profil)
-        for profil in  TProfils.get_profils_in_app(id_application)
-    ]
-    for user in users_in_app:
-        print(user)
-    users_out_app = TRoles.get_user_profil_out_app(id_application)
-    header = ['ID', 'Nom']
-    data = ['id_role', 'full_name']
-    app = TApplications.get_one(id_application)
-    if request.method == 'POST':
-        data = request.get_json()
-        new_users = data["tab_add"]
-        delete_users = data["tab_del"]
-        CorRoleAppProfil.add_cor(id_application, new_users)
-        CorRoleAppProfil.del_cor(id_application, delete_users)
+    application = TApplications.get_one(id_application)
+
+    fLine = ['Id', 'Role', 'Profil']
+    columns = ['id_role', 'full_name', 'profil']
+
     return render_template(
-        'tobelong.html',
-        fLine=header,
-        data=data,
-        table=users_out_app,
-        table2=users_in_app,
-        info="Permissions dans l'application " + app['nom_application'],
-        profils_in_app=profils_in_app,
-        app='True'
+        'table_database.html',
+        table=users_in_app,
+        fLine=fLine,
+        line=columns,
+        key="id_role",
+        key2=id_application,
+        pathU=config.URL_APPLICATION + "/application/update/role_profil/",
+        pathD=config.URL_APPLICATION + "/application/delete/role_profil/",
+        pathA=config.URL_APPLICATION + "/application/add/role_profil/",
+        name="un role pour l'application {}".format(application['nom_application']),
+        name_list="Role(s) de l'application {}".format(application['nom_application']),
+    )
+
+@route.route('application/add/role_profil/<int:id_application>', methods=['GET', 'POST'])
+@route.route('application/update/role_profil/<int:id_role>/<int:id_application>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def add_or_update_profil_for_role_in_app(id_application, id_role=None):
+    """
+        add or update un profil sur une application
+        on part du principe qu'un role ne peut avoir qu'un profil dans une application
+        TODO: pour mettre plusieurs profil a un role dans une appli: 
+        rajouter une clé primaire a cor_role_app_profil pour gérer l'update
+    """
+    form = t_applicationsforms.AppProfil(id_application)
+    application = TApplications.get_one(id_application)
+    role = None
+    title = "Ajouter un profil l'application {}".format(application['nom_application'])
+    if id_role:
+        role = TRoles.get_one(id_role, as_model=True).as_dict_full_name()
+        title = "Editer le profil de {} dans l'application {}".format(
+            role['full_name'],
+            application['nom_application']
+        )
+        # preremplissage du formulaire
+        profil_in_app = CorRoleAppProfil.get_one(id_role, id_application)
+        form.profil.process_data(profil_in_app.id_profil)
+        form.role.process_data(str(id_role))
+        # HACK ajout de l'utilisateur courant dans la liste déroulante
+        # sinon le formulaire ne passe pas
+        form.role.choices.append((id_role, role['full_name']))
+
+    if request.method == 'POST':
+        if form.validate() and form.validate_on_submit():
+            try:
+                if id_role:
+                    CorRoleAppProfil.update(
+                        {
+                            'id_role': id_role,
+                            'id_profil': form.data['profil'],
+                            'id_application': id_application
+                        }
+                    )
+                else:
+                    CorRoleAppProfil.post(
+                        {
+                            'id_role': form.data['role'],
+                            'id_profil': form.data['profil'],
+                            'id_application': id_application
+                        }
+                    )  
+            except Exception as e:
+                redirect(url_for('application.add_or_update_profil_for_role_in_app'))
+                flash("Une erreur s'est produite, {}".format(str(e)))
+            flash('Profil ajouté/edité avec succès')
+            return redirect(url_for('application.profils', id_application=id_application))
+
+    return render_template(
+        'application_role_profil_form.html',
+        title=title,
+        form=form,
+        application=application,
+        id_role=id_role
+    )
+
+
+@route.route('application/delete/role_profil/<id_role>/<id_application>', methods=['GET', 'POST'])
+def delete_cor_role_app_profil(id_role, id_application):
+    try:
+        CorRoleAppProfil.delete(id_role, id_application)
+    except Exception:
+        flash("Une erreur s'est produite")
+    flash("Profil supprimé avec succès")
+    return redirect(
+        url_for(
+            'application.profils', id_application=id_application
+        )
     )
 
 

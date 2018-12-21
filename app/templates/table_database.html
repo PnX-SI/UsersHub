@@ -3,12 +3,28 @@
   <body>
       {% include "head-appli.html" %}
 
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-success" role="alert">
+              {% for mess in messages %}
+                  {{ mess }}
+              {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
       <div class="container main-zone ng-scope">
         <h2>{{ name_list }}</h2>
         <p>
+          {% if key2 %}
+          <a href="{{pathA}}{{key2}}"><button type="submit" class="btn btn-success btn-sm">
+
+          {% else %}
           <a href="{{pathA}}"><button type="submit" class="btn btn-success btn-sm">
-              Ajouter {{ name }}
-            </button></a>
+          {% endif %}
+          Ajouter {{ name }}
+          </button></a>
         </p>
       </div>
       <div class="container main-zone ng-scope ">
@@ -60,7 +76,7 @@
 
                   {% if permissions == 'True'%}
                   <td align="center">
-                    <a href="{{pathR}}{{elt[key]}}">
+                    <a href="{{pathR}}{{elt[key]}} ">
                       <button type="submit" class="btn btn-secondary btn-sm ">
                         <i class="fa fa-user font-medium" aria-hidden="true"></i></button></a>
                   </td>
@@ -79,12 +95,20 @@
                   {%endif%}
         
                   <td align="center">
-                    <a href="{{pathU}}{{elt[key]}}">
+                      {% if key2 %}
+                      <a href="{{pathU}}{{elt[key]}}/{{key2}} ">
+                      {% else %}
+                      <a href="{{pathU}}{{elt[key]}}">
+                      {% endif %}
                       <button type="submit" class="btn btn-secondary btn-sm">
                         <i class="fa fa-pencil font-medium" aria-hidden="true"></i></button></a>
                   </td>
                   <td align="center">
-                    <button onClick="deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm">
+                    {% if key2 %}
+                    <button onClick="deleteRaw('{{pathD}}{{elt[key]}}/{{key2}} ')" type="submit" class="btn btn-danger btn-sm">
+                    {% else %}
+                      <button onClick="deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm">
+                    {% endif %}
                       <i class="fa fa-trash font-medium" aria-hidden="true"></i>
                     </button>
                   </td>

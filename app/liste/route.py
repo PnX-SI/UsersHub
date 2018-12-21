@@ -1,6 +1,6 @@
 from flask import (
     redirect, url_for, render_template,
-    Blueprint, request, flash
+    Blueprint, request, flash, jsonify
 )
 from pypnusershub import routes as fnauth
 
@@ -113,8 +113,12 @@ def membres(id_liste):
         data = request.get_json()
         new_users_in_list = data["tab_add"]
         new_users_out_list = data["tab_del"]
-        CorRoleListe.add_cor(id_liste, new_users_in_list)
-        CorRoleListe.del_cor(id_liste, new_users_out_list)
+        try:
+            CorRoleListe.add_cor(id_liste, new_users_in_list)
+            CorRoleListe.del_cor(id_liste, new_users_out_list)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        return jsonify({'redirect': url_for('liste.lists')}), 200
     return render_template(
         "tobelong.html",
         fLine=header,

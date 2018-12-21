@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
 
-
 from flask_bcrypt import (
     generate_password_hash
 )
@@ -68,8 +67,36 @@ class CorRoleAppProfil(GenericRepository):
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
 
+    # surchage de la méthode get_one car il n'y a pas de clé primaire unique sur une cor
     @classmethod
-    def add_cor(cls,id_app,tab_profil):
+    def get_one(cls, id_role, id_application):
+        return db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).first()
+    
+    
+    # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
+    # TODO cette méthode supprime tous les profils pour une application et un role
+    # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
+    # necessite ne pas utiliser le template table_database.html qui est trop génériqe
+    @classmethod
+    def delete(cls, id_role, id_application):
+        cors = db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).all()
+        for cor in cors:
+            db.session.delete(cor)
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
+
+    @classmethod
+    def add_cor(cls, id_app, tab_profil):
         dict_add = {}
         for d in tab_profil:
             dict_add = {'id_role':d['id_role'],'id_profil':d['id_profil'], 'id_application': id_app }
@@ -89,6 +116,7 @@ class CorProfilForApp(GenericRepository):
     __table_args__ = {'schema':'utilisateurs'}
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
+
 
     @classmethod
     def add_cor(cls,id_application,ids_profil):
@@ -182,19 +210,21 @@ class TRoles(GenericRepository):
         return (pass_plus, pass_md5)
 
     @classmethod
-    def choixSelect(cls,id,nom,aucun = None):
+    def choixSelect(cls, id='id_role', nom='full_name', aucun=None):
         """
-        Methode qui retourne une tableau de tuples d'id de roles et de nom de roles
+        Methode qui retourne une tableau de tuples d'id de roles et de nom de roles ACTIF
         Avec pour paramètres un id de role et un nom de role
         Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
-        q = cls.get_all(as_model =True)
+        # recupère tous les role actif
+        q = cls.get_all(as_model =True, params=[{'col': 'active', 'filter': True}])
         data =[data.as_dict_full_name() for data in q.all()]
         choices = []
-        for d in data :
-            choices.append((d[id], d[nom]))
-        if aucun != None :
+        for role in q.all():
+            role_as_dict = role.as_dict_full_name()
+            choices.append((role_as_dict[id], role_as_dict[nom]))
+        if aucun != None:
             choices.append((-1,'Aucun'))
         return choices
 
@@ -338,9 +368,11 @@ class TRoles(GenericRepository):
         """   
         # get the user
         data = db.session.query(
-            cls, CorRoleAppProfil
+            cls, TProfils
         ).join(
             CorRoleAppProfil, cls.id_role == CorRoleAppProfil.id_role
+        ).join(
+            TProfils, TProfils.id_profil == CorRoleAppProfil.id_profil
         ).filter(
             cls.active == True
         ).filter(
@@ -352,6 +384,7 @@ class TRoles(GenericRepository):
         for d in data:
             user = d[0].as_dict_full_name()
             user['id_profil'] = d[1].id_profil
+            user['profil'] = d[1].nom_profil
             user_with_profil.append(user)
         return user_with_profil
 
@@ -475,7 +508,7 @@ class TProfils(GenericRepository):
     @classmethod
     def get_profils_in_app(cls, id_application):
         """
-        Methode qui retourne un dictionnaire des profils utilisables pour une application
+        Methode qui retourne tableau des profils utilisables pour une application
         Avec pour paramètre un id de l'application
         """
 
@@ -507,10 +540,14 @@ class TProfils(GenericRepository):
         return [data.as_dict() for data in q.all()]
     
     @classmethod
-    def choixSelect(cls,code_profil,nom_profil):
+    def choixSelect(cls, key='id_profil', label='nom_profil', id_application=None):
         """
-        Methode qui retourne un tableau de tuples de code profil et de nom de profil
-        Avec pour paramètres un code de tag et un nom de tag
+        Methode qui retourne un tableau de tuples d'id profil et de nom de profil 
+        Ce que l'on met en key et label sont paramétrable
+
         """
-        #TODO filtrer avec CorProfilForApp
-        return [(d[code_profil], d[nom_profil]) for d in cls.get_all()]
+        if id_application:
+            profils = cls.get_profils_in_app(id_application)
+            return [ ( getattr(d, key), getattr(d, label) ) for d in profils]  
+        return [( getattr(d, key), getattr(d, label) ) for d in cls.get_all()]
+

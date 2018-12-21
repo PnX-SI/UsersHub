@@ -103,6 +103,7 @@ var get_profil = function(data) {
       if (ID == data_id[d]) {
         tab.push({ id_role: ID, id_profil: PROFIL });
       }
+      //tab.push({ id_role: ID, id_profil: PROFIL });
     }
   });
   return tab;
@@ -133,7 +134,7 @@ var update_right = function() {
     dataType: "json"
   })
     .done(function(data) {
-      window.location.href = data.redirect;
+      //window.location.href = data.redirect;
     })
     .fail(function(data) {
       alert("Une erreur c'est produite");
@@ -160,7 +161,8 @@ var update = function() {
       window.location.href = data.redirect;
     })
     .fail(function(data) {
-      alert("Une erreur c'est produite");
+      console.log(data);
+      alert("Une erreur s'est produite");
     });
 
   tab_add = [];

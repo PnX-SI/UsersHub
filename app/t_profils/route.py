@@ -104,46 +104,6 @@ def addorupdate(id_profil):
                 return redirect(url_for('profils.profils'))
         return render_template('profil.html', form=form, title="Formulaire Profil")
 
-
-# @route.route('tag/applications/<id_tag>',  methods=['GET', 'POST'])
-# @fnauth.check_auth(3, False, URL_REDIRECT)
-# def tag_applications(id_tag):
-#     """
-#     Route affichant la liste des applications non étiquetés par le tag vis à vis de ceux étiquetés par celui ci.
-#     Avec pour paramètre un id de tag.
-#     Retourne un template avec pour paramètres:
-#                                             - une entête des tableaux --> fLine
-#                                             - le nom des colonnes de la base --> data
-#                                             - liste des organismes non étiquetés par le tag --> table
-#                                             - liste des organismes étiquetés par le tag --> table2
-#                                             - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
-#     """
-
-#     applications_in_tag = TApplications.get_applications_in_tag(id_tag)
-#     applications_out_tag = TApplications.get_applications_out_tag(id_tag)
-#     tag = TProfils.get_one(id_tag)
-#     header = ['ID', 'Nom']
-#     data = ['id_application', 'nom_application']
-#     if request.method == 'POST':
-#         data = request.get_json()
-#         new_apps_in_tag = data["tab_add"]
-#         new_apps_out_tag = data["tab_del"]
-#         CorApplicationTag.add_cor(id_tag, new_apps_in_tag)
-#         CorApplicationTag.del_cor(id_tag, new_apps_out_tag)
-#         # print("ajout : ")
-#         # print(new_apps_in_tag)
-#         # print("supp : ")
-#         # print( new_apps_out_tag )
-#     return render_template(
-#         'tobelong.html',
-#         fLine=header,
-#         data=data,
-#         table=applications_out_tag,
-#         table2=applications_in_tag,
-#         info="Tag '" + tag['tag_name'] + "' sur les applications"
-#     )
-
-
 def pops(form):
     """
     Methode qui supprime les éléments indésirables du formulaires
