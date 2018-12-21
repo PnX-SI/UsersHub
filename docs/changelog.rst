@@ -5,6 +5,43 @@ CHANGELOG
 2.0.0-beta.2 (unreleased)
 -------------------------
 
+Evolutions depuis la 2.0.0-beta.1 : https://github.com/PnEcrins/UsersHub/compare/2.0.0-beta.1...uhv2
+A compléter à partir de Aug 28, 2018
+Attention, incrémenter le requirements.txt
+
+**Nouveautés**
+
+* Mise en place d'une API pour pouvoir interroger et implémenter UsersHub depuis des applications tiers (#47)
+* Formulaire de login et sécurisation des routes (#48)
+* Ajout d'un ``code_application`` (#54)
+* CRUVED dans GeoNature pour ne pas gérer de permissions applicatives dans UsersHub
+* Suppression des tags trop génériques (#28)
+* Profils par application (#28)
+* Automatisation de l'installation et révision du script ``install_app.sh``
+* Contrôle de la cohérence entre ``pass`` et ``pass_plus``
+
+**Notes de versions**
+
+* Si vous migrez depuis 1.3.3, éxecutez le script SQL de mise à jour de la BDD : ``data/update_1.3.1to2.sql``
+* Faites une nouvelle installation de UsersHub en suivant sa documentation d'installation (avant ou après update BDD ?)
+* Pas de migration disponible depuis la 2.0.0-beta.1
+
+1.3.3 (2018-10-17)
+------------------
+
+**Corrections**
+
+* Suppression de ``cor_role_droit_application`` inutiles
+* ``install_app.sh`` : Suppression de messages portant à confusion
+
+1.3.2 (2018-09-20)
+------------------
+
+**Corrections**
+
+* Installation BDD : Nettoyage des données insérées et remise à 1 des séquences par défaut
+* Vérification que le mot de passe encrypté en md5 et sha soient cohérents (#34)
+
 2.0.0-beta.1 (2018-06-29)
 -------------------------
 
