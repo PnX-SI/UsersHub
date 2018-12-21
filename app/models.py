@@ -473,24 +473,6 @@ class TApplications(GenericRepository):
     desc_application = db.Column(db.Unicode)
     id_parent = db.Column(db.Unicode)
 
-    # @classmethod
-    # def choix_app_cruved(cls,id_app,nom,aucun = None):
-
-    #     """
-    #     Methode qui retourne une tableau de tuples d'id d'applications et de nom d'applications
-    #     Avec pour paramètres un id d'application et un nom d'application
-    #     Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
-    #     """
-
-    #     q = cls.get_all(as_model = True).filter(or_(cls.id_application == config.ID_GEONATURE,cls.id_parent == config.ID_GEONATURE))
-    #     data = [data.as_dict() for data in q.all()]
-    #     choices = []
-    #     for d in data :
-    #         choices.append((d[id_app], d[nom]))
-    #     if aucun != None :
-    #         choices.append((-1,'Aucun'))
-    #     return choices
-
 
 @serializable
 class TProfils(GenericRepository):

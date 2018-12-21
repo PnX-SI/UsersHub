@@ -17,28 +17,6 @@ PASS_METHOD = 'hash'
 COOKIE_EXPIRATION = 3600
 COOKIE_AUTORENEW = True
 
-""" ID of type Tag """
-
-ID_OBJECT = 1
-ID_ACTION = 2
-ID_PRIVILEGE = 3
-ID_LIST = 4
-ID_SCOPE = 5
-
-""" ID of tag cruved in your database """
-
-ID_TAG_CREATE = 11
-ID_TAG_READ = 12
-ID_TAG_UPDATE = 13
-ID_TAG_VALIDATE = 14
-ID_TAG_EXPORT = 15
-ID_TAG_DELETE = 16
-
-""" ID of tag scope in your database """
-
-ID_TAG_MYDATA = 21
-ID_TAG_MYORGDATA = 22
-ID_TAG_ALLDATA = 23
 
 """ SERVER """
 PORT = 5001

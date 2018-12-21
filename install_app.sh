@@ -13,6 +13,10 @@ fi
 echo "préparation du fichier config.py..."
 sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
 
+url_application="${url_application//\//\\/}"
+sed -i 's#http://localhost:5001/#$my_url#g' config.py
+sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py
+
 cd ..
 
 # Installation de l'environement python

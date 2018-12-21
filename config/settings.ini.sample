@@ -18,6 +18,8 @@ user_pg_pass=monpassachanger
 insert_minimal_data=true
 # Intégrer les données exemple (Role, groupe, organismes et correspondances)
 insert_sample_data=true
+# Url de l'applicaiton
+url_application=http://mon_url.fr/
 
 #######################
 ### Python settings ###

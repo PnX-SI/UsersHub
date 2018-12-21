@@ -106,9 +106,6 @@ with app.app_context():
         from app.auth import route
         app.register_blueprint(route.route, url_prefix='/login')
 
-        # from app.CRUVED import route
-        # app.register_blueprint(route.route, url_prefix='/')
-
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')
 
