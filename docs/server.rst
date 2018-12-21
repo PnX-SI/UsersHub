@@ -36,7 +36,7 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
 Installation et configuration du serveur
 ========================================
 
-Installation pour Debian 7.
+Installation pour Debian 9.
 
 :notes:
 
@@ -51,60 +51,23 @@ Installation pour Debian 7.
 ::
 
     su - 
-    apt-get install apache2 php5 libapache2-mod-php5 php5-gd libapache2-mod-wsgi php5-pgsql sudo
-    usermod -g www-data synthese
-    usermod -a -G root synthese
+    apt-get install apache2  python-dev python-pip libpq-dev supervisor
     adduser synthese sudo
     exit
     
 Fermer la console et la réouvrir pour que les modifications soient prises en compte.
     
 
-* Vérifier que le répertoire ``/tmp`` existe et que l'utilisateur ``www-data`` y ait accès en lecture/écriture
 
 Installation et configuration de PosgreSQL
 ==========================================
 
-* Sur Debian 7, configuration des dépots pour avoir les dernières versions de PostgreSQL (9.3) et PostGIS (2.1) (voir http://foretribe.blogspot.fr/2013/12/the-posgresql-and-postgis-install-on.html)
- 
-  ::  
-  
-    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" >> /etc/apt/sources.list'
-    sudo wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-    sudo apt-get update
+
 
 * Installation de PostreSQL
  
   ::  
   
-    sudo apt-get install postgresql-9.3 postgresql-client-9.3
+    sudo apt-get install postgresql-9.6 postgresql-server-dev-9.6
     sudo adduser postgres sudo
         
-* Configuration de PostgreSQL - permettre l'écoute de toutes les IP
- 
-  ::  
-  
-    sed -e "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" -i /etc/postgresql/9.3/main/postgresql.conf
-    sudo sed -e "s/# IPv4 local connections:/# IPv4 local connections:\nhost\tall\tall\tde.la.merde.0\/33\t md5/g" -i /etc/postgresql/9.3/main/pg_hba.conf
-    /etc/init.d/postgresql restart
-
-* Création d'un super-utilisateur PostgreSQL
- 
-  ::  
-  
-    sudo su postgres
-    psql
-    CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';
-    \q
-    exit
-
-L'utilisateur ``geonatuser`` est super utilisateur de PostgreSQL il sera utilisé par l'application pour se connecter à sa propre base de données mais aussi à toutes les autres bases qu'UsersHub doit gérer.
-
-L'application fonctionne avec par default le mot de passe ``monpassachanger`` mais il est conseillé de le modifier !
-
-Ce mot de passe, ainsi que l'utilisateur PostgreSQL ``geonatuser`` créés ci-dessus sont des valeurs par défaut utiliser à plusieurs reprises dans l'application. Ils peuvent cependant être changés. S'ils doivent être changés, ils doivent l'être dans plusieurs fichiers de l'application : 
-
-- config/settings.ini
-- config/connecter.php
-- config/dbconnexions.json
-    

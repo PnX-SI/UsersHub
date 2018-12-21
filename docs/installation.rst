@@ -53,8 +53,8 @@ Créer le fichier `/etc/apache2/sites-avalaible/usershub.conf` avec ce contenu
   ::  
   
     <Location /usershub2>
-        ProxyPass  http://localhost:5001
-        ProxyPassReverse  http://localhost:5001
+        ProxyPass  http://localhost:5001/
+        ProxyPassReverse  http://localhost:5001/
     </Location>
 
 Activé le site et recharger la conf apache
@@ -68,16 +68,7 @@ UsersHub peut fonctionner seul avec sa propre base de données mais il est confi
 
 * Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub et les login et pass admin/admin
 
-* choisir le mode d'authentification dans le fichier ``config/config.php``
-
 Mise à jour de l'application
 ----------------------------
 
 * Suivre les instructions disponibles dans la doc de la release choisie
-
-Personnalisation
-----------------
-
-Vous pouvez changer le bandeau de l'application en remplaçant le fichier ``web/images/bandeau_utilisateurs.png`` par un bandeau personnalisé.
-
-Vous pouvez changer le logo de l'application en remplaçant le fichier ``web/images/main_logo.png`` une image de votre choix.
