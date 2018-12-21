@@ -69,12 +69,11 @@ def applications():
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def addorupdate(id_application):
     """
-    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
-    L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
-    Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_application
-    Une fois le formulaire validé on retourne une redirection vers la liste d'application
+        Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
+        L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
+        Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_application
+        Une fois le formulaire validé on retourne une redirection vers la liste d'application
     """
-
     form = t_applicationsforms.Application()
     form.id_parent.choices = TApplications.choixSelect('id_application', 'nom_application', 1)
     if id_application == None:
@@ -148,8 +147,12 @@ def profils_for_app(id_application):
         data = request.get_json()
         new_profils = data["tab_add"]
         delete_profils = data["tab_del"]
-        CorProfilForApp.add_cor(id_application, new_profils)
-        CorProfilForApp.del_cor(id_application, delete_profils)
+        try:
+            CorProfilForApp.add_cor(id_application, new_profils)
+            CorProfilForApp.del_cor(id_application, delete_profils)
+        except Exception as e:
+            return jsonify(str(e)), 500
+        return jsonify({'redirect': url_for('application.applications')}), 200
     return render_template(
         'app_profils.html',
         fLine=header,

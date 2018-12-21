@@ -136,7 +136,7 @@ def membres(id_groupe):
         table2=users_in_group,
         group='groupe',
         info="Membres du groupe '" + group['nom_role'] + "'"
-     )
+    )
 
 
 @route.route('groups/delete/<id_groupe>', methods=['GET', 'POST'])
