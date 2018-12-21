@@ -254,7 +254,7 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
                 redirect(url_for('application.add_or_update_profil_for_role_in_app'))
                 flash("Une erreur s'est produite, {}".format(str(e)))
             flash('Profil ajouté/edité avec succès')
-            return redirect(url_for('application.profils', id_application=id_application))
+            return redirect(url_for('application.profils_in_app', id_application=id_application))
 
     return render_template(
         'application_role_profil_form.html',
@@ -274,7 +274,7 @@ def delete_cor_role_app_profil(id_role, id_application):
     flash("Profil supprimé avec succès")
     return redirect(
         url_for(
-            'application.profils', id_application=id_application
+            'application.profils_in_app', id_application=id_application
         )
     )
 
