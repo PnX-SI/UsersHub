@@ -84,11 +84,12 @@ def addorupdate(id_role=None):
     form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
 
     if id_role is not None:
-        user = TRoles.get_one(id_role)
+        user = TRoles.get_one(id_role, as_model=True)
+        user_as_dict = user.as_dict_full_name()
         # format group to prepfil the form
         formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
         if request.method == 'GET':
-            form = process(form, user, formated_groups)
+            form = process(form, user_as_dict, formated_groups)
 
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
@@ -110,11 +111,13 @@ def addorupdate(id_role=None):
                     return render_template(
                         'user.html', form=form, title="Formulaire Utilisateur"
                     )
-                # pop pass_plus
-                form_user.pop('pass_plus')
 
             if id_role is not None:
-                form_user['id_role'] = user['id_role']
+                #HACK a l'update on remet a la main les mdp
+                # car on les masque dans le form
+                form_user['pass_plus'] = user.pass_plus
+                form_user['pass_md5'] = user.pass_md5
+                form_user['id_role'] = user.id_role
                 TRoles.update(form_user)
             else:
                 TRoles.post(form_user)

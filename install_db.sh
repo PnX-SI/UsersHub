@@ -1,13 +1,13 @@
 #!/bin/bash
-# Make sure only root can run our script
-if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run as root" 1>&2
-    exit 1
+# Make sure root cannot run our script
+if [ "$(id -u)" == "0" ]; then
+   echo "This script must NOT be run as root" 1>&2
+   exit 1
 fi
 
 . config/settings.ini
 
-
+sudo service postgresql restart
 function database_exists () {
     # /!\ Will return false if psql can't list database. Edit your pg_hba.conf
     # as appropriate.
