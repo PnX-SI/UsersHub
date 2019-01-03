@@ -85,9 +85,7 @@ def addorupdate(id_liste):
                 TListes.update(form_list)
                 return redirect(url_for('liste.lists'))
             else:
-                errors = form.errors
-                if(errors['nom_liste'] != None):
-                    flash("Champ 'Nom' vide, veillez à le remplir afin de valider le formulaire. ")
+                flash(form.errors)
         return render_template('list.html', form=form, title="Formulaire Liste")
 
 

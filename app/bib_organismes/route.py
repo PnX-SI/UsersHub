@@ -83,9 +83,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.post(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                errors = form.errors
-                if(errors['nom_organisme'] != None):
-                    flash("Champ 'Nom Organisme' vide, veillez à le remplir afin de valider le formulaire. ")
+                flash(form.errors)
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method == 'GET':
@@ -98,9 +96,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.update(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                errors = form.errors
-                if(errors['nom_organisme'] != None):
-                    flash("Champ 'Nom Organisme' vide, veillez à le remplir afin de valider le formulaire. ")
+                flash(form.errors)
     return render_template('organism.html', form=form, title="Formulaire Organisme")
 
 
