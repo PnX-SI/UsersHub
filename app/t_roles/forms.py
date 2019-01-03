@@ -17,11 +17,7 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class Utilisateur(FlaskForm):
-    active = BooleanField(
-        'Actif',
-        validators=[DataRequired(message='Ce champ est obligatoire')],
-        default=True
-    )
+    active = BooleanField('Actif', default = True, false_values=(False, 'false'))
     nom_role = StringField('Nom', validators=[DataRequired(message='Ce champ est obligatoire')])
     prenom_role = StringField('Prenom')
     desc_role = TextAreaField('Prenom')
