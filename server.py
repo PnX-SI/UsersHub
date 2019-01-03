@@ -100,8 +100,8 @@ with app.app_context():
         from app.t_profils import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.auth import route
-        app.register_blueprint(route.route, url_prefix='/log')
+        # from app.auth import route
+        # app.register_blueprint(route.route, url_prefix='/log')
 
         from app.auth import route
         app.register_blueprint(route.route, url_prefix='/login')

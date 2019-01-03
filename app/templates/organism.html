@@ -1,5 +1,8 @@
-{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
-include "header.html" %} {% include "head-appli.html" %} {% block content %}
+{% import "bootstrap/wtf.html" as wtf %} 
+{%include "header.html" %} 
+{% include "head-appli.html" %} 
+
+{% block content %}
 
 <form method="post" class="container" novalidate>
   {{ form.hidden_tag() }} {{ form.csrf_token }}
