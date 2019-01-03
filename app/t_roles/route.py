@@ -87,9 +87,9 @@ def addorupdate(id_role=None):
         user = TRoles.get_one(id_role, as_model=True)
         user_as_dict = user.as_dict_full_name()
         # format group to prepfil the form
-        formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
+        # formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
         if request.method == 'GET':
-            form = process(form, user_as_dict, formated_groups)
+            form = process(form, user_as_dict)
 
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
@@ -196,7 +196,8 @@ def pops(form):
     return form
 
 
-def process(form, user, groups):
+# def process(form, user, groups):
+def process(form, user):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
     Avec pour paramètres un formulaire et un user
