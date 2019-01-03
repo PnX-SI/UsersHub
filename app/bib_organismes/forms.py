@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, SelectField, TextField
+from wtforms import (StringField, PasswordField, BooleanField, 
+    SubmitField, HiddenField, SelectField, TextField, validators
+)
 from wtforms.validators import DataRequired, Email
 # from wtforms_components import IntergerField
 
@@ -16,10 +18,7 @@ class Organisme(FlaskForm):
     ville_organisme = StringField ('Ville')
     tel_organisme = StringField('Téléphone')
     fax_organisme = StringField('Fax')
-    email_organisme = StringField(
-        'Email',
-        validators=[Email(message="L'email est incorect")]
-    )
+    email_organisme = StringField('E-mail', validators=[validators.Optional(), Email(message="L'email est incorect")])
     url_organisme = StringField('Url :')
     url_logo = StringField('Logo (url) :')
     id_organisme = HiddenField('id')
