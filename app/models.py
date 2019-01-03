@@ -203,7 +203,10 @@ class TRoles(GenericRepository):
 
         try:
             pass_plus = generate_password_hash(password.encode('utf-8')).decode('utf-8')
-            pass_md5 = hashlib.md5(password.encode('utf-8')).hexdigest()
+            if config.FILL_MD5_PASS:
+                pass_md5 = hashlib.md5(password.encode('utf-8')).hexdigest()
+            else:
+                pass_md5 = ''
         except Exception as e:
             raise e
 
