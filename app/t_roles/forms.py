@@ -32,5 +32,11 @@ class Utilisateur(FlaskForm):
     id_role = HiddenField('id')
     submit = SubmitField('Enregistrer')
 
+class UserPass(FlaskForm):
+    pass_plus = PasswordField('Mot de passe')
+    mdpconf = PasswordField('Confirmation')
+    id_role = HiddenField('id')
+    submit = SubmitField('Enregistrer')
+
 
 

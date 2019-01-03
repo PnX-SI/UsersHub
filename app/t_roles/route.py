@@ -41,13 +41,17 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif']  # noqa
-    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active']  # noqa
+    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif', 'pass']  # noqa
+    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
     tab = []
     for data in contents:
-        data['nom_organisme'] = data['organisme_rel']['nom_organisme']
+        data['nom_organisme'] = data['organisme_rel']['nom_organisme'] 
+        if data['pass_plus'] == '' or  data['pass_plus'] is None:
+            data['pass_plus'] = 'Non'
+        else:
+            data['pass_plus'] = 'Oui'
         tab.append(data)
 
     return render_template(
@@ -61,6 +65,8 @@ def users():
         pathU=config.URL_APPLICATION + "/user/update/",
         pathD=config.URL_APPLICATION + "/users/delete/",
         pathA=config.URL_APPLICATION + "/user/add/new",
+        pathZ=config.URL_APPLICATION + "/user/pass/",
+        passCol='True',
         name="un utilisateur",
         name_list="Utilisateurs"
     )
@@ -74,7 +80,7 @@ def addorupdate(id_role=None):
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un utilisateurs
     L'envoie du formulaire permet l'ajout ou la mise à jour de l'utilisateur dans la base
     Retourne un template accompagné du formulaire pré-rempli ou non selon le paramètre id_role
-    Une fois le formulaire validé on retourne une redirection vers la liste de type de tag
+    Une fois le formulaire validé on retourne une redirection vers la liste des utilisateurs
     """
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect(
@@ -127,6 +133,45 @@ def addorupdate(id_role=None):
             flash(form.errors)
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur", id_role=id_role
+    )
+
+@route.route('user/pass/<id_role>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def updatepass(id_role=None):
+    """
+    Route affichant un formulaire permettant de changer le pass des utilisateurs
+    L'envoie du formulaire permet la mise à jour du pass de l'utilisateur dans la base
+    Retourne un template accompagné du formulaire pré-rempli ou non selon le paramètre id_role
+    Une fois le formulaire validé on retourne une redirection vers la liste des utilisateurs
+    """
+    form = t_rolesforms.UserPass()
+    myuser = TRoles.get_one(id_role)
+    
+    if request.method == 'POST':
+        if form.validate_on_submit() and form.validate():
+            form_user = pops(form.data)
+            form_user.pop('id_role')
+            # check if passwords are the same
+            if form.pass_plus.data:
+                try:
+                    (
+                        form_user['pass_plus'], form_user['pass_md5']
+                    ) = TRoles.set_password(
+                        form.pass_plus.data, form.mdpconf.data
+                    )
+                except Exception as exp:
+                    flash({'password':[exp]})
+                    return render_template(
+                        'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role
+                    )
+            form_user['id_role'] = id_role
+            TRoles.update(form_user)
+            return redirect(url_for('user.users'))
+        else:
+            flash(form.errors)
+
+    return render_template(
+        'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role
     )
 
 

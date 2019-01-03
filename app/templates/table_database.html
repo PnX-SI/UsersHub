@@ -41,9 +41,15 @@
                 {% for name in fLine %}
                   <th scope="col">{{ name }}</th>
                 {% endfor %} 
-                {#{% set otherCols = otherCol %}#} 
+                {% if passCol == 'True'%}
+                <th style="vertical-align: middle; text-align: center" scope="col">
+                  <i title="Modifier le mot de passe" class="fa fa-key font-medium" aria-hidden="true"></i>
+                </th>
+                {%endif%}
                 {% if otherCol == 'True'%}
-                  <th style="vertical-align: middle; text-align: center" scope="col"><i title="{{ Members }}" class="fa fa-user font-medium" aria-hidden="true"></i></th>
+                  <th style="vertical-align: middle; text-align: center" scope="col">
+                    <i title="{{ Members }}" class="fa fa-user font-medium" aria-hidden="true"></i>
+                  </th>
                 {%endif%} 
                 {% if tag_orga == 'True'%}
                   <th scope="col">{{ Organismes }}</th>
@@ -67,16 +73,34 @@
                       <td style="vertical-align: middle;" class="table-primary">{{ elt[name] }}</td>
                     {% else %}
                       <td style="vertical-align: middle;">{{ elt[name] }}</td>
-                    {% endif%} 
+                    {% endif%}
                   {% endfor %} 
-                  {% set type_tag = elt['id_tag_type'] %} 
                   
-                  {% if otherCol == 'True'%}
-                    <td align="center">
-                      <a href="{{pathP}}{{elt[key]}}">
-                        <button type="submit" class="btn btn-secondary btn-sm ">
-                          <i class="fa fa-user font-medium" aria-hidden="true"></i></button></a>
+                  {% if passCol == 'True'%}
+                    <td style="vertical-align: middle; text-align: center">
+                      {% if elt['pass_plus'] == 'Oui' %}
+                        {% set pass_action = 'Modifier le mot de passe' %}
+                        {% set pass_class = 'secondary' %}
+                      {% else %}
+                        {% set pass_action = 'Ajouter un mot de passe' %}
+                        {% set pass_class = 'light' %}
+                      {% endif %}
+                        <a href="{{pathZ}}{{elt[key]}}">
+                          <button type="submit" class="btn btn-{{pass_class}} btn-sm " title="{{pass_action}}">
+                            <i class="fa fa-key font-medium" aria-hidden="true"></i>
+                          </button>
+                        </a>
                     </td>
+                  {%endif%}
+
+                  {% if otherCol == 'True'%}
+                  <td style="vertical-align: middle; text-align: center">
+                    <a href="{{pathP}}{{elt[key]}}">
+                      <button type="submit" class="btn btn-secondary btn-sm ">
+                        <i class="fa fa-user font-medium" aria-hidden="true"></i>
+                      </button>
+                    </a>
+                  </td>
                   {%endif%}
 
                   {% if permissions == 'True'%}

@@ -1,5 +1,5 @@
 import hashlib
-
+from flask import jsonify
 from app.env import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
@@ -199,7 +199,7 @@ class TRoles(GenericRepository):
         if not password:
             raise ValueError("Password is null")
         if password != password_confirmation:
-            raise ValueError("Password doesn't match")
+            raise ValueError("Passwords doesn't match")
 
         try:
             pass_plus = generate_password_hash(password.encode('utf-8')).decode('utf-8')

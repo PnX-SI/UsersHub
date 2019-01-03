@@ -87,7 +87,6 @@ def addorupdate(id_organisme):
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method == 'GET':
-            print(org)
             form = bib_organismeforms.Organisme(**org)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
@@ -96,6 +95,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.update(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
+                print(form.errors)
                 flash(form.errors)
     return render_template('organism.html', form=form, title="Formulaire Organisme")
 

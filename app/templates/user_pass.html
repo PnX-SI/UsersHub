@@ -1,0 +1,37 @@
+
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% include "head-appli.html" %}
+  {% include "header.html" %}
+
+{% block content %}
+
+  <form method="POST" class="container" novalidate>
+    <h3 class="margin-neg">{{ title }}</h3>
+
+    {{ form.hidden_tag() }}
+
+    <div class="row forms card">
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                 {% for message in messages %}
+                  {% for mess in message.values() %}
+                    {% for m in mess %}
+                      {{ m }}<br />
+                    {% endfor %}
+                  {% endfor %}
+                 {% endfor %}
+            </div>
+          {% endif %}
+      {% endwith %}
+      <div class="alert alert-info" role="alert">
+        Pour supprimer le mot de passe de l'utilisateur, il suffit d'enregistrer le formulaire avec les 2 champs vides.
+      </div>
+
+      {{ wtf.form_field(form.pass_plus) }}
+      {{ wtf.form_field(form.mdpconf) }}
+      {{ wtf.form_field(form.submit, class="btn btn-success") }}
+    </div>
+  </form>
+
+{% endblock %}
