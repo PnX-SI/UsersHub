@@ -19,13 +19,20 @@
   </h3>
 
   <div class="row forms card">
-    {% with messages = get_flashed_messages() %} 
+    {% with messages = get_flashed_messages() %}
       {% if messages %}
         <div class="alert alert-danger" role="alert">
-          Certains champs contiennent des erreurs
+          {% for message in messages %}
+            {% for mess in message.values() %}
+              {% for m in mess %}
+                {{ m }}<br />
+              {% endfor %}
+            {% endfor %}
+          {% endfor %}
         </div>
-      {% endif %} 
-    {% endwith %} 
+      {% endif %}
+    {% endwith %}
+
     {{ wtf.form_field(form.nom_application) }}
     {{ wtf.form_field(form.code_application) }}
     {{ wtf.form_field(form.desc_application) }}

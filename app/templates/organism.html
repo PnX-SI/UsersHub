@@ -9,12 +9,19 @@
   <h3 class="margin-neg">{{ title }}</h3>
 
   <div class="row forms card">
-    {% with messages = get_flashed_messages() %} {% if messages %}
-
-    <div class="alert alert-danger" role="alert">
-      Certains champs contiennent des erreurs
-    </div>
-    {% endif %} {% endwith %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+            {% for mess in message.values() %}
+              {% for m in mess %}
+                {{ m }}<br />
+              {% endfor %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
 
     {{ wtf.form_field(form.nom_organisme) }}
     {{ wtf.form_field(form.adresse_organisme) }}
