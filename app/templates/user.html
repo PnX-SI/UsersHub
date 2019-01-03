@@ -3,7 +3,6 @@
   {% include "head-appli.html" %}
   {% include "header.html" %}
 
-
 {% block content %}
 
   <form method="POST" class="container" novalidate>
@@ -27,7 +26,7 @@
       {{ wtf.form_field(form.prenom_role) }}
       {{ wtf.form_field(form.identifiant) }}
       {{ wtf.form_field(form.id_organisme, id="inputGroupSelect01") }}
-      {{ wtf.form_field(form.a_groupe) }}
+      <!-- {{ wtf.form_field(form.a_groupe) }} -->
       {% if not id_role %}
         {{ wtf.form_field(form.pass_plus) }}
         {{ wtf.form_field(form.mdpconf) }}
