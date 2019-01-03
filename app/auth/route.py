@@ -1,20 +1,7 @@
 from flask import (
     Flask, redirect, url_for, render_template,
-    Blueprint, request, session, flash, current_app
+    Blueprint, current_app
 )
-
-import bcrypt
-
-from app import genericRepository
-from app.auth import forms as authforms
-from app.models import TRoles
-from app.utils.utilssqlalchemy import json_resp
-from app.env import db
-from flask_bcrypt import (Bcrypt,
-                          check_password_hash,
-                          generate_password_hash)
-
-from config import config
 
 route = Blueprint('login', __name__)
 
