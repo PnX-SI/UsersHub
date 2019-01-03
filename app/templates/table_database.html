@@ -15,21 +15,22 @@
       {% endwith %}
 
       <div class="container main-zone ng-scope">
-        <h2>{{ name_list }}</h2>
-        <p>
-          {% if key2 %}
-          <a href="{{pathA}}{{key2}}"><button type="submit" class="btn btn-success btn-sm">
+        <div class="card p-4 mb-3 bg-secondary border border-0 text-white">
+          <h2>{{ name_list }}
+            {% if key2 %}
+              <a href="{{pathA}}{{key2}}">
+                <button type="submit" class="btn btn-outline-success btn-sm border border-white text-white float-right">
+            {% else %}
+              <a href="{{pathA}}"><button type="submit" class="btn btn-outline-success btn-sm border border-white text-white float-right">
+            {% endif %}
+                Ajouter {{ name }}
+                </button>
+              </a>
+          </h2>
+        </div>
 
-          {% else %}
-          <a href="{{pathA}}"><button type="submit" class="btn btn-success btn-sm">
-          {% endif %}
-          Ajouter {{ name }}
-          </button></a>
-        </p>
-      </div>
-      <div class="container main-zone ng-scope ">
         <div id="table">
-          <table class="table table-bordered table-striped table-sm " id="tri">
+          <table class="hover table table-bordered table-striped table-hover table-sm table-responsive-sm" id="tri">
             <thead>
               <tr class="footable-filtering"></tr>
               <tr>
@@ -38,7 +39,7 @@
                 {% endfor %} 
                 {#{% set otherCols = otherCol %}#} 
                 {% if otherCol == 'True'%}
-                  <th scope="col">{{ Members }}</th>
+                  <th style="vertical-align: middle; text-align: center" scope="col"><i title="{{ Members }}" class="fa fa-user font-medium" aria-hidden="true"></i></th>
                 {%endif%} 
                 {% if tag_orga == 'True'%}
                   <th scope="col">{{ Organismes }}</th>
@@ -47,10 +48,10 @@
                   <th scope="col">{{ Right }}</th>
                 {%endif%} 
                 {% if see == 'True'%}
-                  <th scope="col">Voir</th>
+                  <th style="vertical-align: middle; text-align: center" scope="col"><i title="Voir" class="fa fa-eye font-medium" aria-hidden="true"></i></th>
                 {%endif%}
-                <th scope="col">Modification</th>
-                <th scope="col">Suppression</th>
+                <th style="vertical-align: middle; text-align: center" scope="col"><i title="Modifier" class="fa fa-pencil font-medium" aria-hidden="true"></i></th>
+                <th style="vertical-align: middle; text-align: center" scope="col"><i title="Supprimer" class="fa fa-trash font-medium" aria-hidden="true"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -59,9 +60,9 @@
                   {% for name in line %} 
                     {% set groups = elt[group] %} 
                     {% if groups == 'True' %}
-                      <td class="table-primary">{{ elt[name] }}</td>
+                      <td style="vertical-align: middle;" class="table-primary">{{ elt[name] }}</td>
                     {% else %}
-                      <td>{{ elt[name] }}</td>
+                      <td style="vertical-align: middle;">{{ elt[name] }}</td>
                     {% endif%} 
                   {% endfor %} 
                   {% set type_tag = elt['id_tag_type'] %} 
@@ -75,18 +76,22 @@
                   {%endif%}
 
                   {% if permissions == 'True'%}
-                  <td align="center">
+                  <td style="vertical-align: middle; text-align: center">
                     <a href="{{pathR}}{{elt[key]}} ">
                       <button type="submit" class="btn btn-secondary btn-sm ">
-                        <i class="fa fa-user font-medium" aria-hidden="true"></i></button></a>
+                        <i class="fa fa-user font-medium" aria-hidden="true"></i>
+                      </button>
+                    </a>
                   </td>
                   {%endif%}
 
                   {% if see == 'True'%}
-                    <td align="center">
+                    <td style="vertical-align: middle; text-align: center">
                       <a href="{{pathI}}{{elt[key]}}">
                         <button type="submit" class="btn btn-secondary btn-sm ">
-                          <i class="fa fa-eye font-medium" aria-hidden="true"></i></button></a>
+                          <i class="fa fa-eye font-medium" aria-hidden="true"></i>
+                        </button>
+                      </a>
                     </td>
                   {%endif%}
 
@@ -94,16 +99,18 @@
                     <td></td>
                   {%endif%}
         
-                  <td align="center">
+                  <td style="vertical-align: middle; text-align: center">
                       {% if key2 %}
                       <a href="{{pathU}}{{elt[key]}}/{{key2}} ">
                       {% else %}
                       <a href="{{pathU}}{{elt[key]}}">
                       {% endif %}
                       <button type="submit" class="btn btn-secondary btn-sm">
-                        <i class="fa fa-pencil font-medium" aria-hidden="true"></i></button></a>
+                        <i class="fa fa-pencil font-medium" aria-hidden="true"></i>
+                      </button>
+                    </a>
                   </td>
-                  <td align="center">
+                  <td style="vertical-align: middle; text-align: center">
                     {% if key2 %}
                     <button onClick="deleteRaw('{{pathD}}{{elt[key]}}/{{key2}} ')" type="submit" class="btn btn-danger btn-sm">
                     {% else %}
@@ -116,7 +123,7 @@
               {% endfor %}
             </tbody>
           </table>
-        </div>
       </div>
+    </div>
   </body>
 </html>
