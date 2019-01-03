@@ -18,12 +18,12 @@ class MultiCheckboxField(SelectMultipleField):
 
 class Utilisateur(FlaskForm):
     active = BooleanField('Actif', default = True, false_values=(False, 'false'))
-    nom_role = StringField('Nom', validators=[DataRequired(message='Ce champ est obligatoire')])
+    nom_role = StringField('Nom', validators=[DataRequired(message="Le nom de l'utilisateur est obligatoire")])
     prenom_role = StringField('Prenom')
-    desc_role = TextAreaField('Prenom')
+    desc_role = TextAreaField('Description')
     id_organisme = SelectField('Organisme', coerce=int, choices=[], default=-1)
-    a_groupe = SelectMultipleField('Groupe', choices=[], coerce=int)
-    identifiant = StringField('Identifiant', validators=[DataRequired(message='Ce champ est obligatoire')])
+    # a_groupe = SelectMultipleField('Groupe', choices=[], coerce=int)
+    identifiant = StringField('Identifiant', validators=[DataRequired(message="L'identifiant est obligatoire")])
     pass_plus = PasswordField('Mot de passe')
     mdpconf = PasswordField('Confirmation')
     email = StringField('E-mail', validators=[validators.Optional(), Email(message="L'email est incorect")])

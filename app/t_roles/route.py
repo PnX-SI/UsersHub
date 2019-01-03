@@ -81,7 +81,7 @@ def addorupdate(id_role=None):
         'id_organisme',
         'nom_organisme'
     )
-    form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
+    # form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
 
     if id_role is not None:
         user = TRoles.get_one(id_role, as_model=True)
@@ -192,7 +192,7 @@ def pops(form):
     form.pop('mdpconf')
     form.pop('submit')
     form.pop('csrf_token')
-    form.pop('a_groupe')
+    # form.pop('a_groupe')
     return form
 
 
@@ -209,5 +209,5 @@ def process(form, user, groups):
     form.email.process_data(user['email'])
     form.remarques.process_data(user['remarques'])
     form.identifiant.process_data(user['identifiant'])
-    form.a_groupe.process_data(groups)
+    # form.a_groupe.process_data(groups)
     return form
