@@ -28,6 +28,7 @@
   "homepage": "https://github.com/PnEcrins/UsersHub#readme",
   "dependencies": {
     "bootstrap": "^4.1.3",
+    "datatables.net": "^1.10.19",
     "font-awesome": "^4.7.0",
     "footable": "^2.0.6",
     "jquery": "^3.3.1"
