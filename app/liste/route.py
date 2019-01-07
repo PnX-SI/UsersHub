@@ -7,7 +7,9 @@ from pypnusershub import routes as fnauth
 from app.env import URL_REDIRECT
 from app.liste import forms as listeforms
 from app.models import TListes, CorRoleListe, TRoles
+from app.utils.utils_all import strigify_dict
 from config import config
+
 
 route = Blueprint('liste', __name__)
 
@@ -85,7 +87,7 @@ def addorupdate(id_liste):
                 TListes.update(form_list)
                 return redirect(url_for('liste.lists'))
             else:
-                flash(form.errors)
+                flash(strigify_dict(form.errors))
         return render_template('list.html', form=form, title="Formulaire Liste")
 
 

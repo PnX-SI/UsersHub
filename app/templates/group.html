@@ -1,26 +1,16 @@
-{% import "bootstrap/wtf.html" as wtf %} 
-{% include "header.html" %} 
+{% import "wtf_bootstrap_4.html" as wtf %} 
+{% include "librairies.html" %} 
+
+{% block body%}
+
 {% include "head-appli.html" %} 
 
-{% block content %}
   <form method="post" class="container" novalidate>
     {{ form.hidden_tag() }} {{ form.csrf_token }}
     <h3 class="margin-neg">{{ title }}</h3>
 
     <div class="row card forms">
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <div class="alert alert-danger" role="alert">
-            {% for message in messages %}
-              {% for mess in message.values() %}
-                {% for m in mess %}
-                  {{ m }}<br />
-                {% endfor %}
-              {% endfor %}
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
+      {% include "alert_messages.html" %} 
 
       {{ wtf.form_field(form.nom_role) }}
       {{ wtf.form_field(form.desc_role) }}

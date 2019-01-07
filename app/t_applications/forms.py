@@ -53,4 +53,3 @@ class AppProfil(FlaskForm):
         self.role.choices = users_select_choices
         # choix des profils dispo pour une appli
         self.profil.choices = TProfils.choixSelect(id_application=id_application)
-

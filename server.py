@@ -6,7 +6,6 @@
 import json
 
 from flask import Flask, redirect, url_for, request, session, render_template
-from flask_bootstrap import Bootstrap
 from app.env import db
 from config import config
 
@@ -40,8 +39,6 @@ app = Flask(
     template_folder="app/templates",
     static_folder='app/static'
 )
-
-Bootstrap(app)
 
 app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
 
@@ -100,11 +97,8 @@ with app.app_context():
         from app.t_profils import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        # from app.auth import route
-        # app.register_blueprint(route.route, url_prefix='/log')
-
-        from app.auth import route
-        app.register_blueprint(route.route, url_prefix='/login')
+        from app.login import route
+        app.register_blueprint(route.route, url_prefix='/')
 
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')

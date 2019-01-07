@@ -1,45 +1,30 @@
-{% import "bootstrap/wtf.html" as wtf %} 
-{% include "header.html" %} 
-{% include "head-appli.html" %} 
+{% import "wtf_bootstrap_4.html" as wtf %} 
+{% include "librairies.html" %} 
+{% include "head-appli.html" %}
+
 {% block content %}
-
 <div class=container>
-
-
-<form method="post"  novalidate>
-  {{ form.hidden_tag() }} {{ form.csrf_token }}
-  <h3 class="margin-neg">{{ title }}
-    {% if id_application %}
-    <button  class="btn btn-primary">
-      <a style="color:white" href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
-          Editer les profils disponibles dans l'application
-      </a>
-    </button>
-    {% endif %}
-  </h3>
-
-  <div class="row forms card">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="alert alert-danger" role="alert">
-          {% for message in messages %}
-            {% for mess in message.values() %}
-              {% for m in mess %}
-                {{ m }}<br />
-              {% endfor %}
-            {% endfor %}
-          {% endfor %}
-        </div>
+  <form method="post"  novalidate>
+    {{ form.hidden_tag() }} {{ form.csrf_token }}
+    <h3 class="margin-neg">{{ title }}
+      {% if id_application %}
+      <button  class="btn btn-primary">
+        <a style="color:white" href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
+            Editer les profils disponibles dans l'application
+        </a>
+      </button>
       {% endif %}
-    {% endwith %}
+    </h3>
 
-    {{ wtf.form_field(form.nom_application) }}
-    {{ wtf.form_field(form.code_application) }}
-    {{ wtf.form_field(form.desc_application) }}
-    {{ wtf.form_field(form.id_parent) }}
-    {{ wtf.form_field(form.submit, class="form-control btn-success") }}
-  </div>
-</form>
-
+    <div class="row forms card">
+      {% include "alert_messages.html" %} 
+      
+      {{ wtf.form_field(form.nom_application) }}
+      {{ wtf.form_field(form.code_application) }}
+      {{ wtf.form_field(form.desc_application) }}
+      {{ wtf.form_field(form.id_parent) }}
+      {{ wtf.form_field(form.submit, class="form-control btn-success") }}
+    </div>
+  </form>
 </div>
 {% endblock %}

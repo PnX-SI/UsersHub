@@ -14,7 +14,7 @@ from app.t_roles import forms as t_rolesforms
 from app.models import (
     TRoles, Bib_Organismes, CorRoles
 )
-# from app.CRUVED.route import get_cruved_one
+from app.utils.utils_all import strigify_dict
 
 from config import config
 
@@ -130,7 +130,7 @@ def addorupdate(id_role=None):
             return redirect(url_for('user.users'))
 
         else:
-            flash(form.errors)
+            flash(strigify_dict(form.errors))
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur", id_role=id_role
     )
@@ -168,7 +168,7 @@ def updatepass(id_role=None):
             TRoles.update(form_user)
             return redirect(url_for('user.users'))
         else:
-            flash(form.errors)
+            flash(strigify_dict(form.errors))
 
     return render_template(
         'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role

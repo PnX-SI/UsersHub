@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}UsersHub V2{% endblock %}
+
+{% block styles %}
+  
+<style type="text/css">
+
+  #add {
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari 3-8 */
+    transform: rotate(180deg);
+  }
+
+  .font-big {
+    font-size: 50px !important;
+  }
+
+  .font-medium {
+    font-size: 25px !important;
+  }
+  
+  .forms {
+    padding: 40px !important;
+  }
+
+  .marge {
+    padding: 40px !important;
+  }
+
+  .form-control {
+    margin-bottom: 10px !important;
+  }
+
+  .margin-neg {
+    margin-left: -15px;
+  }
+
+</style>
+<link
+  rel="stylesheet"
+  href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='node_modules/footable/css/footable.standalone.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='node_modules/font-awesome/css/font-awesome.min.css') }}"
+/>
+<link
+rel="shortcut icon"
+href="{{ url_for('static', filename='images/favicon.png') }}"
+/>
+{% endblock styles%}
+
+
+{% block scripts %}
+  <script
+  src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"
+  type="text/javascript"
+  ></script>
+  <script
+  src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.js') }}"
+  type="text/javascript"
+  ></script>
+  <script
+  src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+  type="text/javascript"
+  ></script>
+  <script src="{{ url_for('constants_js') }} " type="text/javascript"></script>
+  <script
+  src="{{ url_for('static', filename='transfer.js') }}"
+  type="text/javascript"
+  ></script>
+{% endblock scripts %}

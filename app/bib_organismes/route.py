@@ -15,6 +15,7 @@ from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
 from app.models import Bib_Organismes, TRoles
 from config import config
+from app.utils.utils_all import strigify_dict
 
 
 route = Blueprint('organisme', __name__)
@@ -83,7 +84,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.post(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                flash(form.errors)
+                flash(strigify_dict(form.errors))
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method == 'GET':
@@ -95,8 +96,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.update(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                print(form.errors)
-                flash(form.errors)
+                flash(strigify_dict(form.errors))
     return render_template('organism.html', form=form, title="Formulaire Organisme")
 
 

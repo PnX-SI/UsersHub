@@ -1,22 +1,8 @@
-<html>
-  {% include "header.html" %}
-  <body>
-      {% include "head-appli.html" %}
+{% include "librairies.html" %} 
+{% include "head-appli.html" %}
+{% include "alert_messages.html" %} 
 
-
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <div class="alert alert-danger" role="alert">
-            {% for message in messages %}
-              {% for mess in message.values() %}
-                {% for m in mess %}
-                  {{ m }}<br />
-                {% endfor %}
-              {% endfor %}
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
+{% block content %}
 
       <div class="container main-zone ng-scope">
         <div class="card p-4 mb-3 bg-secondary border border-0 text-white">
@@ -87,7 +73,7 @@
                       {% endif %}
                         <a href="{{pathZ}}{{elt[key]}}">
                           <button type="submit" class="btn btn-{{pass_class}} btn-sm " title="{{pass_action}}">
-                            <i class="fa fa-key font-medium" aria-hidden="true"></i>
+                            <i class="fa fa-key font-medium" aria-hidden="true" title="{{Members}}"></i>
                           </button>
                         </a>
                     </td>
@@ -97,7 +83,7 @@
                   <td style="vertical-align: middle; text-align: center">
                     <a href="{{pathP}}{{elt[key]}}">
                       <button type="submit" class="btn btn-secondary btn-sm ">
-                        <i class="fa fa-user font-medium" aria-hidden="true"></i>
+                        <i class="fa fa-user font-medium" aria-hidden="true" title="Voir les membres"></i>
                       </button>
                     </a>
                   </td>
@@ -134,7 +120,7 @@
                       <a href="{{pathU}}{{elt[key]}}">
                       {% endif %}
                       <button type="submit" class="btn btn-secondary btn-sm">
-                        <i class="fa fa-pencil font-medium" aria-hidden="true"></i>
+                        <i class="fa fa-pencil font-medium" aria-hidden="true" title="Editer {{name}}"></i>
                       </button>
                     </a>
                   </td>
@@ -144,7 +130,7 @@
                     {% else %}
                       <button onClick="deleteRaw('{{pathD}}{{elt[key]}} ')" type="submit" class="btn btn-danger btn-sm">
                     {% endif %}
-                      <i class="fa fa-trash font-medium" aria-hidden="true"></i>
+                      <i class="fa fa-trash font-medium" aria-hidden="true"title="Supprimer {{name}}"></i>
                     </button>
                   </td>
                 </tr>
@@ -153,5 +139,5 @@
           </table>
       </div>
     </div>
-  </body>
-</html>
+
+{% endblock content %}

@@ -164,7 +164,7 @@ def profils_for_app(id_application):
 
 
 
-@route.route('application_roles_profil/<id_application>', methods=['GET', 'POST'])
+@route.route('application_roles_profil/<int:id_application>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def profils_in_app(id_application):
     """
@@ -249,10 +249,10 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
                             'id_profil': form.data['profil'],
                             'id_application': id_application
                         }
-                    )  
+                    )
             except Exception as e:
-                redirect(url_for('application.add_or_update_profil_for_role_in_app'))
-                flash("Une erreur s'est produite, {}".format(str(e)))
+                redirect(url_for('application.add_or_update_profil_for_role_in_app', id_application=id_application))
+                flash("Une erreur s'est produsite, {}".format(e))
             flash('Profil ajouté/edité avec succès')
             return redirect(url_for('application.profils_in_app', id_application=id_application))
 

@@ -1,7 +1,8 @@
 
-  {% import "bootstrap/wtf.html" as wtf %}
-  {% include "head-appli.html" %}
-  {% include "header.html" %}
+{% include "librairies.html" %}
+{% import "wtf_bootstrap_4.html" as wtf %} 
+{% include "head-appli.html" %}
+
 
 {% block content %}
 
@@ -11,19 +12,7 @@
     {{ form.hidden_tag() }}
 
     <div class="row forms card">
-      {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="alert alert-danger" role="alert">
-                 {% for message in messages %}
-                  {% for mess in message.values() %}
-                    {% for m in mess %}
-                      {{ m }}<br />
-                    {% endfor %}
-                  {% endfor %}
-                 {% endfor %}
-            </div>
-          {% endif %}
-      {% endwith %}
+      {% include "alert_messages.html" %} 
 
       {{ wtf.form_field(form.active) }}
       {{ wtf.form_field(form.nom_role) }}
