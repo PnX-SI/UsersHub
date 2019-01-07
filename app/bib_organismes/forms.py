@@ -12,14 +12,14 @@ class Organisme(FlaskForm):
     """
     Classe du formulaire des Organismes
     """
-    nom_organisme = StringField('Nom organisme', validators=[DataRequired(message="Le nom de l'organisme est obligatoire")])
+    nom_organisme = StringField("Nom de l'organisme", validators=[DataRequired(message="Le nom de l'organisme est obligatoire")])
     adresse_organisme = StringField('Adresse')
     cp_organisme = StringField('Code Postal')
     ville_organisme = StringField ('Ville')
     tel_organisme = StringField('Téléphone')
     fax_organisme = StringField('Fax')
     email_organisme = StringField('E-mail', validators=[validators.Optional(), Email(message="L'email est incorect")])
-    url_organisme = StringField('Url :')
+    url_organisme = StringField("Url du site web de l'organisme:")
     url_logo = StringField('Logo (url) :')
     id_organisme = HiddenField('id')
     submit = SubmitField('Enregistrer')
