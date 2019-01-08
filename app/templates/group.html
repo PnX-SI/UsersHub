@@ -1,10 +1,8 @@
 {% import "wtf_bootstrap_4.html" as wtf %} 
 {% include "librairies.html" %} 
+{% include "head-appli.html" %}
 
-{% block body%}
-
-{% include "head-appli.html" %} 
-
+{% block content %}
   <form method="post" class="container" novalidate>
     {{ form.hidden_tag() }} {{ form.csrf_token }}
     <h3 class="margin-neg">{{ title }}</h3>
