@@ -44,9 +44,10 @@ def users():
     columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
+    print(contents)
     tab = []
     for data in contents:
-        data['nom_organisme'] = data['organisme_rel']['nom_organisme'] 
+        data['nom_organisme'] = data['organisme_rel']['nom_organisme'] if data.get('organisme_rel') else None
         if data['pass_plus'] == '' or  data['pass_plus'] is None:
             data['pass_plus'] = 'Non'
         else:
