@@ -44,7 +44,6 @@ def users():
     columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
-    print(contents)
     tab = []
     for data in contents:
         data['nom_organisme'] = data['organisme_rel']['nom_organisme'] if data.get('organisme_rel') else None
@@ -167,7 +166,7 @@ def updatepass(id_role=None):
     
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
-            form_user = pops(form.data)
+            form_user = pops(form.data, False)
             form_user.pop('id_role')
             # check if passwords are the same
             if form.pass_plus.data:
@@ -247,7 +246,7 @@ def deluser(id_role):
 #     )
 
 
-def pops(form):
+def pops(form, with_group=True):
     """
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
@@ -255,7 +254,8 @@ def pops(form):
     form.pop('mdpconf')
     form.pop('submit')
     form.pop('csrf_token')
-    form.pop('a_groupe')
+    if with_group:
+        form.pop('a_groupe')
     return form
 
 
