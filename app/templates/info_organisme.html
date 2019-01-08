@@ -1,0 +1,21 @@
+{% include "librairies.html" %}   
+{% include "head-appli.html" %}
+
+{% block content %}
+<div class="container main-zone ng-scope ">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h3>Organisme "{{org['nom_organisme']}}"</h3></li>
+        <li class="list-group-item"><strong>Adresse :</strong> {{org['adresse_organisme']}}</li>
+        <li class="list-group-item"><strong>Code postal :</strong> {{org['cp_organisme']}}</li>
+        <li class="list-group-item"><strong>Ville :</strong> {{org['ville_organisme']}}</li>
+        <li class="list-group-item"><strong>Téléphone :</strong> {{org['tel_organisme']}}</li>
+        <li class="list-group-item"><strong>Email :</strong> {{org['email_organisme']}}</li>
+        <li class="list-group-item"><strong>Utilisateurs de l'organisme "{{org['nom_organisme']}}" :</strong>
+                {% for user in users %}
+                    {{user}}, 
+                {% endfor %}   
+            </ul>
+        </li>
+    </ul>
+</div>
+{% endblock %}
