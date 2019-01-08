@@ -20,12 +20,16 @@
       {% if id_application %}
         <div class="card">
           <div class="card-body">
-            <h4>Liste des profils disponibles pour cette application</h4>
-            <ul>
-              {% for profil in profils%}
-                <li>{{profil.nom_profil}} ({{profil.code_profil}})</li>
-              {% endfor %}
-            </ul>
+            {% if profils|length > 0 %}
+              <h4>Liste des profils disponibles pour cette application</h4>
+              <ul>
+                {% for profil in profils%}
+                  <li>{{profil.nom_profil}} ({{profil.code_profil}})</li>
+                {% endfor %}
+              </ul>
+            {%else%}
+              <h4 class="text-danger text-center">Attention, aucun profil n'a été défini pour cette application</h4><br />
+            {% endif %}
             <button class="btn btn-info btn-block">
               <a style="color:white" href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
                 Editer les profils disponibles
