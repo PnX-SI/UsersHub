@@ -221,10 +221,9 @@ class TRoles(GenericRepository):
         """
 
         # recupère tous les role actif
-        q = cls.get_all(as_model =True, params=[{'col': 'active', 'filter': True}])
-        data =[data.as_dict_full_name() for data in q.all()]
+        roles = cls.get_all(as_model=True, params=[{'col': 'active', 'filter': True}])
         choices = []
-        for role in q.all():
+        for role in roles:
             role_as_dict = role.as_dict_full_name()
             choices.append((role_as_dict[id], role_as_dict[nom]))
         if aucun != None:
