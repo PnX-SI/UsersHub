@@ -114,7 +114,7 @@ def addorupdate(id_role=None):
                         form.pass_plus.data, form.mdpconf.data
                     )
                 except Exception as exp:
-                    flash(str(exp))
+                    flash(str(exp), 'error')
                     return render_template(
                         'user.html', form=form, title="Formulaire Utilisateur"
                     )
@@ -148,7 +148,7 @@ def addorupdate(id_role=None):
             return redirect(url_for('user.users'))
 
         else:
-            flash(strigify_dict(form.errors))
+            flash(strigify_dict(form.errors), 'error')
     return render_template(
         'user.html', form=form, title="Formulaire Utilisateur", id_role=id_role
     )
@@ -178,7 +178,7 @@ def updatepass(id_role=None):
                         form.pass_plus.data, form.mdpconf.data
                     )
                 except Exception as exp:
-                    flash({'password':[exp]})
+                    flash({'password':[exp]}, 'error')
                     return render_template(
                         'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role
                     )
@@ -186,7 +186,7 @@ def updatepass(id_role=None):
             TRoles.update(form_user)
             return redirect(url_for('user.users'))
         else:
-            flash(strigify_dict(form.errors))
+            flash(strigify_dict(form.errors), 'error')
 
     return render_template(
         'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role

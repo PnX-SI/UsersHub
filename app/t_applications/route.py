@@ -252,7 +252,7 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
                     )
             except Exception as e:
                 redirect(url_for('application.add_or_update_profil_for_role_in_app', id_application=id_application))
-                flash("Une erreur s'est produite, {}".format(e))
+                flash("Une erreur s'est produite, {}".format(e), 'error')
             flash('Profil ajouté/edité avec succès')
             return redirect(url_for('application.profils_in_app', id_application=id_application))
 
@@ -270,7 +270,7 @@ def delete_cor_role_app_profil(id_role, id_application):
     try:
         CorRoleAppProfil.delete(id_role, id_application)
     except Exception:
-        flash("Une erreur s'est produite")
+        flash("Une erreur s'est produite", 'error')
     flash("Profil supprimé avec succès")
     return redirect(
         url_for(

@@ -10,7 +10,7 @@ from app.groupe import forms as groupeforms
 from app.models import TRoles
 from app.models import CorRoles
 from config import config
-# from app.CRUVED.route import get_cruved_one
+from app.utils.utils_all import strigify_dict
 
 
 route = Blueprint('groupe', __name__)
@@ -95,7 +95,7 @@ def addorupdate(id_role=None):
                 return redirect(url_for('groupe.groups'))
             else:
                 errors = form.errors
-                flash(errors)
+                flash(strigify_dict(errors), 'error')
         return render_template('group.html', form=form, title="Formulaire Groupe")
 
 

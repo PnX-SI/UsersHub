@@ -84,7 +84,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.post(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                flash(strigify_dict(form.errors))
+                flash(strigify_dict(form.errors), 'error')
     else:
         org = Bib_Organismes.get_one(id_organisme)
         if request.method == 'GET':
@@ -96,7 +96,7 @@ def addorupdate(id_organisme):
                 Bib_Organismes.update(form_org)
                 return redirect(url_for('organisme.organisms'))
             else:
-                flash(strigify_dict(form.errors))
+                flash(strigify_dict(form.errors), 'error')
     return render_template('organism.html', form=form, title="Formulaire Organisme")
 
 
