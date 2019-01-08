@@ -232,7 +232,7 @@ class TRoles(GenericRepository):
         return choices
 
     @classmethod
-    def choix_group(cls,id,nom,aucun = None):
+    def choix_group(cls,id, nom, aucun=None):
         """
         Methode qui retourne une tableau de tuples d'id de groupes et de nom de goupes
         Avec pour paramètres un id de groupe et un nom de groupe
@@ -240,7 +240,7 @@ class TRoles(GenericRepository):
         """
 
         q = db.session.query(cls)
-        q = q.filter(cls.groupe == True )
+        q = q.filter(cls.groupe == True)
         data = [data.as_dict(True) for data in q.all()]
         choices = []
         for d in data :

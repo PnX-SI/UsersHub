@@ -15,10 +15,9 @@ from app.models import (
     TRoles, Bib_Organismes, CorRoles
 )
 from app.utils.utils_all import strigify_dict
+from app.env import db
 
 from config import config
-
-
 route = Blueprint('user', __name__)
 
 
@@ -87,18 +86,19 @@ def addorupdate(id_role=None):
         'id_organisme',
         'nom_organisme'
     )
-    # form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', 1)
+    form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', aucun=None)
 
     if id_role is not None:
         user = TRoles.get_one(id_role, as_model=True)
         user_as_dict = user.as_dict_full_name()
         # format group to prepfil the form
-        # formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
+        formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
         if request.method == 'GET':
-            form = process(form, user_as_dict)
+            form = process(form, user_as_dict, formated_groups)
 
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
+            groups = form.data['a_groupe']
             form_user = pops(form.data)
             form_user['groupe'] = False
             form_user.pop('id_role')
@@ -124,9 +124,26 @@ def addorupdate(id_role=None):
                 form_user['pass_plus'] = user.pass_plus
                 form_user['pass_md5'] = user.pass_md5
                 form_user['id_role'] = user.id_role
-                TRoles.update(form_user)
+                new_role = TRoles.update(form_user)
             else:
-                TRoles.post(form_user)
+                new_role = TRoles.post(form_user)
+            # set groups
+            if len(groups) > 0:
+                if id_role:
+                    #first delete all groups of the user
+                    cor_role_to_delete = CorRoles.get_all(
+                        params=[{'col': 'id_role_utilisateur', 'filter': id_role}],
+                        as_model=True
+                    )
+                    print(cor_role_to_delete)
+                    for cor_role in cor_role_to_delete:
+                        db.session.delete(cor_role)
+                    db.session.commit()
+                for group in groups:
+                    # add new groups
+                    new_group = CorRoles(id_role_groupe=group, id_role_utilisateur=new_role.id_role)
+                    db.session.add(new_group)
+                db.session.commit()
             return redirect(url_for('user.users'))
 
         else:
@@ -237,17 +254,15 @@ def pops(form):
     form.pop('mdpconf')
     form.pop('submit')
     form.pop('csrf_token')
-    # form.pop('a_groupe')
+    form.pop('a_groupe')
     return form
 
 
-# def process(form, user, groups):
-def process(form, user):
+def process(form, user, groups):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire et un user
+    Avec pour paramètres un formulaire, un user et les groupes auxquels il appartient
     """
-
     form.active.process_data(user['active'])
     form.id_organisme.process_data(user['id_organisme'])
     form.nom_role.process_data(user['nom_role'])
@@ -255,5 +270,5 @@ def process(form, user):
     form.email.process_data(user['email'])
     form.remarques.process_data(user['remarques'])
     form.identifiant.process_data(user['identifiant'])
-    # form.a_groupe.process_data(groups)
+    form.a_groupe.process_data(groups)
     return form

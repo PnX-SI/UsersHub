@@ -22,7 +22,7 @@ class Utilisateur(FlaskForm):
     prenom_role = StringField('Prenom')
     desc_role = TextAreaField('Description')
     id_organisme = SelectField('Organisme', coerce=int, choices=[], default=-1)
-    # a_groupe = SelectMultipleField('Groupe', choices=[], coerce=int)
+    a_groupe = SelectMultipleField('', choices=[], coerce=int)
     identifiant = StringField('Identifiant', validators=[DataRequired(message="L'identifiant est obligatoire")])
     pass_plus = PasswordField('Mot de passe')
     mdpconf = PasswordField('Confirmation')

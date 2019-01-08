@@ -103,7 +103,6 @@ with app.app_context():
         from app.API import route
         app.register_blueprint(route.route, url_prefix='/api')
 
-        
 
     if config.ACTIVATE_API:
         from app.API import route_register

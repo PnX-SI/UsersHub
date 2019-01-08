@@ -15,7 +15,7 @@ class GenericRepository(db.Model):
         """
         Methode qui retourne un dictionnaire d'un élément d'un Model
         Avec pour paramètres l'id de l'élément
-        Si as_model != False alors au lieu de retourner un dictionnaire on retourne une requête
+        Si as_model != False alors au lieu de retourner un dictionnaire on retourne l'object du modèle
         """
 
         if as_model == False:
@@ -25,7 +25,7 @@ class GenericRepository(db.Model):
             return db.session.query(cls).get(id)
 
     @classmethod
-    def get_all(cls, columns=None, params=None, recursif = True,as_model = False):
+    def get_all(cls, columns=None, params=None, recursif=True, as_model=False):
 
         """
         Methode qui retourne un dictionnaire de tout les éléments d'un Model
@@ -34,20 +34,20 @@ class GenericRepository(db.Model):
                             params un tableau contenant un dictionnaire de filtre [{'col': colonne à filtrer, 'filter': paramètre de filtrage}]
                             si recursif != True on désactive la fonction récursive du as_dict()
                             si as_model != False alors au lieu de retourner un dictionnaire on retourne une requête
-        Si as_model != False alors au lieu de retourner un dictionnaire on retourne une requête
+        Si as_model != False alors au lieu de retourner un dictionnaire on retourne un tableau d'objets du modèle
         """
-
-        if as_model == False:
-            if params == None :
-                return [data.as_dict(recursif,columns) for data in db.session.query(cls).all()]
-            else:
-                q = db.session.query(cls)
-                for param in params :
-                    nom_col = getattr(cls,param['col'])
-                    q = q.filter(nom_col == param['filter'])
-                return [data.as_dict(recursif,columns) for data in q.all()]
-        else :
-            return db.session.query(cls)
+        data = None
+        if params == None :
+            data = db.session.query(cls).all()
+        else:
+            q = db.session.query(cls)
+            for param in params:
+                nom_col = getattr(cls, param['col'])
+                q = q.filter(nom_col == param['filter'])
+            data = q.all()
+        if as_model:
+            return data
+        return [d.as_dict(recursif, columns) for d in data]
 
 
     @classmethod
@@ -56,10 +56,14 @@ class GenericRepository(db.Model):
         """
         Methode qui ajoute un élément à une table
         Avec pour paramètres un dictionnaire de cet élément
+        Retourne le modèle nouvellement ajouté
         """
         try:
-            db.session.add(cls(**entity_dict))
+            model = cls(**entity_dict)
+            db.session.add(model)
             db.session.commit()
+            return model
+
         except Exception:
             db.session.rollback()
             raise
@@ -70,12 +74,14 @@ class GenericRepository(db.Model):
         """
         Methode qui met à jour un élément
         Avec pour paramètre un dictionnaire de cet élément
+        Retourne le modèle mis à jour
         """
         try:
-            db.session.merge(cls(**entity_dict))
+            model = cls(**entity_dict)
+            db.session.merge(model)
             db.session.commit()
+            return model
         except Exception as e:
-            print('LAAAAAAAAAAA')
             print(e)
             db.session.rollback()
             raise
