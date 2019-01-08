@@ -9,6 +9,7 @@
         <div class="row forms">
             <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
                 <table  id="user" class="table table-bordered table-sm" >
+                    <caption style="caption-side: top;">Profils disponibles <small>non utilisables dans l'application</small></caption>
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -31,18 +32,19 @@
             </div>
             
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <p><br/><br/><br/></p>
-                <button onclick="add()" type="button" class="btn btn-light " >
+                <p></p>
+                <button onclick="add()" type="button" class="btn btn-light"  title="Ajouter">
                     <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
                 </button>
                 <p></p>
-                <button onclick="del()" type="button" class="btn btn-light " >
+                <button onclick="del()" type="button" class="btn btn-light"  title="Retirer">
                     <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
                 </button>                    
             </div>
 
             <div class="col-xs-11 col-sm-11 col-md-5 col-lg-5">
                 <table  id="adding_table"  class="table table-bordered table-sm" data-filtering="true" >
+                    <caption style="caption-side: top;">Profils utilisables pour l'application </caption>
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -63,7 +65,7 @@
                     </tbody>
                 </table>
             </div>
-            <button onclick = "update()" id="update" class ="btn btn-success btn-sm">Enregistrer</button>
+            <button onclick = "update()" id="update" class ="btn btn-success btn-block">Enregistrer</button>
         </div>
     </div>
 
