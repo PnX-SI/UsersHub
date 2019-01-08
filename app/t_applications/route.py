@@ -119,7 +119,7 @@ def addorupdate(id_application):
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_application):
     """
-    Route qui supprime une application dont l'id est donné en paramètres dans l'url
+    Route qui supprime une application dont l'id est donné en paramètres dans l'URL
     Retourne une redirection vers la liste de groupe
     """
     TApplications.delete(id_application)
@@ -252,7 +252,7 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
                     )
             except Exception as e:
                 redirect(url_for('application.add_or_update_profil_for_role_in_app', id_application=id_application))
-                flash("Une erreur s'est produsite, {}".format(e))
+                flash("Une erreur s'est produite, {}".format(e))
             flash('Profil ajouté/edité avec succès')
             return redirect(url_for('application.profils_in_app', id_application=id_application))
 
