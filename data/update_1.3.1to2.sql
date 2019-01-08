@@ -231,11 +231,11 @@ FROM utilisateurs.t_listes
 
 -- Vue permettant de simuler le contenu de la table "cor_role_menu" de la V1
 CREATE OR REPLACE VIEW utilisateurs.cor_role_menu AS 
-SELECT 
-DISTINCT
+SELECT DISTINCT
 crl.id_role,
 crl.id_liste AS id_menu
-FROM utilisateurs.cor_role_liste crl;	 
+FROM utilisateurs.cor_role_liste crl
+JOIN utilisateurs.t_roles r ON r.id_role = crl.id_role AND r.active = true;	 
 
 -- Vue permettant de simuler le contenu de la table "bib_droits" de la V1
 CREATE OR REPLACE VIEW utilisateurs.bib_droits AS 
@@ -249,10 +249,11 @@ WHERE id_profil <= 6;
 -- Vue permettant de simuler le contenu de la table "cor_role_droit_application" de la V1
 CREATE OR REPLACE VIEW utilisateurs.cor_role_droit_application AS 
 SELECT 
- id_role,
- id_profil as id_droit, 
- id_application
-FROM utilisateurs.cor_role_app_profil; 
+ crap.id_role,
+ crap.id_profil as id_droit, 
+ crap.id_application
+FROM utilisateurs.cor_role_app_profil crap
+JOIN utilisateurs.t_roles r ON r.id_role = crap.id_role AND r.active = true; 
 
 -- Vue permettant de retourner les utilisateurs des listes (menus)
 DROP VIEW utilisateurs.v_userslist_forall_menu;
@@ -299,7 +300,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_menu AS
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_liste c ON c.id_role = u.id_role
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false
+          WHERE u.groupe = false AND u.active = true
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -324,7 +325,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_menu AS
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_liste c ON c.id_role = g.id_role_groupe
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false) a;
+          WHERE u.groupe = false AND u.active = true) a;
 
 -- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
 DROP VIEW utilisateurs.v_userslist_forall_applications;
@@ -370,7 +371,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-           WHERE u.groupe = false
+           WHERE u.groupe = false AND u.active = true
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -395,7 +396,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false) a
+          WHERE u.groupe = false AND u.active = true) a
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
 --On essaie de recréer une vue qui n'existe pas dans toutes les bases
@@ -444,7 +445,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_nomade_observateurs_all AS
                                   WHERE crm.id_menu = 11))
                           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
                            FROM utilisateurs.cor_role_menu crm
-                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false AND r.active = true))
                   ORDER BY r.nom_role, r.prenom_role, r.id_role)
         UNION 
                 ( SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role, 'flora'::text AS mode
@@ -456,7 +457,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_nomade_observateurs_all AS
                                   WHERE crm.id_menu = 5))
                           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
                            FROM utilisateurs.cor_role_menu crm
-                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
+                      JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false AND r.active = true))
                   ORDER BY r.nom_role, r.prenom_role, r.id_role))
 UNION 
         ( SELECT DISTINCT r.id_role, r.nom_role, r.prenom_role, 'inv'::text AS mode
@@ -468,7 +469,7 @@ UNION
                           WHERE crm.id_menu = 11))
                   ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
                    FROM utilisateurs.cor_role_menu crm
-              JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+              JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false AND r.active = true))
           ORDER BY r.nom_role, r.prenom_role, r.id_role);
 EXCEPTION WHEN undefined_table  THEN
         RAISE NOTICE 'Cette vue n''existe pas';
@@ -544,7 +545,7 @@ ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
 --                   WHERE crm.id_menu = 5))
 --           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
 --            FROM utilisateurs.cor_role_menu crm
---       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false))
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 5 AND r.groupe = false AND r.active = true))
 --   ORDER BY (r.nom_role::text || ' '::text) || r.prenom_role::text, r.id_role;
 --   EXCEPTION WHEN undefined_table  THEN
 --         RAISE NOTICE 'Cet vue n''existe pas';
@@ -565,7 +566,7 @@ ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
 --                   WHERE crm.id_menu = 11))
 --           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
 --            FROM utilisateurs.cor_role_menu crm
---       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false AND r.active = true))
 --   ORDER BY r.nom_role, r.prenom_role, r.id_role;
 -- EXCEPTION WHEN undefined_table  THEN
 --         RAISE NOTICE 'Cet vue n''existe pas';
@@ -586,7 +587,7 @@ ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
 --                   WHERE crm.id_menu = 11))
 --           ORDER BY cr.id_role_utilisateur)) OR (r.id_role IN ( SELECT crm.id_role
 --            FROM utilisateurs.cor_role_menu crm
---       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false))
+--       JOIN utilisateurs.t_roles r ON r.id_role = crm.id_role AND crm.id_menu = 11 AND r.groupe = false AND r.active = true))
 --   ORDER BY r.nom_role, r.prenom_role, r.id_role;
 --   EXCEPTION WHEN undefined_table  THEN
 --         RAISE NOTICE 'Cet vue n''existe pas';

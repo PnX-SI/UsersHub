@@ -239,7 +239,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_liste c ON c.id_role = u.id_role
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false
+          WHERE u.groupe = false AND u.active = true
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -264,7 +264,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_liste c ON c.id_role = g.id_role_groupe
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false) a;
+          WHERE u.groupe = false AND u.active = true) a;
 
 -- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
 CREATE OR REPLACE VIEW v_userslist_forall_applications AS 
@@ -309,7 +309,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-           WHERE u.groupe = false
+           WHERE u.groupe = false  AND u.active = true
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -334,6 +334,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_applications AS
              JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
              JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false) a
+          WHERE u.groupe = false AND u.active = true) a
   GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 

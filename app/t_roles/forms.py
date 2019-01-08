@@ -23,7 +23,7 @@ class Utilisateur(FlaskForm):
     desc_role = TextAreaField('Description')
     id_organisme = SelectField('Organisme', coerce=int, choices=[], default=-1)
     a_groupe = SelectMultipleField('', choices=[], coerce=int)
-    identifiant = StringField('Identifiant', validators=[DataRequired(message="L'identifiant est obligatoire")])
+    identifiant = StringField('Identifiant')
     pass_plus = PasswordField('Mot de passe')
     mdpconf = PasswordField('Confirmation')
     email = StringField('E-mail', validators=[validators.Optional(), Email(message="L'email est incorect")])
