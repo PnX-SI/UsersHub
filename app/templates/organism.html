@@ -3,11 +3,9 @@
 {% include "head-appli.html" %} 
 
 {% block content %}
-
 <form method="post" class="container" novalidate>
   {{ form.hidden_tag() }} {{ form.csrf_token }}
   <h3 class="margin-neg">{{ title }}</h3>
-
   <div class="row forms card">
     {% include "alert_messages.html" %} 
 

@@ -6,15 +6,7 @@
 <div class=container>
   <form method="post"  novalidate>
     {{ form.hidden_tag() }} {{ form.csrf_token }}
-    <h3 class="margin-neg">{{ title }}
-      {% if id_application %}
-      <button  class="btn btn-primary">
-        <a style="color:white" href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
-            Editer les profils disponibles dans l'application
-        </a>
-      </button>
-      {% endif %}
-    </h3>
+    <h3 class="margin-neg">{{ title }}</h3>
 
     <div class="row forms card">
       {% include "alert_messages.html" %} 
@@ -24,6 +16,29 @@
       {{ wtf.form_field(form.desc_application) }}
       {{ wtf.form_field(form.id_parent) }}
       {{ wtf.form_field(form.submit, class="form-control btn-success") }}
+
+      {% if id_application %}
+        <div class="card">
+          <div class="card-body">
+            {% if profils|length > 0 %}
+              <h4>Liste des profils disponibles pour cette application</h4>
+              <ul>
+                {% for profil in profils%}
+                  <li>{{profil.nom_profil}} ({{profil.code_profil}})</li>
+                {% endfor %}
+              </ul>
+            {%else%}
+              <h4 class="text-danger text-center">Attention, aucun profil n'a été défini pour cette application</h4><br />
+            {% endif %}
+            <button class="btn btn-info btn-block">
+              <a style="color:white" href=" {{url_for('application.profils_for_app', id_application=id_application)}} ">
+                Editer les profils disponibles
+              </a>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+      
     </div>
   </form>
 </div>

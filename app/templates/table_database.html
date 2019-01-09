@@ -41,7 +41,7 @@
                   <th scope="col">{{ Organismes }}</th>
                 {% endif %} 
                 {% if permissions == 'True' %}
-                  <th scope="col">{{ Right }}</th>
+                  <th style="vertical-align: middle; text-align: center" scope="col" title="{{ Right }}"><i class="fa fa-hand-paper-o font-medium" aria-hidden="true"></i></th>
                 {%endif%} 
                 {% if see == 'True'%}
                   <th style="vertical-align: middle; text-align: center" scope="col"><i title="Voir" class="fa fa-eye font-medium" aria-hidden="true"></i></th>
@@ -91,9 +91,9 @@
 
                   {% if permissions == 'True'%}
                   <td style="vertical-align: middle; text-align: center">
-                    <a href="{{pathR}}{{elt[key]}} ">
+                    <a href="{{pathR}}{{elt[key]}} " title="{{Right}}">
                       <button type="submit" class="btn btn-secondary btn-sm ">
-                        <i class="fa fa-user font-medium" aria-hidden="true"></i>
+                        <i class="fa fa-hand-paper-o font-medium" aria-hidden="true"></i>
                       </button>
                     </a>
                   </td>
@@ -107,10 +107,6 @@
                         </button>
                       </a>
                     </td>
-                  {%endif%}
-
-                  {%if permissions == 'True'%}
-                    <td></td>
                   {%endif%}
         
                   <td style="vertical-align: middle; text-align: center">

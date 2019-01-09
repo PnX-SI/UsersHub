@@ -56,11 +56,13 @@ def applications():
         pathD=config.URL_APPLICATION + "/application/delete/",
         pathA=config.URL_APPLICATION + "/application/add/new",
         pathP=config.URL_APPLICATION + "/application_roles_profil/",
+        pathR=config.URL_APPLICATION + "/application/profils/",
         name="une application",
         name_list="Applications",
         otherCol='True',
         Members="Gérer les utilisateurs",
-        permissions="False",
+        permissions="True",
+        Right="Profils disponibles"
     )
 
 
@@ -99,6 +101,7 @@ def addorupdate(id_application):
             else:
                 form.id_parent.process_data(application['id_parent'])
             form_app = process(form, application)
+            profils_in_app = TProfils.get_profils_in_app(id_application)
         if request.method == 'POST':
             if form.validate_on_submit() and form.validate():
                 form_app = pops(form.data)
@@ -111,6 +114,7 @@ def addorupdate(id_application):
             'application.html',
              form=form,
              title="Formulaire Application",
+             profils=profils_in_app,
              id_application=id_application
              )
 

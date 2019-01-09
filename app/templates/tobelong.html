@@ -24,11 +24,11 @@
             <tbody>
                 {% for elt in table %}
                     <tr>
-                            <td><input id="checkBox" type="checkbox"> </td>    
+                        <td><input id="checkBox" type="checkbox"> </td>    
                         {% for name in data %}
                             {% set groups = elt[group] %}  
                             {% if groups == 'True' %}    
-                                <td class = "table-primary" >{{elt[name]}}</td>
+                                <td class="table-primary" >{{elt[name]}}</td>
                             {% else %}
                                 <td >{{elt[name]}}</td>
                             {% endif%}
@@ -41,19 +41,19 @@
       <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <p><br/><br/><br/></p>
           {% if app == 'True'%}
-              <button onclick="add('app')" type="button" class="btn btn-light " >
+              <button onclick="add('app')" type="button" class="btn btn-light" title="Ajouter">
                   <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
               </button>
               <p></p>
-              <button onclick="del('app')" type="button" class="btn btn-light " >
+              <button onclick="del('app')" type="button" class="btn btn-light" title="Ajouter">
                   <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
               </button>
           {% else %}
-              <button onclick="add()" type="button" class="btn btn-light " >
+              <button onclick="add()" type="button" class="btn btn-light" title="Ajouter">
                   <i class="fa fa-arrow-circle-o-right font-big" aria-hidden="true"></i> 
               </button>
               <p></p>
-              <button onclick="del()" type="button" class="btn btn-light " >
+              <button onclick="del()" type="button" class="btn btn-light" title="Retirer">
                   <i class="fa fa-arrow-circle-o-left font-big" aria-hidden="true"></i> 
               </button>                    
           {% endif%}
@@ -104,9 +104,9 @@
         </div>
 
         {% if app == 'True'%}
-            <button onclick="update_right()" id="update" class="btn btn-success btn-sm">Enregistrer</button>
+            <button onclick="update_right()" id="update" class="btn btn-success btn-block">Enregistrer</button>
         {% else %}
-            <button onclick="update()" id="update" class="btn btn-success btn-sm">Enregistrer</button>
+            <button onclick="update()" id="update" class="btn btn-success btn-block">Enregistrer</button>
         {% endif%}
 
         </div>

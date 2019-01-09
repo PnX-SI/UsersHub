@@ -3,25 +3,25 @@ SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usersh
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 URL_APPLICATION = 'http://localhost:5001'
 
-# liste de site depuis lequels on accepte des requetes croisées
+# Liste d'URL depuis lesquels on accepte des requetes croisées
 URLS_COR = ['http://localhost:5000']
 
 SECRET_KEY = 'super secret key'
 
-""" ID of application Userhub"""
-
+# ID of UsersHub application
 ID_APP = 1
 
-""" Authentification crypting method (hash or md5) """
+# Authentification crypting method (hash or md5)
 PASS_METHOD = 'hash'
-#SET FILL_MD5_PASS to True if PASS_METHOD = 'md5'
+
+# Choose if you also want to fill MD5 passwords (lower security)
+# Only useful if you have old application that use MD5 passwords
 FILL_MD5_PASS = False
 
 COOKIE_EXPIRATION = 3600
 COOKIE_AUTORENEW = True
 
-
-""" SERVER """
+# SERVER
 PORT = 5001
 DEBUG = False
 
