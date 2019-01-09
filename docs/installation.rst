@@ -2,6 +2,10 @@
 APPLICATION
 ===========
 
+:notes:
+
+    Pour la suite de l'installation, veuillez utiliser l'utilisateur Linux créer précedemment (``synthese``), et non l'utilisateur ``root``.
+
 Configuration de la base de données PostgreSQL
 ==============================================
 
