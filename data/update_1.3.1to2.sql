@@ -68,6 +68,7 @@ ALTER TABLE ONLY utilisateurs.cor_role_app_profil ADD CONSTRAINT fk_cor_role_app
 ---------
 ALTER TABLE utilisateurs.t_roles ADD COLUMN active boolean;
 ALTER TABLE utilisateurs.t_roles ALTER COLUMN active SET DEFAULT true;
+UPDATE utilisateurs.t_roles SET active = true;
 
 
 --------------
