@@ -8,6 +8,8 @@
         <li class="list-group-item"><strong>Identifiant :</strong> {{user['identifiant']}}</li>
         <li class="list-group-item"><strong>Organisme :</strong> {{organisme.nom_organisme}}</li>
         <li class="list-group-item"><strong>Email :</strong> <a href="mailto:{{user['email']}}">{{user['email']}}</a></li>
+        <li class="list-group-item"><strong>Description :</strong> {{user['desc_role']}}</li>
+        <li class="list-group-item"><strong>Remarques :</strong> {{user['remarques']}}</li>
         <li class="list-group-item"><strong>Groupes :</strong>
             {% for group in groups %}
                 <a href="{{url_application}}/group/update/{{group.id_role}}">{{group.nom_role}}</a> -
