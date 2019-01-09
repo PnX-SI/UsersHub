@@ -49,14 +49,14 @@ def groups():
         key="id_role",
         pathI=config.URL_APPLICATION + '/group/info/',
         pathU=config.URL_APPLICATION + "/group/update/",
-        pathD=config.URL_APPLICATION + "/groups/delete/",
+        pathD=config.URL_APPLICATION + "/group/delete/",
         pathA=config.URL_APPLICATION + '/group/add/new',
-        pathP=config.URL_APPLICATION + '/groups/members/',
+        pathP=config.URL_APPLICATION + '/group/members/',
         name="un groupe",
         name_list="Groupes",
         otherCol='True',
         Members="Membres",
-        see='False'
+        see="True"
     )
 
 
@@ -99,7 +99,7 @@ def addorupdate(id_role=None):
         return render_template('group.html', form=form, title="Formulaire Groupe")
 
 
-@route.route('groups/members/<id_groupe>', methods=['GET', 'POST'])
+@route.route('group/members/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def membres(id_groupe):
     """
@@ -139,7 +139,7 @@ def membres(id_groupe):
     )
 
 
-@route.route('groups/delete/<id_groupe>', methods=['GET', 'POST'])
+@route.route('group/delete/<id_groupe>', methods=['GET', 'POST'])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def delete(id_groupe):
     """
@@ -151,48 +151,21 @@ def delete(id_groupe):
     return redirect(url_for('groupe.groups'))
 
 
-# @route.route('group/info/<id_role>', methods=['GET', 'POST'])
-# @fnauth.check_auth(3, False, URL_REDIRECT)
-# def get_info(id_role):
-#     user = TRoles.get_one(id_role)
-#     members = TRoles.get_user_in_group(id_role)
-#     tab_usr = []
-#     if members != None:
-#         for usr in members:
-#             tab_usr.append(usr["full_name"])
-#     d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
-#     d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
-#     tag = [data.as_dict() for data in d_tag.all()]
-#     tab_t = []
-#     if tag != None:
-#         for t in tag:
-#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-#     fLineCruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']
-#     if Cruved != []:
-#         columnsCruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
-#         return render_template(
-#             "info_group.html",
-#             elt=user,
-#             members=tab_usr,
-#             tag=tab_t,
-#             fLineCruved=fLineCruved,
-#             lineCruved=columnsCruved,
-#             tableCruved=Cruved,
-#             id_r=id_role,
-#             id_app=Cruved[0]['id_application'],
-#             pathU=config.URL_APPLICATION + '/CRUVED/update/',
-#             pathUu='/'
-#         )
-#     else:
-#         return render_template(
-#             "info_group.html",
-#             elt=user,
-#             members=tab_usr,
-#             tag=tab_t,
-#             Cruved='False',
-#             fLineCruved=fLineCruved
-#          )
-
+@route.route('group/info/<id_role>', methods=['GET', 'POST'])
+@fnauth.check_auth(3, False, URL_REDIRECT)
+def info(id_role):
+    group = TRoles.get_one(id_role)
+    members = TRoles.get_user_in_group(id_role)
+    lists = TRoles.get_user_lists(id_role)
+    rights = TRoles.get_user_app_profils(id_role)
+    return render_template(
+        "info_group.html",
+        group=group,
+        members=members,
+        lists=lists,
+        rights=rights,
+        pathU=config.URL_APPLICATION + '/group/update/'
+    )
 
 def pops(form):
     """
