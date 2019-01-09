@@ -45,7 +45,6 @@ app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
 app.config.from_pyfile('config/config.py')
 app.secret_key = config.SECRET_KEY
 
-db.init_app(app)
 app.config['DB'] = db
 
 with app.app_context():
