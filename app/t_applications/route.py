@@ -241,21 +241,19 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
         if form.validate() and form.validate_on_submit():
             try:
                 if id_role:
-                    CorRoleAppProfil.update(
-                        {
-                            'id_role': id_role,
-                            'id_profil': form.data['profil'],
-                            'id_application': id_application
-                        }
+                    # on supprime d'abbord le profil pour une app
+                    CorRoleAppProfil.delete(
+                        id_role=id_role,
+                        id_application=id_application
                     )
-                else:
-                    CorRoleAppProfil.post(
-                        {
-                            'id_role': form.data['role'],
-                            'id_profil': form.data['profil'],
-                            'id_application': id_application
-                        }
-                    )
+                # et on post
+                CorRoleAppProfil.post(
+                    {
+                        'id_role': form.data['role'],
+                        'id_profil': form.data['profil'],
+                        'id_application': id_application
+                    }
+                )
             except Exception as e:
                 redirect(url_for('application.add_or_update_profil_for_role_in_app', id_application=id_application))
                 flash("Une erreur s'est produite, {}".format(e), 'error')
