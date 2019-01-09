@@ -20,7 +20,7 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
   
     adduser --home /home/synthese synthese
 
-:notes:
+:Note:
 
     Pour la suite de l'installation, veuillez utiliser l'utilisateur Linux créer précedemment (``synthese``), et non l'utilisateur ``root``.
 
@@ -41,33 +41,25 @@ Installation et configuration du serveur
 
 Installation pour Debian 9.
 
-:notes:
-
-    Cette documentation concerne une installation sur Debian. Pour tout autre environemment les commandes sont à adapter.
-
-
-
-:notes:
-
-    Bien qu'indépendante, cette documentation est en lien avec l'installation de GeoNature : https://github.com/PnEcrins/GeoNature.
-
-::
+::  
+  
     su -
     apt-get install apache2  python-dev python-pip libpq-dev supervisor
     adduser synthese sudo
     
 Fermer la console et la réouvrir pour que les modifications soient prises en compte.
     
+:Note:
 
+    Cette documentation concerne une installation sur Debian. Pour tout autre environemment les commandes sont à adapter.
 
-Installation et configuration de PosgreSQL
-==========================================
+Installation et configuration de PostgreSQL
+===========================================
 
-* Installation de PostreSQL
+* Installation de PostgreSQL
  
   ::  
   
     apt-get install postgresql-9.6 postgresql-server-dev-9.6
     adduser postgres sudo
-    exi
-        
+    exit
