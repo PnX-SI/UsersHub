@@ -12,7 +12,7 @@
         <li class="list-group-item"><strong>Site web :</strong> <a href="{{org['url_organisme']}}" target="_blank">{{org['url_organisme']}}</a></li>
         <li class="list-group-item"><strong>Utilisateurs de l'organisme "{{org['nom_organisme']}}" :</strong>
                 {% for user in users %}
-                    {{user}}, 
+                    <a href="{{url_application}}/user/update/{{user.id_role}}">{{user.prenom_role}} {{user.nom_role}}</a> -
                 {% endfor %}   
             </ul>
         </li>

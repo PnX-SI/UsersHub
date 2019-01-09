@@ -123,10 +123,10 @@ def info(id_organisme):
             {'col': 'id_organisme', 'filter': id_organisme}
         ]
     )
-    array_user = [data.as_dict_full_name() for data in q]
-    users = []
-    for user in array_user:
-        users.append(user['full_name'])
+    users = [data.as_dict_full_name() for data in q]
+    # users = []
+    # for user in array_user:
+    #     users.append(user['full_name'])
 
     return render_template('info_organisme.html', org=org, users=users)
 
