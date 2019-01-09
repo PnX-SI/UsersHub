@@ -20,11 +20,9 @@
                 <a href="{{url_application}}/list/update/{{list.id_liste}}">{{list.nom_liste}}</a> - 
             {% endfor %}
         </li>
-        
         <li class="list-group-item"><strong>Profils dans les applications :</strong> <br /><br />
             {% for right in rights %}
                 <p style="margin-left: 30px">
-
                     Application "{{right['application_rel']['nom_application']}}" : 
                     {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
                     <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">

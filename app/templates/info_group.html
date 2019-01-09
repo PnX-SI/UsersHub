@@ -1,71 +1,37 @@
-<!DOCTYPE html>
-<html>
-   {% include "librairies.html" %}   
-
-   <body>
-
-        {% include "head-appli.html" %}
-
-        <div class="container main-zone ng-scope ">
-
-           
-
-           <ul class="list-group list-group-flush">
-                <li class="list-group-item"><h3>{{elt['nom_role']}} </h3></li>
-                <li class="list-group-item"><strong>Description :</strong> {{elt['desc_role']}}</li>
-                <li class="list-group-item"><strong>Membre :</strong>
-                {% for usr in members %}
-                    {{usr}}, 
-                {% endfor %}   
-                </li>
-                <li class="list-group-item"><strong>Tag :</strong>
-                {% for t in tag %}
-                    {{t}}, 
-                {% endfor %}  
-                </li>
-                <li class="list-group-item"><strong>CRUVED :</strong> <br></br>
-                   
-                <table class="table table-bordered table-striped table-sm " >
-                    <thead>
-                        <tr>
-                            {% if CRUVED == 'False'%}
-                                {% for name in fLineCruved %}
-                                    <th scope="col">{{name}}</th>
-                                {% endfor %}
-                            {%endif%}
-                            
-                                {% for name in fLineCruved %}
-                                <th scope="col">{{name}}</th>
-                                {% endfor %}
-                                <th></th>
-                            
-                        </tr> 
-    
-                    </thead>
-                    <tbody>
-                        {% for elt in tableCruved %}
-                        <tr >   
-                            {% for name in lineCruved %}
-                                <td >{{elt[name]}}</td>
-                            {% endfor %}
-                        <td>
-                                <a href="{{pathU}}{{id_r}}{{pathUu}}{{id_app}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Editer  </button></a>
-        
-                        </td>
-                        </tr> 
-                        {%endfor%}
-                    </tbody>
-                    </table>       
-
-                </li>
-              </ul>
-
-
-
-
-
-
-        </div>
-
-    </body>
-</html>
+{% include "librairies.html" %}
+{% include "head-appli.html" %}
+<div class="container main-zone ng-scope ">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h3>{{group['nom_role']}} </h3></li>
+        <li class="list-group-item"><strong>Description :</strong> {{group['desc_role']}}</li>
+        <li class="list-group-item"><strong>Membres :</strong>
+            {% for user in members %}
+                <a href="{{url_application}}/user/update/{{user.id_role}}">{{user.prenom_role}} {{user.nom_role}}</a> -
+            {% endfor %}   
+        </li>
+        <li class="list-group-item"><strong>Listes :</strong>
+            {% for list in lists %}
+                <a href="{{url_application}}/list/update/{{list.id_liste}}">{{list.nom_liste}}</a> -
+            {% endfor %}
+        </li>
+        <li class="list-group-item"><strong>Profils dans les applications :</strong> <br /><br />
+            {% for right in rights %}
+            <p style="margin-left: 30px">
+                Application "{{right['application_rel']['nom_application']}}" :
+                {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
+                <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
+                    <button type="submit" class="btn btn-outline-success btn-sm">
+                        Modifier
+                    </button>
+                </a>
+            </p>
+            {% endfor %}
+        </li>
+    </ul>
+    <br />
+    <a href="{{pathU}}{{group['id_role']}}">
+        <button type="submit" class="btn btn-success btn-block">
+            Modifier le groupe
+        </button>
+    </a>
+</div>

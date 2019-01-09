@@ -210,7 +210,6 @@ def info(id_role):
     organisme = Bib_Organismes.get_one(user['id_organisme'])
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
-    print(lists)
     rights = TRoles.get_user_app_profils(id_role)
     return render_template(
         "info_user.html",
