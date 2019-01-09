@@ -9,21 +9,27 @@ Evolutions depuis la 2.0.0-beta.1 : https://github.com/PnEcrins/UsersHub/compare
 A compléter à partir de Aug 28, 2018
 Attention, incrémenter le requirements.txt
 
+Refonte complète de l'application en Python / Flask / Bootstrap 4
+
 **Nouveautés**
 
+* Suppression de la notion de droits à 6 niveaux (trop restrictive)
+* Intégration de la notion de profils personalisables pour chaque application
 * Mise en place d'une API pour pouvoir interroger et implémenter UsersHub depuis des applications tiers (#47)
-* Formulaire de login et sécurisation des routes (#48)
-* Ajout d'un ``code_application`` (#54)
-* CRUVED dans GeoNature pour ne pas gérer de permissions applicatives dans UsersHub
+* Simplification globale du MCD pour déporter la complexité côté metier et se rapprocher d'une application UsersHub type CAS
 * Suppression des tags trop génériques (#28)
-* Profils par application (#28)
+* Suppression du CRUVED, réintegré dans GeoNature
+* Création de vues assurant la rétrocompatibilité avec d'autres applications utilisant le modèle de UHV1
+* Création de fiche "info" permettant de faire une synthèse rapide sur les utilisateurs/applications/groupes
+* Ménage et ajouts de champs dans les tables ``t_role`` (suppression de ``nom_organisme``), ``bib_organimses`` (ajout ``url_organisme`` et ``url_logo``) et ``t_applications`` (``code_application`` #54)
 * Automatisation de l'installation et révision du script ``install_app.sh``
 * Contrôle de la cohérence entre ``pass`` et ``pass_plus``
+
 
 **Notes de versions**
 
 * Si vous migrez depuis 1.3.3, éxecutez le script SQL de mise à jour de la BDD : ``data/update_1.3.1to2.sql``
-* Faites une nouvelle installation de UsersHub en suivant sa documentation d'installation (avant ou après update BDD ?)
+* Faites une nouvelle installation de UsersHub en suivant sa documentation d'installation
 * Pas de migration disponible depuis la 2.0.0-beta.1
 
 1.3.3 (2018-10-17)
