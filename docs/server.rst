@@ -50,8 +50,7 @@ Installation pour Debian 9.
 
 ::
 
-    su - 
-    apt-get install apache2  python-dev python-pip libpq-dev supervisor
+    sudo apt-get install apache2  python-dev python-pip libpq-dev supervisor
     adduser synthese sudo
     exit
     

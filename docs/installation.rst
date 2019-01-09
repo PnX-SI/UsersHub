@@ -71,4 +71,17 @@ UsersHub peut fonctionner seul avec sa propre base de données mais il est confi
 Mise à jour de l'application
 ----------------------------
 
-* Suivre les instructions disponibles dans la doc de la release choisie
+Télécharger la dernière version de UsersHub
+
+    wget https://github.com/PnEcrins/UsersHub/archive/X.Y.Z.zip
+    unzip vX.Y.Z.zip
+
+Renommer l’ancien repertoire de l’application, ainsi que le nouveau :
+
+    mv /home/`whoami`/usershub/ /home/`whoami`/usershub_old/
+    mv UsersHub-X.Y.Z /home/`whoami`/usershub/
+
+* Suivre ensuite les instructions disponibles dans la doc de la release choisie
+
+
+
