@@ -236,6 +236,8 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
         form.role.choices.append((id_role, role['full_name']))
 
     if request.method == 'POST':
+        # set new id__profil
+        form.profil.process_data(request.form['profil'])
         if form.validate() and form.validate_on_submit():
             try:
                 if id_role:
