@@ -1,66 +1,43 @@
-<!DOCTYPE html>
-<html>
-   {% include "librairies.html" %}   
+{% include "librairies.html" %}   
+{% include "head-appli.html" %}
 
-   <body>
-
-        {% include "head-appli.html" %}
-
-        <div class="container main-zone ng-scope ">
-
-           
-
-           <ul class="list-group list-group-flush">
-                <li class="list-group-item"><h3>{{elt['nom_role']}}  {{elt['prenom_role']}}</h3></li>
-                <li class="list-group-item"><strong>Identifiant :</strong> {{elt['identifiant']}}</li>
-                <li class="list-group-item"><strong>Email :</strong> {{elt['email']}}</li>
-                <li class="list-group-item"><strong>Groupe :</strong>
-                {% for gr in group %}
-                    {{gr}}, 
-                {% endfor %}   
-                </li>
-                <li class="list-group-item"><strong>Organisme :</strong> {{org}}</li>
-                <li class="list-group-item"><strong>Tag :</strong>
-                {% for t in tag %}
-                    {{t}}, 
-                {% endfor %}  
-                </li>
-                <li class="list-group-item"><strong>CRUVED :</strong> <br></br>
-                <table class="table table-bordered table-striped table-sm " >
-                    <thead>
-                        <tr>
-                                {% for name in fLineCruved %}
-                                <th scope="col">{{name}}</th>
-                                {% endfor %}
-                                <th></th>
-                            
-                        </tr> 
-    
-                    </thead>
-                    <tbody>
-                        {% for elt in tableCruved %}
-                        <tr >   
-                            {% for name in lineCruved %}
-                                <td >{{elt[name]}}</td>
-                            {% endfor %}
-                        <td>
-                                <a href="{{pathU}}{{id_r}}{{pathUu}}{{id_app}}"  > <button type="submit" class="btn btn-secondary btn-sm" >Editer  </button></a>
+<div class="container main-zone ng-scope ">
+    <h3>{{user['nom_role']}} {{user['prenom_role']}}</h3>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>UUID :</strong> {{user['uuid_role']}}</li>
+        <li class="list-group-item"><strong>Identifiant :</strong> {{user['identifiant']}}</li>
+        <li class="list-group-item"><strong>Organisme :</strong> {{organisme.nom_organisme}}</li>
+        <li class="list-group-item"><strong>Email :</strong> <a href="mailto:{{user['email']}}">{{user['email']}}</a></li>
+        <li class="list-group-item"><strong>Groupes :</strong>
+            {% for group in groups %}
+                <a href="{{url_application}}/group/update/{{group.id_role}}">{{group.nom_role}}</a> -
+            {% endfor %}   
+        </li>
+        <li class="list-group-item"><strong>Listes :</strong>
+            {% for list in lists %}
+                <a href="{{url_application}}/list/update/{{list.id_liste}}">{{list.nom_liste}}</a> - 
+            {% endfor %}
+        </li>
         
-                        </td>
-                        </tr> 
-                        {%endfor%}
-                    </tbody>
-                    </table>       
+        <li class="list-group-item"><strong>Profils dans les applications :</strong> <br /><br />
+            {% for right in rights %}
+                <p style="margin-left: 30px">
 
-                </li>
-              </ul>
-
-
-
-
-
-
-        </div>
-
-    </body>
-</html>
+                    Application "{{right['application_rel']['nom_application']}}" : 
+                    {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
+                    <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
+                        <button type="submit" class="btn btn-outline-success btn-sm">
+                            Modifier
+                        </button>
+                    </a>
+                </p>
+            {% endfor %}
+        </li>
+    </ul>
+    <br />
+    <a href="{{pathU}}{{user['id_role']}}">
+        <button type="submit" class="btn btn-success btn-block">
+            Modifier l'utilisateur
+        </button>
+    </a>
+</div>

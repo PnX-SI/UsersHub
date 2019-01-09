@@ -58,7 +58,7 @@ def users():
         fLine=fLine,
         line=columns,
         table=tab,
-        see="False",
+        see="True",
         key="id_role",
         pathI=config.URL_APPLICATION + "/user/info/",
         pathU=config.URL_APPLICATION + "/user/update/",
@@ -92,7 +92,7 @@ def addorupdate(id_role=None):
         user = TRoles.get_one(id_role, as_model=True)
         user_as_dict = user.as_dict_full_name()
         # format group to prepfil the form
-        formated_groups = [group.id_role for group in TRoles.get_users_groupe(id_role)]
+        formated_groups = [group.id_role for group in TRoles.get_user_groups(id_role)]
         if request.method == 'GET':
             form = process(form, user_as_dict, formated_groups)
 
@@ -203,47 +203,24 @@ def deluser(id_role):
     return redirect(url_for('user.users'))
 
 
-# @route.route('user/info/<id_role>', methods=['GET', 'POST'])
-# @fnauth.check_auth(6, False, URL_REDIRECT)
-# def get_info(id_role):
-#     user = TRoles.get_one(id_role)
-#     d_group = CorRoles.get_all(recursif=True, as_model=True)
-#     d_group = d_group.filter(CorRoles.id_role_utilisateur == id_role)
-#     group = [data.as_dict() for data in d_group.all()]
-#     tab_g = []
-#     if group != None:
-#         for g in group:
-#             tab_g.append(TRoles.get_one(g['id_role_groupe'])["nom_role"])
-#     org = Bib_Organismes.get_one(user['id_organisme'])['nom_organisme']
-#     d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
-#     d_tag = d_tag.filter(CorRoleTag.id_role == id_role)
-#     tag = [data.as_dict() for data in d_tag.all()]
-#     tab_t = []
-#     if tag != None:
-#         for t in tag:
-#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-#     cruved = get_cruved_one(id_role)
-#     print(cruved)
-#     if not cruved:
-#         id_app = None
-#     else:
-#         id_app = cruved[0]['id_application']
-#     f_lines_cruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']  # noqa
-#     columns_cruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
-#     return render_template(
-#         "info_user.html",
-#         elt=user,
-#         group=tab_g,
-#         org=org,
-#         tag=tab_t,
-#         fLineCruved=f_lines_cruved,
-#         lineCruved=columns_cruved,
-#         tableCruved=cruved,
-#         id_r=id_role,
-#         id_app=id_app,
-#         pathU=config.URL_APPLICATION + '/CRUVED/update/',
-#         pathUu='/'
-#     )
+@route.route('user/info/<id_role>', methods=['GET', 'POST'])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def info(id_role):
+    user = TRoles.get_one(id_role)
+    organisme = Bib_Organismes.get_one(user['id_organisme'])
+    groups = TRoles.get_user_groups(id_role)
+    lists = TRoles.get_user_lists(id_role)
+    print(lists)
+    rights = TRoles.get_user_app_profils(id_role)
+    return render_template(
+        "info_user.html",
+        user=user,
+        organisme=organisme,
+        groups=groups,
+        lists=lists,
+        rights=rights,
+        pathU=config.URL_APPLICATION + '/user/update/'
+    )
 
 
 def pops(form, with_group=True):

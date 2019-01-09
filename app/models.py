@@ -56,94 +56,6 @@ class CorRoleListe(GenericRepository):
             db.session.commit()
 
 
-
-@serializable
-class CorRoleAppProfil(GenericRepository):
-    """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
-
-    __tablename__= "cor_role_app_profil"
-    __table_args__={'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
-
-    # surchage de la méthode get_one car il n'y a pas de clé primaire unique sur une cor
-    @classmethod
-    def get_one(cls, id_role, id_application):
-        return db.session.query(cls).filter_by(
-            id_role=id_role,
-            id_application=id_application
-        ).first()
-    
-    
-    # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
-    # TODO cette méthode supprime tous les profils pour une application et un role
-    # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
-    # necessite ne pas utiliser le template table_database.html qui est trop génériqe
-    @classmethod
-    def delete(cls, id_role, id_application):
-        cors = db.session.query(cls).filter_by(
-            id_role=id_role,
-            id_application=id_application
-        ).all()
-        for cor in cors:
-            db.session.delete(cor)
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise
-
-
-    @classmethod
-    def add_cor(cls, id_app, tab_profil):
-        dict_add = {}
-        for d in tab_profil:
-            dict_add = {'id_role':d['id_role'],'id_profil':d['id_profil'], 'id_application': id_app }
-            cls.post(dict_add)
-
-    @classmethod
-    def del_cor(cls,id_app,tab_profil):
-       for t in tab_profil:
-            cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_profil == t['id_profil']).filter(cls.id_application == id_app).delete()
-            db.session.commit()
-
-@serializable
-class CorProfilForApp(GenericRepository):
-    """ Classe de correspondance entre la table t_applications et la table t_profils"""
-
-    __tablename__ = "cor_profil_for_app"
-    __table_args__ = {'schema':'utilisateurs'}
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
-    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
-
-
-    @classmethod
-    def add_cor(cls,id_application,ids_profil):
-        """
-        Methode qui ajoute des relations applications <-> profil
-
-        Avec pour paramètres un id profil et un tableau d'id d'applications
-        """
-
-        dict_add = dict()
-        dict_add["id_application"] = id_application
-        for d in ids_profil:
-            dict_add["id_profil"] = d
-            cls.post(dict_add)
-
-    @classmethod
-    def del_cor(cls,id_application,ids_profil):
-        """
-        Methode qui supprime des relations applications <-> profil
-
-        Avec pour paramètres un id profil et un tableau d'id d'applications
-        """
-
-        for d in ids_profil:
-            cls.query.filter(cls.id_application == id_application).filter(cls.id_profil == d).delete()
-            db.session.commit()
-
 @serializable
 class Bib_Organismes(GenericRepository):
     """
@@ -249,7 +161,7 @@ class TRoles(GenericRepository):
         return choices
 
     @classmethod
-    def get_users_groupe(cls, id_role):
+    def get_user_groups(cls, id_role):
         """
         Get all groups of a user
         Parameters:
@@ -259,7 +171,45 @@ class TRoles(GenericRepository):
         """
         cor_role_query = db.session.query(CorRoles.id_role_groupe).filter(CorRoles.id_role_utilisateur == id_role)
         return db.session.query(TRoles).filter(TRoles.id_role.in_(cor_role_query)).all()
+    
+    @classmethod
+    def get_user_lists(cls, id_role):
+        """
+        Get all lists of a user
+        Parameters:
+            id_role (int): the user's id
+        Return:
+            Array<TListes>
+        """
+        # get ids_role list from user and user groups
+        ids_role = [id_role]
+        ids_group = [group.id_role for group in cls.get_user_groups(id_role)]
+        for id in ids_group:
+            ids_role.append(id)
+        cor_role_list_query = db.session.query(CorRoleListe.id_liste).filter(CorRoleListe.id_role.in_(ids_role))
+        return db.session.query(TListes).filter(TListes.id_liste.in_(cor_role_list_query)).all()
 
+    @classmethod
+    def get_user_app_profils(cls, id_role):
+        """
+        Get all listapp profils of a user
+        Parameters:
+            id_role (int): the user's id
+        Return:
+            Array<CorRoleAppProfil>
+        """
+        # get ids_role list from user and user groups
+        ids_role = [id_role]
+        ids_group = [group.id_role for group in cls.get_user_groups(id_role)]
+        for id in ids_group:
+            ids_role.append(id)
+        # get right rows in cor_role_app_profil
+        rights = db.session.query(CorRoleAppProfil) \
+            .distinct(CorRoleAppProfil.id_application) \
+            .filter(CorRoleAppProfil.id_role.in_(ids_role)) \
+            .order_by(CorRoleAppProfil.id_application) \
+            .all()
+        return rights
 
     def get_full_name(self):
         """
@@ -535,3 +485,93 @@ class TProfils(GenericRepository):
             return [ ( getattr(d, key), getattr(d, label) ) for d in profils]  
         return [( getattr(d, key), getattr(d, label) ) for d in cls.get_all()]
 
+
+@serializable
+class CorProfilForApp(GenericRepository):
+    """ Classe de correspondance entre la table t_applications et la table t_profils"""
+
+    __tablename__ = "cor_profil_for_app"
+    __table_args__ = {'schema':'utilisateurs'}
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
+
+
+    @classmethod
+    def add_cor(cls,id_application,ids_profil):
+        """
+        Methode qui ajoute des relations applications <-> profil
+
+        Avec pour paramètres un id profil et un tableau d'id d'applications
+        """
+
+        dict_add = dict()
+        dict_add["id_application"] = id_application
+        for d in ids_profil:
+            dict_add["id_profil"] = d
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_application,ids_profil):
+        """
+        Methode qui supprime des relations applications <-> profil
+
+        Avec pour paramètres un id profil et un tableau d'id d'applications
+        """
+
+        for d in ids_profil:
+            cls.query.filter(cls.id_application == id_application).filter(cls.id_profil == d).delete()
+            db.session.commit()
+
+
+@serializable
+class CorRoleAppProfil(GenericRepository):
+    """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
+
+    __tablename__= "cor_role_app_profil"
+    __table_args__={'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    application_rel = relationship("TApplications")
+    profil_rel = relationship("TProfils")
+
+    # surchage de la méthode get_one car il n'y a pas de clé primaire unique sur une cor
+    @classmethod
+    def get_one(cls, id_role, id_application):
+        return db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).first()
+    
+    
+    # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
+    # TODO cette méthode supprime tous les profils pour une application et un role
+    # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
+    # necessite ne pas utiliser le template table_database.html qui est trop génériqe
+    @classmethod
+    def delete(cls, id_role, id_application):
+        cors = db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).all()
+        for cor in cors:
+            db.session.delete(cor)
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
+
+    @classmethod
+    def add_cor(cls, id_app, tab_profil):
+        dict_add = {}
+        for d in tab_profil:
+            dict_add = {'id_role':d['id_role'],'id_profil':d['id_profil'], 'id_application': id_app }
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_app,tab_profil):
+       for t in tab_profil:
+            cls.query.filter(cls.id_role == t['id_role']).filter(cls.id_profil == t['id_profil']).filter(cls.id_application == id_app).delete()
+            db.session.commit()
