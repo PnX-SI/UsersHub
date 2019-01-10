@@ -41,7 +41,7 @@ def organisms():
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
 
-    fLine = ['ID', 'Nom',  'Adresse',  'Code_Postal',  'Ville',  'Telephone', 'Fax',  'Email']
+    fLine = ['ID', 'Nom',  'Adresse',  'Code postal',  'Ville',  'Telephone', 'Fax',  'Email']
     columns = [
         'id_organisme', 'nom_organisme', 'adresse_organisme',
         'cp_organisme', 'ville_organisme', 'tel_organisme',
@@ -53,9 +53,9 @@ def organisms():
         table=contents,
         fLine=fLine,
         line=columns,
+        key='id_organisme',
         pathI=config.URL_APPLICATION + '/organism/info/',
         pathU=config.URL_APPLICATION + '/organism/update/',
-        key='id_organisme',
         pathD=config.URL_APPLICATION + '/organisms/delete/',
         pathA=config.URL_APPLICATION + '/organism/add/new',
         name="un organisme",

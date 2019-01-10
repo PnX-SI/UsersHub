@@ -1,0 +1,42 @@
+{% include "librairies.html" %}
+{% include "head-appli.html" %}
+
+{%set is_members = members|length > 0 %}
+<div class="container main-zone ng-scope ">
+    <h3>Liste "{{mylist['nom_liste']}}" </h3>
+    <small> {{mylist['desc_liste']}}</small>
+    <br />
+    <hr />
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#memberslist">
+            <h5>Liste des utilisateurs membres de la liste </h5>
+        </div>
+        <div id="memberslist" class="card-body collapse show">
+            {% if is_members %}
+                <ul class="list-group list-group-flush">
+                    {% for user in members %}
+                        <li class="list-group-item">
+                            {% set is_group = user.role_rel.groupe %}
+                            {% if is_group %}
+                                <a href="{{url_application}}/group/info/{{user.role_rel.id_role}}">
+                                    {{user.role_rel.nom_role}}</a>
+                            {% else %}
+                                <a href="{{url_application}}/user/info/{{user.role_rel.id_role}}">
+                                    {%if user.role_rel.prenom_role %}{{user.role_rel.prenom_role}} {% endif %}{{user.role_rel.nom_role}}</a>
+                            {% endif %}   
+                        </li>
+                    {% endfor %}   
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">Le groupe ne comporte aucun membre.</p>
+            {% endif %}
+        </div>
+    </div>
+    <br />
+    <a href="{{pathU}}{{mylist['id_liste']}}">
+        <button type="submit" class="btn btn-success btn-block">
+            Modifier la liste
+        </button>
+    </a>
+</div>

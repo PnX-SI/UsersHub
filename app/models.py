@@ -20,43 +20,6 @@ from config import config
 
 
 @serializable
-class CorRoleListe(GenericRepository):
-    """ Classe de correspondance entre la table t_roles et la table t_listes"""
-
-    __tablename__ = 'cor_role_liste'
-    __table_args__= {'schema':'utilisateurs'}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_liste = db.Column(db.Integer, ForeignKey('utilisateurs.t_listes.id_liste'),primary_key = True)
-
-
-    @classmethod
-    def add_cor(cls,id_liste,ids_role):
-        """
-        Methode qui ajoute des relations roles <-> liste
-
-        Avec pour paramètres un id de liste et un tableau d'id de roles
-        """
-
-        dict_add = dict()
-        dict_add["id_liste"] = id_liste
-        for d in ids_role:
-            dict_add["id_role"] = d
-            cls.post(dict_add)
-
-    @classmethod
-    def del_cor(cls,id_liste,ids_role):
-        """
-        Methode qui supprime des relations roles <-> liste
-
-        Avec pour paramètres un id de liste et un tableau d'id de roles
-        """
-
-        for d in ids_role:
-            cls.query.filter(cls.id_liste == id_liste).filter(cls.id_role == d).delete()
-            db.session.commit()
-
-
-@serializable
 class Bib_Organismes(GenericRepository):
     """
     Model de la table Bib_Organismes
@@ -409,6 +372,42 @@ class TListes(GenericRepository):
     desc_liste = db.Column(db.Unicode)
 
 
+@serializable
+class CorRoleListe(GenericRepository):
+    """ Classe de correspondance entre la table t_roles et la table t_listes"""
+
+    __tablename__ = 'cor_role_liste'
+    __table_args__= {'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_liste = db.Column(db.Integer, ForeignKey('utilisateurs.t_listes.id_liste'),primary_key = True)
+    role_rel = relationship("TRoles")
+
+    @classmethod
+    def add_cor(cls,id_liste,ids_role):
+        """
+        Methode qui ajoute des relations roles <-> liste
+
+        Avec pour paramètres un id de liste et un tableau d'id de roles
+        """
+
+        dict_add = dict()
+        dict_add["id_liste"] = id_liste
+        for d in ids_role:
+            dict_add["id_role"] = d
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_liste,ids_role):
+        """
+        Methode qui supprime des relations roles <-> liste
+
+        Avec pour paramètres un id de liste et un tableau d'id de roles
+        """
+
+        for d in ids_role:
+            cls.query.filter(cls.id_liste == id_liste).filter(cls.id_role == d).delete()
+            db.session.commit()
+            
 
 @serializable
 class TApplications(GenericRepository):
@@ -494,7 +493,7 @@ class CorProfilForApp(GenericRepository):
     __table_args__ = {'schema':'utilisateurs'}
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
-
+    profil_rel = relationship("TProfils")
 
     @classmethod
     def add_cor(cls,id_application,ids_profil):
@@ -532,6 +531,7 @@ class CorRoleAppProfil(GenericRepository):
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    role_rel = relationship("TRoles")
     application_rel = relationship("TApplications")
     profil_rel = relationship("TProfils")
 

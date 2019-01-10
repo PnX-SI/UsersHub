@@ -1,33 +1,96 @@
 {% include "librairies.html" %}
 {% include "head-appli.html" %}
+
+{%set is_members = members|length > 0 %}
+{%set is_lists = lists|length > 0 %}
+{%set is_rights = rights|length > 0 %}
 <div class="container main-zone ng-scope ">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item"><h3>{{group['nom_role']}} </h3></li>
-        <li class="list-group-item"><strong>Description :</strong> {{group['desc_role']}}</li>
-        <li class="list-group-item"><strong>Membres :</strong>
-            {% for user in members %}
-                <a href="{{url_application}}/user/update/{{user.id_role}}">{{user.prenom_role}} {{user.nom_role}}</a> -
-            {% endfor %}   
-        </li>
-        <li class="list-group-item"><strong>Listes :</strong>
-            {% for list in lists %}
-                <a href="{{url_application}}/list/update/{{list.id_liste}}">{{list.nom_liste}}</a> -
-            {% endfor %}
-        </li>
-        <li class="list-group-item"><strong>Profils dans les applications :</strong> <br /><br />
-            {% for right in rights %}
-            <p style="margin-left: 30px">
-                Application "{{right['application_rel']['nom_application']}}" :
-                {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
-                <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
-                    <button type="submit" class="btn btn-outline-success btn-sm">
-                        Modifier
+    <h3>{{group['nom_role']}} </h3>
+    <small> {{group['desc_role']}}</small>
+    <br />
+    <hr />
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#memberslist">
+            <h5>Liste des utilisateurs membres du groupe 
+                <a href="{{url_application}}/group/members/{{group['id_role']}}">
+                    <button type="submit" class="btn btn-outline-success btn-sm text-white float-right">
+                        Modifier les membres du groupe "{{group['nom_role']}}"
                     </button>
                 </a>
-            </p>
-            {% endfor %}
-        </li>
-    </ul>
+            </h5>
+        </div>
+        <div id="memberslist" class="card-body collapse show">
+        {% if is_members %}
+            <ul class="list-group list-group-flush">
+                {% for user in members %}
+                    <li class="list-group-item">
+                        {% set is_group = user.groupe %}
+                        {% if is_group %}
+                            <a href="{{url_application}}/group/info/{{user.id_role}}">
+                                {{user.nom_role}}</a>
+                        {% else %}
+                            <a href="{{url_application}}/user/info/{{user.id_role}}">
+                                {%if user.prenom_role %}{{user.prenom_role}} {% endif %}{{user.nom_role}}</a>
+                        {% endif %}
+                    
+                    </li>
+                {% endfor %}   
+            </ul>
+        {% else %}
+            <p class="text-info ml-5">Le groupe ne comporte aucun membre.</p>
+        {% endif %}
+    </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#listlist">
+            <h5>Listes auxquelles le groupe appartient</h5>
+        </div>
+        <div id="listlist" class="card-body collapse">
+            {% if is_lists %}
+                <ul class="list-group list-group-flush">
+                {% for list in lists %}
+                    <li class="list-group-item">
+                        <a href="{{url_application}}/list/info/{{list.id_liste}}">{{list.nom_liste}}</a> -
+                        <a href="{{url_application}}/list/members/{{list.id_liste}}">
+                            <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                Modifier la composition de la liste "{{list.nom_liste}}"
+                            </button>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">Le groupe n'appartient à aucune liste.</p>
+            {% endif %}
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
+            <h5>Profils du groupe dans les applications</h5>
+        </div>
+        <div id="profillist" class="card-body collapse">
+            {% if is_rights %}
+                <ul class="list-group list-group-flush">
+                    {% for right in rights %}
+                        <li class="list-group-item">
+                            Application "<a href="{{url_application}}/application/info/{{right['application_rel']['id_application']}}">{{right['application_rel']['nom_application']}}</a>" :
+                            {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
+                            <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
+                                <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                    Modifier le profil du groupe pour l'application "{{right['application_rel']['nom_application']}}"
+                                </button>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">Le groupe ne dispose d'aucun profil dans les applications.</p>
+            {% endif %}
+        </div>
+    </div>
     <br />
     <a href="{{pathU}}{{group['id_role']}}">
         <button type="submit" class="btn btn-success btn-block">
