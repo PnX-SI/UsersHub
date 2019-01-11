@@ -14,7 +14,11 @@ echo "préparation du fichier config.py..."
 sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
 
 url_application="${url_application//\//\\/}"
-sed -i 's#http://localhost:5001/#$my_url#g' config.py
+# on enleve le / final
+if [ "${url_application: -1}" -eq '/' ]
+then
+url_application="${url_application::-1}"
+fi
 sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py
 
 cd ..
@@ -38,6 +42,11 @@ cd ../..
 DIR=$(readlink -e "${0%/*}")
 sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
 sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
+
+
+# activate proxy apache extension
+sudo a2enmod proxy
+sudo a2enmod proxy_http
 
 sudo -s supervisorctl reread
 sudo -s supervisorctl reload
