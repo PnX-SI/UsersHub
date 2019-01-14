@@ -17,7 +17,12 @@ route = Blueprint('groupe', __name__)
 
 
 @route.route('groups/list', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def groups():
 
     """
@@ -62,7 +67,12 @@ def groups():
 
 @route.route('group/add/new', methods=['GET', 'POST'])
 @route.route('group/update/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def addorupdate(id_role=None):
 
     """
@@ -100,7 +110,12 @@ def addorupdate(id_role=None):
 
 
 @route.route('group/members/<id_groupe>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def membres(id_groupe):
     """
     Route affichant la liste des roles n'appartenant pas au groupe vis à vis de ceux qui appartiennent à celui ci.
@@ -140,7 +155,12 @@ def membres(id_groupe):
 
 
 @route.route('group/delete/<id_groupe>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def delete(id_groupe):
     """
     Route qui supprime un groupe dont l'id est donné en paramètres dans l'url
@@ -152,7 +172,12 @@ def delete(id_groupe):
 
 
 @route.route('group/info/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def info(id_role):
     group = TRoles.get_one(id_role)
     members = TRoles.get_user_in_group(id_role)

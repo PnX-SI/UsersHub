@@ -15,7 +15,12 @@ route = Blueprint('liste', __name__)
 
 
 @route.route('lists/list', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def lists():
     """
     Route qui affiche la liste des listes
@@ -58,7 +63,12 @@ def lists():
 
 @route.route('list/add/new', defaults={'id_liste': None}, methods=['GET', 'POST'])
 @route.route('list/update/<id_liste>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def addorupdate(id_liste):
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une liste
@@ -92,7 +102,12 @@ def addorupdate(id_liste):
 
 
 @route.route('list/members/<id_liste>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def membres(id_liste):
     """
     Route affichant la liste des listes n'appartenant pas à la liste vis à vis de ceux qui appartiennent à celle-ci.
@@ -130,7 +145,12 @@ def membres(id_liste):
 
 
 @route.route('list/delete/<id_liste>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def delete(id_liste):
     """
     Route qui supprime une liste dont l'id est donné en paramètres dans l'url

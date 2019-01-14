@@ -17,7 +17,12 @@ route = Blueprint('application', __name__)
 
 
 @route.route('applications/list', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def applications():
     """
     Route qui affiche la liste des applications
@@ -68,7 +73,12 @@ def applications():
 
 @route.route('application/add/new', defaults={'id_application': None}, methods=['GET', 'POST'])
 @route.route('application/update/<id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def addorupdate(id_application):
     """
         Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
@@ -120,7 +130,12 @@ def addorupdate(id_application):
 
 
 @route.route('application/delete/<id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def delete(id_application):
     """
     Route qui supprime une application dont l'id est donné en paramètres dans l'URL
@@ -131,7 +146,12 @@ def delete(id_application):
 
 
 @route.route('application/profils/<id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def profils_for_app(id_application):
     """
     Route affichant la liste des profils utilisables par l'application et ceux disponibles.
@@ -169,7 +189,12 @@ def profils_for_app(id_application):
 
 
 @route.route('application_roles_profil/<int:id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def profils_in_app(id_application):
     """
     Route affichant la liste des roles ayant un profil pour une application
@@ -209,7 +234,12 @@ def profils_in_app(id_application):
 
 @route.route('application/add/role_profil/<int:id_application>', methods=['GET', 'POST'])
 @route.route('application/update/role_profil/<int:id_role>/<int:id_application>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def add_or_update_profil_for_role_in_app(id_application, id_role=None):
     """
         add or update un profil sur une application
@@ -270,6 +300,12 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
 
 
 @route.route('application/delete/role_profil/<id_role>/<id_application>', methods=['GET', 'POST'])
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def delete_cor_role_app_profil(id_role, id_application):
     try:
         CorRoleAppProfil.delete(id_role, id_application)

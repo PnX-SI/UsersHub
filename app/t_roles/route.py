@@ -22,7 +22,12 @@ route = Blueprint('user', __name__)
 
 
 @route.route('users/list', methods=['GET'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def users():
 
     """
@@ -73,7 +78,12 @@ def users():
 
 @route.route('user/add/new', methods=['GET', 'POST'])
 @route.route('user/update/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def addorupdate(id_role=None):
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un utilisateurs
@@ -153,7 +163,12 @@ def addorupdate(id_role=None):
     )
 
 @route.route('user/pass/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def updatepass(id_role=None):
     """
     Route affichant un formulaire permettant de changer le pass des utilisateurs
@@ -193,7 +208,12 @@ def updatepass(id_role=None):
 
 
 @route.route('users/delete/<id_role>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def deluser(id_role):
     """
     Route qui supprime un utilisateurs dont l'id est donné en paramètres dans l'url

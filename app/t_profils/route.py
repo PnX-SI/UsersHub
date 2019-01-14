@@ -21,7 +21,12 @@ Routes des profils
 
 
 @route.route('profils/list', methods=['GET', 'POST'])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(
+    3, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def profils():
     """
     Route qui affiche la liste des profils
@@ -57,11 +62,16 @@ def profils():
         otherCol='False',
         profil_app='True',
         App="Application"
-     )
+    )
 
 
 @route.route('profil/delete/<id_profil>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def delete(id_profil):
     """
     Route qui supprime un profil dont l'id est donné en paramètres dans l'url
@@ -74,7 +84,12 @@ def delete(id_profil):
 
 @route.route('profil/add/new', defaults={'id_profil': None}, methods=['GET', 'POST'])
 @route.route('profil/update/<id_profil>', methods=['GET', 'POST'])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(
+    6, 
+    False, 
+    redirect_on_expiration=URL_REDIRECT, 
+    redirect_on_invalid_token=URL_REDIRECT
+)
 def addorupdate(id_profil):
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un profil
