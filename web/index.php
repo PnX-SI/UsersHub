@@ -77,6 +77,7 @@ body {
 }
 -->
 </style>
+<link rel="shortcut icon" href="images/favicon.png">
 </head>
 <body>
 <form name="formlogin" method="post" action="index.php">
