@@ -2,11 +2,9 @@
 CHANGELOG
 =========
 
-2.0.0-beta.2 (unreleased)
--------------------------
+2.0.0 (unreleased)
+------------------
 
-Evolutions depuis la 2.0.0-beta.1 : https://github.com/PnEcrins/UsersHub/compare/2.0.0-beta.1...uhv2
-A compléter à partir de Aug 28, 2018
 Attention, incrémenter le requirements.txt
 
 Refonte complète de l'application en Python / Flask / Bootstrap 4
@@ -18,19 +16,19 @@ Refonte complète de l'application en Python / Flask / Bootstrap 4
 * Mise en place d'une API pour pouvoir interroger et implémenter UsersHub depuis des applications tiers (#47)
 * Simplification globale du MCD pour déporter la complexité côté metier et se rapprocher d'une application UsersHub type CAS
 * Suppression des tags trop génériques (#28)
-* Suppression du CRUVED, réintegré dans GeoNature
-* Création de vues assurant la rétrocompatibilité avec d'autres applications utilisant le modèle de UHV1
-* Création de fiche "info" permettant de faire une synthèse rapide sur les utilisateurs/applications/groupes
+* Suppression du CRUVED, réintegré dans GeoNature (28#issuecomment-440293296)
+* Création de vues assurant la rétrocompatibilité avec d'autres applications utilisant le modèle de la version 1 de UsersHub
+* Création de fiches d'information permettant de faire une synthèse rapide par utilisateur, groupes, organisme ou application
 * Ménage et ajouts de champs dans les tables ``t_role`` (suppression de ``nom_organisme``), ``bib_organimses`` (ajout ``url_organisme`` et ``url_logo``) et ``t_applications`` (``code_application`` #54)
 * Automatisation de l'installation et révision du script ``install_app.sh``
-* Contrôle de la cohérence entre ``pass`` et ``pass_plus``
-
+* Contrôle de la cohérence entre les champs ``pass`` et ``pass_plus``
+* Possibilité de ne pas utiliser le champs ``pass`` (md5) si on ne l'utilise pas pour renforcer la sécurité du contenu
 
 **Notes de versions**
 
-* Si vous migrez depuis 1.3.3, éxecutez le script SQL de mise à jour de la BDD : ``data/update_1.3.1to2.sql``
+* Si vous migrez depuis la version 1.3.3, éxecutez le script SQL de mise à jour de la BDD : ``data/update_1.3.3to2.0.0.sql``
 * Faites une nouvelle installation de UsersHub en suivant sa documentation d'installation
-* Pas de migration disponible depuis la 2.0.0-beta.1
+* Pas de migration disponible depuis la version 2.0.0-beta.1
 
 1.3.3 (2018-10-17)
 ------------------
