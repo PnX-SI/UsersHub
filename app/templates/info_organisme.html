@@ -2,20 +2,68 @@
 {% include "head-appli.html" %}
 
 {% block content %}
+{%set is_fax = org['fax_organisme'] is not none and org['fax_organisme'] != '' %}
+{%set is_addess = org['adresse_organisme'] is not none and org['adresse_organisme'] != '' %}
+{%set is_cp = org['cp_organisme'] is not none and org['cp_organisme'] != '' %}
+{%set is_ville = org['ville_organisme'] is not none and org['ville_organisme'] != '' %}
+{%set is_tel = org['tel_organisme'] is not none and org['tel_organisme'] != '' %}
+{%set is_mail = org['email_organisme'] is not none and org['email_organisme'] != '' %}
+{%set is_url = org['url_organisme'] is not none and org['url_organisme'] != '' %}
+{%set is_logo = org['url_logo'] is not none and org['url_logo'] != '' %}
+{%set is_users = users|length > 0 %}
 <div class="container main-zone ng-scope ">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item"><img class="img-fluid" src="{{org['url_logo']}}"><h3>Organisme "{{org['nom_organisme']}}"</h3></li>
-        <li class="list-group-item"><strong>Adresse :</strong> {{org['adresse_organisme']}}<br />{{org['cp_organisme']}} {{org['ville_organisme']}}</li>
-        <li class="list-group-item"><strong>Téléphone :</strong> {{org['tel_organisme']}}</li>
-        <li class="list-group-item"><strong>Fax :</strong> {{org['fax_organisme']}}</li>
-        <li class="list-group-item"><strong>Email :</strong> <a href="mailto:{{org['email_organisme']}}">{{org['email_organisme']}}</a></li>
-        <li class="list-group-item"><strong>Site web :</strong> <a href="{{org['url_organisme']}}" target="_blank">{{org['url_organisme']}}</a></li>
-        <li class="list-group-item"><strong>Utilisateurs de l'organisme "{{org['nom_organisme']}}" :</strong>
-                {% for user in users %}
-                    <a href="{{url_application}}/user/update/{{user.id_role}}">{{user.prenom_role}} {{user.nom_role}}</a> -
-                {% endfor %}   
-            </ul>
-        </li>
-    </ul>
+    {%if is_logo %}
+        <img class="img-fluid" src="{{org['url_logo']}}">
+    {% endif %}
+    <h3>Organisme "{{org['nom_organisme']}}"</h3>
+    <div class="ml-3">
+        <small> 
+            {%if is_addess %}
+                {{org['adresse_organisme']}}
+            {% endif %}
+            <br />
+            {%if is_cp %}{{org['cp_organisme']}}{% endif %} {%if is_ville %}{{org['ville_organisme']}}{% endif %}
+            {%if is_tel %}
+                <br /><strong>tel</strong> : {{org['tel_organisme']}}
+            {% endif %}
+            {%if is_fax %}
+                <br /><strong>fax</strong> : {{org['fax_organisme']}}
+            {% endif %}
+            {%if is_mail %}
+                <br /><strong>Email</strong>: <a href="mailto:{{org['email_organisme']}}">{{org['email_organisme']}}</a>
+            {% endif %}
+            {%if is_url %}
+                <br /><strong>Site web</strong> :  <a href="{{org['url_organisme']}}" target="_blank">{{org['url_organisme']}}</a>
+            {% endif %}
+            </small>
+    </div>
+    <br />
+    <hr />
+    <br />         
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#memberslist">
+            <h5>Liste des utilisateurs membres de l'organisme "{{org['nom_organisme']}}" </h5>
+        </div>
+        <div id="memberslist" class="card-body collapse show">
+            {% if is_users %}
+                <ul class="list-group list-group-flush">
+                    {% for user in users %}
+                        <li class="list-group-item">
+                            <a href="{{url_application}}/user/info/{{user.id_role}}">
+                                {%if user.prenom_role %}{{user.prenom_role}} {% endif %}{{user.nom_role}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">L'organisme ne comporte aucun utilisateur.</p>
+            {% endif %}
+        </div>
+    </div>
+    <br />
+    <a href="{{url_application}}/organism/update/{{org['id_organisme']}}">
+        <button type="submit" class="btn btn-success btn-block">
+            Modifier l'organisme
+        </button>
+    </a>
 </div>
 {% endblock %}

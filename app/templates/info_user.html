@@ -1,39 +1,115 @@
 {% include "librairies.html" %}   
 {% include "head-appli.html" %}
 
+{%set is_identifiant = user['identifiant'] is not none and user['identifiant'] != '' %}
+{%set is_uuid = user['uuid_role'] is not none and user['uuid_role'] != '' %}
+{%set is_organisme = organisme.nom_organisme is not none and organisme.nom_organisme != '' %}
+{%set is_desc = user['desc_role'] is not none and user['desc_role'] != '' %}
+{%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
+{%set is_mail = user['email'] is not none and user['email'] != '' %}
+{%set is_group = groups|length > 0 %}
+{%set is_list = lists|length > 0 %}
+{%set is_right = rights|length > 0 %}
 <div class="container main-zone ng-scope ">
-    <h3>{{user['nom_role']}} {{user['prenom_role']}}</h3>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>UUID :</strong> {{user['uuid_role']}}</li>
-        <li class="list-group-item"><strong>Identifiant :</strong> {{user['identifiant']}}</li>
-        <li class="list-group-item"><strong>Organisme :</strong> {{organisme.nom_organisme}}</li>
-        <li class="list-group-item"><strong>Email :</strong> <a href="mailto:{{user['email']}}">{{user['email']}}</a></li>
-        <li class="list-group-item"><strong>Description :</strong> {{user['desc_role']}}</li>
-        <li class="list-group-item"><strong>Remarques :</strong> {{user['remarques']}}</li>
-        <li class="list-group-item"><strong>Groupes :</strong>
-            {% for group in groups %}
-                <a href="{{url_application}}/group/update/{{group.id_role}}">{{group.nom_role}}</a> -
-            {% endfor %}   
-        </li>
-        <li class="list-group-item"><strong>Listes :</strong>
-            {% for list in lists %}
-                <a href="{{url_application}}/list/update/{{list.id_liste}}">{{list.nom_liste}}</a> - 
-            {% endfor %}
-        </li>
-        <li class="list-group-item"><strong>Profils dans les applications :</strong> <br /><br />
-            {% for right in rights %}
-                <p style="margin-left: 30px">
-                    Application "{{right['application_rel']['nom_application']}}" : 
-                    {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
-                    <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
-                        <button type="submit" class="btn btn-outline-success btn-sm">
-                            Modifier
-                        </button>
-                    </a>
-                </p>
-            {% endfor %}
-        </li>
-    </ul>
+    <h3>Utilisateur "{{user['nom_role']}} {{user['prenom_role']}}"</h3>
+    <div class="ml-5">
+        <small> 
+            {% if is_desc %}
+                {{role['desc_role']}}
+            {% endif %}
+            {% if is_uuid %}
+                <br /><strong>UUID :</strong> {{user['uuid_role']}}
+            {% endif %}
+            {% if is_identifiant %}
+                <br /><strong>Identifiant :</strong>{{user['identifiant']}}
+            {% endif %}
+            {% if is_mail %}
+                <br /><strong>Email :</strong> <a href="mailto:{{user['email']}}">{{user['email']}}</a>
+            {% endif %}
+            {% if is_organisme %}
+                <br /><strong>Organisme :</strong> {{organisme.nom_organisme}}
+            {% endif %}
+            {% if is_remarques %}
+                <br /><strong>Remarques :</strong> {{user['remarques']}}
+            {% endif %}
+        </small>
+    </div>
+
+    <br />
+    <hr />
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#grouplist">
+            <h5 class="bg-secondary">Liste des groupes auxquels appartient l'utilisateur</h5>
+        </div>
+        <div id="grouplist"  class="card-body collapse">
+            {%if is_group %}
+                <ul class="list-group list-group-flush">
+                    {% for group in groups %}
+                        <li class="list-group-item">
+                            <a href="{{url_application}}/group/info/{{group.id_role}}">{{group.nom_role}}</a>
+                            <a href="{{url_application}}/group/members/{{group['id_role']}}">
+                                <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                    Modifier les membres du groupe "{{group['nom_role']}}"
+                                </button>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">L'utilisateur n'appartient à aucun groupe.</p>
+            {% endif %}   
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#listlist">
+            <h5>Liste des listes auxquelles appartient l'utilisateur</h5>
+        </div>
+        <div id="listlist" class="card-body collapse">
+            {%if is_list %}
+                <ul class="list-group list-group-flush">
+                    {% for list in lists %}
+                        <li class="list-group-item">
+                            <a href="{{url_application}}/list/info/{{list.id_liste}}">{{list.nom_liste}}</a>
+                            <a href="{{url_application}}/list/members/{{list.id_liste}}">
+                                <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                    Modifier les membres de la liste "{{list['nom_liste']}}"
+                                </button>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">L'utilisateur n'appartient à aucune liste.</p>
+            {% endif %}
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
+            <h5>Liste des applications pour lesquelles l'utilisateur dispose d'un profil</h5>
+        </div>
+        <div id="profillist"  class="card-body collapse">
+            {%if is_right %}
+                <ul class="list-group list-group-flush">
+                    {% for right in rights %}
+                        <li class="list-group-item">
+                            Application "<a href="{{url_application}}/application/info/{{right['application_rel']['id_application']}}">{{right['application_rel']['nom_application']}}</a>" : 
+                            {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
+                            <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
+                                <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                    Modifier le profil de l'utilisateur dans l'application "{{right['application_rel']['nom_application']}}"
+                                </button>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-info ml-5">L'utilisateur ne dispose d'aucune autorisation dans les applications.</p>
+            {% endif %}
+        </div>
+    </div>
     <br />
     <a href="{{pathU}}{{user['id_role']}}">
         <button type="submit" class="btn btn-success btn-block">

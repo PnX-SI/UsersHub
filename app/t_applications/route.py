@@ -3,7 +3,7 @@ from flask import (
     Blueprint, request, flash, jsonify
 )
 
-from app.env import URL_REDIRECT
+from app.env import db, URL_REDIRECT
 from app.t_applications import forms as t_applicationsforms
 from app.models import (
     TApplications, TRoles, TProfils, 
@@ -62,12 +62,32 @@ def applications():
         pathA=config.URL_APPLICATION + "/application/add/new",
         pathP=config.URL_APPLICATION + "/application_roles_profil/",
         pathR=config.URL_APPLICATION + "/application/profils/",
+        pathI=config.URL_APPLICATION + "/application/info/",
         name="une application",
         name_list="Applications",
         otherCol='True',
         Members="Gérer les utilisateurs",
         permissions="True",
-        Right="Profils disponibles"
+        Right="Profils disponibles",
+        see="True"
+    )
+
+
+@route.route('application/info/<id_application>', methods=['GET'])
+@fnauth.check_auth(3, False, URL_REDIRECT)
+def info(id_application):
+    """
+    Route qui retourne une fiche de l'application
+    et des roles qui disposent de profils pour elle.
+    """
+    application = TApplications.get_one(id_application)
+    users = db.session.query(CorRoleAppProfil).filter(CorRoleAppProfil.id_application == id_application).all()
+    profils = db.session.query(CorProfilForApp).filter(CorProfilForApp.id_application == id_application)
+    return render_template(
+        'info_application.html',
+        application=application,
+        users=users,
+        profils=profils
     )
 
 
@@ -122,11 +142,11 @@ def addorupdate(id_application):
                 return redirect(url_for('application.applications'))
         return render_template(
             'application.html',
-             form=form,
-             title="Formulaire Application",
-             profils=profils_in_app,
-             id_application=id_application
-             )
+            form=form,
+            title="Formulaire Application",
+            profils=profils_in_app,
+            id_application=id_application
+            )
 
 
 @route.route('application/delete/<id_application>', methods=['GET', 'POST'])

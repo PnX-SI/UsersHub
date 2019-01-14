@@ -57,8 +57,8 @@ Créer le fichier `/etc/apache2/sites-avalaible/usershub.conf` avec ce contenu
   ::  
   
     <Location /usershub2>
-        ProxyPass  http://localhost:5001/
-        ProxyPassReverse  http://localhost:5001/
+        ProxyPass  http://localhost:5001
+        ProxyPassReverse  http://localhost:5001
     </Location>
 
 Activé le site et recharger la conf apache

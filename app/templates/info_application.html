@@ -1,0 +1,67 @@
+{% include "librairies.html" %}   
+{% include "head-appli.html" %}
+
+<div class="container main-zone ng-scope ">
+    <h3>
+        Application "{{application.nom_application}}" - 
+        <small>code "{{application.code_application}}"</small>
+    </h3>
+    <small>{{application.desc_application}}</small>
+    <br />
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
+            <h5>
+                Liste des profils implémentés dans l'application
+                <a href="{{url_application}}/application/profils/{{application.id_application}}">
+                    <button type="submit" class="btn btn-outline-success btn-sm text-white float-right">
+                        Modifier les profils applicables pour l'application
+                    </button>
+                </a>
+            </h5>
+        </div>
+        <div id="profillist" class="card-body collapse show">
+                <div class="ml-3">
+                {% for profil in profils %}
+                    {{profil.profil_rel.nom_profil}} - 
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#userlist">
+            <h5>Liste des utilisateurs ayant un profil dans l'application </h5>
+        </div>
+        <div id="userlist" class="card-body collapse">
+            <ul class="list-group list-group-flush">
+                {% for user in users %}
+                    <li class="list-group-item">
+                        {% set is_group = user.role_rel.groupe %}
+                        {% if is_group %}
+                            <a href="{{url_application}}/group/info/{{user.role_rel.id_role}}">
+                                {{user.role_rel.nom_role}} 
+                            </a>
+                        {% else %}
+                            <a href="{{url_application}}/user/info/{{user.role_rel.id_role}}">
+                                {%if user.role_rel.prenom_role %}{{user.role_rel.prenom_role}}{% endif %} {{user.role_rel.nom_role}}
+                            </a>
+                        {% endif %}
+                        : profil "{{user.profil_rel.nom_profil}}"
+                        <a href="{{url_application}}/application/update/role_profil/{{user.role_rel.id_role}}/{{application.id_application}}">
+                            <button type="submit" class="btn btn-outline-success btn-sm float-right">
+                                Modifier le profil de {%if user.role_rel.prenom_role %}{{user.role_rel.prenom_role}}{% endif %} {{user.role_rel.nom_role}}
+                            </button>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <br />
+    <a href="{{url_application}}/application/update/{{application.id_application}}">
+        <button type="submit" class="btn btn-success btn-block">
+            Modifier l'application
+        </button>
+    </a>
+</div>

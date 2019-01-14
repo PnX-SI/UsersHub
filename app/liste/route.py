@@ -4,7 +4,7 @@ from flask import (
 )
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
+from app.env import db, URL_REDIRECT
 from app.liste import forms as listeforms
 from app.models import TListes, CorRoleListe, TRoles
 from app.utils.utils_all import strigify_dict
@@ -57,7 +57,7 @@ def lists():
         name_list="Listes",
         otherCol='True',
         Members="Membres",
-        see='False'
+        see='True'
     )
 
 
@@ -156,53 +156,20 @@ def delete(id_liste):
     Route qui supprime une liste dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste des listes
     """
-
     TListes.delete(id_liste)
     return redirect(url_for('liste.lists'))
 
 
-# @route.route('list/info/<id_liste>', methods=['GET', 'POST'])
-# @fnauth.check_auth(3, False, URL_REDIRECT)
-# def get_info(id_liste):
-#     user = TListes.get_one(id_liste)
-#     members = TListes.get_user_in_list(id_liste)
-#     tab_usr = []
-#     if members != None:
-#         for usr in members:
-#             tab_usr.append(usr["full_name"])
-#     d_tag = CorRoleTag.get_all(recursif=True, as_model=True)
-#     d_tag = d_tag.filter(CorRoleTag.id_liste == id_liste)
-#     tag = [data.as_dict() for data in d_tag.all()]
-#     tab_t = []
-#     if tag != None:
-#         for t in tag:
-#             tab_t.append(TTags.get_one(t['id_tag'])['tag_name'])
-#     Cruved = get_cruved_one(id_liste)
-#     fLineCruved = ['Application', 'Create', 'Read', 'Update', 'Validate', 'Export', 'Delete']
-#     if Cruved != []:
-#         columnsCruved = ['nom_application', 'C', 'R', 'U', 'V', 'E', 'D']
-#         return render_template(
-#             "info_list.html",
-#             elt=user,
-#             members=tab_usr,
-#             tag=tab_t,
-#             fLineCruved=fLineCruved,
-#             lineCruved=columnsCruved,
-#             tableCruved=Cruved,
-#             id_r=id_liste,
-#             id_app=Cruved[0]['id_application'],
-#             pathU=config.URL_APPLICATION + '/CRUVED/update/',
-#             pathUu='/'
-#         )
-#     else:
-#         return render_template(
-#             "info_list.html",
-#             elt=user,
-#             members=tab_usr,
-#             tag=tab_t,
-#             Cruved='False',
-#             fLineCruved=fLineCruved
-#          )
+@route.route('list/info/<id_liste>', methods=['GET'])
+@fnauth.check_auth(3, False, URL_REDIRECT)
+def info(id_liste):
+    mylist = TListes.get_one(id_liste)
+    members = db.session.query(CorRoleListe).filter(CorRoleListe.id_liste == id_liste).all()
+    return render_template(
+        "info_list.html",
+        mylist=mylist,
+        members=members
+    )
 
 
 def pops(form):
