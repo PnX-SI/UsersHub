@@ -328,10 +328,10 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_menu AS
              LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           WHERE u.groupe = false AND u.active = true) a;
 
--- Vue permettant de retourner les utilisateurs et leurs droits maximum pour chaque application
-DROP VIEW utilisateurs.v_userslist_forall_applications;
-CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
- SELECT a.groupe,
+-- Vue permettant de retourner les roles et leurs droits maximum pour chaque application
+CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS 
+SELECT a.groupe,
+    a.active,
     a.id_role,
     a.identifiant,
     a.nom_role,
@@ -360,6 +360,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+	    u.active,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
@@ -371,8 +372,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             c.id_application
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
-             LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-           WHERE u.groupe = false AND u.active = true
+             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
         UNION
          SELECT u.groupe,
             u.id_role,
@@ -384,6 +384,7 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             u.pass_plus,
             u.email,
             u.id_organisme,
+            u.active,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
@@ -394,11 +395,19 @@ CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
             c.id_profil AS id_droit,
             c.id_application
            FROM utilisateurs.t_roles u
-             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role
+             JOIN utilisateurs.cor_roles g ON g.id_role_utilisateur = u.id_role OR g.id_role_groupe = u.id_role
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = g.id_role_groupe
              LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
-          WHERE u.groupe = false AND u.active = true) a
-  GROUP BY a.groupe, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+          ) a
+  WHERE a.active = true
+  GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+
+-- Vue permettant de retourner les utilisateurs (pas les roles) et leurs droits maximum pour chaque application
+CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
+SELECT * FROM utilisateurs.v_roleslist_forall_applications
+WHERE groupe = false;
+
+
 
 --On essaie de recréer une vue qui n'existe pas dans toutes les bases
 --Si elle n'existe pas une erreur est levée et la création ne se fait pas.
