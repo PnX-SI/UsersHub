@@ -17,7 +17,7 @@ Renommer l’ancien repertoire de l’application, ainsi que le nouveau :
 
 * Créer et mettre à jour le fichier ``config/settings.ini``.
 
-Remplir uniquement la partie 'PostgreSQL settings' (sauf si vous savez ce que vous faites), avec les paramètres de connexion de la base de données contenant votre schéma ``utilisateurs``. Dans notre cas, il s'agit de la base de données de GeoNature.
+Remplir uniquement la partie 'PostgreSQL settings' et 'Application settings', avec les paramètres de connexion de la base de données contenant votre schéma ``utilisateurs``. Dans notre cas, il s'agit de la base de données de GeoNature.
  
 ::  
   
@@ -51,7 +51,7 @@ Exemple :
 
 Passer le script de migration ``data/update_1.3.3to2.0.0.sql``
 
-Lancer le script d'installation de l'application:
+Lancer le script d'installation de l'application :
 
 ::
 
