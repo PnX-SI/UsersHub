@@ -529,6 +529,12 @@ ALTER TABLE save.t_menus DROP CONSTRAINT t_menus_id_application_fkey;
 ALTER TABLE save.t_tags DROP CONSTRAINT fk_t_tags_id_tag_type;
 
 
+DROP FUNCTION utilisateurs.can_user_do_in_module(integer, integer, integer, integer);
+DROP FUNCTION utilisateurs.can_user_do_in_module(integer, integer, character varying, integer);
+DROP FUNCTION utilisateurs.user_max_accessible_data_level_in_module(integer, integer, integer);
+DROP FUNCTION utilisateurs.user_max_accessible_data_level_in_module(integer, character varying, integer);
+DROP FUNCTION utilisateurs.find_all_modules_childs(integer);
+
 --------
 --SAVE--
 --------
