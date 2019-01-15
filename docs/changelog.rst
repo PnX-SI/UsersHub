@@ -2,10 +2,19 @@
 CHANGELOG
 =========
 
+2.1.0 (unreleased)
+------------------
+
+**Nouveautés**
+
+* Finalisation des scripts permettant de synchroniser le schéma ``utilisateurs`` de UsersHub avec celui de bases de données filles (data/synchro_interbase_mere.sql)
+
 2.0.0 (2019-01-15)
 ------------------
 
-Refonte complète de l'application en Python / Flask / Bootstrap 4
+Refonte complète de l'application en Python / Flask / Bootstrap 4.
+
+Pas de mécanisme de synchronisation de BDD filles disponible pour le moment.
 
 **Nouveautés**
 
