@@ -7,7 +7,7 @@ CHANGELOG
 
 **Nouveautés**
 
-* Finalisation des scripts permettant de synchroniser le schéma ``utilisateurs`` de UsersHub avec celui de bases de données filles (data/synchro_interbase_mere.sql)
+* Finalisation des scripts permettant de synchroniser le schéma ``utilisateurs`` de UsersHub avec celui de bases de données filles (``data/synchro_interbase_mere.sql`` et ``data/synchro_interbase_fille.sql``)
 
 2.0.0 (2019-01-15)
 ------------------
