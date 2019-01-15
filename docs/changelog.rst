@@ -2,10 +2,8 @@
 CHANGELOG
 =========
 
-2.0.0 (unreleased)
+2.0.0 (2019-01-15)
 ------------------
-
-Attention, incrémenter le requirements.txt
 
 Refonte complète de l'application en Python / Flask / Bootstrap 4
 
@@ -26,8 +24,9 @@ Refonte complète de l'application en Python / Flask / Bootstrap 4
 
 **Notes de versions**
 
-* Si vous migrez depuis la version 1.3.3, éxecutez le script SQL de mise à jour de la BDD : ``data/update_1.3.3to2.0.0.sql``
-* Faites une nouvelle installation de UsersHub en suivant sa documentation d'installation
+Pour mettre à jour UsersHub depuis la version 1, il s'agit d'une nouvelle installation et d'une migration des données vers le nouveau modèle de BDD.
+
+* Pour migrer depuis la version 1.3.3, suivez la documentation spécifique de migration (docs/migration_uhv2.rst)
 * Pas de migration disponible depuis la version 2.0.0-beta.1
 
 1.3.3 (2018-10-17)
