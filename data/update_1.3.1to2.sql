@@ -403,6 +403,7 @@ SELECT a.groupe,
   GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
 -- Vue permettant de retourner les utilisateurs (pas les roles) et leurs droits maximum pour chaque application
+DROP VIEW utilisateurs.v_userslist_forall_applications;
 CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
 SELECT * FROM utilisateurs.v_roleslist_forall_applications
 WHERE groupe = false;

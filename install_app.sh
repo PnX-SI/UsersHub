@@ -15,7 +15,7 @@ sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\
 
 url_application="${url_application//\//\\/}"
 # on enleve le / final
-if [ "${url_application: -1}" -eq '/' ]
+if [ "${url_application: -1}" = '/' ]
 then
 url_application="${url_application::-1}"
 fi

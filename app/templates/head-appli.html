@@ -6,7 +6,6 @@
     </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        {% if session.get('current_user', False) %}
           <ul class="nav navbar-nav mr-auto">
               <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('user.users') }}">Utilisateurs</a>
@@ -35,6 +34,5 @@
                 </a>
               </li>
           </ul>
-          {% endif %}
       </div>
     </div>
