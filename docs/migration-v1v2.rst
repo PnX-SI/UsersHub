@@ -1,3 +1,7 @@
+=================
+MIGRATION V1 > V2
+=================
+
 Procédure de mise à jour de UsersHub version 1 vers la version 2.0.0
 
 * Télécharger la dernière version de UsersHub
