@@ -13,6 +13,7 @@ CHANGELOG
 **Notes de versions**
 
 * Vous pouvez passer directement de la version 1.3.3 à la version 2.0.1, mais en suivant les notes de version de la 2.0.0.
+* Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 2.0.0 (2019-01-15)
 ------------------
