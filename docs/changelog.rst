@@ -2,6 +2,19 @@
 CHANGELOG
 =========
 
+2.0.2 (2019-01-18)
+------------------
+
+**Corrections**
+
+* Correction de la documentation
+* Correction des versions du sous-module d'authentification
+
+**Notes de version**
+
+* Vous pouvez passer directement de la version 1.3.3 à la version 2.0.2, mais en suivant les notes de version de la 2.0.0.
+* Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
 2.0.1 (2019-01-18)
 ------------------
 
