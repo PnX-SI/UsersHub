@@ -96,8 +96,8 @@ Mise à jour de l'application
 
 ::
 
-    mv /home/`whoami`/usershub_old/config/config.py /home/`whoami`/usershub/config/config.py
-    mv /home/`whoami`/usershub_old/config/settings.ini /home/`whoami`/usershub/config/settings.ini 
+    cp /home/`whoami`/usershub_old/config/config.py /home/`whoami`/usershub/config/config.py
+    cp /home/`whoami`/usershub_old/config/settings.ini /home/`whoami`/usershub/config/settings.ini 
 
 * Lancer le script d'installation de l'application :
 
