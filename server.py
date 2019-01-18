@@ -5,7 +5,7 @@
 
 import json
 
-from flask import Flask, redirect, url_for, request, session, render_template
+from flask import Flask, redirect, url_for, request, session, render_template, g
 from app.env import db
 from config import config
 
@@ -75,6 +75,10 @@ with app.app_context():
                 current_user = json.loads(response.get_data().decode('utf-8'))
                 session["current_user"] = current_user["user"]
             return response
+
+        @app.context_processor
+        def inject_user():
+            return dict(user=getattr(g, "user", None))
 
         from pypnusershub import routes
         app.register_blueprint(routes.routes, url_prefix='/pypn/auth')
