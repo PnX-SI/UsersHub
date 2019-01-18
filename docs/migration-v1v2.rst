@@ -54,9 +54,9 @@ Exemple :
     url_application=http://test.ecrins-parcnational.net/usershub
 
 
-Passer le script de migration ``data/update_1.3.3to2.0.0.sql``
+- Passer le script de migration ``data/update_1.3.3to2.0.0.sql``
 
-Lancer le script d'installation de l'application :
+- Lancer le script d'installation de l'application :
 
 ::
 
@@ -67,6 +67,12 @@ Lancer le script d'installation de l'application :
 
 Supprimer le contenu du fichier ``/etc/apache2/sites-enabled/usershub.conf`` et le remplacer par les lignes suivantes :
  
+
+::  
+  
+    sudo nano /etc/apache2/sites-enabled/usershub.conf
+
+
 ::  
   
     <Location /usershub>
