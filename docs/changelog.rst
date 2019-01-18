@@ -2,6 +2,18 @@
 CHANGELOG
 =========
 
+2.0.1 (2019-01-18)
+------------------
+
+**Corrections**
+
+* Corrections mineures de l'authentification et de la gestion des sessions
+* Mise à jour des scripts de synchronisation du schéma ``utilisateurs`` entre BDD mère et BDD filles (``data/synchro_interbase_fille.sql``	et ``data/synchro_interbase_mere.sql``). A tester et finaliser.
+
+**Notes de versions**
+
+* Vous pouvez passer directement de la version 1.3.3 à la version 2.0.1, mais en suivant les notes de version de la 2.0.0.
+
 2.0.0 (2019-01-15)
 ------------------
 
@@ -26,7 +38,7 @@ Refonte complète de l'application en Python / Flask / Bootstrap 4
 
 Pour mettre à jour UsersHub depuis la version 1, il s'agit d'une nouvelle installation et d'une migration des données vers le nouveau modèle de BDD.
 
-* Pour migrer depuis la version 1.3.3, suivez la documentation spécifique de migration (docs/migration_uhv2.rst)
+* Pour migrer depuis la version 1.3.3, suivez la documentation spécifique de migration (https://usershub.readthedocs.io/fr/latest/migration-v1v2.html)
 * Pas de migration disponible depuis la version 2.0.0-beta.1
 
 1.3.3 (2018-10-17)
