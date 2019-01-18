@@ -46,6 +46,7 @@ app.config.from_pyfile('config/config.py')
 app.secret_key = config.SECRET_KEY
 
 db.init_app(app)
+# pass parameters to the usershub authenfication sub-module, DONT CHANGE THIS
 app.config['DB'] = db
 
 with app.app_context():
