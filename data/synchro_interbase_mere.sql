@@ -176,110 +176,47 @@ $BODY$
 
 
 -- Triggers sur l'ensemble des tables du schéma utilisateurs
-do $$
-begin
-CREATE TRIGGER trg_utilisateurs_bib_droits_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.bib_droits
+CREATE TRIGGER trg_utilisateurs_bib_organismes_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.bib_organismes
           for each row
- execute procedure utilisateurs.fct_trg_log_actions(False, 'id_droit');
-exception when others then
-    raise notice '% %', SQLERRM, SQLSTATE;
-end;
-$$ language 'plpgsql';
+ EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(False, 'id_organisme');
 
-CREATE TRIGGER trg_utilisateurs_bib_organismes_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.bib_organismes
+CREATE TRIGGER trg_utilisateurs_t_applications_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.t_applications
           for each row
- execute procedure utilisateurs.fct_trg_log_actions(False, 'id_organisme');
+ EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(False, 'id_application');
 
-CREATE TRIGGER trg_utilisateurs_bib_tag_types_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.bib_tag_types
+CREATE TRIGGER trg_utilisateurs_t_listes_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.t_listes
           for each row
- execute procedure utilisateurs.fct_trg_log_actions(False, 'id_tag_type');
+ EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(False, 'id_liste');
 
-CREATE TRIGGER trg_utilisateurs_bib_unites_types_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.bib_unites
+CREATE TRIGGER trg_utilisateurs_t_profils_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.t_profils
           for each row
- execute procedure utilisateurs.fct_trg_log_actions(False, 'id_unite');
+ EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(False, 'id_profil');
 
-CREATE TRIGGER trg_utilisateurs_cor_tags_relations_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_tags_relations
+CREATE TRIGGER trg_utilisateurs_t_roles_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.t_roles
+          for each row
+ EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(False, 'id_role');
+
+CREATE TRIGGER trg_utilisateurs_cor_profil_for_app_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.cor_profil_for_app
           FOR EACH ROW
  EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
 
-CREATE TRIGGER trg_utilisateurs_cor_organism_tag_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_organism_tag
+CREATE TRIGGER trg_utilisateurs_cor_role_app_profil_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.cor_role_app_profil
           FOR EACH ROW
  EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
 
-CREATE TRIGGER trg_utilisateurs_cor_role_tag_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_role_tag
+CREATE TRIGGER trg_utilisateurs_cor_role_liste_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.cor_role_liste
           FOR EACH ROW
  EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
 
-do $$
-begin
-CREATE TRIGGER trg_utilisateurs_cor_role_droit_application_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_role_droit_application
+CREATE TRIGGER trg_utilisateurs_cor_roles_log
+     AFTER INSERT OR UPDATE OR DELETE ON utilisateurs.cor_roles
           FOR EACH ROW
  EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
-
-exception when others then
-    raise notice '% %', SQLERRM, SQLSTATE;
-end;
-$$ language 'plpgsql';
-
-do $$
-begin
-CREATE TRIGGER trg_utilisateurs_cor_role_menu_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_role_menu
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
-
-exception when others then
-    raise notice '% %', SQLERRM, SQLSTATE;
-end;
-$$ language 'plpgsql';
-
-CREATE TRIGGER trg_utilisateurs_cor_roles_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_roles
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
-
-CREATE TRIGGER trg_utilisateurs_cor_application_tag_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_application_tag
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
-
-CREATE TRIGGER trg_utilisateurs_cor_app_privileges_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.cor_app_privileges
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(TRUE, 'none');
-
-do $$
-begin
-CREATE TRIGGER trg_utilisateurs_t_menus_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.t_menus
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(FALSE, 'id_menu');
-
-exception when others then
-    raise notice '% %', SQLERRM, SQLSTATE;
-end;
-$$ language 'plpgsql';
-
-CREATE TRIGGER trg_utilisateurs_t_applications_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.t_applications
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(FALSE, 'id_application');
-
-CREATE TRIGGER trg_utilisateurs_t_tags_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.t_tags
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(FALSE, 'id_tag');
-
-CREATE TRIGGER trg_utilisateurs_t_roles_log_a
-     AFTER INSERT OR UPDATE OR DELETE on utilisateurs.t_roles
-          FOR EACH ROW
- EXECUTE PROCEDURE utilisateurs.fct_trg_log_actions(FALSE, 'id_role');
-
