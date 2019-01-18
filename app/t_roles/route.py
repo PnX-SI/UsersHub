@@ -27,7 +27,6 @@ route = Blueprint('user', __name__)
     False, 
     redirect_on_expiration=URL_REDIRECT, 
     redirect_on_invalid_token=URL_REDIRECT,
-    redirect_on_insufficient_right=URL_REDIRECT
 )
 def users():
 
