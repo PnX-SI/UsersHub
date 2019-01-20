@@ -3,9 +3,9 @@ from flask import (
     Blueprint, request, flash, jsonify
 )
 
-from app.env import db, URL_REDIRECT
-from app.t_applications import forms as t_applicationsforms
-from app.models import (
+from usershub.env import db, URL_REDIRECT
+from usershub.t_applications import forms as t_applicationsforms
+from usershub.models import (
     TApplications, TRoles, TProfils, 
     CorProfilForApp, CorRoleAppProfil
 )

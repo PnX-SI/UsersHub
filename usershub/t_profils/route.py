@@ -5,9 +5,9 @@ from flask import (
 
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
-from app.t_profils import forms as t_profilsforms
-from app.models import (
+from usershub.env import URL_REDIRECT
+from usershub.t_profils import forms as t_profilsforms
+from usershub.models import (
     TProfils, TApplications, CorProfilForApp,
     TRoles, Bib_Organismes, CorRoleAppProfil
 )

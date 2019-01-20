@@ -3,8 +3,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 
-from app.models import TRoles, TProfils, CorRoleAppProfil
-from app.env import db
+from usershub.models import TRoles, TProfils, CorRoleAppProfil
+from usershub.env import db
 
 
 class Application(FlaskForm):

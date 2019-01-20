@@ -4,10 +4,10 @@ from flask import (
 )
 from pypnusershub import routes as fnauth
 
-from app.env import db, URL_REDIRECT
-from app.liste import forms as listeforms
-from app.models import TListes, CorRoleListe, TRoles
-from app.utils.utils_all import strigify_dict
+from usershub.env import db, URL_REDIRECT
+from usershub.liste import forms as listeforms
+from usershub.models import TListes, CorRoleListe, TRoles
+from usershub.utils.utils_all import strigify_dict
 from config import config
 
 

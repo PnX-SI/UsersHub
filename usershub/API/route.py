@@ -1,9 +1,9 @@
 from flask import Blueprint, request
 
 
-from app.env import db
-from app.utils.utilssqlalchemy import json_resp
-from app.models import (
+from usershub.env import db
+from usershub.utils.utilssqlalchemy import json_resp
+from usershub.models import (
     TProfils, CorProfilForApp
 )
 

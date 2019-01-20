@@ -1,6 +1,6 @@
 import hashlib
 from flask import jsonify
-from app.env import db
+from usershub.env import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
@@ -9,10 +9,10 @@ from flask_bcrypt import (
     generate_password_hash
 )
 
-from app.utils.utilssqlalchemy import serializable
+from usershub.utils.utilssqlalchemy import serializable
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, distinct, or_, desc
-from app.genericRepository import GenericRepository
+from usershub.genericRepository import GenericRepository
 from config import config
 
 

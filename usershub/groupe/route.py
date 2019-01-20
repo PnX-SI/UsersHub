@@ -5,12 +5,12 @@ from flask import (
 from pypnusershub import routes as fnauth
 
 
-from app.env import URL_REDIRECT
-from app.groupe import forms as groupeforms
-from app.models import TRoles
-from app.models import CorRoles
+from usershub.env import URL_REDIRECT
+from usershub.groupe import forms as groupeforms
+from usershub.models import TRoles
+from usershub.models import CorRoles
 from config import config
-from app.utils.utils_all import strigify_dict
+from usershub.utils.utils_all import strigify_dict
 
 
 route = Blueprint('groupe', __name__)

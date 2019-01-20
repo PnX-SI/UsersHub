@@ -9,13 +9,13 @@ from flask import (
 
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
+from usershub.env import URL_REDIRECT
 
-from app import genericRepository
-from app.bib_organismes import forms as bib_organismeforms
-from app.models import Bib_Organismes, TRoles
+from usershub import genericRepository
+from usershub.bib_organismes import forms as bib_organismeforms
+from usershub.models import Bib_Organismes, TRoles
 from config import config
-from app.utils.utils_all import strigify_dict
+from usershub.utils.utils_all import strigify_dict
 
 
 route = Blueprint('organisme', __name__)

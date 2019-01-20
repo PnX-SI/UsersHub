@@ -9,13 +9,13 @@ from flask_bcrypt import (
 
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
-from app.t_roles import forms as t_rolesforms
-from app.models import (
+from usershub.env import URL_REDIRECT
+from usershub.t_roles import forms as t_rolesforms
+from usershub.models import (
     TRoles, Bib_Organismes, CorRoles
 )
-from app.utils.utils_all import strigify_dict
-from app.env import db
+from usershub.utils.utils_all import strigify_dict
+from usershub.env import db
 
 from config import config
 route = Blueprint('user', __name__)

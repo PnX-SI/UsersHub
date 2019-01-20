@@ -6,7 +6,7 @@
 import json
 
 from flask import Flask, redirect, url_for, request, session, render_template, g
-from app.env import db
+from usershub.env import db
 from config import config
 
 
@@ -36,8 +36,8 @@ class ReverseProxied(object):
 
 app = Flask(
     __name__,
-    template_folder="app/templates",
-    static_folder='app/static'
+    template_folder="usershub/templates",
+    static_folder='usershub/static'
 )
 
 app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
@@ -84,33 +84,33 @@ with app.app_context():
         from pypnusershub import routes
         app.register_blueprint(routes.routes, url_prefix='/pypn/auth')
 
-        from app.t_roles import route
+        from usershub.t_roles import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.bib_organismes import route
+        from usershub.bib_organismes import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.groupe import route
+        from usershub.groupe import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.liste import route
+        from usershub.liste import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.t_applications import route
+        from usershub.t_applications import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.t_profils import route
+        from usershub.t_profils import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.login import route
+        from usershub.login import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.API import route
+        from usershub.API import route
         app.register_blueprint(route.route, url_prefix='/api')
 
 
     if config.ACTIVATE_API:
-        from app.API import route_register
+        from usershub.API import route_register
         app.register_blueprint(route_register.route, url_prefix='/api_register')  # noqa
 
 
