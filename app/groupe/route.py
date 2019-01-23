@@ -88,6 +88,8 @@ def addorupdate(id_role=None):
             if form.validate_on_submit() and form.validate():
                 form_group = pops(form.data)
                 form_group.pop('id_role')
+                # set the group as active default
+                form_group['active'] = True
                 TRoles.post(form_group)
                 return redirect(url_for('groupe.groups'))
             else:

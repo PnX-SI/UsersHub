@@ -224,7 +224,7 @@ class TRoles(GenericRepository):
         q = db.session.query(cls).filter(cls.active == True)
         q = q.order_by(desc(cls.nom_role))
         q = q.join(CorRoleListe)
-        q = q.filter(id_liste == CorRoleListe.id_liste  )
+        q = q.filter(id_liste == CorRoleListe.id_liste )
         data =  [data.as_dict_full_name() for data in q.all()]
         return data
 
