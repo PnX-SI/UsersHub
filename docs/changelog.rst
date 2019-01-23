@@ -5,9 +5,30 @@ CHANGELOG
 2.0.3 (unreleased)
 ------------------
 
+** Nouveauté **
+
+* Mise en place de log rotatif pour éviter de surcharger le serveur
+
 **Corrections**
 
-*
+** Note de version ** 
+
+* Si vous effectuez une monté de version, afin que les logs de l'application soient tous écrit au même endroit, éditez le fichier suivant ``sudo nano /etc/supervisor/conf.d/usershub-service.conf ``. A la ligne ``stdout_logfile``remplacer la ligne existante par   : ``stdout_logfile = /home/<MON_USER>/usershub/var/log/errors_uhv2.log`` (en remplaçant <MON_USER> par votre utilisateur linux).
+
+* Vous pouvez également mettre en place un système de 'log roatif' (système permettant d'archiver les fichiers de log afin qu'ils ne surchargent pas le serveur - conseillé si votre serveur a une capacité disque limité).
+Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les lignes suivantes dans le fichier nouvellement créé (en remplaçant <MON_USER> par votre utilisateur linux)
+
+::
+
+    /home/<MON_USER>/usershub/var/log/*.log {
+    daily
+    rotate 8
+    size 100M
+    create
+    compress
+}
+
+Executez enfin la commande ``sudo logrotate -f /etc/logrotate.conf``
 
 2.0.2 (2019-01-18)
 ------------------

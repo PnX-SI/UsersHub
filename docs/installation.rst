@@ -102,7 +102,8 @@ Mise à jour de l'application
 * Lancer le script d'installation de l'application :
 
 ::
-
+    
+    cd usershub
     ./install_app.sh
 
 * Suivre les éventuelles notes de version spécifique à chaque version
