@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 . config/settings.ini
 
@@ -40,9 +40,16 @@ cd ../..
 
 #Lancement de l'application
 DIR=$(readlink -e "${0%/*}")
+currentdir=${PWD##*/} 
+
+
 sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
 sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
 
+#création d'un fichier rotation des logs
+sudo cp $DIR/log_rotate /etc/logrotate.d/uhv2
+sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/logrotate.d/uhv2
+sudo logrotate -f /etc/logrotate.conf
 
 # activate proxy apache extension
 sudo a2enmod proxy

@@ -15,4 +15,4 @@ source bin/activate
 export PYTHONPATH=$FLASKDIR:$PYTHONPATH
 
 # Start your unicorn
-exec gunicorn server:app --access-logfile $FLASKDIR/var/log/access_uhv2.log --error-log $FLASKDIR/var/log/errors_uhv2.log --pid="${app_name}.pid" -w "${gun_num_workers}"  -b "${gun_host}:${gun_port}"  -n "${app_name}"
+exec gunicorn server:app --access-logfile $FLASKDIR/var/log/access_uhv2.log --pid="${app_name}.pid" -w "${gun_num_workers}"  -b "${gun_host}:${gun_port}"  -n "${app_name}"
