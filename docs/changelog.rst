@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+2.0.3 (unreleased)
+------------------
+
+**Corrections**
+
+*
+
 2.0.2 (2019-01-18)
 ------------------
 
@@ -47,6 +54,7 @@ Refonte complète de l'application en Python / Flask / Bootstrap 4
 * Automatisation de l'installation et révision du script ``install_app.sh``
 * Contrôle de la cohérence entre les champs ``pass`` et ``pass_plus``
 * Possibilité de ne pas utiliser le champs ``pass`` (md5) si on ne l'utilise pas pour renforcer la sécurité du contenu
+* Développement de pages d'information par utilisateur, groupe, organisme, liste et application
 
 **Notes de version**
 
