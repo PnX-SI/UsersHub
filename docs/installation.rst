@@ -83,7 +83,7 @@ Mise à jour de l'application
 
     wget https://github.com/PnEcrins/UsersHub/archive/X.Y.Z.zip
     unzip X.Y.Z.zip
-    rm master.zip
+    rm X.Y.Z.zip
 
 * Renommer l’ancien repertoire de l’application, ainsi que le nouveau :
 
