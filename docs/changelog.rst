@@ -5,20 +5,21 @@ CHANGELOG
 2.0.3 (unreleased)
 ------------------
 
-** Nouveauté **
+**Nouveautés**
 
-* Mise en place de log rotatif pour éviter de surcharger le serveur
+* Mise en place de logs rotatifs pour éviter de surcharger le serveur
 
 **Corrections**
 
-** Note de version ** 
+* Correction de l'enregistrement du formulaire des groupes qui passait automatiquement le champs ``t_roles.active`` à ``false`` (#71)
+* Redirection de l'utilisateur si il n'a pas les droits suffisants pour accéder à une page
 
-* Si vous effectuez une monté de version, afin que les logs de l'application soient tous écrit au même endroit, éditez le fichier suivant ``sudo nano /etc/supervisor/conf.d/usershub-service.conf ``. A la ligne ``stdout_logfile``remplacer la ligne existante par   : ``stdout_logfile = /home/<MON_USER>/usershub/var/log/errors_uhv2.log`` (en remplaçant <MON_USER> par votre utilisateur linux).
+**Note de version** 
 
-* Vous pouvez également mettre en place un système de 'log roatif' (système permettant d'archiver les fichiers de log afin qu'ils ne surchargent pas le serveur - conseillé si votre serveur a une capacité disque limité).
-Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les lignes suivantes dans le fichier nouvellement créé (en remplaçant <MON_USER> par votre utilisateur linux)
+* Afin que les logs de l'application soient tous écrits au même endroit, éditez le fichier ``usershub-service.conf`` (``sudo nano /etc/supervisor/conf.d/usershub-service.conf``. A la ligne ``stdout_logfile``, remplacer la ligne existante par : ``stdout_logfile = /home/<MON_USER>/usershub/var/log/errors_uhv2.log`` (en remplaçant ``<MON_USER>`` par votre utilisateur linux).
+* Vous pouvez également mettre en place un système de logs rotatifs (système permettant d'archiver les fichiers de log afin qu'ils ne surchargent pas le serveur - conseillé si votre serveur a une capacité disque limitée). Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les lignes suivantes dans le fichier nouvellement créé (en remplaçant <MON_USER> par votre utilisateur linux)
 
-::
+  ::
 
     /home/<MON_USER>/usershub/var/log/*.log {
     daily
@@ -26,9 +27,10 @@ Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les li
     size 100M
     create
     compress
-}
+    }
 
-Executez enfin la commande ``sudo logrotate -f /etc/logrotate.conf``
+  Exécutez ensuite la commande ``sudo logrotate -f /etc/logrotate.conf``
+
 
 2.0.2 (2019-01-18)
 ------------------
