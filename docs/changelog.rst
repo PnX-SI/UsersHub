@@ -17,7 +17,7 @@ CHANGELOG
 **Note de version** 
 
 * Afin que les logs de l'application soient tous écrits au même endroit, éditez le fichier ``usershub-service.conf`` (``sudo nano /etc/supervisor/conf.d/usershub-service.conf``. A la ligne ``stdout_logfile``, remplacer la ligne existante par : ``stdout_logfile = /home/<MON_USER>/usershub/var/log/errors_uhv2.log`` (en remplaçant ``<MON_USER>`` par votre utilisateur linux).
-* Vous pouvez également mettre en place un système de logs rotatifs (système permettant d'archiver les fichiers de log afin qu'ils ne surchargent pas le serveur - conseillé si votre serveur a une capacité disque limitée). Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les lignes suivantes dans le fichier nouvellement créé (en remplaçant <MON_USER> par votre utilisateur linux)
+* Vous pouvez également mettre en place un système de logs rotatifs (système permettant d'archiver les fichiers de log afin qu'ils ne surchargent pas le serveur) - conseillé si votre serveur a une capacité disque limitée. Créer le fichier suivant ``sudo nano /etc/logrotate.d/uhv2`` puis copiez les lignes suivantes dans le fichier nouvellement créé (en remplaçant ``<MON_USER>`` par votre utilisateur linux)
 
   ::
 
