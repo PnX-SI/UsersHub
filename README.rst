@@ -31,7 +31,7 @@ Si certains des utilisateurs ou groupe d'utilisateurs doivent figurer dans une l
 
 Il ne vous reste alors plus qu'à utiliser cette liste dans votre application.
 
-.. image :: http://geonature.fr/img/uhv2-screenshot.png
+.. image :: http://geonature.fr/img/uhv2-screenshot.jpg
 
 Installation
 -----------
