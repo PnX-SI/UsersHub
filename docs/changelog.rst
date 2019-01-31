@@ -11,6 +11,9 @@ CHANGELOG
 
 **Corrections**
 
+* Correction du formulaire des groupes (qui créait des groupes inactifs par défaut)
+* Correction du scrip de migration 1.3.0to1.3.1.sql
+
 ** Note de version ** 
 
 * Si vous effectuez une monté de version, afin que les logs de l'application soient tous écrit au même endroit, éditez le fichier suivant ``sudo nano /etc/supervisor/conf.d/usershub-service.conf ``. A la ligne ``stdout_logfile``remplacer la ligne existante par   : ``stdout_logfile = /home/<MON_USER>/usershub/var/log/errors_uhv2.log`` (en remplaçant <MON_USER> par votre utilisateur linux).

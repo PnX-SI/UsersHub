@@ -82,10 +82,18 @@ $$
 BEGIN
 ALTER TABLE bib_organismes ADD COLUMN id_parent integer;
 ALTER TABLE t_applications ADD COLUMN id_parent integer;
---ALTER TABLE t_roles ADD COLUMN pass_plus text;
 EXCEPTION WHEN duplicate_column  THEN
         RAISE NOTICE 'Tentative d''insertion de valeur existante';
 END
+$$;
+
+
+DO $$ 
+    BEGIN
+        ALTER TABLE utilisateurs.t_roles ADD COLUMN pass_plus text;
+    EXCEPTION
+        WHEN duplicate_column THEN RAISE NOTICE 'column "pass_plus" already exists in "utilisateurs.t_roles".';
+    END
 $$;
 ----------------
 --PRIMARY KEYS--
