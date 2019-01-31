@@ -13,7 +13,7 @@ CHANGELOG
 
 * Correction de l'enregistrement du formulaire des groupes qui passait automatiquement le champs ``t_roles.active`` à ``false`` (#71)
 * Redirection de l'utilisateur si il n'a pas les droits suffisants pour accéder à une page
-* Correction du scrip de migration 1.3.0to1.3.1.sql
+* Correction du script de migration 1.3.0to1.3.1.sql
 
 
 **Note de version** 
