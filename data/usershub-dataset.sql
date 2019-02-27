@@ -11,8 +11,6 @@ INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, vill
 INSERT INTO bib_organismes (nom_organisme, adresse_organisme, cp_organisme, ville_organisme, tel_organisme) VALUES 
 ('ma structure test', 'Rue des bois', '00000', 'VILLE', '00-00-99-00-99');
 
-SELECT pg_catalog.setval('utilisateurs.bib_organismes_id_organisme_seq', (SELECT max(id_organisme)+1 FROM utilisateurs.t_roles), false);
-
 -- Insertion de roles de type GROUPE de base pour GeoNature
 --TODO revoir l'insertion des organisme et des identifiants
 INSERT INTO t_roles (groupe, id_role, identifiant, nom_role, prenom_role, desc_role, pass, email, pn, session_appli, date_insert, date_update, id_organisme, remarques) VALUES 
