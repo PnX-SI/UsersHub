@@ -34,6 +34,7 @@ CHANGELOG
 
   Exécutez ensuite la commande ``sudo logrotate -f /etc/logrotate.conf``
 
+* Suivez la procédure standard de mise à jour de UsersHub : https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application
 
 2.0.2 (2019-01-18)
 ------------------
