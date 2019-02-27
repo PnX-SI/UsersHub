@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2.0.3 (unreleased)
+2.0.3 (2019-02-27)
 ------------------
 
 **Nouveautés**
@@ -14,6 +14,7 @@ CHANGELOG
 * Correction de l'enregistrement du formulaire des groupes qui passait automatiquement le champs ``t_roles.active`` à ``false`` (#71)
 * Redirection de l'utilisateur si il n'a pas les droits suffisants pour accéder à une page
 * Correction du script de migration 1.3.0to1.3.1.sql
+* Correction de conflit d'authentification entre les différentes applications utilisant le sous-module d'authentification (MAJ du sous module en 1.3.2)
 
 
 **Note de version** 
