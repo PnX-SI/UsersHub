@@ -13,6 +13,8 @@
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#memberslist">
             <h5>Liste des utilisateurs membres du groupe 
+                <i class="fa fa-chevron-down float-right" aria-hidden="true"></i>
+
                 <a href="{{url_application}}/group/members/{{group['id_role']}}">
                     <button type="submit" class="btn btn-outline-success btn-sm text-white float-right">
                         Modifier les membres du groupe "{{group['nom_role']}}"
@@ -45,7 +47,7 @@
     <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#listlist">
-            <h5>Listes auxquelles le groupe appartient</h5>
+            <h5>Listes auxquelles le groupe appartient <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="listlist" class="card-body collapse">
             {% if is_lists %}
@@ -69,7 +71,7 @@
     <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
-            <h5>Profils du groupe dans les applications</h5>
+            <h5>Profils du groupe dans les applications <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="profillist" class="card-body collapse">
             {% if is_rights %}

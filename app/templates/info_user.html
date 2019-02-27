@@ -40,7 +40,7 @@
     <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#grouplist">
-            <h5 class="bg-secondary">Liste des groupes auxquels appartient l'utilisateur</h5>
+            <h5 class="bg-secondary">Liste des groupes auxquels appartient l'utilisateur <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="grouplist"  class="card-body collapse">
             {%if is_group %}
@@ -64,7 +64,7 @@
     <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#listlist">
-            <h5>Liste des listes auxquelles appartient l'utilisateur</h5>
+            <h5>Liste des listes auxquelles appartient l'utilisateur <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="listlist" class="card-body collapse">
             {%if is_list %}
@@ -88,7 +88,7 @@
     <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
-            <h5>Liste des applications pour lesquelles l'utilisateur dispose d'un profil</h5>
+            <h5>Liste des applications pour lesquelles l'utilisateur dispose d'un profil <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="profillist"  class="card-body collapse">
             {%if is_right %}
