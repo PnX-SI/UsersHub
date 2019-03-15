@@ -462,6 +462,21 @@ class TProfils(GenericRepository):
         ).all()
 
     @classmethod
+    def get_profil_in_app_with_code(cls, id_application, code_profil):
+        """
+            Methode qui retourne un profil à partir de son code
+        """
+        return db.session.query(
+            TProfils
+        ).join(
+            CorProfilForApp, CorProfilForApp.id_profil == TProfils.id_profil
+        ).filter(
+            CorProfilForApp.id_application == id_application
+        ).filter(
+            TProfils.code_profil == code_profil
+        ).first()
+
+    @classmethod
     def get_profils_out_app(cls, id_application):
         """
         Methode qui retourne un dictionnaire des profils non utilisés pour une application
@@ -523,5 +538,69 @@ class CorProfilForApp(GenericRepository):
             db.session.commit()
 
 
+
 @serializable
 class CorRoleAppProfil(GenericRepository):
+    """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
+
+    __tablename__= "cor_role_app_profil"
+    __table_args__={'schema':'utilisateurs'}
+    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
+    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
+    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    role_rel = relationship("TRoles")
+    application_rel = relationship("TApplications")
+    profil_rel = relationship("TProfils")
+
+    # surchage de la méthode get_one car il n'y a pas de clé primaire unique sur une cor
+    @classmethod
+    def get_one(cls, id_role, id_application):
+        return db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).first()
+    
+    
+    # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
+    # TODO cette méthode supprime tous les profils pour une application et un role
+    # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
+    # necessite ne pas utiliser le template table_database.html qui est trop génériqe
+    @classmethod
+    def delete(cls, id_role, id_application):
+        cors = db.session.query(cls).filter_by(
+            id_role=id_role,
+            id_application=id_application
+        ).all()
+        for cor in cors:
+            db.session.delete(cor)
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
+
+    @classmethod
+    def add_cor(cls, id_app, tab_profil):
+        dict_add = {}
+        for d in tab_profil:
+            dict_add = {
+                'id_role': d['id_role'],
+                'id_profil': d['id_profil'],
+                'id_application': id_app 
+            }
+            cls.post(dict_add)
+
+    @classmethod
+    def del_cor(cls,id_app,tab_profil):
+       for t in tab_profil:
+            cls.query.filter(
+                cls.id_role == t['id_role']
+            ).filter(
+                cls.id_profil == t['id_profil']
+            ).filter(
+                cls.id_application == id_app
+            ).delete()
+            db.session.commit()
+    
+    
