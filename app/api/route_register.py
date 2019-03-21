@@ -63,7 +63,14 @@ def create_temp_user():
     # recuperation des parametres
     data = request.get_json()
 
-    temp_user = TempUser(**data)
+    # filtre des données correspondant à un role
+
+    role_data = {}
+    for att in data:
+        if hasattr(TempUser, att):
+            role_data[att] = data[att]
+
+    temp_user = TempUser(**role_data)
 
     # verification des parametres
     (is_temp_user_valid, msg) = temp_user.is_valid()
@@ -143,7 +150,6 @@ def valid_temp_user():
         return {"msg": "pas d'utilisateur trouvé avec le token user demandé"}, 422
 
     temp_user.decrypt_password(config.SECRET_KEY)
-
     req_data = temp_user.as_dict()
 
     # ici on ajoute le droit 1 par default
@@ -428,16 +434,16 @@ def update_user():
         return {'msg': "Pas d'id_role"}, 400
 
     role_data = {}
+    print(req_data)
     for att in req_data:
         if hasattr(TRoles, att):
             role_data[att] = req_data[att]
-            role_data[att] = req_data[att]
 
+    print(role_data)
     role = TRoles(**role_data)
-
     db.session.merge(role)
     db.session.commit()
-
+    role = db.session.query(TRoles).get(id_role)
     return role.as_dict(recursif=True)
 
 

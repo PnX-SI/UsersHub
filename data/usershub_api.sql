@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
     email character varying(250),
     id_organisme integer,
     organisme character(32),
-    id_unite integer,
     remarques text,
     pn boolean,
     session_appli character varying(50),
@@ -43,10 +42,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
 
     CONSTRAINT t_roles_id_organisme_fkey FOREIGN KEY (id_organisme)
         REFERENCES utilisateurs.bib_organismes (id_organisme) MATCH SIMPLE
-        ON UPDATE CASCADE ON DELETE CASCADE,
-
-    CONSTRAINT t_roles_id_unite_fkey FOREIGN KEY (id_unite)
-        REFERENCES utilisateurs.bib_unites (id_unite) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 

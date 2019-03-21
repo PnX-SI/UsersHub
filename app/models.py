@@ -135,7 +135,7 @@ class TRoles(GenericRepository):
         """
         cor_role_query = db.session.query(CorRoles.id_role_groupe).filter(CorRoles.id_role_utilisateur == id_role)
         return db.session.query(TRoles).filter(TRoles.id_role.in_(cor_role_query)).all()
-    
+
     @classmethod
     def get_user_lists(cls, id_role):
         """
@@ -281,7 +281,7 @@ class TRoles(GenericRepository):
         Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
         Ne retourne que les utilisateurs actifs
-        """   
+        """
         # get the user
         data = db.session.query(
             cls, TProfils
@@ -408,7 +408,7 @@ class CorRoleListe(GenericRepository):
         for d in ids_role:
             cls.query.filter(cls.id_liste == id_liste).filter(cls.id_role == d).delete()
             db.session.commit()
-            
+
 
 @serializable
 class TApplications(GenericRepository):
@@ -473,7 +473,7 @@ class TProfils(GenericRepository):
         ).filter(
             CorProfilForApp.id_application == id_application
         ).filter(
-            TProfils.code_profil == code_profil
+            TProfils.code_profil == str(code_profil)
         ).first()
 
     @classmethod
@@ -485,19 +485,19 @@ class TProfils(GenericRepository):
 
         q = db.session.query(cls)
         subquery = db.session.query(CorProfilForApp.id_profil).filter(CorProfilForApp.id_application == id_application)
-        q = q.filter(cls.id_profil.notin_(subquery)) 
+        q = q.filter(cls.id_profil.notin_(subquery))
         return [data.as_dict() for data in q.all()]
-    
+
     @classmethod
     def choixSelect(cls, key='id_profil', label='nom_profil', id_application=None):
         """
-        Methode qui retourne un tableau de tuples d'id profil et de nom de profil 
+        Methode qui retourne un tableau de tuples d'id profil et de nom de profil
         Ce que l'on met en key et label sont paramétrable
 
         """
         if id_application:
             profils = cls.get_profils_in_app(id_application)
-            return [ ( getattr(d, key), getattr(d, label) ) for d in profils]  
+            return [ ( getattr(d, key), getattr(d, label) ) for d in profils]
         return [( getattr(d, key), getattr(d, label) ) for d in cls.get_all()]
 
 
@@ -506,7 +506,7 @@ class CorProfilForApp(GenericRepository):
     """ Classe de correspondance entre la table t_applications et la table t_profils"""
 
     __tablename__ = "cor_profil_for_app"
-    __table_args__ = {'schema':'utilisateurs'}
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
     profil_rel = relationship("TProfils")
@@ -544,7 +544,7 @@ class CorRoleAppProfil(GenericRepository):
     """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
 
     __tablename__= "cor_role_app_profil"
-    __table_args__={'schema':'utilisateurs'}
+    __table_args__={'schema':'utilisateurs', 'extend_existing': True}
     id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
     id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
     id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
@@ -559,8 +559,8 @@ class CorRoleAppProfil(GenericRepository):
             id_role=id_role,
             id_application=id_application
         ).first()
-    
-    
+
+
     # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
     # TODO cette méthode supprime tous les profils pour une application et un role
     # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
@@ -587,7 +587,7 @@ class CorRoleAppProfil(GenericRepository):
             dict_add = {
                 'id_role': d['id_role'],
                 'id_profil': d['id_profil'],
-                'id_application': id_app 
+                'id_application': id_app
             }
             cls.post(dict_add)
 
@@ -602,5 +602,4 @@ class CorRoleAppProfil(GenericRepository):
                 cls.id_application == id_app
             ).delete()
             db.session.commit()
-    
-    
+
