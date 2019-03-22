@@ -325,6 +325,7 @@ def change_application_right():
     if not id_application or not id_role or not code_profil:
         return {'msg': 'Problème de paramètres POST'}, 400
 
+    # TODO GESTION DES GROUPES
     cor = db.session.query(
         CorRoleAppProfil
     ).filter(
@@ -334,15 +335,20 @@ def change_application_right():
     ).first()
 
     if not cor:
-        return {'msg': 'Pas de droit pour l user ' + id_role + ' pour l application ' + id_application}, 500
-
-    cor.id_profil = id_profil
+        cor = CorRoleAppProfil(**{
+            "id_role":id_role,
+            "id_application":id_application,
+            "id_profil":id_profil
+        })
+    else:
+        cor.id_profil = id_profil
 
     db.session.commit()
 
     return {
         'id_role': id_role,
-        'id_profil': id_profil,
+        'id_profil': code_profil,
+        'id_droit': code_profil, # Retrocompatiblité pour l'OEASC
         'id_application': id_application,
         "role": role.as_dict()
     }
@@ -434,12 +440,10 @@ def update_user():
         return {'msg': "Pas d'id_role"}, 400
 
     role_data = {}
-    print(req_data)
     for att in req_data:
         if hasattr(TRoles, att):
             role_data[att] = req_data[att]
 
-    print(role_data)
     role = TRoles(**role_data)
     db.session.merge(role)
     db.session.commit()
