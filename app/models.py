@@ -47,9 +47,9 @@ class TRoles(GenericRepository):
     """
 
     __tablename__ = 't_roles'
-    __table_args__={'schema':'utilisateurs', 'extend_existing':True}
+    __table_args__ = {'schema': 'utilisateurs', 'extend_existing': True}
 
-    id_role = db.Column(db.Integer, primary_key = True)
+    id_role = db.Column(db.Integer, primary_key=True)
     groupe = db.Column(db.Boolean)
     uuid_role = db.Column(UUID(as_uuid=True), default=select([func.uuid_generate_v4()]))
     identifiant = db.Column(db.Unicode)
@@ -59,16 +59,17 @@ class TRoles(GenericRepository):
     pass_md5 = db.Column("pass", db.Unicode)
     pass_plus = db.Column(db.Unicode)
     email = db.Column(db.Unicode)
-    id_organisme =db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme'))
+    id_organisme = db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme'))
     organisme_rel = relationship("Bib_Organismes")
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
     session_appli = (db.Unicode)
 
-
     def fill_password(self, password, password_confirmation):
-        (self.pass_plus, self.pass_md5) = self.set_password( password, password_confirmation)
+        (
+            self.pass_plus, self.pass_md5
+        ) = self.set_password(password, password_confirmation)
 
     @classmethod
     def set_password(cls, password, password_confirmation):
@@ -107,7 +108,7 @@ class TRoles(GenericRepository):
         return choices
 
     @classmethod
-    def choix_group(cls,id, nom, aucun=None):
+    def choix_group(cls, id, nom, aucun=None):
         """
         Methode qui retourne une tableau de tuples d'id de groupes et de nom de goupes
         Avec pour paramètres un id de groupe et un nom de groupe
@@ -118,9 +119,9 @@ class TRoles(GenericRepository):
         q = q.filter(cls.groupe == True)
         data = [data.as_dict(True) for data in q.all()]
         choices = []
-        for d in data :
+        for d in data:
             choices.append((d[id], d[nom]))
-        if aucun != None :
+        if aucun != None:
             choices.append((-1,'Aucun'))
         return choices
 
@@ -154,11 +155,12 @@ class TRoles(GenericRepository):
         return db.session.query(TListes).filter(TListes.id_liste.in_(cor_role_list_query)).all()
 
     @classmethod
-    def get_user_app_profils(cls, id_role):
+    def get_user_app_profils(cls, id_role, id_application=None):
         """
         Get all listapp profils of a user
         Parameters:
             id_role (int): the user's id
+            id_application optional (int): application id
         Return:
             Array<CorRoleAppProfil>
         """
@@ -168,11 +170,13 @@ class TRoles(GenericRepository):
         for id in ids_group:
             ids_role.append(id)
         # get right rows in cor_role_app_profil
-        rights = db.session.query(CorRoleAppProfil) \
+        q = db.session.query(CorRoleAppProfil) \
             .distinct(CorRoleAppProfil.id_application) \
-            .filter(CorRoleAppProfil.id_role.in_(ids_role)) \
-            .order_by(CorRoleAppProfil.id_application) \
-            .all()
+            .filter(CorRoleAppProfil.id_role.in_(ids_role))
+        if id_application:
+            q = q.filter(CorRoleAppProfil.id_application == id_application)
+        q = q.order_by(CorRoleAppProfil.id_application)
+        rights = q.all()
         return rights
 
     def get_full_name(self):
@@ -314,7 +318,9 @@ class TRoles(GenericRepository):
 
         q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
-        subquery = db.session.query(distinct(CorRoleAppProfil.id_role)).filter(CorRoleAppProfil.id_application == id_application)
+        subquery = db.session.query(
+            distinct(CorRoleAppProfil.id_role)
+        ).filter(CorRoleAppProfil.id_application == id_application)
         q = q.filter(cls.id_role.notin_(subquery))
         return  [data.as_dict_full_name() for data in q.all()]
 
@@ -324,19 +330,23 @@ class CorRoles(GenericRepository):
     """
     Classe de correspondance entre un utilisateur et un groupe
     """
-    __tablename__= 'cor_roles'
-    __table_args__ = {'schema':'utilisateurs'}
-    id_role_groupe = db.Column(db.Integer, primary_key = True)
-    id_role_utilisateur = db.Column(db.Integer, ForeignKey('utilisateurs.t_roles.id_role'),primary_key = True )
+    __tablename__ = 'cor_roles'
+    __table_args__ = {'schema': 'utilisateurs'}
+    id_role_groupe = db.Column(db.Integer, primary_key=True)
+    id_role_utilisateur = db.Column(
+        db.Integer,
+        ForeignKey('utilisateurs.t_roles.id_role'),
+        primary_key=True
+        )
     t_roles = db.relationship('TRoles')
 
-
     @classmethod
-    def add_cor(cls,id_group,ids_role):
+    def add_cor(cls, id_group, ids_role):
 
         """
         Methode qui ajoute des relations roles <-> groupe
-        Avec pour paramètres un id de groupe(id_role) et un tableau d'id de roles
+        Avec pour paramètres un id de groupe(id_role)
+            et un tableau d'id de roles
         """
 
         dict_add = dict()
@@ -544,15 +554,28 @@ class CorRoleAppProfil(GenericRepository):
     """Classe de correspondance entre la table t_roles, t_profils et t_applications"""
 
     __tablename__= "cor_role_app_profil"
-    __table_args__={'schema':'utilisateurs', 'extend_existing': True}
-    id_role = db.Column(db.Integer,ForeignKey('utilisateurs.t_roles.id_role'), primary_key = True)
-    id_profil = db.Column(db.Integer,ForeignKey('utilisateurs.t_profils.id_profil'), primary_key = True)
-    id_application = db.Column(db.Integer, ForeignKey('utilisateurs.t_applications.id_application'), primary_key = True)
+    __table_args__ = {'schema':'utilisateurs', 'extend_existing': True}
+    id_role = db.Column(
+        db.Integer,
+        ForeignKey('utilisateurs.t_roles.id_role'),
+        primary_key = True
+    )
+    id_profil = db.Column(
+        db.Integer,
+        ForeignKey('utilisateurs.t_profils.id_profil'),
+        primary_key = True
+    )
+    id_application = db.Column(
+        db.Integer,
+        ForeignKey('utilisateurs.t_applications.id_application'),
+        primary_key = True
+    )
     role_rel = relationship("TRoles")
     application_rel = relationship("TApplications")
     profil_rel = relationship("TProfils")
 
-    # surchage de la méthode get_one car il n'y a pas de clé primaire unique sur une cor
+    # surchage de la méthode get_one
+    # car il n'y a pas de clé primaire unique sur une cor
     @classmethod
     def get_one(cls, id_role, id_application):
         return db.session.query(cls).filter_by(
@@ -592,7 +615,7 @@ class CorRoleAppProfil(GenericRepository):
             cls.post(dict_add)
 
     @classmethod
-    def del_cor(cls,id_app,tab_profil):
+    def del_cor(cls, id_app, tab_profil):
        for t in tab_profil:
             cls.query.filter(
                 cls.id_role == t['id_role']
