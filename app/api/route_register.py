@@ -16,7 +16,8 @@ from app.utils.utilssqlalchemy import json_resp
 from app.models import (
     TRoles,
     CorRoleAppProfil,
-    TProfils
+    TProfils,
+    CorRoles
 )
 from config import config
 
@@ -136,7 +137,7 @@ def valid_temp_user():
     data_in = request.get_json()
 
     token = data_in['token']
-
+    id_grp = data_in.get('id_grp', None)
     id_application = data_in['id_application']
 
     # recherche de l'utilisateur temporaire correspondant au token
@@ -153,21 +154,24 @@ def valid_temp_user():
     req_data = temp_user.as_dict()
 
     # ici on ajoute le droit 1 par default
+    #  Par soucis de rétrocompatibilité si aucun groupe
+    #  n'est passé en paramètre on donne le profil 1 à l'utilisateur
     # @TODO (a voir si on fait passer ça en parametre)
-    code_profil = "1"
-    profil = TProfils.get_profil_in_app_with_code(
-        id_application, code_profil
-    )
-    if not profil:
-        return {"msg": "pas de profil " + code_profil + " corespondant pour l'application"}, 500
+    if not id_grp:
+        code_profil = "1"
+        profil = TProfils.get_profil_in_app_with_code(
+            id_application, code_profil
+        )
+        if not profil:
+            return {"msg": "pas de profil " + code_profil + " corespondant pour l'application"}, 500
 
-    id_profil = profil.id_profil
-    req_data["applications"] = [
-        {
-            "id_app": id_application,
-            "id_profil": id_profil
-        }
-    ]
+        id_profil = profil.id_profil
+        req_data["applications"] = [
+            {
+                "id_app": id_application,
+                "id_profil": id_profil
+            }
+        ]
 
     role_data = {"active": True}
     for att in req_data:
@@ -188,14 +192,21 @@ def valid_temp_user():
     db.session.add(role)
     db.session.commit()
 
-    for app in req_data['applications']:
+    # Si un groupe a été spécifié
+    if id_grp:
+        cor = CorRoles(
+            id_role_groupe=id_grp,
+            id_role_utilisateur=role.id_role
+        )
+        db.session.add(cor)
+
+    for app in req_data.get('applications', []):
         cor = CorRoleAppProfil(
             id_role=role.id_role,
             id_profil=app['id_profil'],
             id_application=app['id_app']
         )
         db.session.add(cor)
-        db.session.commit()
 
     db.session.delete(temp_user)
     db.session.commit()
@@ -325,7 +336,6 @@ def change_application_right():
     if not id_application or not id_role or not code_profil:
         return {'msg': 'Problème de paramètres POST'}, 400
 
-    # TODO GESTION DES GROUPES
     cor = db.session.query(
         CorRoleAppProfil
     ).filter(
@@ -336,9 +346,9 @@ def change_application_right():
 
     if not cor:
         cor = CorRoleAppProfil(**{
-            "id_role":id_role,
-            "id_application":id_application,
-            "id_profil":id_profil
+            "id_role": id_role,
+            "id_application": id_application,
+            "id_profil": id_profil
         })
     else:
         cor.id_profil = id_profil
@@ -348,7 +358,7 @@ def change_application_right():
     return {
         'id_role': id_role,
         'id_profil': code_profil,
-        'id_droit': code_profil, # Retrocompatiblité pour l'OEASC
+        'id_droit': code_profil,  # Retrocompatiblité pour l'OEASC
         'id_application': id_application,
         "role": role.as_dict()
     }
@@ -361,6 +371,8 @@ def add_application_right_to_role():
     '''
         Route permettant de d'ajouter des droits
         pour une application a un utilisateur
+        soit en l'associant à un groupe
+        soit en lui affectant le profil "1"
     '''
 
     req_data = request.get_json()
@@ -369,17 +381,21 @@ def add_application_right_to_role():
     pwd = req_data.get('password', None)
 
     id_application = req_data.get('id_application', None)
+    # Pour des questions de retrocompatibilité param non obligatoire
+    #   Si id_grp absent alors l'utilisateur se voit attribué le profil code 1
+    id_grp = req_data.get('id_grp', None)
 
-    code_profil = "1"
-    profil = TProfils.get_profil_in_app_with_code(
-        id_application, str(code_profil)
-    )
-    if not profil:
-        return {"msg": "pas de profil " + str(code_profil) + " corespondant pour l'application"}, 500
+    if not id_grp:
+        code_profil = "1"
+        profil = TProfils.get_profil_in_app_with_code(
+            id_application, str(code_profil)
+        )
+        if not profil:
+            return {"msg": "pas de profil " + str(code_profil) + " correspondant pour l'application"}, 500
 
-    id_profil = profil.id_profil
+        id_profil = profil.id_profil
 
-    if not identifiant or not pwd or not id_application or not id_profil:
+    if not identifiant or not pwd or not id_application:
         return {"msg": "les parametres sont mal renseignés"}, 500
 
     role = db.session.query(TRoles).filter(
@@ -400,25 +416,25 @@ def add_application_right_to_role():
 
         return {"msg": "password false"}, 500
 
-    # on regarde les droits que possede cet utilisateur
-    cor = db.session.query(CorRoleAppProfil).filter(
-        id_role == CorRoleAppProfil.id_role).filter(
-        id_application == CorRoleAppProfil.id_application).first()
-
+    # on regarde les droits que possède cet utilisateur
+    profils = TRoles.get_user_app_profils(id_role, id_application)
     # si pas de droit pour cette application on ajoute
-    if not cor:
-        cor = CorRoleAppProfil(
-            id_role=role.id_role,
-            id_profil=id_profil,
-            id_application=id_application
-        )
-        db.session.add(cor)
-        db.session.commit()
-
-    # sinon on update avec les nouveaux droits
-
-    else:
-        cor.id_profil = id_profil
+    # soit un profil => Retrocompatibilité
+    # soit un groupe
+    if not profils:
+        if id_grp:
+            cor = CorRoles(
+                id_role_groupe=id_grp,
+                id_role_utilisateur=role.id_role
+            )
+            db.session.add(cor)
+        else:
+            cor = CorRoleAppProfil(
+                id_role=role.id_role,
+                id_profil=id_profil,
+                id_application=id_application
+            )
+            db.session.add(cor)
         db.session.commit()
 
     return role.as_dict(recursif=True)
@@ -448,50 +464,4 @@ def update_user():
     db.session.merge(role)
     db.session.commit()
     role = db.session.query(TRoles).get(id_role)
-    return role.as_dict(recursif=True)
-
-
-@route.route('/role', methods=['POST'])
-@fnauth.check_auth(6)
-@json_resp
-def insert_one_t_role():
-    '''
-        Route permettant de créer un utilisateur
-
-        curl --header "Content-Type: application/json" \
-        --request POST \
-        --data '{"email": "a@test.fr", "groupe": false, "pn": true, "remarques": "utilisateur test api", "desc_role": null, "prenom_role": "test", "identifiant": "test_api", "id_unite": -1, "id_organisme": -1, "uuid_role": "c8f63c2d-e606-49c5-8865-edb0953c496f", "nom_role": "API", "password": "123456", "password_confirmation": "123456", "applications":[{"id_app":2, "id_droit":1}]}' \
-        http://localhost:5001/api_register/role
-    '''
-
-    req_data = request.get_json()
-
-    role_data = {}
-    for att in req_data:
-        if hasattr(TRoles, att):
-            role_data[att] = req_data[att]
-
-    # Validation email
-    if re.search("[@.]", req_data['email']) is None:
-        return {"msg": "email not valid"}, 500
-
-    role = TRoles(**role_data)
-
-    if req_data['password']:
-        role.fill_password(
-            req_data['password'], req_data['password_confirmation']
-        )
-
-    db.session.add(role)
-    db.session.commit()
-
-    for app in req_data['applications']:
-        cor = CorRoleAppProfil(
-            id_role=role.id_role,
-            id_profil=app['id_profil'],
-            id_application=app['id_app']
-        )
-        db.session.add(cor)
-        db.session.commit()
-
     return role.as_dict(recursif=True)
