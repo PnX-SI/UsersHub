@@ -121,9 +121,7 @@ def create_temp_user():
 
         return {'token': temp_user.token_role}
 
-    else:
-
-        return {'msg': "Un utilisateur avec l'identifiant existe déjà."}, 422
+    return {'msg': "Un utilisateur avec l'identifiant existe déjà."}, 422
 
 
 @route.route('valid_temp_user', methods=['POST'])
@@ -255,7 +253,10 @@ def create_cor_role_token():
 @fnauth.check_auth(5)
 @json_resp
 def change_password():
-
+    '''
+        Route permettant à un utilisateur de renouveller
+        son mot de passe
+    '''
     data = request.get_json()
 
     token = data.get('token', None)
@@ -393,7 +394,7 @@ def add_application_right_to_role():
             id_application, str(code_profil)
         )
         if not profil:
-            return {"msg": "pas de profil " + str(code_profil) + " correspondant pour l'application"}, 500
+            return {"msg": "pas de profil " + str(code_profil) + " correspondant pour l'application"}, 500  # noqa
 
         id_profil = profil.id_profil
 
