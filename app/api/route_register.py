@@ -55,9 +55,12 @@ def test_connexion():
 @json_resp
 def create_temp_user():
     '''
-        route pour creer un compte temporaire en attendait la confirmation de l'adresse mail
-        les mot de passe seront stocké en crypté
-        1. on stocke les variables qui seront utilisées par la création de compte
+        route pour creer un compte temporaire en attendait
+        la confirmation de l'adresse mail
+        les mots de passe seront stocké en crypté
+
+        1. on stocke les variables qui seront
+            utilisées par la création de compte
         2. on envoie un mail pour demander la confirmation du compte mail
     '''
 
@@ -136,7 +139,6 @@ def valid_temp_user():
     data_in = request.get_json()
 
     token = data_in['token']
-    id_grp = data_in.get('id_grp', None)
     id_application = data_in['id_application']
 
     # recherche de l'utilisateur temporaire correspondant au token
@@ -147,30 +149,17 @@ def valid_temp_user():
     ).first()
 
     if not temp_user:
-        return {"msg": "pas d'utilisateur trouvé avec le token user demandé"}, 422
+        return {
+            "msg": "pas d'utilisateur trouvé avec le token user demandé"
+        }, 422
 
     temp_user.decrypt_password(config.SECRET_KEY)
     req_data = temp_user.as_dict()
 
-    # ici on ajoute le droit 1 par default
-    #  Par soucis de rétrocompatibilité si aucun groupe
-    #  n'est passé en paramètre on donne le profil 1 à l'utilisateur
-    # @TODO (a voir si on fait passer ça en parametre)
+    # Récupération du groupe par défaut
+    id_grp = CorRoleAppProfil.get_default_for_app(id_application)
     if not id_grp:
-        code_profil = "1"
-        profil = TProfils.get_profil_in_app_with_code(
-            id_application, code_profil
-        )
-        if not profil:
-            return {"msg": "pas de profil " + code_profil + " corespondant pour l'application"}, 500
-
-        id_profil = profil.id_profil
-        req_data["applications"] = [
-            {
-                "id_app": id_application,
-                "id_profil": id_profil
-            }
-        ]
+        return {"msg": "pas de groupe par défaut pour l'application"}, 500
 
     role_data = {"active": True}
     for att in req_data:
@@ -191,21 +180,12 @@ def valid_temp_user():
     db.session.add(role)
     db.session.commit()
 
-    # Si un groupe a été spécifié
-    if id_grp:
-        cor = CorRoles(
-            id_role_groupe=id_grp,
-            id_role_utilisateur=role.id_role
-        )
-        db.session.add(cor)
-
-    for app in req_data.get('applications', []):
-        cor = CorRoleAppProfil(
-            id_role=role.id_role,
-            id_profil=app['id_profil'],
-            id_application=app['id_app']
-        )
-        db.session.add(cor)
+    # Ajout du role au profil
+    cor = CorRoles(
+        id_role_groupe=id_grp.id_role,
+        id_role_utilisateur=role.id_role
+    )
+    db.session.add(cor)
 
     db.session.delete(temp_user)
     db.session.commit()
@@ -274,7 +254,9 @@ def change_password():
 
     if not password_confirmation == password:
 
-        return {"msg": "password et password_confirmation sont différents"}, 500
+        return {
+            "msg": "password et password_confirmation sont différents"
+        }, 500
 
     res = db.session.query(
         CorRoleToken.id_role
@@ -327,7 +309,9 @@ def change_application_right():
         id_application, str(code_profil)
     )
     if not profil:
-        return {"msg": "pas de profil " + str(code_profil) + "corespondant pour l'application"}, 500
+        return {
+            "msg": "pas de profil " + str(code_profil) + "corespondant pour l'application"  # noqa
+        }, 500
 
     id_profil = profil.id_profil
 
@@ -384,22 +368,13 @@ def add_application_right_to_role():
 
     id_application = req_data.get('id_application', None)
 
-    # Pour des questions de retrocompatibilité param non obligatoire
-    #   Si id_grp absent alors l'utilisateur se voit attribué le profil code 1
-    id_grp = req_data.get('id_grp', None)
-
-    if not id_grp:
-        code_profil = "1"
-        profil = TProfils.get_profil_in_app_with_code(
-            id_application, str(code_profil)
-        )
-        if not profil:
-            return {"msg": "pas de profil " + str(code_profil) + " correspondant pour l'application"}, 500  # noqa
-
-        id_profil = profil.id_profil
-
     if not identifiant or not pwd or not id_application:
         return {"msg": "les parametres sont mal renseignés"}, 500
+
+    # Récupération du groupe par défaut
+    id_grp = CorRoleAppProfil.get_default_for_app(id_application)
+    if not id_grp:
+        return {"msg": "pas de groupe par défaut pour l'application"}, 500
 
     role = db.session.query(TRoles).filter(
         TRoles.identifiant == identifiant
@@ -419,25 +394,14 @@ def add_application_right_to_role():
 
         return {"msg": "password false"}, 500
 
-    # on regarde les droits que possède cet utilisateur
-    profils = TRoles.get_user_app_profils(id_role, id_application)
-    # si pas de droit pour cette application on ajoute
-    # soit un profil => Retrocompatibilité
-    # soit un groupe
-    if not profils:
-        if id_grp:
-            cor = CorRoles(
-                id_role_groupe=id_grp,
-                id_role_utilisateur=role.id_role
-            )
-            db.session.add(cor)
-        else:
-            cor = CorRoleAppProfil(
-                id_role=role.id_role,
-                id_profil=id_profil,
-                id_application=id_application
-            )
-            db.session.add(cor)
+    # Test si l'utilisateur n'est pas déjà associé au groupe
+    # par défaut
+    if not CorRoles.test_role_in_grp(id_role, id_grp.id_role):
+        cor = CorRoles(
+            id_role_groupe=id_grp.id_role,
+            id_role_utilisateur=role.id_role
+        )
+        db.session.add(cor)
         db.session.commit()
 
     return role.as_dict(recursif=True)

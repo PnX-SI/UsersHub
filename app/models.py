@@ -376,6 +376,18 @@ class TRoles(GenericRepository):
         q = q.filter(cls.id_role.notin_(subquery))
         return [data.as_dict_full_name() for data in q.all()]
 
+    @classmethod
+    def get_groups(cls):
+
+        """
+        Methode qui retourne une liste des roles
+            de type groupe
+        """
+        q = db.session.query(cls).filter(
+            TRoles.groupe == True
+        )
+        return q.all()
+
 
 @serializable
 class CorRoles(GenericRepository):
@@ -392,6 +404,21 @@ class CorRoles(GenericRepository):
         primary_key=True
         )
     t_roles = db.relationship('TRoles')
+
+    @classmethod
+    def test_role_in_grp(cls, id_role, id_group):
+        """
+        Methode qui retourne vrai si le role
+            appartient au groupe
+        """
+        in_grp = db.session.query(CorRoles).filter(
+            CorRoles.id_role_utilisateur == id_role
+        ).filter(
+            CorRoles.id_role_groupe == id_group
+        ).all()
+        if in_grp:
+            return True
+        return False
 
     @classmethod
     def add_cor(cls, id_group, ids_role):
@@ -613,7 +640,7 @@ class CorRoleAppProfil(GenericRepository):
         t_applications
     """
 
-    __tablename__= "cor_role_app_profil"
+    __tablename__ = "cor_role_app_profil"
     __table_args__ = {'schema': 'utilisateurs', 'extend_existing': True}
     id_role = db.Column(
         db.Integer,
@@ -630,6 +657,8 @@ class CorRoleAppProfil(GenericRepository):
         ForeignKey('utilisateurs.t_applications.id_application'),
         primary_key=True
     )
+    is_default_group_for_app = db.Column(db.Boolean)
+
     role_rel = relationship("TRoles")
     application_rel = relationship("TApplications")
     profil_rel = relationship("TProfils")
@@ -643,6 +672,13 @@ class CorRoleAppProfil(GenericRepository):
             id_application=id_application
         ).first()
 
+    @classmethod
+    def get_default_for_app(cls, id_application):
+        return db.session.query(cls).filter_by(
+            id_application=id_application
+        ).filter_by(
+            is_default_group_for_app=True
+        ).first()
 
     # surchage de la méthode delete car
     # il n'y a pas de clé primaire unique sur une cor
