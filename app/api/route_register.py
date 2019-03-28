@@ -96,7 +96,8 @@ def create_temp_user():
     ).delete()
     db.session.commit()
 
-    # verification si on a un utilisateur qui a le meme email et les memes droits
+    # verification si on a un utilisateur
+    # qui a le meme email et les memes droits
 
     user = db.session.query(
         TRoles
@@ -381,6 +382,7 @@ def add_application_right_to_role():
     pwd = req_data.get('password', None)
 
     id_application = req_data.get('id_application', None)
+
     # Pour des questions de retrocompatibilité param non obligatoire
     #   Si id_grp absent alors l'utilisateur se voit attribué le profil code 1
     id_grp = req_data.get('id_grp', None)

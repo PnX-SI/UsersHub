@@ -258,7 +258,8 @@ def pops(form, with_group=True):
 def process(form, user, groups):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire, un user et les groupes auxquels il appartient
+    Avec pour paramètres un formulaire, un user et les groupes
+     auxquels il appartient
     """
     form.active.process_data(user['active'])
     form.id_organisme.process_data(user['id_organisme'])

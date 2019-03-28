@@ -16,9 +16,9 @@ route = Blueprint('liste', __name__)
 
 @route.route('lists/list', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def lists():
@@ -64,9 +64,9 @@ def lists():
 @route.route('list/add/new', defaults={'id_liste': None}, methods=['GET', 'POST'])
 @route.route('list/update/<id_liste>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def addorupdate(id_liste):
@@ -103,9 +103,9 @@ def addorupdate(id_liste):
 
 @route.route('list/members/<id_liste>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def membres(id_liste):
@@ -146,9 +146,9 @@ def membres(id_liste):
 
 @route.route('list/delete/<id_liste>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def delete(id_liste):
