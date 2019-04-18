@@ -18,7 +18,7 @@ class Application(FlaskForm):
     id_parent = SelectField('Application parent',coerce=int ,choices = [])
     id_application = HiddenField('id')
     submit = SubmitField('Enregistrer')
-    
+
 
 
 class AppProfil(FlaskForm):
@@ -43,12 +43,12 @@ class AppProfil(FlaskForm):
         )
         users_no_profils_in_app = db.session.query(TRoles).filter(
             TRoles.id_role.notin_(user_with_profil_in_app)
-        ).all()
+        ).order_by(TRoles.nom_role.asc()).all()
         users_select_choices = []
         for user in users_no_profils_in_app:
             user_as_dict = user.as_dict_full_name()
             users_select_choices.append(
-                 (user_as_dict['id_role'], user_as_dict['full_name']) 
+                 (user_as_dict['id_role'], user_as_dict['full_name'])
             )
         self.role.choices = users_select_choices
         # choix des profils dispo pour une appli
