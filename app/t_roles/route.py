@@ -23,9 +23,9 @@ route = Blueprint('user', __name__)
 
 @route.route('users/list', methods=['GET'])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT,
     redirect_on_insufficient_right=URL_REDIRECT
 )
@@ -80,9 +80,9 @@ def users():
 @route.route('user/add/new', methods=['GET', 'POST'])
 @route.route('user/update/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def addorupdate(id_role=None):
@@ -146,7 +146,6 @@ def addorupdate(id_role=None):
                         params=[{'col': 'id_role_utilisateur', 'filter': id_role}],
                         as_model=True
                     )
-                    print(cor_role_to_delete)
                     for cor_role in cor_role_to_delete:
                         db.session.delete(cor_role)
                     db.session.commit()
@@ -165,9 +164,9 @@ def addorupdate(id_role=None):
 
 @route.route('user/pass/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def updatepass(id_role=None):
@@ -179,7 +178,7 @@ def updatepass(id_role=None):
     """
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
-    
+
     if request.method == 'POST':
         if form.validate_on_submit() and form.validate():
             form_user = pops(form.data, False)
@@ -210,9 +209,9 @@ def updatepass(id_role=None):
 
 @route.route('users/delete/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def deluser(id_role):
@@ -259,7 +258,8 @@ def pops(form, with_group=True):
 def process(form, user, groups):
     """
     Methode qui rempli le formulaire par les données de l'éléments concerné
-    Avec pour paramètres un formulaire, un user et les groupes auxquels il appartient
+    Avec pour paramètres un formulaire, un user et les groupes
+     auxquels il appartient
     """
     form.active.process_data(user['active'])
     form.id_organisme.process_data(user['id_organisme'])

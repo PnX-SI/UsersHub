@@ -105,12 +105,12 @@ with app.app_context():
         from app.login import route
         app.register_blueprint(route.route, url_prefix='/')
 
-        from app.API import route
+        from app.api import route
         app.register_blueprint(route.route, url_prefix='/api')
 
 
     if config.ACTIVATE_API:
-        from app.API import route_register
+        from app.api import route_register
         app.register_blueprint(route_register.route, url_prefix='/api_register')  # noqa
 
 
