@@ -175,7 +175,11 @@ def valid_temp_user():
     role_data = {"active": True}
     for att in req_data:
         if hasattr(TRoles, att):
-            role_data[att] = req_data[att]
+            #Patch pas beau pour corriger le db.Unicode de TRole pour id_organisme
+            if att == 'id_organisme' and req_data[att] == 'None':
+                role_data[att] = None
+            else:
+                role_data[att] = req_data[att]
 
     # Validation email
     if re.search("[@.]", req_data['email']) is None:
