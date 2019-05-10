@@ -27,3 +27,12 @@ DEBUG = False
 
 ACTIVATE_API = True
 ACTIVATE_APP = True
+
+
+# MAIL
+MAIL_SERVER = 'mail_server'
+MAIL_PORT = mail_port
+MAIL_USERNAME = 'mail_username'
+MAIL_PASSWORD = 'mail_password'
+MAIL_USE_SSL = mail_ssl
+MAIL_USE_TLS = mail_tsl

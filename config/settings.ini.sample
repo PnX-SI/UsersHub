@@ -26,6 +26,23 @@ insert_sample_data=true
 # URL de l'application
 url_application=http://mon_url.fr
 
+############################
+### Mail settings ###
+############################
+
+# URL serveur SMTP
+mail_server=smtp.mon_url.fr
+# Port serveur SMTP
+mail_port=mail_port
+# Identifiant compte mail
+mail_username=mail_username
+# Password compte mail
+mail_password=mail_password
+# Connexion SSL
+mail_ssl=mail_ssl
+# Connexion TSL
+mail_tsl=mail_tsl
+
 #######################
 ### Python settings ###
 #######################

@@ -8,8 +8,9 @@ import re
 from datetime import datetime, timedelta
 
 from flask import (
-    Blueprint, request
+    Blueprint, request, current_app as app, render_template
 )
+from flask_mail import Mail, Message
 
 from app.env import db
 from app.utils.utilssqlalchemy import json_resp
@@ -26,7 +27,6 @@ from pypnusershub import routes as fnauth
 from pypnusershub.db.models_register import TempUser, CorRoleToken
 
 route = Blueprint('api_register', __name__)
-
 
 @route.route('/role/<id_role>', methods=['GET', 'POST'])
 @fnauth.check_auth(1, False, '/api_register/role_check_auth_error')
@@ -66,6 +66,11 @@ def create_temp_user():
 
     # recuperation des parametres
     data = request.get_json()
+
+    #recuperation et verif de l'url de confirmation
+    url_confirmation = data.get('url_confirmation', None)
+    if url_confirmation is None:
+        return {"msg": "Erreur server"}, 500
 
     # filtre des données correspondant à un role
 
@@ -121,8 +126,14 @@ def create_temp_user():
         db.session.commit()
 
         # envoie du mail de confirmation
+        msg = Message("GeoNature - Confirmation d'inscription",
+                      sender=("Ne pas répondre", "no-reply@geonature.fr"),
+                      recipients=[temp_user.email])
+        msg.html = render_template('mails/sign_up_confirmation.html', user=temp_user, url_confirmation=url_confirmation)
+        mail = Mail(app)
+        mail.send(msg)
 
-        return {'token': temp_user.token_role}
+        return {'msg': "Un mail vient de vous être envoyé afin de confirmer votre inscription."}, 200
 
     return {'msg': "Un utilisateur avec l'identifiant existe déjà."}, 422
 
