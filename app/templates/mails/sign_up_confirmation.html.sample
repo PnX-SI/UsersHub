@@ -1,4 +1,4 @@
-<p>Bonjour {{user.nom_role}} {{user.prenom_role}},</p>
+<p>Bonjour {{user.prenom_role}} {{user.nom_role}},</p>
 
 <p>Vous vous êtes inscrit sur l'outil GeoNature récemment.</p>
 

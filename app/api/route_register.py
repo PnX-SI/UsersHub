@@ -422,6 +422,39 @@ def add_application_right_to_role():
     return role.as_dict(recursif=True)
 
 
+@route.route('/login_recovery', methods=['POST'])
+@fnauth.check_auth(5)
+@json_resp
+def login_recovery():
+    '''
+        route pour changer des paramètres d'utilisateur
+    '''
+    req_data = request.get_json()
+
+    email = req_data.get('email', None)
+
+    if not email:
+        return {'msg': "Pas d'email"}, 400
+
+    count = db.session.query(TRoles).filter_by(email=email).count()  
+
+    if count == 0:
+        return {"message": "Adresse mail inconnue"}, 404
+    if count > 1:
+        return {"message": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
+    
+    user = db.session.query(TRoles).filter_by(email=email).one()
+    # envoie du mail
+    msg = Message("GeoNature - Récupération de l'identifiant",
+                  sender=("Ne pas répondre", "no-reply@geonature.fr"),
+                  recipients=[user.email])
+    msg.html = render_template('mails/login_recovery.html', user=user)
+    mail = Mail(app)
+    mail.send(msg)
+    
+    return {"message": "Un mail avec votre identifiant vient d'être envoyé sur l'adresse %s" % email}, 200
+
+
 @route.route('/update_user', methods=['POST'])
 @fnauth.check_auth(5)
 @json_resp
