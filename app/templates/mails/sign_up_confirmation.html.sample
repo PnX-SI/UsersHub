@@ -4,7 +4,7 @@
 
 <p>Pour finaliser votre inscription cliquez sur le lien de confirmation ci-après et laissez-vous guider :</p>
 
-<p><a href="">Cliquez ici pour valider votre email</a></p>
+<p><a href="{{url_confirmation}}?token={{user.token_role}}">Cliquez ici pour valider votre email</a></p>
 
 <p>Une fois inscrit sur GeoNature, vous pourrez saisir vos données et contribuer à la connaissance, les visualisez et bien plus encore.</p>
 

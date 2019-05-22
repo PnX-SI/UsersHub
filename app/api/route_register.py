@@ -208,18 +208,13 @@ def valid_temp_user():
     return role.as_dict(recursif=True)
 
 
-@route.route("/create_cor_role_token", methods=['POST'])
-@fnauth.check_auth(5)
-@json_resp
-def create_cor_role_token():
+def set_cor_role_token(email):
     '''
-        route pour la creation d'un token associé a un id_role
-        parametres post : email
+        fonction pour la creation d'un token associé a un id_role
+        parametres : email
     '''
-
-    data = request.get_json()
-
-    email = data['email']
+    if not email:
+        return {'msg': "Aucun email"}, 404
 
     role = db.session.query(TRoles).filter(email == TRoles.email).first()
 
@@ -242,6 +237,23 @@ def create_cor_role_token():
     db.session.commit()
 
     return {'token': token, 'id_role': id_role}
+
+
+@route.route("/create_cor_role_token", methods=['POST'])
+@fnauth.check_auth(5)
+@json_resp
+def create_cor_role_token():
+    '''
+        route pour la creation d'un token associé a un id_role
+        fait un appel de la fonction set_cor_role_token(email)
+        parametres post : email
+    '''
+
+    data = request.get_json()
+
+    email = data['email']
+
+    return set_cor_role_token(email)
 
 
 @route.route("/change_password", methods=['POST'])
@@ -439,9 +451,9 @@ def login_recovery():
     count = db.session.query(TRoles).filter_by(email=email).count()  
 
     if count == 0:
-        return {"message": "Adresse mail inconnue"}, 404
+        return {"msg": "Adresse mail inconnue"}, 404
     if count > 1:
-        return {"message": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
+        return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
     
     user = db.session.query(TRoles).filter_by(email=email).one()
     # envoie du mail
@@ -451,8 +463,47 @@ def login_recovery():
     msg.html = render_template('mails/login_recovery.html', user=user)
     mail = Mail(app)
     mail.send(msg)
+
+    return {"msg": "Un mail avec votre identifiant vient d'être envoyé sur l'adresse %s" % email}, 200
+
+
+@route.route('/password_recovery', methods=['POST'])
+@fnauth.check_auth(5)
+@json_resp
+def password_recovery():
+    '''
+        route pour changer des paramètres d'utilisateur
+    '''
+    req_data = request.get_json()
+
+    email = req_data.get('email', None)
+    #recuperation et verif de l'url de confirmation
+    url_confirmation = req_data.get('url_confirmation', None)
+
+    if not email:
+        return {'msg': "Pas d'email"}, 400
+
+    if url_confirmation is None:
+        return {"msg": "Erreur server"}, 500
+
+    count = db.session.query(TRoles).filter_by(email=email).count()  
+
+    if count == 0:
+        return {"msg": "Adresse mail inconnue"}, 404
+    if count > 1:
+        return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
     
-    return {"message": "Un mail avec votre identifiant vient d'être envoyé sur l'adresse %s" % email}, 200
+    token = set_cor_role_token(email)
+    user = db.session.query(TRoles).filter_by(email=email).one()
+    # envoie du mail
+    msg = Message("GeoNature - Modification de mot de passe",
+                  sender=("Ne pas répondre", "no-reply@geonature.fr"),
+                  recipients=[user.email])
+    msg.html = render_template('mails/password_recovery.html', user=user, token=token['token'], url_confirmation=url_confirmation)
+    mail = Mail(app)
+    mail.send(msg)
+    
+    return {"msg": "Un mail avec pour modifier votre mot de passe vient d'être envoyé sur l'adresse %s" % email}, 200
 
 
 @route.route('/update_user', methods=['POST'])
