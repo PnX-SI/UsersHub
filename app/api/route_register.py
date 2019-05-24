@@ -4,6 +4,7 @@
 import hashlib
 import random
 import re
+import requests
 
 from datetime import datetime, timedelta
 
@@ -24,6 +25,7 @@ from pypnusershub import routes as fnauth
 
 from pypnusershub.db.models_register import TempUser, CorRoleToken
 
+REQ_SESSION = requests.Session()
 route = Blueprint('api_register', __name__)
 
 @route.route('/role/<id_role>', methods=['GET', 'POST'])
@@ -231,6 +233,21 @@ def set_cor_role_token(email):
 
     return {'token': token, 'id_role': id_role}
 
+def check_token(token):
+    '''
+        fonction permettant de vérifier la présence
+        d'un token associé à un role
+    '''
+    res = db.session.query(
+        CorRoleToken.id_role
+    ).filter(CorRoleToken.token == token).first()
+
+    if not res:
+        return False
+    return True
+
+
+
 
 @route.route("/create_cor_role_token", methods=['POST'])
 @fnauth.check_auth(5)
@@ -278,11 +295,7 @@ def change_password():
             "msg": "password et password_confirmation sont différents"
         }, 500
 
-    res = db.session.query(
-        CorRoleToken.id_role
-    ).filter(CorRoleToken.token == token).first()
-
-    if not res:
+    if not check_token(token):
 
         return {"msg": "pas d'id role associée au token"}, 500
 
@@ -511,3 +524,21 @@ def update_user():
     db.session.commit()
     role = db.session.query(TRoles).get(id_role)
     return role.as_dict(recursif=True)
+
+
+
+@route.route("/check_token", methods=['POST'])
+@fnauth.check_auth(5)
+@json_resp
+def check_token_validity():
+    '''
+        route permettant de savoir si un token est toujours valide
+        parametres post : token
+    '''
+
+    data = request.get_json()
+    token_exists = check_token(token)
+    if token_exists:
+        return {"msg":"valid token"}, 200
+
+    return {"msg":"invalid token"}, 500
