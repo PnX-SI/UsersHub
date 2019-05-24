@@ -8,10 +8,8 @@ import re
 from datetime import datetime, timedelta
 
 from flask import (
-    Blueprint, request, current_app as app, render_template
+    Blueprint, request
 )
-from flask_mail import Mail, Message
-
 from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import (
@@ -67,10 +65,11 @@ def create_temp_user():
     # recuperation des parametres
     data = request.get_json()
 
-    #recuperation et verif de l'url de confirmation
+    # recuperation et verif de l'url de confirmation
+    # @REM : Non necessaire si l'envoie de mail est géré par une autre application
     url_confirmation = data.get('url_confirmation', None)
     if url_confirmation is None:
-        return {"msg": "Erreur server"}, 500
+        return {"msg": "Erreur server parameters url_confirmation is required"}, 500
 
     # filtre des données correspondant à un role
 
@@ -125,15 +124,9 @@ def create_temp_user():
         db.session.add(temp_user)
         db.session.commit()
 
-        # envoie du mail de confirmation
-        msg = Message("GeoNature - Confirmation d'inscription",
-                      sender=("Ne pas répondre", "no-reply@geonature.fr"),
-                      recipients=[temp_user.email])
-        msg.html = render_template('mails/sign_up_confirmation.html', user=temp_user, url_confirmation=url_confirmation)
-        mail = Mail(app)
-        mail.send(msg)
-
-        return {'msg': "Un mail vient de vous être envoyé afin de confirmer votre inscription."}, 200
+        return {
+            'token': temp_user.token_role
+        }, 200
 
     return {'msg': "Un utilisateur avec l'identifiant existe déjà."}, 422
 
@@ -448,23 +441,16 @@ def login_recovery():
     if not email:
         return {'msg': "Pas d'email"}, 400
 
-    count = db.session.query(TRoles).filter_by(email=email).count()  
+    count = db.session.query(TRoles).filter_by(email=email).count()
 
     if count == 0:
         return {"msg": "Adresse mail inconnue"}, 404
     if count > 1:
-        return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
-    
-    user = db.session.query(TRoles).filter_by(email=email).one()
-    # envoie du mail
-    msg = Message("GeoNature - Récupération de l'identifiant",
-                  sender=("Ne pas répondre", "no-reply@geonature.fr"),
-                  recipients=[user.email])
-    msg.html = render_template('mails/login_recovery.html', user=user)
-    mail = Mail(app)
-    mail.send(msg)
+        return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404 # noqa
 
-    return {"msg": "Un mail avec votre identifiant vient d'être envoyé sur l'adresse %s" % email}, 200
+    user = db.session.query(TRoles).filter_by(email=email).one()
+
+    return user.as_dict(recursif=True), 200
 
 
 @route.route('/password_recovery', methods=['POST'])
@@ -486,23 +472,17 @@ def password_recovery():
     if url_confirmation is None:
         return {"msg": "Erreur server"}, 500
 
-    count = db.session.query(TRoles).filter_by(email=email).count()  
+    count = db.session.query(TRoles).filter_by(email=email).count()
 
     if count == 0:
         return {"msg": "Adresse mail inconnue"}, 404
     if count > 1:
         return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404
-    
+
     token = set_cor_role_token(email)
     user = db.session.query(TRoles).filter_by(email=email).one()
-    # envoie du mail
-    msg = Message("GeoNature - Modification de mot de passe",
-                  sender=("Ne pas répondre", "no-reply@geonature.fr"),
-                  recipients=[user.email])
-    msg.html = render_template('mails/password_recovery.html', user=user, token=token['token'], url_confirmation=url_confirmation)
-    mail = Mail(app)
-    mail.send(msg)
-    
+
+    # TODO : change return msg
     return {"msg": "Un mail avec pour modifier votre mot de passe vient d'être envoyé sur l'adresse %s" % email}, 200
 
 
