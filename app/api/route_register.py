@@ -1,12 +1,12 @@
 """
     Route permettant de manipuler les données de UsersHub via une API
 """
+from datetime import datetime, timedelta
+
 import hashlib
 import random
 import re
-import requests
 
-from datetime import datetime, timedelta
 
 from flask import (
     Blueprint, request
@@ -25,7 +25,6 @@ from pypnusershub import routes as fnauth
 
 from pypnusershub.db.models_register import TempUser, CorRoleToken
 
-REQ_SESSION = requests.Session()
 route = Blueprint('api_register', __name__)
 
 @route.route('/role/<id_role>', methods=['GET', 'POST'])
@@ -236,7 +235,7 @@ def set_cor_role_token(email):
 def check_token(token):
     '''
         fonction permettant de vérifier la présence
-        d'un token associé à un role
+        d'un token et qui retourne l'id_role associé
     '''
     res = db.session.query(
         CorRoleToken.id_role
@@ -244,10 +243,7 @@ def check_token(token):
 
     if not res:
         return False
-    return True
-
-
-
+    return res
 
 @route.route("/create_cor_role_token", methods=['POST'])
 @fnauth.check_auth(5)
@@ -295,11 +291,12 @@ def change_password():
             "msg": "password et password_confirmation sont différents"
         }, 500
 
-    if not check_token(token):
+    associated_id_role = check_token(token)
+    if not associated_id_role:
 
         return {"msg": "pas d'id role associée au token"}, 500
 
-    id_role = res[0]
+    id_role = associated_id_role[0]
 
     role = db.session.query(TRoles).filter(TRoles.id_role == id_role).first()
 
@@ -446,6 +443,9 @@ def add_application_right_to_role():
 def login_recovery():
     '''
         route pour changer des paramètres d'utilisateur
+        FIXME : Route qui ne modifie rien du tout
+            devrait peut être transformée pour être plus générique
+            et retourner les informations d'un utilisateur donné
     '''
     req_data = request.get_json()
 
@@ -459,11 +459,12 @@ def login_recovery():
     if count == 0:
         return {"msg": "Adresse mail inconnue"}, 404
     if count > 1:
-        return {"msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404 # noqa
+        return {"msg": "Plusieurs identifiants correspondent à cette adresse, veuillez contacter l'administrateur"}, 404 # noqa
 
     user = db.session.query(TRoles).filter_by(email=email).one()
 
-    return user.as_dict(recursif=True), 200
+    # FIXME changer le retour de la fonction
+    return {"msg": "Un mail avec votre identifiant vient d'être envoyé sur l'adresse %s" % email}, 200
 
 
 @route.route('/password_recovery', methods=['POST'])
@@ -472,6 +473,9 @@ def login_recovery():
 def password_recovery():
     '''
         route pour changer des paramètres d'utilisateur
+        FIXME route une fois vidée de sa fonctionnalité d'envoie de mail
+            est en doublon avec create_cor_role_token (pour qui
+            il manque des tests)
     '''
     req_data = request.get_json()
 
@@ -526,9 +530,7 @@ def update_user():
     return role.as_dict(recursif=True)
 
 
-
 @route.route("/check_token", methods=['POST'])
-@fnauth.check_auth(5)
 @json_resp
 def check_token_validity():
     '''
@@ -537,7 +539,8 @@ def check_token_validity():
     '''
 
     data = request.get_json()
-    token_exists = check_token(token)
+
+    token_exists = check_token(data.get('token', None))
     if token_exists:
         return {"msg":"valid token"}, 200
 
