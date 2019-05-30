@@ -7,7 +7,7 @@ CHANGELOG
 
 **Corrections**
 
-*
+* Modification du champs uuid_organisme : aucun UUID n'est créé par défaut, le champs peut rester vide. Evite la production d'un uuid différent pour un organisme donné dans chaque instance. 
 
 2.0.3 (2019-02-27)
 ------------------
