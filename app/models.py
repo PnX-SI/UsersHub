@@ -28,7 +28,7 @@ class Bib_Organismes(GenericRepository):
     __tablename__ = 'bib_organismes'
     __table_args__={'schema':'utilisateurs'}
     id_organisme = db.Column(db.Integer, primary_key = True)
-    uuid_organisme = db.Column(UUID(as_uuid=True), default=select([func.uuid_generate_v4()]))
+    uuid_organisme = db.Column(UUID(as_uuid=True))
     nom_organisme = db.Column(db.Unicode)
     adresse_organisme = db.Column(db.Unicode)
     cp_organisme = db.Column(db.Unicode)
