@@ -192,6 +192,26 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_ro
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_application FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_profil FOREIGN KEY (id_profil) REFERENCES t_profils(id_profil) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
+----------------
+------INDEX-----
+----------------
+CREATE INDEX i_utilisateurs_groupe
+  ON utilisateurs.t_roles
+  USING btree
+  (groupe);
+
+CREATE INDEX i_utilisateurs_nom_prenom
+  ON utilisateurs.t_roles
+  USING btree
+  (nom_role, prenom_role);
+
+CREATE INDEX i_utilisateurs_active
+  ON utilisateurs.t_roles
+  USING btree
+  (active);
+
+
 ---------
 --VIEWS--
 ---------
