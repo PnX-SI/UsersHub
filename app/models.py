@@ -134,7 +134,7 @@ class TRoles(GenericRepository):
         """
         cor_role_query = db.session.query(CorRoles.id_role_groupe).filter(CorRoles.id_role_utilisateur == id_role)
         return db.session.query(TRoles).filter(TRoles.id_role.in_(cor_role_query)).all()
-    
+
     @classmethod
     def get_user_lists(cls, id_role):
         """
@@ -280,7 +280,7 @@ class TRoles(GenericRepository):
         Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
         Ne retourne que les utilisateurs actifs
-        """   
+        """
         # get the user
         data = db.session.query(
             cls, TProfils
@@ -407,7 +407,7 @@ class CorRoleListe(GenericRepository):
         for d in ids_role:
             cls.query.filter(cls.id_liste == id_liste).filter(cls.id_role == d).delete()
             db.session.commit()
-            
+
 
 @serializable
 class TApplications(GenericRepository):
@@ -458,7 +458,7 @@ class TProfils(GenericRepository):
             CorProfilForApp, CorProfilForApp.id_profil == TProfils.id_profil
         ).filter(
             CorProfilForApp.id_application == id_application
-        ).all()
+        ).order_by(TProfils.code_profil).all()
 
     @classmethod
     def get_profils_out_app(cls, id_application):
@@ -469,19 +469,19 @@ class TProfils(GenericRepository):
 
         q = db.session.query(cls)
         subquery = db.session.query(CorProfilForApp.id_profil).filter(CorProfilForApp.id_application == id_application)
-        q = q.filter(cls.id_profil.notin_(subquery)) 
+        q = q.filter(cls.id_profil.notin_(subquery))
         return [data.as_dict() for data in q.all()]
-    
+
     @classmethod
     def choixSelect(cls, key='id_profil', label='nom_profil', id_application=None):
         """
-        Methode qui retourne un tableau de tuples d'id profil et de nom de profil 
+        Methode qui retourne un tableau de tuples d'id profil et de nom de profil
         Ce que l'on met en key et label sont paramétrable
 
         """
         if id_application:
             profils = cls.get_profils_in_app(id_application)
-            return [ ( getattr(d, key), getattr(d, label) ) for d in profils]  
+            return [ ( getattr(d, key), getattr(d, label) ) for d in profils]
         return [( getattr(d, key), getattr(d, label) ) for d in cls.get_all()]
 
 
@@ -542,8 +542,8 @@ class CorRoleAppProfil(GenericRepository):
             id_role=id_role,
             id_application=id_application
         ).first()
-    
-    
+
+
     # surchage de la méthode delete car il n'y a pas de clé primaire unique sur une cor
     # TODO cette méthode supprime tous les profils pour une application et un role
     # faire une méthode qui supprime seulement un enregistrement grace à une PK unique
