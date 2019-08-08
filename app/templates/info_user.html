@@ -1,4 +1,4 @@
-{% include "librairies.html" %}   
+{% include "librairies.html" %}
 {% include "head-appli.html" %}
 
 {%set is_identifiant = user['identifiant'] is not none and user['identifiant'] != '' %}
@@ -13,9 +13,9 @@
 <div class="container main-zone ng-scope ">
     <h3>Utilisateur "{{user['nom_role']}} {{user['prenom_role']}}"</h3>
     <div class="ml-5">
-        <small> 
+        <small>
             {% if is_desc %}
-                {{role['desc_role']}}
+                {{user['desc_role']}}
             {% endif %}
             {% if is_uuid %}
                 <br /><strong>UUID :</strong> {{user['uuid_role']}}
@@ -58,7 +58,7 @@
                 </ul>
             {% else %}
                 <p class="text-info ml-5">L'utilisateur n'appartient à aucun groupe.</p>
-            {% endif %}   
+            {% endif %}
         </div>
     </div>
     <br />
@@ -95,7 +95,7 @@
                 <ul class="list-group list-group-flush">
                     {% for right in rights %}
                         <li class="list-group-item">
-                            Application "<a href="{{url_application}}/application/info/{{right['application_rel']['id_application']}}">{{right['application_rel']['nom_application']}}</a>" : 
+                            Application "<a href="{{url_application}}/application/info/{{right['application_rel']['id_application']}}">{{right['application_rel']['nom_application']}}</a>" :
                             {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
                             <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
                                 <button type="submit" class="btn btn-outline-success btn-sm float-right">

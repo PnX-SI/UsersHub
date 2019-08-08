@@ -26,6 +26,7 @@ insert_sample_data=true
 # URL de l'application
 url_application=http://mon_url.fr
 
+
 #######################
 ### Python settings ###
 #######################

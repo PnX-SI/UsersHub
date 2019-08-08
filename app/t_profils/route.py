@@ -22,9 +22,9 @@ Routes des profils
 
 @route.route('profils/list', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def profils():
@@ -67,9 +67,9 @@ def profils():
 
 @route.route('profil/delete/<id_profil>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def delete(id_profil):
@@ -85,9 +85,9 @@ def delete(id_profil):
 @route.route('profil/add/new', defaults={'id_profil': None}, methods=['GET', 'POST'])
 @route.route('profil/update/<id_profil>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def addorupdate(id_profil):

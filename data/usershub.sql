@@ -7,7 +7,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --Ensure to have uuid-ossp extension installed before running this script
---You must be superuser to add an extension in your database 
+--You must be superuser to add an extension in your database
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE SCHEMA IF NOT EXISTS utilisateurs;
@@ -133,7 +133,8 @@ COMMENT ON TABLE cor_profil_for_app IS 'Permet d''attribuer et limiter les profi
 CREATE TABLE IF NOT EXISTS cor_role_app_profil (
     id_role integer NOT NULL,
     id_application integer NOT NULL,
-    id_profil integer NOT NULL
+    id_profil integer NOT NULL,
+    is_default_group_for_app boolean NOT NULL DEFAULT (FALSE)
 );
 COMMENT ON TABLE cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils par application';
 
@@ -210,6 +211,38 @@ CREATE INDEX i_utilisateurs_active
   ON utilisateurs.t_roles
   USING btree
   (active);
+  
+---------------
+--CONSTRAINTS--
+---------------
+CREATE OR REPLACE FUNCTION utilisateurs.check_is_default_group_for_app_is_grp_and_unique(id_app integer, id_grp integer, is_default boolean)
+RETURNS boolean AS
+$BODY$
+BEGIN
+    -- Fonction de vérification
+    -- Test : si le role est un groupe et qu'il n'y a qu'un seul groupe par défaut définit par application
+    IF is_default IS TRUE THEN
+        IF (
+            SELECT DISTINCT TRUE
+            FROM utilisateurs.cor_role_app_profil
+            WHERE id_application = id_app AND is_default_group_for_app IS TRUE
+        ) IS TRUE THEN
+            RETURN FALSE;
+        ELSIF (SELECT TRUE FROM utilisateurs.t_roles WHERE id_role = id_grp AND groupe IS TRUE) IS NULL THEN
+            RETURN FALSE;
+        ELSE
+          RETURN TRUE;
+        END IF;
+    END IF;
+    RETURN TRUE;
+  END
+$BODY$
+  LANGUAGE plpgsql IMMUTABLE
+  COST 100;
+
+
+ALTER TABLE utilisateurs.cor_role_app_profil ADD CONSTRAINT check_is_default_group_for_app_is_grp_and_unique
+    CHECK (utilisateurs.check_is_default_group_for_app_is_grp_and_unique(id_application, id_role, is_default_group_for_app));
 
 
 ---------
@@ -287,7 +320,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
           WHERE u.groupe = false AND u.active = true) a;
 
 -- Vue permettant de retourner les roles et leurs droits maximum pour chaque application
-CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS 
+CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS
 SELECT a.groupe,
     a.active,
     a.id_role,
@@ -361,6 +394,6 @@ SELECT a.groupe,
   GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
 
 -- Vue permettant de retourner les utilisateurs (pas les roles) et leurs droits maximum pour chaque application
-CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
+CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
 SELECT * FROM utilisateurs.v_roleslist_forall_applications
 WHERE groupe = false;

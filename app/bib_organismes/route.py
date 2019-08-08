@@ -23,9 +23,9 @@ route = Blueprint('organisme', __name__)
 
 @route.route('organisms/list', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def organisms():
@@ -72,9 +72,9 @@ def organisms():
 @route.route('organism/add/new', defaults={'id_organisme': None}, methods=['GET', 'POST'])
 @route.route('organism/update/<id_organisme>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def addorupdate(id_organisme):
@@ -112,9 +112,9 @@ def addorupdate(id_organisme):
 
 @route.route('organisms/delete/<id_organisme>', methods=['GET', 'POST'])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def delete(id_organisme):
@@ -129,17 +129,17 @@ def delete(id_organisme):
 
 @route.route('organism/info/<id_organisme>', methods=['GET'])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT
 )
 def info(id_organisme):
     org = Bib_Organismes.get_one(id_organisme)
     q = TRoles.get_all(
-        as_model=True, 
+        as_model=True,
         params=[
-            {'col': 'active', 'filter': True}, 
+            {'col': 'active', 'filter': True},
             {'col': 'id_organisme', 'filter': id_organisme}
         ]
     )

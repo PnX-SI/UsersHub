@@ -18,7 +18,6 @@ def get_profils():
         Return the profils
     '''
     params = request.args
-    print(params)
     q = db.session.query(TProfils)
     if 'id_application' in params:
         q = q.join(

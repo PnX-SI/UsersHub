@@ -1,4 +1,4 @@
-https://github.com/PnX-SI/UsersHub-authentification-module/archive/1.3.2.zip
+https://github.com/amandine-sahl/UsersHub-authentification-module/archive/develop.zip
 bcrypt==3.1.4
 cffi==1.11.5
 click==6.7
