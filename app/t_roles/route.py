@@ -46,8 +46,8 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif', 'pass']  # noqa
-    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus']  # noqa
+    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif', 'pass_plus', 'pass_md5']  # noqa
+    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus', 'pass_md5']  # noqa
     filters = [{'col': 'groupe', 'filter': 'False'}]
     contents = TRoles.get_all(columns, filters)
     tab = []
@@ -57,6 +57,10 @@ def users():
             data['pass_plus'] = 'Non'
         else:
             data['pass_plus'] = 'Oui'
+        if data['pass_md5'] == '' or  data['pass_md5'] is None:
+            data['pass_md5'] = 'Non'
+        else:
+            data['pass_md5'] = 'Oui'
         tab.append(data)
 
     return render_template(
@@ -71,7 +75,8 @@ def users():
         pathD=config.URL_APPLICATION + "/users/delete/",
         pathA=config.URL_APPLICATION + "/user/add/new",
         pathZ=config.URL_APPLICATION + "/user/pass/",
-        passCol='True',
+        passPlusCol='True',
+        passMd5Col='True',
         name="un utilisateur",
         name_list="Utilisateurs"
     )

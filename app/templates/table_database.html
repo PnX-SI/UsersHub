@@ -27,7 +27,7 @@
                 {% for name in fLine %}
                   <th scope="col">{{ name }}</th>
                 {% endfor %} 
-                {% if passCol == 'True'%}
+                {% if passPlusCol == 'True' or passMd5Col%}
                 <th style="vertical-align: middle; text-align: center" scope="col">
                   <i title="Modifier le mot de passe" class="fa fa-key font-medium" aria-hidden="true"></i>
                 </th>
@@ -62,18 +62,18 @@
                     {% endif%}
                   {% endfor %} 
                   
-                  {% if passCol == 'True'%}
+                  {% if passPlusCol == 'True' or passMd5Col == 'True'%}
                     <td style="vertical-align: middle; text-align: center">
-                      {% if elt['pass_plus'] == 'Oui' %}
-                        {% set pass_action = 'Modifier le mot de passe' %}
+                      {% if elt['pass_plus'] == 'Oui' or elt['pass_md5'] == 'Oui'%}
+                        {% set pass_plus_action = 'Modifier le mot de passe' %}
                         {% set pass_class = 'secondary' %}
                       {% else %}
-                        {% set pass_action = 'Ajouter un mot de passe' %}
+                        {% set pass_plus_action = 'Ajouter un mot de passe' %}
                         {% set pass_class = 'light' %}
                       {% endif %}
                         <a href="{{pathZ}}{{elt[key]}}">
-                          <button type="submit" class="btn btn-{{pass_class}} btn-sm " title="{{pass_action}}">
-                            <i class="fa fa-key font-medium" aria-hidden="true" title="{{pass_action}}"></i>
+                          <button type="submit" class="btn btn-{{pass_class}} btn-sm " title="{{pass_plus_action}}">
+                            <i class="fa fa-key font-medium" aria-hidden="true" title="{{pass_plus_action}}"></i>
                           </button>
                         </a>
                     </td>

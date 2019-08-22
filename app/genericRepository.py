@@ -47,7 +47,15 @@ class GenericRepository(db.Model):
             data = q.all()
         if as_model:
             return data
-        return [d.as_dict(recursif, columns) for d in data]
+        roles = []
+        for d in data:
+            role = d.as_dict(recursif, columns)
+            #HACK pourri car le champ 'pass' de bdd ne passe pas dans le as_dict() (mot réservé !)
+            if hasattr(d, 'pass_md5'):
+                role['pass_md5'] = d.pass_md5
+            roles.append(role)           
+        return roles
+        # return [d.as_dict(recursif, columns) for d in data]
 
 
     @classmethod
