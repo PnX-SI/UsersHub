@@ -10,6 +10,7 @@ from werkzeug.datastructures import Headers
 
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import ColumnProperty
 
 
 
@@ -124,19 +125,21 @@ def serializable(cls):
         Liste des propriétés sérialisables de la classe
         associées à leur sérializer en fonction de leur type
     """
-
-    cls_db_columns = [
-        (
-            db_col.key,
-            SERIALIZERS.get(
-                db_col.type.__class__.__name__.lower(),
-                lambda x: x
-            )
-        )
-        for db_col in cls.__mapper__.c
-        if not db_col.type.__class__.__name__ == 'Geometry' and getattr(cls, db_col.key, False)
-    ]
-
+    cls_db_columns = []
+    for prop in cls.__mapper__.column_attrs:
+        if isinstance(prop, ColumnProperty) and len(prop.columns) == 1:
+            db_col = prop.columns[0]
+            # HACK
+            #  -> Récupération du nom de l'attribut sans la classe
+            name = str(prop).split('.', 1)[1]
+            if not db_col.type.__class__.__name__ == 'Geometry':
+                cls_db_columns.append((
+                    name,
+                    SERIALIZERS.get(
+                        db_col.type.__class__.__name__.lower(),
+                        lambda x: x
+                    )
+                ))
 
     """
         Liste des propriétés synonymes

@@ -61,7 +61,7 @@ class TRoles(GenericRepository):
     nom_role = db.Column(db.Unicode)
     prenom_role = db.Column(db.Unicode)
     desc_role = db.Column(db.Unicode)
-    pass5 = db.Column('pass', db.Unicode)
+    pass_md5 = db.Column('pass', db.Unicode)
     pass_plus = db.Column(db.Unicode)
     email = db.Column(db.Unicode)
     id_organisme =db.Column(
@@ -74,9 +74,6 @@ class TRoles(GenericRepository):
     active = db.Column(db.Boolean)
     session_appli = (db.Unicode)
 
-    # Add synonym for column pass
-    # Hack because pass is an python reserved word
-    pass_md5 = synonym('pass5')
 
     def fill_password(self, password, password_confirmation):
         (self.pass_plus, self.pass_md5) = self.set_password(password, password_confirmation)
