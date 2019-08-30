@@ -1,6 +1,6 @@
-{% include "librairies.html" %} 
+{% include "librairies.html" %}
 {% include "head-appli.html" %}
-{% include "alert_messages.html" %} 
+{% include "alert_messages.html" %}
 
 {% block content %}
 
@@ -26,26 +26,26 @@
               <tr>
                 {% for name in fLine %}
                   <th scope="col">{{ name }}</th>
-                {% endfor %} 
-                {% if passPlusCol == 'True' or passMd5Col%}
+                {% endfor %}
+                {% if passPlusCol == 'True' or passMd5Col %}
                 <th style="vertical-align: middle; text-align: center" scope="col">
                   <i title="Modifier le mot de passe" class="fa fa-key font-medium" aria-hidden="true"></i>
                 </th>
-                {%endif%}
-                {% if otherCol == 'True'%}
+                {% endif %}
+                {% if otherCol == 'True' %}
                   <th style="vertical-align: middle; text-align: center" scope="col">
                     <i title="{{ Members }}" class="fa fa-user font-medium" aria-hidden="true"></i>
                   </th>
-                {%endif%} 
-                {% if tag_orga == 'True'%}
+                {% endif %}
+                {% if tag_orga == 'True' %}
                   <th scope="col">{{ Organismes }}</th>
-                {% endif %} 
+                {% endif %}
                 {% if permissions == 'True' %}
                   <th style="vertical-align: middle; text-align: center" scope="col" title="{{ Right }}"><i class="fa fa-hand-paper-o font-medium" aria-hidden="true"></i></th>
-                {%endif%} 
-                {% if see == 'True'%}
+                {% endif %}
+                {% if see == 'True' %}
                   <th style="vertical-align: middle; text-align: center" scope="col"><i title="Voir" class="fa fa-eye font-medium" aria-hidden="true"></i></th>
-                {%endif%}
+                {% endif %}
                 <th style="vertical-align: middle; text-align: center" scope="col"><i title="Modifier" class="fa fa-pencil font-medium" aria-hidden="true"></i></th>
                 <th style="vertical-align: middle; text-align: center" scope="col"><i title="Supprimer" class="fa fa-trash font-medium" aria-hidden="true"></i></th>
               </tr>
@@ -53,16 +53,16 @@
             <tbody>
               {% for elt in table %}
                 <tr>
-                  {% for name in line %} 
-                    {% set groups = elt[group] %} 
+                  {% for name in line %}
+                    {% set groups = elt[group] %}
                     {% if groups == 'True' %}
                       <td style="vertical-align: middle;" class="table-primary">{{ elt[name] }}</td>
                     {% else %}
                       <td style="vertical-align: middle;">{{ elt[name] }}</td>
-                    {% endif%}
-                  {% endfor %} 
-                  
-                  {% if passPlusCol == 'True' or passMd5Col == 'True'%}
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if passPlusCol == 'True' or passMd5Col == 'True' %}
                     <td style="vertical-align: middle; text-align: center">
                       {% if elt['pass_plus'] == 'Oui' or elt['pass_md5'] == 'Oui'%}
                         {% set pass_plus_action = 'Modifier le mot de passe' %}
@@ -77,9 +77,9 @@
                           </button>
                         </a>
                     </td>
-                  {%endif%}
+                  {% endif %}
 
-                  {% if otherCol == 'True'%}
+                  {% if otherCol == 'True' %}
                   <td style="vertical-align: middle; text-align: center">
                     <a href="{{pathP}}{{elt[key]}}">
                       <button type="submit" class="btn btn-secondary btn-sm ">
@@ -87,9 +87,9 @@
                       </button>
                     </a>
                   </td>
-                  {%endif%}
+                  {% endif %}
 
-                  {% if permissions == 'True'%}
+                  {% if permissions == 'True' %}
                   <td style="vertical-align: middle; text-align: center">
                     <a href="{{pathR}}{{elt[key]}} " title="{{Right}}">
                       <button type="submit" class="btn btn-secondary btn-sm ">
@@ -97,9 +97,9 @@
                       </button>
                     </a>
                   </td>
-                  {%endif%}
+                  {% endif %}
 
-                  {% if see == 'True'%}
+                  {% if see == 'True' %}
                     <td style="vertical-align: middle; text-align: center">
                       <a href="{{pathI}}{{elt[key]}}">
                         <button type="submit" class="btn btn-secondary btn-sm ">
@@ -107,8 +107,8 @@
                         </button>
                       </a>
                     </td>
-                  {%endif%}
-        
+                  {% endif %}
+
                   <td style="vertical-align: middle; text-align: center">
                       {% if key2 %}
                       <a href="{{pathU}}{{elt[key]}}/{{key2}} ">
