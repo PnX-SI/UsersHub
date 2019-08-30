@@ -1,22 +1,25 @@
 import hashlib
+
 from flask import jsonify
-from app.env import db
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey, distinct, or_, desc
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import select, func
+from sqlalchemy.orm import synonym, relationship, backref
 
 from flask_bcrypt import (
     generate_password_hash
 )
 
-from app.utils.utilssqlalchemy import serializable
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, distinct, or_, desc
-from app.genericRepository import GenericRepository
 from config import config
+from app.env import db
+from app.utils.utilssqlalchemy import serializable
+from app.genericRepository import GenericRepository
 
 
-"""Fichier contenant les models de la base de données"""
+"""
+    Fichier contenant les models de la base de données
+"""
 
 
 @serializable
@@ -50,24 +53,34 @@ class TRoles(GenericRepository):
     __table_args__={'schema':'utilisateurs', 'extend_existing': True}
     id_role = db.Column(db.Integer, primary_key = True)
     groupe = db.Column(db.Boolean)
-    uuid_role = db.Column(UUID(as_uuid=True), default=select([func.uuid_generate_v4()]))
+    uuid_role = db.Column(
+        UUID(as_uuid=True),
+        default=select([func.uuid_generate_v4()])
+    )
     identifiant = db.Column(db.Unicode)
     nom_role = db.Column(db.Unicode)
     prenom_role = db.Column(db.Unicode)
     desc_role = db.Column(db.Unicode)
-    pass_md5 = db.Column('pass', db.Unicode)
+    pass5 = db.Column('pass', db.Unicode)
     pass_plus = db.Column(db.Unicode)
     email = db.Column(db.Unicode)
-    id_organisme =db.Column(db.Unicode, ForeignKey('utilisateurs.bib_organismes.id_organisme'))
+    id_organisme =db.Column(
+        db.Unicode,
+        ForeignKey('utilisateurs.bib_organismes.id_organisme')
+    )
     # organisme_rel = relationship("Bib_Organismes")
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
     session_appli = (db.Unicode)
 
+    # Add synonym for column pass
+    # Hack because pass is an python reserved word
+    pass_md5 = synonym('pass5')
 
     def fill_password(self, password, password_confirmation):
-        (self.pass_plus, self.pass_md5) = self.set_password( password, password_confirmation)
+        (self.pass_plus, self.pass_md5) = self.set_password(password, password_confirmation)
+
 
     @classmethod
     def set_password(cls, password, password_confirmation):

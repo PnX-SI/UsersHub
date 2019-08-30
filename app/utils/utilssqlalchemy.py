@@ -124,6 +124,7 @@ def serializable(cls):
         Liste des propriétés sérialisables de la classe
         associées à leur sérializer en fonction de leur type
     """
+
     cls_db_columns = [
         (
             db_col.key,
@@ -135,6 +136,27 @@ def serializable(cls):
         for db_col in cls.__mapper__.c
         if not db_col.type.__class__.__name__ == 'Geometry' and getattr(cls, db_col.key, False)
     ]
+
+
+    """
+        Liste des propriétés synonymes
+        sérialisables de la classe
+        associées à leur sérializer en fonction de leur type
+    """
+    for syn in cls.__mapper__.synonyms:
+        col = cls.__mapper__.c[syn.name]
+        # if column type is geometry pass
+        if col.type.__class__.__name__ == 'Geometry':
+            pass
+
+        # else add synonyms in columns properties
+        cls_db_columns.append((
+            syn.key,
+            SERIALIZERS.get(
+                col.type.__class__.__name__.lower(),
+                lambda x: x
+            )
+        ))
 
     """
         Liste des propriétés de type relationship

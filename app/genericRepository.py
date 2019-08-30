@@ -36,6 +36,7 @@ class GenericRepository(db.Model):
                             si as_model != False alors au lieu de retourner un dictionnaire on retourne une requête
         Si as_model != False alors au lieu de retourner un dictionnaire on retourne un tableau d'objets du modèle
         """
+
         data = None
         if params == None :
             data = db.session.query(cls).all()
@@ -47,14 +48,13 @@ class GenericRepository(db.Model):
             data = q.all()
         if as_model:
             return data
-        roles = []
+        d_dicts = []
+
         for d in data:
-            role = d.as_dict(recursif, columns)
-            #HACK pourri car le champ 'pass' de bdd ne passe pas dans le as_dict() (mot réservé !)
-            if hasattr(d, 'pass_md5'):
-                role['pass_md5'] = d.pass_md5
-            roles.append(role)           
-        return roles
+            d_dict = d.as_dict(recursif, columns)
+            d_dicts.append(d_dict)
+
+        return d_dicts
         # return [d.as_dict(recursif, columns) for d in data]
 
 
