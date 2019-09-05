@@ -419,53 +419,6 @@ def login_recovery():
     )
 
 
-@route.route("/password_recovery", methods=["POST"])
-@fnauth.check_auth(5)
-@json_resp
-def password_recovery():
-    """
-        route pour changer des paramètres d'utilisateur
-        FIXME route une fois vidée de sa fonctionnalité d'envoie de mail
-            est en doublon avec create_cor_role_token (pour qui
-            il manque des tests)
-    """
-    req_data = request.get_json()
-
-    email = req_data.get("email", None)
-    # recuperation et verif de l'url de confirmation
-    url_confirmation = req_data.get("url_confirmation", None)
-
-    if not email:
-        return {"msg": "Pas d'email"}, 400
-
-    if url_confirmation is None:
-        return {"msg": "Erreur server"}, 500
-
-    count = db.session.query(TRoles).filter_by(email=email).count()
-
-    if count == 0:
-        return {"msg": "Adresse mail inconnue"}, 404
-    if count > 1:
-        return (
-            {
-                "msg": "Plusieur identifiants correspondent à cette adresse, veuillez contacter l'administrateur"
-            },
-            404,
-        )
-
-    token = set_cor_role_token(email)
-    user = db.session.query(TRoles).filter_by(email=email).one()
-
-    # TODO : change return msg
-    return (
-        {
-            "msg": "Un mail avec pour modifier votre mot de passe vient d'être envoyé sur l'adresse %s"
-            % email
-        },
-        200,
-    )
-
-
 @route.route("/update_user", methods=["POST"])
 @fnauth.check_auth(5)
 @json_resp
