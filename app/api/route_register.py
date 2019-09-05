@@ -61,21 +61,23 @@ def create_temp_user():
     # recuperation des parametres
     data = request.get_json()
 
-    if data["password"] != data["password_confirmation"]:
-        return "Password and password_confirmation are differents", 500
-
     role_data = {}
     for att in data:
         if hasattr(TempUser, att):
             role_data[att] = data[att]
     temp_user = TempUser(**role_data)
-    # encrypt en set pwd
-    temp_user.encrypt_password(
-        data["password"],
-        data["password_confirmation"],
-        current_app.config["PASS_METHOD"] or current_app.config["FILL_MD5_PASS"],
-    )
-    # verification des parametres
+
+    try:
+        # encrypt en set pwd
+        temp_user.set_password(
+            data["password"],
+            data["password_confirmation"],
+            current_app.config["PASS_METHOD"] or current_app.config["FILL_MD5_PASS"],
+        )
+    except DifferentPasswordError:
+        return "Password and password_confirmation are differents", 500
+
+    # verification des parametres (mdp, login et email existant)
     (is_temp_user_valid, msg) = temp_user.is_valid()
 
     if not is_temp_user_valid:
@@ -93,25 +95,14 @@ def create_temp_user():
     ).delete()
     db.session.commit()
 
-    # verification si on a un utilisateur
-    # qui a le meme email et les memes droits
-    user = (
-        db.session.query(TRoles)
-        .filter(TRoles.identifiant == temp_user.identifiant)
-        .first()
-    )
+    # On cree un nouveau utilisateur
+    temp_user.token_role = str(random.getrandbits(128))
 
-    if not user:
-        # dans ce cas on cree un nouveau utilisateur
-        temp_user.token_role = str(random.getrandbits(128))
+    # sauvegarde en base
+    db.session.add(temp_user)
+    db.session.commit()
 
-        # sauvegarde en base
-        db.session.add(temp_user)
-        db.session.commit()
-
-        return {"token": temp_user.token_role}, 200
-
-    return {"msg": "Un utilisateur avec l'identifiant existe déjà."}, 422
+    return {"token": temp_user.token_role}, 200
 
 
 @route.route("valid_temp_user", methods=["POST"])
@@ -249,9 +240,6 @@ def change_password():
     if not password_confirmation or not password:
         return {"msg": "password non defini dans paramètres POST"}, 500
 
-    if not password_confirmation == password:
-        return {"msg": "password et password_confirmation sont différents"}, 500
-
     associated_id_role = check_token(token)
     if not associated_id_role:
         return {"msg": "pas d'id role associée au token"}, 500
@@ -262,8 +250,7 @@ def change_password():
 
     if not role:
         return {"msg": "pas d'utilisateur correspondant à id_role"}, 500
-
-    role.fill_password(password, password)
+    role.set_password(password, password_confirmation)
     db.session.commit()
 
     # delete cors

@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS t_roles (
     pn boolean,
     active boolean DEFAULT true,
     session_appli character varying(50),
+    champs_addi jsonb,
     date_insert timestamp without time zone,
     date_update timestamp without time zone
 );

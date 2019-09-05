@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
 (
 
     id_temp_user SERIAL NOT NULL,
-
     groupe boolean NOT NULL DEFAULT false,
     token_role text,
     identifiant character varying(100),
@@ -28,11 +27,12 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
     prenom_role character varying(50),
     desc_role text,
     password text,
+    pass_md5 text,
     email character varying(250),
-    id_organisme integer,
     organisme character(32),
+    id_organisme integer,
     remarques text,
-    pn boolean,
+    champs_addi jsonb,
     session_appli character varying(50),
     date_insert timestamp without time zone,
     date_update timestamp without time zone,
@@ -86,3 +86,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
         REFERENCES utilisateurs.bib_organismes (id_organisme) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+ALTER TABLE utilisateurs.t_roles
+ADD COLUMN champs_addi jsonb;

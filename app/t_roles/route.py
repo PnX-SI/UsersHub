@@ -1,33 +1,26 @@
-from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request, flash
-)
-
-from flask_bcrypt import (
-    generate_password_hash
-)
+from flask import redirect, url_for, render_template, Blueprint, request, flash
 
 from pypnusershub import routes as fnauth
+from pypnusershub.db.models import check_and_encrypt_password
 
 from app.env import URL_REDIRECT
 from app.t_roles import forms as t_rolesforms
-from app.models import (
-    TRoles, Bib_Organismes, CorRoles
-)
+from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
 from app.env import db
 
 from config import config
-route = Blueprint('user', __name__)
+
+route = Blueprint("user", __name__)
 
 
-@route.route('users/list', methods=['GET'])
+@route.route("users/list", methods=["GET"])
 @fnauth.check_auth(
     3,
     False,
     redirect_on_expiration=URL_REDIRECT,
     redirect_on_invalid_token=URL_REDIRECT,
-    redirect_on_insufficient_right=URL_REDIRECT
+    redirect_on_insufficient_right=URL_REDIRECT,
 )
 def users():
 
@@ -46,17 +39,41 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif', 'pass']  # noqa
-    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus']  # noqa
-    filters = [{'col': 'groupe', 'filter': 'False'}]
+    fLine = [
+        "Id",
+        "Identifiant",
+        "Nom",
+        "Prenom",
+        "Email",
+        "Organisme",
+        "Remarques",
+        "Actif",
+        "pass",
+    ]  # noqa
+    columns = [
+        "id_role",
+        "identifiant",
+        "nom_role",
+        "prenom_role",
+        "email",
+        "nom_organisme",
+        "remarques",
+        "active",
+        "pass_plus",
+    ]  # noqa
+    filters = [{"col": "groupe", "filter": "False"}]
     contents = TRoles.get_all(columns, filters)
     tab = []
     for data in contents:
-        data['nom_organisme'] = data['organisme_rel']['nom_organisme'] if data.get('organisme_rel') else None
-        if data['pass_plus'] == '' or  data['pass_plus'] is None:
-            data['pass_plus'] = 'Non'
+        data["nom_organisme"] = (
+            data["organisme_rel"]["nom_organisme"]
+            if data.get("organisme_rel")
+            else None
+        )
+        if data["pass_plus"] == "" or data["pass_plus"] is None:
+            data["pass_plus"] = "Non"
         else:
-            data['pass_plus'] = 'Oui'
+            data["pass_plus"] = "Oui"
         tab.append(data)
 
     return render_template(
@@ -71,19 +88,19 @@ def users():
         pathD=config.URL_APPLICATION + "/users/delete/",
         pathA=config.URL_APPLICATION + "/user/add/new",
         pathZ=config.URL_APPLICATION + "/user/pass/",
-        passCol='True',
+        passCol="True",
         name="un utilisateur",
-        name_list="Utilisateurs"
+        name_list="Utilisateurs",
     )
 
 
-@route.route('user/add/new', methods=['GET', 'POST'])
-@route.route('user/update/<id_role>', methods=['GET', 'POST'])
+@route.route("user/add/new", methods=["GET", "POST"])
+@route.route("user/update/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_role=None):
     """
@@ -94,80 +111,86 @@ def addorupdate(id_role=None):
     """
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect(
-        'id_organisme',
-        'nom_organisme'
+        "id_organisme", "nom_organisme"
     )
-    form.a_groupe.choices = TRoles.choix_group('id_role', 'nom_role', aucun=None)
+    form.a_groupe.choices = TRoles.choix_group("id_role", "nom_role", aucun=None)
 
     if id_role is not None:
         user = TRoles.get_one(id_role, as_model=True)
         user_as_dict = user.as_dict_full_name()
         # format group to prepfil the form
         formated_groups = [group.id_role for group in TRoles.get_user_groups(id_role)]
-        if request.method == 'GET':
+        if request.method == "GET":
             form = process(form, user_as_dict, formated_groups)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if form.validate_on_submit() and form.validate():
-            groups = form.data['a_groupe']
+            groups = form.data["a_groupe"]
             form_user = pops(form.data)
-            form_user['groupe'] = False
-            form_user.pop('id_role')
+            form_user["groupe"] = False
+            form_user.pop("id_role")
 
             # if a password is set
             # check they are the same
             if form.pass_plus.data:
                 try:
                     (
-                        form_user['pass_plus'], form_user['pass_md5']
-                    ) = TRoles.set_password(
-                        form.pass_plus.data, form.mdpconf.data
+                        form_user["pass_plus"],
+                        form_user["pass_md5"],
+                    ) = check_and_encrypt_password(
+                        form.pass_plus.data,
+                        form.mdpconf.data,
+                        current_app.config["PASS_METHOD"] == "md5"
+                        or current_app.config["FILL_MD5_PASS"],
                     )
                 except Exception as exp:
-                    flash(str(exp), 'error')
+                    flash(str(exp), "error")
                     return render_template(
-                        'user.html', form=form, title="Formulaire Utilisateur"
+                        "user.html", form=form, title="Formulaire Utilisateur"
                     )
 
             if id_role is not None:
-                #HACK a l'update on remet a la main les mdp
+                # HACK a l'update on remet a la main les mdp
                 # car on les masque dans le form
-                form_user['pass_plus'] = user.pass_plus
-                form_user['pass_md5'] = user.pass_md5
-                form_user['id_role'] = user.id_role
+                form_user["pass_plus"] = user.pass_plus
+                form_user["pass_md5"] = user.pass_md5
+                form_user["id_role"] = user.id_role
                 new_role = TRoles.update(form_user)
             else:
                 new_role = TRoles.post(form_user)
             # set groups
             if len(groups) > 0:
                 if id_role:
-                    #first delete all groups of the user
+                    # first delete all groups of the user
                     cor_role_to_delete = CorRoles.get_all(
-                        params=[{'col': 'id_role_utilisateur', 'filter': id_role}],
-                        as_model=True
+                        params=[{"col": "id_role_utilisateur", "filter": id_role}],
+                        as_model=True,
                     )
                     for cor_role in cor_role_to_delete:
                         db.session.delete(cor_role)
                     db.session.commit()
                 for group in groups:
                     # add new groups
-                    new_group = CorRoles(id_role_groupe=group, id_role_utilisateur=new_role.id_role)
+                    new_group = CorRoles(
+                        id_role_groupe=group, id_role_utilisateur=new_role.id_role
+                    )
                     db.session.add(new_group)
                 db.session.commit()
-            return redirect(url_for('user.users'))
+            return redirect(url_for("user.users"))
 
         else:
-            flash(strigify_dict(form.errors), 'error')
+            flash(strigify_dict(form.errors), "error")
     return render_template(
-        'user.html', form=form, title="Formulaire Utilisateur", id_role=id_role
+        "user.html", form=form, title="Formulaire Utilisateur", id_role=id_role
     )
 
-@route.route('user/pass/<id_role>', methods=['GET', 'POST'])
+
+@route.route("user/pass/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def updatepass(id_role=None):
     """
@@ -179,40 +202,58 @@ def updatepass(id_role=None):
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if form.validate_on_submit() and form.validate():
             form_user = pops(form.data, False)
-            form_user.pop('id_role')
+            form_user.pop("id_role")
             # check if passwords are the same
             if form.pass_plus.data:
                 try:
                     (
-                        form_user['pass_plus'], form_user['pass_md5']
-                    ) = TRoles.set_password(
-                        form.pass_plus.data, form.mdpconf.data
+                        form_user["pass_plus"],
+                        form_user["pass_md5"],
+                    ) = encrypt_check_and_encrypt_passwordpassword(
+                        form.pass_plus.data,
+                        form.mdpconf.data,
+                        current_app.config["PASS_METHOD"] == "md5"
+                        or current_app.config["FILL_MD5_PASS"],
                     )
                 except Exception as exp:
-                    flash({'password':[exp]}, 'error')
+                    flash({"password": [exp]}, "error")
                     return render_template(
-                        'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role
+                        "user_pass.html",
+                        form=form,
+                        title="Changer le mot de passe de l'utilisateur '"
+                        + myuser["nom_role"]
+                        + " "
+                        + myuser["prenom_role"]
+                        + "'",
+                        id_role=id_role,
                     )
-            form_user['id_role'] = id_role
+            form_user["id_role"] = id_role
             TRoles.update(form_user)
-            return redirect(url_for('user.users'))
+            return redirect(url_for("user.users"))
         else:
-            flash(strigify_dict(form.errors), 'error')
+            flash(strigify_dict(form.errors), "error")
 
     return render_template(
-        'user_pass.html', form=form, title="Changer le mot de passe de l'utilisateur '" + myuser['nom_role'] + ' ' + myuser['prenom_role'] + "'", id_role=id_role
+        "user_pass.html",
+        form=form,
+        title="Changer le mot de passe de l'utilisateur '"
+        + myuser["nom_role"]
+        + " "
+        + myuser["prenom_role"]
+        + "'",
+        id_role=id_role,
     )
 
 
-@route.route('users/delete/<id_role>', methods=['GET', 'POST'])
+@route.route("users/delete/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def deluser(id_role):
     """
@@ -220,14 +261,14 @@ def deluser(id_role):
     Retourne une redirection vers la liste d'utilisateurs
     """
     TRoles.delete(id_role)
-    return redirect(url_for('user.users'))
+    return redirect(url_for("user.users"))
 
 
-@route.route('user/info/<id_role>', methods=['GET', 'POST'])
+@route.route("user/info/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def info(id_role):
     user = TRoles.get_one(id_role)
-    organisme = Bib_Organismes.get_one(user['id_organisme'])
+    organisme = Bib_Organismes.get_one(user["id_organisme"])
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
@@ -238,7 +279,7 @@ def info(id_role):
         groups=groups,
         lists=lists,
         rights=rights,
-        pathU=config.URL_APPLICATION + '/user/update/'
+        pathU=config.URL_APPLICATION + "/user/update/",
     )
 
 
@@ -247,11 +288,11 @@ def pops(form, with_group=True):
     Methode qui supprime les éléments indésirables du formulaires
     Avec pour paramètre un formulaire
     """
-    form.pop('mdpconf')
-    form.pop('submit')
-    form.pop('csrf_token')
+    form.pop("mdpconf")
+    form.pop("submit")
+    form.pop("csrf_token")
     if with_group:
-        form.pop('a_groupe')
+        form.pop("a_groupe")
     return form
 
 
@@ -261,12 +302,12 @@ def process(form, user, groups):
     Avec pour paramètres un formulaire, un user et les groupes
      auxquels il appartient
     """
-    form.active.process_data(user['active'])
-    form.id_organisme.process_data(user['id_organisme'])
-    form.nom_role.process_data(user['nom_role'])
-    form.prenom_role.process_data(user['prenom_role'])
-    form.email.process_data(user['email'])
-    form.remarques.process_data(user['remarques'])
-    form.identifiant.process_data(user['identifiant'])
+    form.active.process_data(user["active"])
+    form.id_organisme.process_data(user["id_organisme"])
+    form.nom_role.process_data(user["nom_role"])
+    form.prenom_role.process_data(user["prenom_role"])
+    form.email.process_data(user["email"])
+    form.remarques.process_data(user["remarques"])
+    form.identifiant.process_data(user["identifiant"])
     form.a_groupe.process_data(groups)
     return form
