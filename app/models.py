@@ -1,12 +1,12 @@
 import hashlib
 
 from flask import current_app
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import select, func
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey, distinct, desc
 
-from pypnusershub.db.models import encrypt_password
+from pypnusershub.db.models import check_and_encrypt_password
 
 from app.env import db
 from app.utils.utilssqlalchemy import serializable
@@ -70,15 +70,10 @@ class TRoles(GenericRepository):
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
     session_appli = db.Unicode
+    champs_addi = db.Column(JSONB)
 
-    def fill_password(self, password, password_confirmation):
-        (self.pass_plus, self.pass_md5) = self.set_password(
-            password, password_confirmation
-        )
-
-    @classmethod
-    def set_password(cls, password, password_confirmation):
-        self.pass_plus, self.pass_md5 = encrypt_password(
+    def set_password(self, password, password_confirmation):
+        (self.pass_plus, self.pass_md5) = check_and_encrypt_password(
             password,
             password_confirmation,
             current_app.config["PASS_METHOD"] == "md5"
