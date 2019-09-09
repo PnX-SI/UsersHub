@@ -311,3 +311,12 @@ def process(form, user, groups):
     form.identifiant.process_data(user["identifiant"])
     form.a_groupe.process_data(groups)
     return form
+
+
+@route.route("test", methods=["GET", "POST"])
+def test(id_role):
+    fLine = [{"key": "test1", "label": "Test 1"}, {"key": "test2", "label": "Test 2"}]
+
+    tab = [{"test1": "test1", "test2": "Test 1"}, {"test1": "test2", "test2": "Test 2"}]
+    return render_template("generic_table.html", fLine=fLine, table=tab)
+

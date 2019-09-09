@@ -1,0 +1,25 @@
+<table class="class="hover table table-bordered table-striped table-hover table-sm table-responsive-sm" id="tri">
+  
+  <thead>
+      {% block head %}
+      <tr>
+          {% for name in fLine %}
+            <th scope="col">{{ name }}</th>
+          {% endfor %} 
+      </tr>
+      {% endblock %}
+  </thead>
+  <tbody>
+      {% block body %}
+      {% for elt in table %}
+        <tr> 
+          {% for name in line %} 
+            <td>
+                <td style="vertical-align: middle;">{{ elt[name] }}</td>
+            </td>
+            {% endfor %}
+        </tr>
+      {% endfor %}
+      {% endblock %}
+  </tbody>
+</table>
