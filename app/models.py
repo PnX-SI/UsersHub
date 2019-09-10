@@ -1,21 +1,22 @@
 import hashlib
 
-from flask import current_app
+from flask import current_app, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey, distinct, or_, desc
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import select, func
-from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey, distinct, desc
-
+from sqlalchemy.orm import synonym, relationship, backref
 from pypnusershub.db.models import check_and_encrypt_password
 
+from config import config
 from app.env import db
 from app.utils.utilssqlalchemy import serializable
 from app.genericRepository import GenericRepository
 
-from config import config
 
-
-"""Fichier contenant les models de la base de données"""
+"""
+    Fichier contenant les models de la base de données
+"""
 
 
 @serializable
@@ -63,14 +64,20 @@ class TRoles(GenericRepository):
     pass_plus = db.Column(db.Unicode)
     email = db.Column(db.Unicode)
     id_organisme = db.Column(
-        db.Unicode, ForeignKey("utilisateurs.bib_organismes.id_organisme")
+        db.Integer, ForeignKey("utilisateurs.bib_organismes.id_organisme")
     )
     organisme_rel = relationship("Bib_Organismes")
     remarques = db.Column(db.Unicode)
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
     session_appli = db.Unicode
+    pass5 = db.Column('pass', db.Unicode)
+    pass_plus = db.Column(db.Unicode)	    pass_plus = db.Column(db.Unicode)
     champs_addi = db.Column(JSONB)
+
+    # Add synonym for column pass
+    # Hack because pass is an python reserved word
+    pass_md5 = synonym('pass5')
 
     def set_password(self, password, password_confirmation):
         (self.pass_plus, self.pass_md5) = check_and_encrypt_password(
