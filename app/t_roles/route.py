@@ -39,7 +39,6 @@ def users():
                                             - un nom de listes --> name_list
                                             - ajoute une colonne pour accéder aux infos de l'utilisateur --> see
     """
-<<<<<<< HEAD
     fLine = [
         "Id",
         "Identifiant",
@@ -63,11 +62,6 @@ def users():
         "pass_plus",
     ]  # noqa
     filters = [{"col": "groupe", "filter": "False"}]
-=======
-    fLine = ['Id', 'Identifiant', 'Nom', 'Prenom', 'Email', 'Organisme', 'Remarques', 'Actif', 'pass_plus', 'pass_md5']  # noqa
-    columns = ['id_role', 'identifiant', 'nom_role', 'prenom_role', 'email', 'nom_organisme', 'remarques', 'active', 'pass_plus', 'pass_md5']  # noqa
-    filters = [{'col': 'groupe', 'filter': 'False'}]
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
     contents = TRoles.get_all(columns, filters)
     tab = []
     for data in contents:
@@ -79,15 +73,7 @@ def users():
         if data["pass_plus"] == "" or data["pass_plus"] is None:
             data["pass_plus"] = "Non"
         else:
-<<<<<<< HEAD
             data["pass_plus"] = "Oui"
-=======
-            data['pass_plus'] = 'Oui'
-        if data['pass_md5'] == '' or  data['pass_md5'] is None:
-            data['pass_md5'] = 'Non'
-        else:
-            data['pass_md5'] = 'Oui'
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
         tab.append(data)
 
     return render_template(
@@ -102,12 +88,7 @@ def users():
         pathD=config.URL_APPLICATION + "/users/delete/",
         pathA=config.URL_APPLICATION + "/user/add/new",
         pathZ=config.URL_APPLICATION + "/user/pass/",
-<<<<<<< HEAD
         passCol="True",
-=======
-        passPlusCol='True',
-        passMd5Col='True',
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
         name="un utilisateur",
         name_list="Utilisateurs",
     )
@@ -119,11 +100,7 @@ def users():
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-<<<<<<< HEAD
     redirect_on_invalid_token=URL_REDIRECT,
-=======
-    redirect_on_invalid_token=URL_REDIRECT
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
 )
 def addorupdate(id_role=None):
     """
@@ -213,11 +190,7 @@ def addorupdate(id_role=None):
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-<<<<<<< HEAD
     redirect_on_invalid_token=URL_REDIRECT,
-=======
-    redirect_on_invalid_token=URL_REDIRECT
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
 )
 def updatepass(id_role=None):
     """
@@ -229,11 +202,7 @@ def updatepass(id_role=None):
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
 
-<<<<<<< HEAD
     if request.method == "POST":
-=======
-    if request.method == 'POST':
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
         if form.validate_on_submit() and form.validate():
             form_user = pops(form.data, False)
             form_user.pop("id_role")
@@ -284,11 +253,7 @@ def updatepass(id_role=None):
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-<<<<<<< HEAD
     redirect_on_invalid_token=URL_REDIRECT,
-=======
-    redirect_on_invalid_token=URL_REDIRECT
->>>>>>> eb0f2e5bb0becf4f3720fa976dd1b50500ff70aa
 )
 def deluser(id_role):
     """

@@ -71,13 +71,13 @@ class TRoles(GenericRepository):
     pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
     session_appli = db.Unicode
-    pass5 = db.Column('pass', db.Unicode)
-    pass_plus = db.Column(db.Unicode)	    pass_plus = db.Column(db.Unicode)
+    pass5 = db.Column("pass", db.Unicode)
+    pass_plus = db.Column(db.Unicode)
     champs_addi = db.Column(JSONB)
 
     # Add synonym for column pass
     # Hack because pass is an python reserved word
-    pass_md5 = synonym('pass5')
+    pass_md5 = synonym("pass5")
 
     def set_password(self, password, password_confirmation):
         (self.pass_plus, self.pass_md5) = check_and_encrypt_password(
