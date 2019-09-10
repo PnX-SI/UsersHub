@@ -35,7 +35,6 @@ def temp_users_slist():
         temp_user["app_name"] = None
         if app:
             temp_user["app_name"] = app.nom_application
-        print(temp_user["full_name"])
         temp_users.append(temp_user)
     columns = [
         {"key": "identifiant", "label": "Login"},
