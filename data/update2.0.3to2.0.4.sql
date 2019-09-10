@@ -72,17 +72,22 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
     password text,
     pass_md5 text,
     email character varying(250),
-    id_organisme integer,
     organisme character(32),
+    id_organisme integer,
+    id_application integer,
     remarques text,
-    pn boolean,
+    champs_addi jsonb,
     session_appli character varying(50),
     date_insert timestamp without time zone,
     date_update timestamp without time zone,
 
     CONSTRAINT pk_temp_users     PRIMARY KEY (id_temp_user),
 
-    CONSTRAINT t_roles_id_organisme_fkey FOREIGN KEY (id_organisme)
+    CONSTRAINT temp_user_id_organisme_fkey FOREIGN KEY (id_application)
+        REFERENCES utilisateurs.t_applications (id_application) MATCH SIMPLE
+        ON UPDATE CASCADE ON DELETE CASCADE,
+
+    CONSTRAINT temp_user_id_application_fkey FOREIGN KEY (id_organisme)
         REFERENCES utilisateurs.bib_organismes (id_organisme) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 );
