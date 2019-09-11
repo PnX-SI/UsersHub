@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
     email character varying(250),
     organisme character(32),
     id_organisme integer,
-    id_application integer,
+    id_application integer NOT NULL,
     remarques text,
     champs_addi jsonb,
     session_appli character varying(50),

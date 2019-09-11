@@ -22,7 +22,7 @@ routes = Blueprint("temp_users", __name__)
 
 @routes.route("/list", methods=["GET"])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-def temp_users_slist():
+def temp_users_list():
     """
     Get all temp_users
     """
@@ -61,7 +61,7 @@ def validate():
     r = req_lib.post(url=url_validate, json=data_posted, cookies=request.cookies)
     if r.status_code == 200:
         flash("L'utilisateur a bien été validé")
-        return {"url_redirect": url_for("temp_users.temp_users_slist")}, 200
+        return {"url_redirect": url_for("temp_users.temp_users_list")}, 200
     else:
         flash("Une erreur s'est produite", "error")
-        return {"url_redirect": url_for("temp_users.temp_users_slist")}, 500
+        return {"url_redirect": url_for("temp_users.temp_users_list")}, 500
