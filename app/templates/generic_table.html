@@ -1,0 +1,26 @@
+
+
+    <table class="hover table table-bordered table-striped table-hover table-sm table-responsive-sm" id="tri">
+        <thead>
+            <tr>
+              {% for el in columns %}
+                <th scope="col">{{ el.label }}</th>
+              {% endfor %} 
+              {% block table_head %}
+              {% endblock %}
+            </tr>
+        </thead>
+        <tbody>
+              {% for elt in data %}
+                <tr> 
+                  {% for col in columns %} 
+                    <td style="vertical-align: middle;">{{ elt[col.key] }}</td>
+                  {% endfor %}
+                  {% block table_td  scoped%}
+                  {% endblock %}
+                </tr>
+              {% endfor %}
+        </tbody>
+      </table>
+      
+
