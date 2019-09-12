@@ -139,6 +139,35 @@ CREATE TABLE IF NOT EXISTS cor_role_app_profil (
 );
 COMMENT ON TABLE cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils par application';
 
+
+CREATE TABLE IF NOT EXISTS cor_role_token
+(
+    id_role INTEGER,
+    token text
+);
+
+CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
+(
+    id_temp_user SERIAL NOT NULL,
+    groupe boolean NOT NULL DEFAULT false,
+    token_role text,
+    identifiant character varying(100),
+    nom_role character varying(50),
+    prenom_role character varying(50),
+    desc_role text,
+    password text,
+    pass_md5 text,
+    email character varying(250),
+    organisme character(32),
+    id_organisme integer,
+    id_application integer NOT NULL,
+    remarques text,
+    champs_addi jsonb,
+    session_appli character varying(50),
+    date_insert timestamp without time zone,
+    date_update timestamp without time zone
+);
+
 ----------------
 --PRIMARY KEYS--
 ----------------
@@ -161,6 +190,10 @@ ALTER TABLE ONLY cor_profil_for_app ADD CONSTRAINT pk_cor_profil_for_app PRIMARY
 
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMARY KEY (id_role, id_application, id_profil);
 
+ALTER TABLE ONLY cor_role_token ADD CONSTRAINT cor_role_token_pk_id_role PRIMARY KEY (id_role);
+
+ALTER TABLE ONLY temp_users ADD CONSTRAINT pk_temp_users PRIMARY KEY (id_temp_user);
+
 
 ------------
 --TRIGGERS--
@@ -169,6 +202,12 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMA
 CREATE TRIGGER tri_modify_date_insert_t_roles BEFORE INSERT ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_insert();
 
 CREATE TRIGGER tri_modify_date_update_t_roles BEFORE UPDATE ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_update();
+
+CREATE TRIGGER tri_modify_date_insert_temp_roles
+    BEFORE INSERT
+    ON temp_users
+    FOR EACH ROW
+    EXECUTE PROCEDURE utilisateurs.modify_date_insert();
 
 
 ----------------
@@ -194,6 +233,18 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_ro
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_application FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_profil FOREIGN KEY (id_profil) REFERENCES t_profils(id_profil) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
+ALTER TABLE ONLY cor_role_token ADD CONSTRAINT cor_role_token_fk_id_role FOREIGN KEY (id_role)
+    REFERENCES t_roles (id_role) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+ALTER TABLE ONLY temp_users ADD CONSTRAINT temp_user_id_organisme_fkey FOREIGN KEY (id_application)
+    REFERENCES t_applications (id_application) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY temp_users ADD CONSTRAINT temp_user_id_application_fkey FOREIGN KEY (id_organisme)
+    REFERENCES bib_organismes (id_organisme) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
 
 ----------------
 ------INDEX-----
