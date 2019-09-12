@@ -2,26 +2,6 @@
 {% include "head-appli.html" %}
 {% include "alert_messages.html" %} 
 
-<script>
-    function validateTempUser (token_user, id_application) {
-      $.post({
-        url:'{{url_application}}'+'/temp_users/validate',
-        data: JSON.stringify({
-          'id_application': id_application,
-          'token': token_user
-        }),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        success: function(response) {
-          window.location = response.url_redirect;
-        },
-        error: function(err) {
-          window.location =  err.responseJSON.url_redirect;
-        }
-      });
-    }
-  </script>
-
 <div class="container main-zone ng-scope">
     <div class="card p-4 mb-3 bg-secondary border border-0 text-white">
       <h2>Demande de compte en cours
@@ -36,11 +16,16 @@
   {% block table_head %}
 
   <th 
-    style="vertical-align: middle; text-align: center" 
-    scope="col">
+    style="vertical-align: middle; text-align: center">
     <i 
-      title="Valider l'utilisateur" 
       class="fa fa-check" 
+      aria-hidden="true">
+    </i>
+  </th>
+    <th 
+    style="vertical-align: middle; text-align: center" >
+    <i 
+      class="fa fa-trash" 
       aria-hidden="true">
     </i>
   </th>
@@ -50,14 +35,30 @@
   {% block table_td %}
 
   <td> 
-      <button class="btn btn-success" onclick="validateTempUser('{{elt.token_role}}', 3)">    
-        <i 
-          title="Valider l'utilisateur temporaire" 
-          class="fa fa-check" 
-          aria-hidden="true">
-        </i> 
-      </button> 
+    <a href=" {{url_for('temp_users.validate', token=elt.token_role, id_application=elt.id_application)}} ">
+        <button class="btn btn-success">    
+            <i 
+              title="Valider l'utilisateur temporaire" 
+              class="fa fa-check" 
+              aria-hidden="true">
+            </i> 
+          </button> 
+    </a>
+
   </td>
+
+  <td> 
+      <a href=" {{url_for('temp_users.delete', token=elt.token_role)}} ">
+          <button class="btn btn-danger">    
+              <i 
+                title="Supprimer l'utilisateur temporaire" 
+                class="fa fa-trash " 
+                aria-hidden="true">
+              </i> 
+            </button> 
+      </a>
+  
+    </td>
 
   {% endblock table_td %}
 

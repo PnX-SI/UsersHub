@@ -46,22 +46,38 @@ def temp_users_list():
     return render_template("temp_users.html", data=temp_users, columns=columns)
 
 
-@routes.route("/validate", methods=["POST"])
+@routes.route("/validate/<token>/<int:id_application>", methods=["GET"])
 @fnauth.check_auth(6, False, URL_REDIRECT)
-@json_resp
-def validate():
+def validate(token, id_application):
     """
     Call the API to validate a temp user
-    return an URL to redirect, managed by frontend
     """
-    data_posted = request.get_json()
+    data_to_post = {"token": token, "id_application": id_application}
     url_validate = (
         current_app.config["URL_APPLICATION"] + "/api_register/valid_temp_user"
     )
-    r = req_lib.post(url=url_validate, json=data_posted, cookies=request.cookies)
+    r = req_lib.post(url=url_validate, json=data_to_post, cookies=request.cookies)
     if r.status_code == 200:
         flash("L'utilisateur a bien été validé")
-        return {"url_redirect": url_for("temp_users.temp_users_list")}, 200
+        return redirect(url_for("temp_users.temp_users_list"))
     else:
         flash("Une erreur s'est produite", "error")
-        return {"url_redirect": url_for("temp_users.temp_users_list")}, 500
+        return redirect(url_for("temp_users.temp_users_list"))
+
+
+@routes.route("/delete/<token>", methods=["GET"])
+@fnauth.check_auth(6, False, URL_REDIRECT)
+def delete(token):
+    """
+    DELETE a temp_user
+    """
+
+    temp_user = db.session.query(TempUser).filter(TempUser.token_role == token).first()
+    if temp_user:
+        db.session.delete(temp_user)
+        db.session.commit()
+        flash("L'utilisateur a bien été supprimé")
+        return redirect(url_for("temp_users.temp_users_list"))
+    else:
+        flash("Une erreur s'est produite", "error")
+        return redirect(url_for("temp_users.temp_users_list"))
