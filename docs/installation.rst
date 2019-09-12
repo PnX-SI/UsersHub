@@ -80,6 +80,7 @@ Mise à jour de l'application
 * Télécharger la dernière version de UsersHub
 
 ::
+
     cd
     wget https://github.com/PnEcrins/UsersHub/archive/X.Y.Z.zip
     unzip X.Y.Z.zip
