@@ -2,8 +2,16 @@
 CHANGELOG
 =========
 
-2.0.4 (unreleased)
+2.1.0 (unreleased)
 ------------------
+
+**Nouveautés**
+
+- Ajout d'un API de gestion des compte (création de role, changement du MDP et des informations personnelles)
+- Création des tables "temp_user" et "cor_role_token" permettant de gérer de manière sécurisé les créations de compte et les changement de MDP.
+- Ajout d'une interface de visualisation des utilisateurs temporatires (non validés)
+- Ajout d'un template générique pour la génération des tableaux utilisant l'héritage de template (block, extend)
+
 
 **Corrections**
 
