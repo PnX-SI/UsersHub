@@ -26,11 +26,13 @@ Voir https://github.com/PnX-SI/UsersHub/compare/2.0.3...develop
 
 **Notes de version**
 
-* Vous pouvez passer directement de la version 1.3.3 à la version 2.0.2, mais en suivant les notes de version de la 2.0.0.
+* Vous pouvez passer directement de la version 2.0.0 à la version 2.1.0, mais en suivant les notes de version intermédiaires.
+* Exécuter le script de mise à jour de la BDD ``data/update_2.0.3to2.1.0.sql``
 * Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 **TODO**
 
+* Autres alertes de sécurité - https://github.com/PnX-SI/UsersHub/network/alerts
 * Voir les 2 PR
 * Voir https://github.com/PnX-SI/UsersHub/commit/0b7a60aa18e17ae2b9fd8bb298ccb013f64fcdca et https://github.com/PnX-SI/UsersHub/commit/c9ba097801e1bc96fc00eb99afbfc7f975989b44
 * Menu DemandeS de compte
