@@ -1,4 +1,12 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash
+from flask import (
+    current_app,
+    redirect,
+    url_for,
+    render_template,
+    Blueprint,
+    request,
+    flash,
+)
 
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
@@ -219,7 +227,7 @@ def updatepass(id_role=None):
                     (
                         form_user["pass_plus"],
                         form_user["pass_md5"],
-                    ) = encrypt_check_and_encrypt_passwordpassword(
+                    ) = check_and_encrypt_password(
                         form.pass_plus.data,
                         form.mdpconf.data,
                         current_app.config["PASS_METHOD"] == "md5"
