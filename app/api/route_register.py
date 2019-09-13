@@ -168,7 +168,7 @@ def set_cor_role_token(email):
     role = db.session.query(TRoles).filter(email == TRoles.email).first()
 
     if not role:
-        return {"msg": "Pas de role trouvé pour l'email : " + email}, 400
+        return {"msg": "Aucun utilisateur trouvé pour l'email : " + email}, 400
 
     id_role = role.id_role
 
