@@ -68,9 +68,7 @@ class TRoles(GenericRepository):
     )
     organisme_rel = relationship("Bib_Organismes")
     remarques = db.Column(db.Unicode)
-    pn = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
-    session_appli = db.Unicode
     pass5 = db.Column("pass", db.Unicode)
     pass_plus = db.Column(db.Unicode)
     champs_addi = db.Column(JSONB)

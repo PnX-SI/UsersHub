@@ -57,9 +57,7 @@ CREATE TABLE IF NOT EXISTS t_roles (
     email character varying(250),
     id_organisme integer,
     remarques text,
-    pn boolean,
     active boolean DEFAULT true,
-    session_appli character varying(50),
     champs_addi jsonb,
     date_insert timestamp without time zone,
     date_update timestamp without time zone
@@ -163,7 +161,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
     id_application integer NOT NULL,
     remarques text,
     champs_addi jsonb,
-    session_appli character varying(50),
     date_insert timestamp without time zone,
     date_update timestamp without time zone
 );
@@ -317,8 +314,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.organisme,
     a.id_unite,
     a.remarques,
-    a.pn,
-    a.session_appli,
     a.date_insert,
     a.date_update,
     a.id_menu
@@ -336,8 +331,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_liste AS id_menu
@@ -360,8 +353,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_liste AS id_menu
@@ -387,8 +378,6 @@ SELECT a.groupe,
     a.organisme,
     a.id_unite,
     a.remarques,
-    a.pn,
-    a.session_appli,
     a.date_insert,
     a.date_update,
     max(a.id_droit) AS id_droit_max,
@@ -407,8 +396,6 @@ SELECT a.groupe,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_profil AS id_droit,
@@ -431,8 +418,6 @@ SELECT a.groupe,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_profil AS id_droit,
@@ -443,7 +428,7 @@ SELECT a.groupe,
              LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           ) a
   WHERE a.active = true
-  GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+  GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.date_insert, a.date_update, a.id_application;
 
 -- Vue permettant de retourner les utilisateurs (pas les roles) et leurs droits maximum pour chaque application
 CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
