@@ -5,17 +5,39 @@ CHANGELOG
 2.1.0 (unreleased)
 ------------------
 
+Voir https://github.com/PnX-SI/UsersHub/compare/2.0.3...develop
+
 **Nouveautés**
 
-- Ajout d'un API de gestion des compte (création de role, changement du MDP et des informations personnelles)
-- Création des tables "temp_user" et "cor_role_token" permettant de gérer de manière sécurisé les créations de compte et les changement de MDP.
-- Ajout d'une interface de visualisation des utilisateurs temporatires (non validés)
-- Ajout d'un template générique pour la génération des tableaux utilisant l'héritage de template (block, extend)
-
+* Ajout d'une API sécurisée de création de comptes utilisateurs depuis des applications tierces (création de roles et d'utilisateurs temporaires à valider, changement de mot de passe et des informations personnelles)
+* Mise en place d'une API pour pouvoir interroger et implémenter UsersHub depuis des applications tierces. Par @joelclems, @amandine-sahl, @jbrieuclp et @TheoLechemia #47 / Déjà intégré dans la 2.0.0 ???
+* Création des tables ``temp_users`` et ``cor_role_token`` permettant de gérer de manière sécurisée les créations de compte et les changement de mot de passe.
+* Ajout d'une interface de visualisation et de validation des utilisateurs temporaires
+* Ajout d'un template générique (``generic_table.html``) pour la génération des tableaux utilisant l'héritage de template (block, extend)
+* Ajout d'un champs ``champs_addi`` au format jsonb dans les tables ``t_roles`` et ``temp_users``, permettant d'ajouter des informations diverses sur les utilisateurs, notamment lors d'une demande de création de compte depuis une application tierce (droits souhaités, validation d'une charte...)
+* Création d'index sur la table ``t_roles``
+* Mise à jour de Flask (1.0.2 à 1.1.1)
 
 **Corrections**
 
-*
+* Ordonnancement des listes par ordre alphabétique (#81)
+* Utilisation de synonymes au niveau du modèle pour les champs utilisant des noms réservés comme ``pass``
+* Factorisation de la fonction ``encrypt_password``
+
+**Notes de version**
+
+* Vous pouvez passer directement de la version 2.0.0 à la version 2.1.0, mais en suivant les notes de version intermédiaires.
+* Exécuter le script de mise à jour de la BDD ``data/update_2.0.3to2.1.0.sql``
+* Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
+**TODO**
+
+* Autres alertes de sécurité - https://github.com/PnX-SI/UsersHub/network/alerts
+* Voir les 2 PR
+* Voir https://github.com/PnX-SI/UsersHub/commit/0b7a60aa18e17ae2b9fd8bb298ccb013f64fcdca et https://github.com/PnX-SI/UsersHub/commit/c9ba097801e1bc96fc00eb99afbfc7f975989b44
+* Menu DemandeS de compte
+* Voir https://github.com/PnX-SI/UsersHub/issues/89
+* Voir https://github.com/PnX-SI/UsersHub/issues/78
 
 2.0.3 (2019-02-27)
 ------------------
