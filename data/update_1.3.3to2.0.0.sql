@@ -97,7 +97,7 @@ ALTER TABLE utilisateurs.t_applications ADD COLUMN code_application character va
 UPDATE utilisateurs.t_applications SET code_application = id_application::character varying;
 UPDATE utilisateurs.t_applications SET code_application = 'UH' WHERE nom_application ilike 'usershub' OR nom_application ilike 'application utilisateurs';
 UPDATE utilisateurs.t_applications SET code_application = 'TH' WHERE nom_application ilike 'taxhub';
-UPDATE utilisateurs.t_applications SET code_application = 'GN' WHERE nom_application ilike 'geonature';
+UPDATE utilisateurs.t_applications SET code_application = 'GN' WHERE nom_application ilike 'geonature' OR nom_application ilike 'application geonature';
 
 ALTER TABLE utilisateurs.t_applications ALTER COLUMN code_application SET NOT NULL;
 
