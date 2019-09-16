@@ -46,14 +46,15 @@ currentdir=${PWD##*/}
 sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
 sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
 
-#création d'un fichier rotation des logs
-sudo cp $DIR/log_rotate /etc/logrotate.d/uhv2
-sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/logrotate.d/uhv2
-sudo logrotate -f /etc/logrotate.conf
-
 # activate proxy apache extension
 sudo a2enmod proxy
 sudo a2enmod proxy_http
 
+# lancement des services qui créent les fichiers de logs
 sudo -s supervisorctl reread
 sudo -s supervisorctl reload
+
+#création d'un fichier rotation des logs une fois qu'ils sont créés
+sudo cp $DIR/log_rotate /etc/logrotate.d/uhv2
+sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/logrotate.d/uhv2
+sudo logrotate -f /etc/logrotate.conf
