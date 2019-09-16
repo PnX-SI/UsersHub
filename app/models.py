@@ -630,7 +630,7 @@ class CorRoleAppProfil(GenericRepository):
         ForeignKey("utilisateurs.t_applications.id_application"),
         primary_key=True,
     )
-    is_default_group_for_app = db.Column(db.Boolean)
+    is_default_group_for_app = db.Column(db.Boolean, default=False)
 
     role_rel = relationship("TRoles")
     application_rel = relationship("TApplications")
