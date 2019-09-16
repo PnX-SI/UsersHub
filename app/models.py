@@ -116,7 +116,7 @@ class TRoles(GenericRepository):
             de rajouter le tuple (-1,Aucun) au tableau
         """
 
-        q = db.session.query(cls)
+        q = db.session.query(cls).order_by(cls.identifiant)
         q = q.filter(cls.groupe == True)
         data = [data.as_dict(True) for data in q.all()]
         choices = []

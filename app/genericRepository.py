@@ -1,5 +1,5 @@
+from sqlalchemy.sql import text
 from app.env import db
-
 
 
 class GenericRepository(db.Model):
@@ -25,7 +25,15 @@ class GenericRepository(db.Model):
             return db.session.query(cls).get(id)
 
     @classmethod
-    def get_all(cls, columns=None, params=None, recursif=True, as_model=False):
+    def get_all(
+        cls,
+        columns=None,
+        params=None,
+        recursif=True,
+        as_model=False,
+        order_by=None,
+        order="asc",
+    ):
 
         """
         Methode qui retourne un dictionnaire de tout les éléments d'un Model
@@ -38,25 +46,20 @@ class GenericRepository(db.Model):
         """
 
         data = None
-        if params == None :
-            data = db.session.query(cls).all()
-        else:
+        q = db.session.query(cls)
+        if params:
             q = db.session.query(cls)
             for param in params:
-                nom_col = getattr(cls, param['col'])
-                q = q.filter(nom_col == param['filter'])
-            data = q.all()
+                nom_col = getattr(cls, param["col"])
+                q = q.filter(nom_col == param["filter"])
+        if order_by:
+            order_col = getattr(cls, order_by)
+            order_col = order_col.desc() if order == "desc" else order_col.asc()
+            q = q.order_by(order_col)
+        data = q.all()
         if as_model:
             return data
-        d_dicts = []
-
-        for d in data:
-            d_dict = d.as_dict(recursif, columns)
-            d_dicts.append(d_dict)
-
-        return d_dicts
-        # return [d.as_dict(recursif, columns) for d in data]
-
+        return [d.as_dict(recursif, columns) for d in data]
 
     @classmethod
     def post(cls, entity_dict):
@@ -95,7 +98,7 @@ class GenericRepository(db.Model):
             raise
 
     @classmethod
-    def delete(cls,id):
+    def delete(cls, id):
 
         """
         Methode qui supprime un élement d'une table à partir d'un id donné
@@ -109,7 +112,7 @@ class GenericRepository(db.Model):
             raise
 
     @classmethod
-    def choixSelect(cls,id,nom,aucun = None):
+    def choixSelect(cls, id, nom, aucun=None, order_by=None):
 
         """
         Methode qui retourne un tableau de tuples d'id  et de nom
@@ -117,23 +120,17 @@ class GenericRepository(db.Model):
         Le paramètre aucun si il a une valeur permet de rajouter le tuple (-1,Aucun) au tableau
         """
 
-        data = cls.get_all()
+        data = cls.get_all(order_by=order_by)
         choices = []
-        for d in data :
+        for d in data:
             choices.append((d[id], d[nom]))
-        if aucun != None :
-            choices.append((-1,'Aucun'))
+        if aucun != None:
+            choices.append((-1, "Aucun"))
         return choices
-
-
-
-
 
     # def get_column_name(cls,columns=None):
     #     if columns:
     #         for col in cls.__table__.columns.keys()
 
     #     return cls.__table__.columns.keys()
-
-
 
