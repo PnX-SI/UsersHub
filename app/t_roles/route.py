@@ -72,7 +72,7 @@ def users():
         "pass_md5",
     ]  # noqa
     filters = [{"col": "groupe", "filter": "False"}]
-    contents = TRoles.get_all(columns, filters)
+    contents = TRoles.get_all(columns, filters, order_by="identifiant", order="asc")
     tab = []
     for data in contents:
         data["nom_organisme"] = (
@@ -126,7 +126,7 @@ def addorupdate(id_role=None):
     """
     form = t_rolesforms.Utilisateur()
     form.id_organisme.choices = Bib_Organismes.choixSelect(
-        "id_organisme", "nom_organisme"
+        "id_organisme", "nom_organisme", order_by="nom_organisme"
     )
     form.a_groupe.choices = TRoles.choix_group("id_role", "nom_role", aucun=None)
 

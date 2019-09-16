@@ -16,7 +16,6 @@ function fill_select() {
       "</option>";
   }
   td_profil = td_profil + "</select></td>";
-  console.log(data_select);
   return td_profil;
 }
 
@@ -272,7 +271,8 @@ $(document).ready(function() {
       },
       aLengthMenu: [[10, 25, 50, 75, -1], [10, 25, 50, 75, "All"]],
       iDisplayLength: 25
-    }
+    },
+    aaSorting: []
   });
 
   // end main

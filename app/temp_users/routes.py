@@ -26,7 +26,7 @@ def temp_users_list():
     """
     Get all temp_users
     """
-    data = db.session.query(TempUser).all()
+    data = db.session.query(TempUser).order_by("identifiant").all()
     temp_users = []
     for d in data:
         temp_user = d.as_dict()

@@ -1,7 +1,4 @@
-from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request, flash, jsonify
-)
+from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify
 from pypnusershub import routes as fnauth
 
 from app.env import db, URL_REDIRECT
@@ -11,15 +8,15 @@ from app.utils.utils_all import strigify_dict
 from config import config
 
 
-route = Blueprint('liste', __name__)
+route = Blueprint("liste", __name__)
 
 
-@route.route('lists/list', methods=['GET', 'POST'])
+@route.route("lists/list", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def lists():
     """
@@ -39,35 +36,35 @@ def lists():
         - nom affiché sur le bouton --> Members
     """
 
-    fLine = ['ID', 'Code', 'Nom', 'Description']
-    columns = ['id_liste', 'code_liste', 'nom_liste', 'desc_liste']
-    contents = TListes.get_all()
+    fLine = ["ID", "Code", "Nom", "Description"]
+    columns = ["id_liste", "code_liste", "nom_liste", "desc_liste"]
+    contents = TListes.get_all(order_by="nom_liste")
     return render_template(
-        'table_database.html',
+        "table_database.html",
         fLine=fLine,
         line=columns,
         table=contents,
         key="id_liste",
-        pathI=config.URL_APPLICATION + '/list/info/',
+        pathI=config.URL_APPLICATION + "/list/info/",
         pathU=config.URL_APPLICATION + "/list/update/",
         pathD=config.URL_APPLICATION + "/list/delete/",
-        pathA=config.URL_APPLICATION + '/list/add/new',
-        pathP=config.URL_APPLICATION + '/list/members/',
+        pathA=config.URL_APPLICATION + "/list/add/new",
+        pathP=config.URL_APPLICATION + "/list/members/",
         name="une liste",
         name_list="Listes",
-        otherCol='True',
+        otherCol="True",
         Members="Membres",
-        see='True'
+        see="True",
     )
 
 
-@route.route('list/add/new', defaults={'id_liste': None}, methods=['GET', 'POST'])
-@route.route('list/update/<id_liste>', methods=['GET', 'POST'])
+@route.route("list/add/new", defaults={"id_liste": None}, methods=["GET", "POST"])
+@route.route("list/update/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_liste):
     """
@@ -79,34 +76,34 @@ def addorupdate(id_liste):
 
     form = listeforms.List()
     if id_liste == None:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate_on_submit() and form.validate():
                 form_list = pops(form.data)
-                form_list.pop('id_liste')
+                form_list.pop("id_liste")
                 TListes.post(form_list)
-                return redirect(url_for('liste.lists'))
-        return render_template('list.html', form=form, title="Formulaire Liste")
+                return redirect(url_for("liste.lists"))
+        return render_template("list.html", form=form, title="Formulaire Liste")
     else:
         list = TListes.get_one(id_liste)
-        if request.method == 'GET':
+        if request.method == "GET":
             form = process(form, list)
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate_on_submit() and form.validate():
                 form_list = pops(form.data)
-                form_list['id_liste'] = list['id_liste']
+                form_list["id_liste"] = list["id_liste"]
                 TListes.update(form_list)
-                return redirect(url_for('liste.lists'))
+                return redirect(url_for("liste.lists"))
             else:
                 flash(strigify_dict(form.errors))
-        return render_template('list.html', form=form, title="Formulaire Liste")
+        return render_template("list.html", form=form, title="Formulaire Liste")
 
 
-@route.route('list/members/<id_liste>', methods=['GET', 'POST'])
+@route.route("list/members/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def membres(id_liste):
     """
@@ -122,9 +119,9 @@ def membres(id_liste):
     users_in_list = TRoles.test_group(TRoles.get_user_in_list(id_liste))
     users_out_list = TRoles.test_group(TRoles.get_user_out_list(id_liste))
     mylist = TListes.get_one(id_liste)
-    header = ['ID', 'Nom']
-    data = ['id_role', 'full_name']
-    if request.method == 'POST':
+    header = ["ID", "Nom"]
+    data = ["id_role", "full_name"]
+    if request.method == "POST":
         data = request.get_json()
         new_users_in_list = data["tab_add"]
         new_users_out_list = data["tab_del"]
@@ -132,24 +129,24 @@ def membres(id_liste):
             CorRoleListe.add_cor(id_liste, new_users_in_list)
             CorRoleListe.del_cor(id_liste, new_users_out_list)
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
-        return jsonify({'redirect': url_for('liste.lists')}), 200
+            return jsonify({"error": str(e)}), 500
+        return jsonify({"redirect": url_for("liste.lists")}), 200
     return render_template(
         "tobelong.html",
         fLine=header,
         data=data,
         table=users_out_list,
         table2=users_in_list,
-        info="Membres de la liste '" + mylist['nom_liste'] + "'"
-     )
+        info="Membres de la liste '" + mylist["nom_liste"] + "'",
+    )
 
 
-@route.route('list/delete/<id_liste>', methods=['GET', 'POST'])
+@route.route("list/delete/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
     False,
     redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_liste):
     """
@@ -157,19 +154,17 @@ def delete(id_liste):
     Retourne une redirection vers la liste des listes
     """
     TListes.delete(id_liste)
-    return redirect(url_for('liste.lists'))
+    return redirect(url_for("liste.lists"))
 
 
-@route.route('list/info/<id_liste>', methods=['GET'])
+@route.route("list/info/<id_liste>", methods=["GET"])
 @fnauth.check_auth(3, False, URL_REDIRECT)
 def info(id_liste):
     mylist = TListes.get_one(id_liste)
-    members = db.session.query(CorRoleListe).filter(CorRoleListe.id_liste == id_liste).all()
-    return render_template(
-        "info_list.html",
-        mylist=mylist,
-        members=members
+    members = (
+        db.session.query(CorRoleListe).filter(CorRoleListe.id_liste == id_liste).all()
     )
+    return render_template("info_list.html", mylist=mylist, members=members)
 
 
 def pops(form):
@@ -178,8 +173,8 @@ def pops(form):
     Avec pour paramètre un formulaire
     """
 
-    form.pop('submit')
-    form.pop('csrf_token')
+    form.pop("submit")
+    form.pop("csrf_token")
     return form
 
 
@@ -189,7 +184,7 @@ def process(form, list):
     Avec pour paramètres un formulaire et une liste
     """
 
-    form.nom_liste.process_data(list['nom_liste'])
-    form.code_liste.process_data(list['code_liste'])
-    form.desc_liste.process_data(list['desc_liste'])
+    form.nom_liste.process_data(list["nom_liste"])
+    form.code_liste.process_data(list["code_liste"])
+    form.desc_liste.process_data(list["desc_liste"])
     return form
