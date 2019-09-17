@@ -8,7 +8,7 @@ CHANGELOG
 **Nouveautés**
 
 * Ajout d'une API sécurisée de création de comptes utilisateurs depuis des applications tierces (création de roles et d'utilisateurs temporaires à valider, changement de mot de passe et des informations personnelles). Par @joelclems, @amandine-sahl, @jbrieuclp et @TheoLechemia #47
-* Création des tables ``temp_users`` et ``cor_role_token`` permettant de gérer de manière sécurisée les créations de compte et les changement de mot de passe.
+* Création des tables ``temp_users`` et ``cor_role_token`` permettant de gérer de manière sécurisée les créations de compte et les changements de mot de passe.
 * Ajout d'une interface de gestion des utilisateurs temporaires
 * Ajout d'un template générique (``generic_table.html``) pour la génération des tableaux utilisant l'héritage de template (block, extend)
 * Ajout d'un champs ``champs_addi`` au format jsonb dans les tables ``t_roles`` et ``temp_users``, permettant d'ajouter des informations diverses sur les utilisateurs, notamment lors d'une demande de création de compte depuis une application tierce (droits souhaités, validation d'une charte...)
