@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2.1.0 (unreleased)
+2.1.0 (2019-09-17)
 ------------------
 
 **Nouveautés**
@@ -24,7 +24,7 @@ CHANGELOG
 **Notes de version**
 
 * Vous pouvez passer directement de la version 2.0.0 à la version 2.1.0, mais en suivant les notes de version intermédiaires.
-* Exécuter le script de mise à jour de la BDD ``data/update_2.0.3to2.1.0.sql``
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.0.3to2.1.0.sql
 * Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 2.0.3 (2019-02-27)
