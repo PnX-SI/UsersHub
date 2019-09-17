@@ -11,6 +11,7 @@ import re
 from flask import Blueprint, request, current_app
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models_register import TempUser, CorRoleToken
+from pypnusershub.db.tools import DifferentPasswordError
 
 from app.env import db
 from app.utils.utilssqlalchemy import json_resp
