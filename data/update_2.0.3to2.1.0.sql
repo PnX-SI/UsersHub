@@ -92,5 +92,17 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS utilisateurs.cor_role_token
+(
+    id_role INTEGER,
+    token text
+);
+
+ALTER TABLE ONLY utilisateurs.cor_role_token ADD CONSTRAINT cor_role_token_pk_id_role PRIMARY KEY (id_role);
+
+ALTER TABLE ONLY utilisateurs.cor_role_token ADD CONSTRAINT cor_role_token_fk_id_role FOREIGN KEY (id_role)
+    REFERENCES utilisateurs.t_roles (id_role) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+
 ALTER TABLE utilisateurs.t_roles
 ADD COLUMN champs_addi jsonb;
