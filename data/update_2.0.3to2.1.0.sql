@@ -14,35 +14,6 @@ CREATE INDEX i_utilisateurs_active
   (active);
 
 
-DROP TABLE IF EXISTS utilisateurs.temp_users;
-
-CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
-(
-
-    id_temp_user SERIAL NOT NULL,
-    groupe boolean NOT NULL DEFAULT false,
-    token_role text,
-    identifiant character varying(100),
-    nom_role character varying(50),
-    prenom_role character varying(50),
-    desc_role text,
-    password text,
-    pass_md5 text,
-    email character varying(250),
-    organisme character(32),
-    id_organisme integer,
-    remarques text,
-    champs_addi jsonb,
-    session_appli character varying(50),
-    date_insert timestamp without time zone,
-    date_update timestamp without time zone,
-
-    CONSTRAINT pk_temp_users     PRIMARY KEY (id_temp_user),
-
-    CONSTRAINT t_roles_id_organisme_fkey FOREIGN KEY (id_organisme)
-        REFERENCES utilisateurs.bib_organismes (id_organisme) MATCH SIMPLE
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
 
 DROP TRIGGER IF EXISTS tri_modify_date_insert_temp_roles ON utilisateurs.temp_users;
 
