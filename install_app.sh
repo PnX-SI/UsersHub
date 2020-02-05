@@ -31,10 +31,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 
+# rendre la commande nvm disponible
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # Installation de l'environement javascript
-
 cd app/static
-npm install
+nvm install 
+nvm use
+npm ci
 cd ../..
 
 
