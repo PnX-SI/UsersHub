@@ -45,6 +45,7 @@ Installation pour Debian 9.
   
     su -
     apt-get install apache2  python-dev python-pip libpq-dev supervisor
+    pip install virtualenv==20.0.1
     adduser synthese sudo
 
 * Installer NVM (Node version manager), node et npm
