@@ -1,0 +1,4 @@
+ALTER TABLE utilisateurs.cor_role_app_profil  drop constraint check_is_default_group_for_app_is_grp_and_unique;
+
+ALTER TABLE utilisateurs.cor_role_app_profil ADD CONSTRAINT check_is_default_group_for_app_is_grp_and_unique
+    CHECK (utilisateurs.check_is_default_group_for_app_is_grp_and_unique(id_application, id_role, is_default_group_for_app)) NOT VALID;

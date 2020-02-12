@@ -2,6 +2,23 @@
 CHANGELOG
 =========
 
+
+2.1.1 (unreleased)
+------------------
+
+**Corrections**
+
+* Modification de l'écriture d'une contrainte d'unicité
+* Modification de la méthode d'installation du virtualenv
+* Utilisation de nvm pour installer node et npm (uniformisation avec GeoNature)
+
+
+**Note de version**
+
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
+* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
+
 2.1.0 (2019-09-17)
 ------------------
 
