@@ -21,6 +21,12 @@ CHANGELOG
 
 **Note de version**
 
+* Installez ``pip3`` et ``virtualenv``
+::
+
+    sudo apt-get update
+    sudo apt-get install python3-pip
+    sudo pip3 install virtualenv==20.0.1
 * Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
 * Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
