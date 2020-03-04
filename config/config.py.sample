@@ -3,13 +3,7 @@ SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usersh
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 URL_APPLICATION = 'http://localhost:5001'
 
-# Liste d'URL depuis lesquels on accepte des requetes croisées
-URLS_COR = ['http://localhost:5000']
-
 SECRET_KEY = 'super secret key'
-
-# ID of UsersHub application
-ID_APP = 1
 
 # Authentification crypting method (hash or md5)
 PASS_METHOD = 'hash'
