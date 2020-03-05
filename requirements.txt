@@ -23,3 +23,4 @@ validators==0.12.2
 Werkzeug==0.15.3
 WTForms==2.2.1
 WTForms-Components==0.10.3
+toml==0.10.0

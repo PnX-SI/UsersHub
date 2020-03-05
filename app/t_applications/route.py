@@ -1,6 +1,15 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify
+from flask import (
+    redirect,
+    url_for,
+    render_template,
+    Blueprint,
+    request,
+    flash,
+    jsonify,
+    current_app
+)
 
-from app.env import db, URL_REDIRECT
+from app.env import db
 from app.t_applications import forms as t_applicationsforms
 from app.models import (
     TApplications,
@@ -9,9 +18,12 @@ from app.models import (
     CorProfilForApp,
     CorRoleAppProfil,
 )
-from config import config
 
 from pypnusershub import routes as fnauth
+
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 
 route = Blueprint("application", __name__)
 
@@ -62,12 +74,12 @@ def applications():
         fLine=fLine,
         line=columns,
         key="id_application",
-        pathU=config.URL_APPLICATION + "/application/update/",
-        pathD=config.URL_APPLICATION + "/application/delete/",
-        pathA=config.URL_APPLICATION + "/application/add/new",
-        pathP=config.URL_APPLICATION + "/application_roles_profil/",
-        pathR=config.URL_APPLICATION + "/application/profils/",
-        pathI=config.URL_APPLICATION + "/application/info/",
+        pathU=URL_APPLICATION + "/application/update/",
+        pathD=URL_APPLICATION + "/application/delete/",
+        pathA=URL_APPLICATION + "/application/add/new",
+        pathP=URL_APPLICATION + "/application_roles_profil/",
+        pathR=URL_APPLICATION + "/application/profils/",
+        pathI=URL_APPLICATION + "/application/info/",
         name="une application",
         name_list="Applications",
         otherCol="True",
@@ -257,9 +269,9 @@ def profils_in_app(id_application):
         line=columns,
         key="id_role",
         key2=id_application,
-        pathU=config.URL_APPLICATION + "/application/update/role_profil/",
-        pathD=config.URL_APPLICATION + "/application/delete/role_profil/",
-        pathA=config.URL_APPLICATION + "/application/add/role_profil/",
+        pathU=URL_APPLICATION + "/application/update/role_profil/",
+        pathD=URL_APPLICATION + "/application/delete/role_profil/",
+        pathA=URL_APPLICATION + "/application/add/role_profil/",
         name="un role pour l'application {}".format(application["nom_application"]),
         name_list="Role(s) de l'application {}".format(application["nom_application"]),
     )
@@ -282,7 +294,7 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
     """
         add or update un profil sur une application
         on part du principe qu'un role ne peut avoir qu'un profil dans une application
-        TODO: pour mettre plusieurs profil a un role dans une appli: 
+        TODO: pour mettre plusieurs profil a un role dans une appli:
         rajouter une clé primaire a cor_role_app_profil pour gérer l'update
     """
     form = t_applicationsforms.AppProfil(id_application)

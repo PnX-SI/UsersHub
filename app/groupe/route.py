@@ -1,14 +1,14 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify
+from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify, current_app
 from pypnusershub import routes as fnauth
 
-
-from app.env import URL_REDIRECT
 from app.groupe import forms as groupeforms
 from app.models import TRoles
 from app.models import CorRoles
-from config import config
 from app.utils.utils_all import strigify_dict
 
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 
 route = Blueprint("groupe", __name__)
 
@@ -49,11 +49,11 @@ def groups():
         line=columns,
         table=contents,
         key="id_role",
-        pathI=config.URL_APPLICATION + "/group/info/",
-        pathU=config.URL_APPLICATION + "/group/update/",
-        pathD=config.URL_APPLICATION + "/group/delete/",
-        pathA=config.URL_APPLICATION + "/group/add/new",
-        pathP=config.URL_APPLICATION + "/group/members/",
+        pathI=URL_APPLICATION + "/group/info/",
+        pathU=URL_APPLICATION + "/group/update/",
+        pathD=URL_APPLICATION + "/group/delete/",
+        pathA=URL_APPLICATION + "/group/add/new",
+        pathP=URL_APPLICATION + "/group/members/",
         name="un groupe",
         name_list="Groupes",
         otherCol="True",
@@ -188,7 +188,7 @@ def info(id_role):
         members=members,
         lists=lists,
         rights=rights,
-        pathU=config.URL_APPLICATION + "/group/update/",
+        pathU=URL_APPLICATION + "/group/update/",
     )
 
 

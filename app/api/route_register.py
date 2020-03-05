@@ -17,8 +17,6 @@ from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import TRoles, CorRoleAppProfil, TProfils, CorRoles
 
-from config import config
-
 
 route = Blueprint("api_register", __name__)
 

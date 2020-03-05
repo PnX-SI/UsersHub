@@ -2,12 +2,27 @@
     Serveur de l'application UsersHub
 """
 
+import os
+import sys
+
+# # Test si dossier vendor exists alors on l'ajoute au sys path
+# if os.path.isdir('app/vendor'):
+#     abs_p = os.path.abspath('app/vendor')
+#     sys.path.append(abs_p)
+# # Sinon activation du virtual env
+
+
 import json
+import toml
 
-from flask import Flask, redirect, url_for, request, session, render_template, g
+from flask import (
+    Flask, redirect, url_for,
+    request, session, render_template,
+    g
+)
+from toml import TomlDecodeError
+
 from app.env import db
-from config import config
-
 
 class ReverseProxied(object):
     def __init__(self, app, script_name=None, scheme=None, server=None):
@@ -32,12 +47,65 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
+def load_toml(file_path):
+    """
+        Chargement des fichier de type toml
+    """
+    try:
+        return toml.load(file_path)
+    except (TypeError, TomlDecodeError) as exp:
+        sys.exit(
+            "Unable to parse config file '{}' : {}".format(
+                    file_path, exp
+                )
+            )
+
+
+def loadConfig():
+    """
+        Chargement de la configuration
+            si prod = fichiers
+                - /etc/usershub.conf
+                - /etc/geonature-db.conf
+            si dev = fichier config/config.py
+
+            Les fichiers sont chargés
+                les uns après les autres et se surchagent
+    """
+    config = {}
+
+    config_files = [
+        "/etc/usershub.conf",
+        "/etc/geonature-db.conf",
+        "config/config.conf"
+    ]
+    for f in config_files:
+        if os.path.isfile(f):
+            config.update(load_toml(f))
+
+    # Generation SQLALCHEMY_DATABASE_URI
+    if 'SQLALCHEMY_DATABASE_URI' not in config:
+        db_uri = "postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}".format(  # noqa E501
+            **config
+        )
+        config['SQLALCHEMY_DATABASE_URI'] = db_uri
+
+    config['URL_REDIRECT'] = "{}/{}".format(config['URL_APPLICATION'], "login")
+
+    return config
+
+# Chargement de la config
+CONF = loadConfig()
+
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 
-app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
+app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=CONF['URL_APPLICATION'])
 
-app.config.from_pyfile("config/config.py")
-app.secret_key = config.SECRET_KEY
+app.config.update(CONF)
+
+
+
+app.secret_key = CONF['SECRET_KEY']
 
 db.init_app(app)
 # pass parameters to the usershub authenfication sub-module, DONT CHANGE THIS
@@ -46,7 +114,7 @@ app.config["DB"] = db
 with app.app_context():
     app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
 
-    if config.ACTIVATE_APP:
+    if CONF['ACTIVATE_APP']:
 
         @app.route("/")
         def index():
@@ -116,7 +184,7 @@ with app.app_context():
 
         app.register_blueprint(route.route, url_prefix="/api")
 
-    if config.ACTIVATE_API:
+    if CONF['ACTIVATE_API']:
         from app.api import route_register
 
         app.register_blueprint(route_register.route, url_prefix="/api_register")  # noqa
@@ -124,4 +192,4 @@ with app.app_context():
 
 if __name__ == "__main__":
     app.config["TEMPLATES_AUTO_RELOAD"] = True
-    app.run(debug=config.DEBUG, port=config.PORT)
+    app.run(debug=CONF['DEBUG'], port=CONF['PORT'])
