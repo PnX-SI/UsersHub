@@ -74,9 +74,9 @@ def loadConfig():
     """
     config = {}
     config_files = [
-        "/etc/usershub.conf.default",
-        "/etc/usershub.conf",
-        "/etc/geonature-db.conf",
+        "config/usershub.conf.default",
+        "/etc/geonature/usershub.conf",
+        "/etc/geonature/geonature-db.conf",
         "config/config.conf"
     ]
     for f in config_files:
