@@ -72,9 +72,8 @@ def loadConfig():
             Les fichiers sont chargés
                 les uns après les autres et se surchagent
     """
-    config = {}
-
     config_files = [
+        "/etc/usershub.conf.default",
         "/etc/usershub.conf",
         "/etc/geonature-db.conf",
         "config/config.conf"

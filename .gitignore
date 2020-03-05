@@ -2,7 +2,7 @@
 log/
 
 usershub2.pid
-config.py
+config.conf
 venv
 *.pyc
 __pycache__

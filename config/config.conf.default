@@ -1,6 +1,13 @@
+# Default settings DO NOT MODIFY THIS FILE
+
 # Database settings
-SQLALCHEMY_DATABASE_URI = "postgresql://monuser:monpassachanger@localhost/usershubdb"
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+POSTGRES_HOST = "localhost"
+POSTGRES_PORT = 5432
+POSTGRES_USER = "monuser"
+POSTGRES_PASSWORD = "monpass"
+POSTGRES_DB = "geonature2db"
+
+SQLALCHEMY_TRACK_MODIFICATIONS = false
 URL_APPLICATION = 'http://localhost:5001'
 
 SECRET_KEY = 'super secret key'
@@ -10,14 +17,14 @@ PASS_METHOD = 'hash'
 
 # Choose if you also want to fill MD5 passwords (lower security)
 # Only useful if you have old application that use MD5 passwords
-FILL_MD5_PASS = False
+FILL_MD5_PASS = false
 
 COOKIE_EXPIRATION = 3600
-COOKIE_AUTORENEW = True
+COOKIE_AUTORENEW = true
 
 # SERVER
 PORT = 5001
-DEBUG = False
+DEBUG = false
 
-ACTIVATE_API = True
-ACTIVATE_APP = True
+ACTIVATE_API = true
+ACTIVATE_APP = true
