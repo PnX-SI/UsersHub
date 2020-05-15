@@ -156,7 +156,7 @@ def info(id_organisme):
             {"col": "active", "filter": True},
             {"col": "id_organisme", "filter": id_organisme},
         ],
-        order_by="nom_organisme",
+        order_by="nom_role",
     )
     users = [data.as_dict_full_name() for data in q]
 
