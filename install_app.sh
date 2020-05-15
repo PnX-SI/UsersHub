@@ -8,7 +8,7 @@ cd config
 
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
-  cp config.py.default config.py
+  cp config.py.sample config.py
 fi
 
 
