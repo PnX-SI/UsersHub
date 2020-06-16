@@ -1,11 +1,16 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify
+from flask import (
+    redirect, url_for, render_template,
+    Blueprint, request, flash, jsonify, current_app
+)
 from pypnusershub import routes as fnauth
 
-from app.env import db, URL_REDIRECT
+from app.env import db
 from app.liste import forms as listeforms
 from app.models import TListes, CorRoleListe, TRoles
 from app.utils.utils_all import strigify_dict
-from config import config
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 
 
 route = Blueprint("liste", __name__)
@@ -45,11 +50,11 @@ def lists():
         line=columns,
         table=contents,
         key="id_liste",
-        pathI=config.URL_APPLICATION + "/list/info/",
-        pathU=config.URL_APPLICATION + "/list/update/",
-        pathD=config.URL_APPLICATION + "/list/delete/",
-        pathA=config.URL_APPLICATION + "/list/add/new",
-        pathP=config.URL_APPLICATION + "/list/members/",
+        pathI=URL_APPLICATION + "/list/info/",
+        pathU=URL_APPLICATION + "/list/update/",
+        pathD=URL_APPLICATION + "/list/delete/",
+        pathA=URL_APPLICATION + "/list/add/new",
+        pathP=URL_APPLICATION + "/list/members/",
         name="une liste",
         name_list="Listes",
         otherCol="True",

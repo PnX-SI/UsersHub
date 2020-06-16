@@ -2,12 +2,26 @@
     Serveur de l'application UsersHub
 """
 
+import os
+import sys
+
+# # Test si dossier vendor exists alors on l'ajoute au sys path
+# if os.path.isdir('app/vendor'):
+#     abs_p = os.path.abspath('app/vendor')
+#     sys.path.append(abs_p)
+# # Sinon activation du virtual env
+
+
 import json
 
-from flask import Flask, redirect, url_for, request, session, render_template, g
+from flask import (
+    Flask, redirect, url_for,
+    request, session, render_template,
+    g
+)
+
 from app.env import db
 from config import config
-
 
 class ReverseProxied(object):
     def __init__(self, app, script_name=None, scheme=None, server=None):
@@ -34,20 +48,21 @@ class ReverseProxied(object):
 
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 
-app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=config.URL_APPLICATION)
-
+# Chargement de la config
 app.config.from_pyfile("config/config.py")
-app.secret_key = config.SECRET_KEY
+app.config["URL_REDIRECT"] =  "{}/{}".format(app.config["URL_APPLICATION"], "login")
+app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["URL_APPLICATION"])
+app.secret_key = app.config["SECRET_KEY"]
 
 db.init_app(app)
+
 # pass parameters to the usershub authenfication sub-module, DONT CHANGE THIS
 app.config["DB"] = db
 
 with app.app_context():
     app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
 
-    if config.ACTIVATE_APP:
-
+    if app.config["ACTIVATE_APP"]:
         @app.route("/")
         def index():
             """ Route par défaut de l'application """
@@ -116,7 +131,7 @@ with app.app_context():
 
         app.register_blueprint(route.route, url_prefix="/api")
 
-    if config.ACTIVATE_API:
+    if app.config['ACTIVATE_API']:
         from app.api import route_register
 
         app.register_blueprint(route_register.route, url_prefix="/api_register")  # noqa
@@ -124,4 +139,4 @@ with app.app_context():
 
 if __name__ == "__main__":
     app.config["TEMPLATES_AUTO_RELOAD"] = True
-    app.run(debug=config.DEBUG, port=config.PORT)
+    app.run(debug=app.config['DEBUG'], port=app.config['PORT'])

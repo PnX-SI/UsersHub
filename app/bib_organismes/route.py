@@ -2,19 +2,20 @@
 Route des Organismes
 """
 
-from flask import Blueprint, redirect, url_for, render_template, request, flash
+from flask import (
+    Blueprint, redirect, url_for, render_template, request, flash, current_app
+)
 
 from pypnusershub import routes as fnauth
-
-from app.env import URL_REDIRECT
 
 from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
 from app.models import Bib_Organismes, TRoles
-from config import config
 from app.utils.utils_all import strigify_dict
 
 
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 route = Blueprint("organisme", __name__)
 
 
@@ -70,10 +71,10 @@ def organisms():
         fLine=fLine,
         line=columns,
         key="id_organisme",
-        pathI=config.URL_APPLICATION + "/organism/info/",
-        pathU=config.URL_APPLICATION + "/organism/update/",
-        pathD=config.URL_APPLICATION + "/organisms/delete/",
-        pathA=config.URL_APPLICATION + "/organism/add/new",
+        pathI=URL_APPLICATION + "/organism/info/",
+        pathU=URL_APPLICATION + "/organism/update/",
+        pathD=URL_APPLICATION + "/organisms/delete/",
+        pathA=URL_APPLICATION + "/organism/add/new",
         name="un organisme",
         name_list="Organismes",
         see="True",
@@ -155,7 +156,7 @@ def info(id_organisme):
             {"col": "active", "filter": True},
             {"col": "id_organisme", "filter": id_organisme},
         ],
-        order_by="nom_organisme",
+        order_by="nom_role",
     )
     users = [data.as_dict_full_name() for data in q]
 

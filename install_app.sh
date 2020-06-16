@@ -5,10 +5,12 @@
 # Création des fichiers de configuration
 cd config
 
+
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
   cp config.py.sample config.py
 fi
+
 
 echo "préparation du fichier config.py..."
 sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
@@ -37,7 +39,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # Installation de l'environement javascript
 cd app/static
-nvm install 
+nvm install
 nvm use
 npm ci
 cd ../..
@@ -45,7 +47,7 @@ cd ../..
 
 #Lancement de l'application
 DIR=$(readlink -e "${0%/*}")
-currentdir=${PWD##*/} 
+currentdir=${PWD##*/}
 
 
 sudo -s cp usershub-service.conf /etc/supervisor/conf.d/

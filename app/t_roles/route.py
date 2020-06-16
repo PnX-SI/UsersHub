@@ -6,18 +6,21 @@ from flask import (
     Blueprint,
     request,
     flash,
+    current_app
 )
 
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
 
-from app.env import URL_REDIRECT
+
 from app.t_roles import forms as t_rolesforms
 from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
 from app.env import db
 
-from config import config
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 
 route = Blueprint("user", __name__)
 
@@ -97,11 +100,11 @@ def users():
         table=tab,
         see="True",
         key="id_role",
-        pathI=config.URL_APPLICATION + "/user/info/",
-        pathU=config.URL_APPLICATION + "/user/update/",
-        pathD=config.URL_APPLICATION + "/users/delete/",
-        pathA=config.URL_APPLICATION + "/user/add/new",
-        pathZ=config.URL_APPLICATION + "/user/pass/",
+        pathI=URL_APPLICATION + "/user/info/",
+        pathU=URL_APPLICATION + "/user/update/",
+        pathD=URL_APPLICATION + "/users/delete/",
+        pathA=URL_APPLICATION + "/user/add/new",
+        pathZ=URL_APPLICATION + "/user/pass/",
         passPlusCol="True",
         passMd5Col="True",
         name="un utilisateur",
@@ -294,7 +297,7 @@ def info(id_role):
         groups=groups,
         lists=lists,
         rights=rights,
-        pathU=config.URL_APPLICATION + "/user/update/",
+        pathU=URL_APPLICATION + "/user/update/",
     )
 
 
