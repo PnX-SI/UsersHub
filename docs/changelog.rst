@@ -2,6 +2,71 @@
 CHANGELOG
 =========
 
+2.1.2 (unreleased)
+------------------
+
+**Nouveautés**
+
+* Mise à jour des librairies Javascript (Bootstrap 4.5.0, jQuery 3.5.0)
+* Mise à jour de MarkupSafe de la version 1.0 à 1.1 (#103)
+* Amélioration du template du formulaire de connexion
+* Suppression du paramètre ``ID_APP`` du fichier ``config/config.py``, dont la valeur est récupérée automatiquement avec le ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications``
+
+**Corrections**
+
+* Correction de l'affichage des fiches "Organisme" (#90)
+
+**Notes de version**
+
+* Vous pouvez supprimer le paramètre ``ID_APP`` du fichier ``config/config.py`` car il n'est plus utilisé
+
+2.1.1 (2019-02-12)
+------------------
+
+**Corrections**
+
+* Modification de l'écriture d'une contrainte d'unicité
+* Modification de la méthode d'installation du virtualenv
+* Utilisation de nvm pour installer node et npm (uniformisation avec GeoNature)
+
+
+**Note de version**
+
+* Installez ``pip3`` et ``virtualenv``
+::
+
+    sudo apt-get update
+    sudo apt-get install python3-pip
+    sudo pip3 install virtualenv==20.0.1
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
+* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
+
+2.1.0 (2019-09-17)
+------------------
+
+**Nouveautés**
+
+* Ajout d'une API sécurisée de création de comptes utilisateurs depuis des applications tierces (création de roles et d'utilisateurs temporaires à valider, changement de mot de passe et des informations personnelles). Par @joelclems, @amandine-sahl, @jbrieuclp et @TheoLechemia #47
+* Création des tables ``temp_users`` et ``cor_role_token`` permettant de gérer de manière sécurisée les créations de compte et les changements de mot de passe.
+* Ajout d'une interface de gestion des utilisateurs temporaires
+* Ajout d'un template générique (``generic_table.html``) pour la génération des tableaux utilisant l'héritage de template (block, extend)
+* Ajout d'un champs ``champs_addi`` au format jsonb dans les tables ``t_roles`` et ``temp_users``, permettant d'ajouter des informations diverses sur les utilisateurs, notamment lors d'une demande de création de compte depuis une application tierce (droits souhaités, validation d'une charte...)
+* Création d'index sur la table ``t_roles``
+* Possibilité de nommer les attributs des modèles SQLAlchemy différemment des colonnes de la base de données
+* Factorisation de la fonction ``encrypt_password``
+* Mise à jour de Flask (1.0.2 à 1.1.1)
+
+**Corrections**
+
+* Ordonnancement des listes par ordre alphabétique (#81)
+
+**Notes de version**
+
+* Vous pouvez passer directement de la version 2.0.0 à la version 2.1.0, mais en suivant les notes de version intermédiaires.
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.0.3to2.1.0.sql
+* Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
 2.0.3 (2019-02-27)
 ------------------
 

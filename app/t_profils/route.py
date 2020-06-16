@@ -1,31 +1,33 @@
-from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request,  flash
-)
+from flask import redirect, url_for, render_template, Blueprint, request, flash, current_app
 
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
 from app.t_profils import forms as t_profilsforms
 from app.models import (
-    TProfils, TApplications, CorProfilForApp,
-    TRoles, Bib_Organismes, CorRoleAppProfil
+    TProfils,
+    TApplications,
+    CorProfilForApp,
+    TRoles,
+    Bib_Organismes,
+    CorRoleAppProfil,
 )
-from config import config
 
-route = Blueprint('profils', __name__)
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
+
+route = Blueprint("profils", __name__)
 
 """
 Routes des profils
 """
 
 
-@route.route('profils/list', methods=['GET', 'POST'])
+@route.route("profils/list", methods=["GET", "POST"])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def profils():
     """
@@ -45,32 +47,32 @@ def profils():
                                             - nom affiché sur le bouton --> Members
     """
 
-    fLine = ['ID', 'CODE', 'Nom', 'Description']
-    columns = ['id_profil',  'code_profil', 'nom_profil', 'desc_profil']
-    tab = [data for data in TProfils.get_all()]
+    fLine = ["ID", "CODE", "Nom", "Description"]
+    columns = ["id_profil", "code_profil", "nom_profil", "desc_profil"]
+    tab = [data for data in TProfils.get_all(order_by="nom_profil")]
     return render_template(
-        'table_database.html',
+        "table_database.html",
         fLine=fLine,
         line=columns,
         table=tab,
-        key='id_profil',
-        pathU=config.URL_APPLICATION + '/profil/update/',
-        pathD=config.URL_APPLICATION + '/profil/delete/',
-        pathA=config.URL_APPLICATION + '/profil/add/new',
+        key="id_profil",
+        pathU=URL_APPLICATION + "/profil/update/",
+        pathD=URL_APPLICATION + "/profil/delete/",
+        pathA=URL_APPLICATION + "/profil/add/new",
         name="un profil",
         name_list="Profils",
-        otherCol='False',
-        profil_app='True',
-        App="Application"
+        otherCol="False",
+        profil_app="True",
+        App="Application",
     )
 
 
-@route.route('profil/delete/<id_profil>', methods=['GET', 'POST'])
+@route.route("profil/delete/<id_profil>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_profil):
     """
@@ -79,16 +81,16 @@ def delete(id_profil):
     """
 
     TProfils.delete(id_profil)
-    return redirect(url_for('profils.profils'))
+    return redirect(url_for("profils.profils"))
 
 
-@route.route('profil/add/new', defaults={'id_profil': None}, methods=['GET', 'POST'])
-@route.route('profil/update/<id_profil>', methods=['GET', 'POST'])
+@route.route("profil/add/new", defaults={"id_profil": None}, methods=["GET", "POST"])
+@route.route("profil/update/<id_profil>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_profil):
     """
@@ -100,24 +102,25 @@ def addorupdate(id_profil):
 
     form = t_profilsforms.Profil()
     if id_profil == None:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate() and form.validate_on_submit():
                 form_profil = pops(form.data)
-                form_profil.pop('id_profil')
+                form_profil.pop("id_profil")
                 TProfils.post(form_profil)
-                return redirect(url_for('profils.profils'))
-        return render_template('profil.html', form=form, title="Formulaire Profil")
+                return redirect(url_for("profils.profils"))
+        return render_template("profil.html", form=form, title="Formulaire Profil")
     else:
         profil = TProfils.get_one(id_profil)
-        if request.method == 'GET':
+        if request.method == "GET":
             form = process(form, profil)
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate() and form.validate_on_submit():
                 form_profil = pops(form.data)
-                form_profil['id_profil'] = profil['id_profil']
+                form_profil["id_profil"] = profil["id_profil"]
                 TProfils.update(form_profil)
-                return redirect(url_for('profils.profils'))
-        return render_template('profil.html', form=form, title="Formulaire Profil")
+                return redirect(url_for("profils.profils"))
+        return render_template("profil.html", form=form, title="Formulaire Profil")
+
 
 def pops(form):
     """
@@ -125,8 +128,8 @@ def pops(form):
     Avec pour paramètre un formulaire
     """
 
-    form.pop('csrf_token')
-    form.pop('submit')
+    form.pop("csrf_token")
+    form.pop("submit")
     return form
 
 
@@ -136,7 +139,7 @@ def process(form, profil):
     Avec pour paramètres un formulaire et un profil
     """
 
-    form.nom_profil.process_data(profil['nom_profil'])
-    form.code_profil.process_data(profil['code_profil'])
-    form.desc_profil.process_data(profil['desc_profil'])
+    form.nom_profil.process_data(profil["nom_profil"])
+    form.code_profil.process_data(profil["code_profil"])
+    form.desc_profil.process_data(profil["desc_profil"])
     return form

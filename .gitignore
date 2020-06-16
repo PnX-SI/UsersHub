@@ -12,3 +12,5 @@ fontawesome*
 .vscode
 
 *.php
+
+app/templates/mails/sign_up_confirmation.html

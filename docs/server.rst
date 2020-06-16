@@ -50,9 +50,21 @@ Installation pour Debian 9.
     apt-get install curl
     curl -sL https://deb.nodesource.com/setup_10.x | bash -
     apt-get install -y nodejs 
+    pip install virtualenv==20.0.1
 
     adduser synthese sudo
-    
+
+* Installer NVM (Node version manager), node et npm
+
+  ::  
+        
+        wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+ 
 Fermer la console et la réouvrir pour que les modifications soient prises en compte.
     
 :Note:

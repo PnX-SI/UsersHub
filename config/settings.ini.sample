@@ -2,14 +2,14 @@
 ### PostgreSQL settings ###
 ###########################
 
-# Effacer la base de donnée existante lors de l'installation
+# Effacer la base de donnée existante lors de la réinstallation
 drop_apps_db=false
 # Host de la base de données de l'application
 db_host=localhost
 # Port du serveur PostgreSQL
 pg_port=5432
 # Nom de la base de données de l'application
-db_name=referentielsdb
+db_name=usershubdb
 # Nom de l'utilisateur propriétaire de la BDD de l'application
 user_pg=geonatuser
 # User propriétaire de la BDD de l'application
@@ -26,11 +26,12 @@ insert_sample_data=true
 # URL de l'application
 url_application=http://mon_url.fr
 
+
 #######################
 ### Python settings ###
 #######################
 
-# Notice: n'est compatible qu'avec python3
+# Note : n'est compatible qu'avec python3
 python_path=/usr/bin/python3
 
 #########################

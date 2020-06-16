@@ -1,27 +1,24 @@
-from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request, flash, jsonify
-)
+from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify, current_app
 from pypnusershub import routes as fnauth
 
-
-from app.env import URL_REDIRECT
 from app.groupe import forms as groupeforms
 from app.models import TRoles
 from app.models import CorRoles
-from config import config
 from app.utils.utils_all import strigify_dict
 
 
-route = Blueprint('groupe', __name__)
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
+
+route = Blueprint("groupe", __name__)
 
 
-@route.route('groups/list', methods=['GET', 'POST'])
+@route.route("groups/list", methods=["GET", "POST"])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def groups():
 
@@ -42,36 +39,36 @@ def groups():
                                             - nom affiché sur le bouton --> Members
     """
 
-    fLine = ['ID groupe', 'nom', 'description']
-    columns = ['id_role', 'nom_role', 'desc_role']
-    filters = [{'col': 'groupe', 'filter': 'True'}]
-    contents = TRoles.get_all(columns, filters)
+    fLine = ["ID groupe", "nom", "description"]
+    columns = ["id_role", "nom_role", "desc_role"]
+    filters = [{"col": "groupe", "filter": "True"}]
+    contents = TRoles.get_all(columns, filters, order_by="identifiant")
     return render_template(
-        'table_database.html',
+        "table_database.html",
         fLine=fLine,
         line=columns,
         table=contents,
         key="id_role",
-        pathI=config.URL_APPLICATION + '/group/info/',
-        pathU=config.URL_APPLICATION + "/group/update/",
-        pathD=config.URL_APPLICATION + "/group/delete/",
-        pathA=config.URL_APPLICATION + '/group/add/new',
-        pathP=config.URL_APPLICATION + '/group/members/',
+        pathI=URL_APPLICATION + "/group/info/",
+        pathU=URL_APPLICATION + "/group/update/",
+        pathD=URL_APPLICATION + "/group/delete/",
+        pathA=URL_APPLICATION + "/group/add/new",
+        pathP=URL_APPLICATION + "/group/members/",
         name="un groupe",
         name_list="Groupes",
-        otherCol='True',
+        otherCol="True",
         Members="Membres",
-        see="True"
+        see="True",
     )
 
 
-@route.route('group/add/new', methods=['GET', 'POST'])
-@route.route('group/update/<id_role>', methods=['GET', 'POST'])
+@route.route("group/add/new", methods=["GET", "POST"])
+@route.route("group/update/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_role=None):
 
@@ -84,39 +81,39 @@ def addorupdate(id_role=None):
     form = groupeforms.Group()
     form.groupe.process_data(True)
     if id_role == None:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate_on_submit() and form.validate():
                 form_group = pops(form.data)
-                form_group.pop('id_role')
+                form_group.pop("id_role")
                 # set the group as active default
-                form_group['active'] = True
+                form_group["active"] = True
                 TRoles.post(form_group)
-                return redirect(url_for('groupe.groups'))
+                return redirect(url_for("groupe.groups"))
             else:
                 errors = form.errors
-        return render_template('group.html', form=form, title="Formulaire Groupe")
+        return render_template("group.html", form=form, title="Formulaire Groupe")
     else:
         group = TRoles.get_one(id_role)
-        if request.method == 'GET':
+        if request.method == "GET":
             form = process(form, group)
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.validate_on_submit() and form.validate():
                 form_group = pops(form.data)
-                form_group['id_role'] = group['id_role']
+                form_group["id_role"] = group["id_role"]
                 TRoles.update(form_group)
-                return redirect(url_for('groupe.groups'))
+                return redirect(url_for("groupe.groups"))
             else:
                 errors = form.errors
-                flash(strigify_dict(errors), 'error')
-        return render_template('group.html', form=form, title="Formulaire Groupe")
+                flash(strigify_dict(errors), "error")
+        return render_template("group.html", form=form, title="Formulaire Groupe")
 
 
-@route.route('group/members/<id_groupe>', methods=['GET', 'POST'])
+@route.route("group/members/<id_groupe>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def membres(id_groupe):
     """
@@ -133,9 +130,9 @@ def membres(id_groupe):
     users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
     users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
     group = TRoles.get_one(id_groupe)
-    header = ['ID', 'Nom']
-    data = ['id_role', 'full_name']
-    if request.method == 'POST':
+    header = ["ID", "Nom"]
+    data = ["id_role", "full_name"]
+    if request.method == "POST":
         data = request.get_json()
         new_users_in_group = data["tab_add"]
         new_users_out_group = data["tab_del"]
@@ -144,24 +141,24 @@ def membres(id_groupe):
             CorRoles.del_cor(id_groupe, new_users_out_group)
         except Exception as e:
             return jsonify(str(e)), 500
-        return jsonify({'redirect': url_for('groupe.groups')}), 200
+        return jsonify({"redirect": url_for("groupe.groups")}), 200
     return render_template(
         "tobelong.html",
         fLine=header,
         data=data,
         table=users_out_group,
         table2=users_in_group,
-        group='groupe',
-        info="Membres du groupe '" + group['nom_role'] + "'"
+        group="groupe",
+        info="Membres du groupe '" + group["nom_role"] + "'",
     )
 
 
-@route.route('group/delete/<id_groupe>', methods=['GET', 'POST'])
+@route.route("group/delete/<id_groupe>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    6, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    6,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_groupe):
     """
@@ -170,15 +167,15 @@ def delete(id_groupe):
     """
 
     TRoles.delete(id_groupe)
-    return redirect(url_for('groupe.groups'))
+    return redirect(url_for("groupe.groups"))
 
 
-@route.route('group/info/<id_role>', methods=['GET', 'POST'])
+@route.route("group/info/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
-    3, 
-    False, 
-    redirect_on_expiration=URL_REDIRECT, 
-    redirect_on_invalid_token=URL_REDIRECT
+    3,
+    False,
+    redirect_on_expiration=URL_REDIRECT,
+    redirect_on_invalid_token=URL_REDIRECT,
 )
 def info(id_role):
     group = TRoles.get_one(id_role)
@@ -191,8 +188,9 @@ def info(id_role):
         members=members,
         lists=lists,
         rights=rights,
-        pathU=config.URL_APPLICATION + '/group/update/'
+        pathU=URL_APPLICATION + "/group/update/",
     )
+
 
 def pops(form):
     """
@@ -200,8 +198,8 @@ def pops(form):
     Avec pour paramètre un formulaire
     """
 
-    form.pop('submit')
-    form.pop('csrf_token')
+    form.pop("submit")
+    form.pop("csrf_token")
     return form
 
 
@@ -211,6 +209,6 @@ def process(form, group):
     Avec pour paramètres un formulaire et un groupe
     """
 
-    form.nom_role.process_data(group['nom_role'])
-    form.desc_role.process_data(group['desc_role'])
+    form.nom_role.process_data(group["nom_role"])
+    form.desc_role.process_data(group["desc_role"])
     return form

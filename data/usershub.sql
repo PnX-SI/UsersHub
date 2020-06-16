@@ -7,7 +7,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --Ensure to have uuid-ossp extension installed before running this script
---You must be superuser to add an extension in your database 
+--You must be superuser to add an extension in your database
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE SCHEMA IF NOT EXISTS utilisateurs;
@@ -57,9 +57,8 @@ CREATE TABLE IF NOT EXISTS t_roles (
     email character varying(250),
     id_organisme integer,
     remarques text,
-    pn boolean,
     active boolean DEFAULT true,
-    session_appli character varying(50),
+    champs_addi jsonb,
     date_insert timestamp without time zone,
     date_update timestamp without time zone
 );
@@ -133,9 +132,38 @@ COMMENT ON TABLE cor_profil_for_app IS 'Permet d''attribuer et limiter les profi
 CREATE TABLE IF NOT EXISTS cor_role_app_profil (
     id_role integer NOT NULL,
     id_application integer NOT NULL,
-    id_profil integer NOT NULL
+    id_profil integer NOT NULL,
+    is_default_group_for_app boolean NOT NULL DEFAULT (FALSE)
 );
 COMMENT ON TABLE cor_role_app_profil IS 'Cette table centrale, permet d''associer des roles à des profils par application';
+
+
+CREATE TABLE IF NOT EXISTS cor_role_token
+(
+    id_role INTEGER,
+    token text
+);
+
+CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
+(
+    id_temp_user SERIAL NOT NULL,
+    groupe boolean NOT NULL DEFAULT false,
+    token_role text,
+    identifiant character varying(100),
+    nom_role character varying(50),
+    prenom_role character varying(50),
+    desc_role text,
+    password text,
+    pass_md5 text,
+    email character varying(250),
+    organisme character(32),
+    id_organisme integer,
+    id_application integer NOT NULL,
+    remarques text,
+    champs_addi jsonb,
+    date_insert timestamp without time zone,
+    date_update timestamp without time zone
+);
 
 ----------------
 --PRIMARY KEYS--
@@ -159,6 +187,10 @@ ALTER TABLE ONLY cor_profil_for_app ADD CONSTRAINT pk_cor_profil_for_app PRIMARY
 
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMARY KEY (id_role, id_application, id_profil);
 
+ALTER TABLE ONLY cor_role_token ADD CONSTRAINT cor_role_token_pk_id_role PRIMARY KEY (id_role);
+
+ALTER TABLE ONLY temp_users ADD CONSTRAINT pk_temp_users PRIMARY KEY (id_temp_user);
+
 
 ------------
 --TRIGGERS--
@@ -167,6 +199,12 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT pk_cor_role_app_profil PRIMA
 CREATE TRIGGER tri_modify_date_insert_t_roles BEFORE INSERT ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_insert();
 
 CREATE TRIGGER tri_modify_date_update_t_roles BEFORE UPDATE ON t_roles FOR EACH ROW EXECUTE PROCEDURE modify_date_update();
+
+CREATE TRIGGER tri_modify_date_insert_temp_roles
+    BEFORE INSERT
+    ON temp_users
+    FOR EACH ROW
+    EXECUTE PROCEDURE utilisateurs.modify_date_insert();
 
 
 ----------------
@@ -192,6 +230,70 @@ ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_ro
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_application FOREIGN KEY (id_application) REFERENCES t_applications(id_application) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY cor_role_app_profil ADD CONSTRAINT fk_cor_role_app_profil_id_profil FOREIGN KEY (id_profil) REFERENCES t_profils(id_profil) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
+ALTER TABLE ONLY cor_role_token ADD CONSTRAINT cor_role_token_fk_id_role FOREIGN KEY (id_role)
+    REFERENCES t_roles (id_role) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+ALTER TABLE ONLY temp_users ADD CONSTRAINT temp_user_id_organisme_fkey FOREIGN KEY (id_application)
+    REFERENCES t_applications (id_application) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY temp_users ADD CONSTRAINT temp_user_id_application_fkey FOREIGN KEY (id_organisme)
+    REFERENCES bib_organismes (id_organisme) MATCH SIMPLE
+    ON UPDATE CASCADE ON DELETE CASCADE;
+
+----------------
+------INDEX-----
+----------------
+CREATE INDEX i_utilisateurs_groupe
+  ON utilisateurs.t_roles
+  USING btree
+  (groupe);
+
+CREATE INDEX i_utilisateurs_nom_prenom
+  ON utilisateurs.t_roles
+  USING btree
+  (nom_role, prenom_role);
+
+CREATE INDEX i_utilisateurs_active
+  ON utilisateurs.t_roles
+  USING btree
+  (active);
+  
+---------------
+--CONSTRAINTS--
+---------------
+CREATE OR REPLACE FUNCTION utilisateurs.check_is_default_group_for_app_is_grp_and_unique(id_app integer, id_grp integer, is_default boolean)
+RETURNS boolean AS
+$BODY$
+BEGIN
+    -- Fonction de vérification
+    -- Test : si le role est un groupe et qu'il n'y a qu'un seul groupe par défaut définit par application
+    IF is_default IS TRUE THEN
+        IF (
+            SELECT DISTINCT TRUE
+            FROM utilisateurs.cor_role_app_profil
+            WHERE id_application = id_app AND is_default_group_for_app IS TRUE
+        ) IS TRUE THEN
+            RETURN FALSE;
+        ELSIF (SELECT TRUE FROM utilisateurs.t_roles WHERE id_role = id_grp AND groupe IS TRUE) IS NULL THEN
+            RETURN FALSE;
+        ELSE
+          RETURN TRUE;
+        END IF;
+    END IF;
+    RETURN TRUE;
+  END
+$BODY$
+  LANGUAGE plpgsql IMMUTABLE
+  COST 100;
+
+
+ALTER TABLE utilisateurs.cor_role_app_profil ADD CONSTRAINT check_is_default_group_for_app_is_grp_and_unique
+    CHECK (utilisateurs.check_is_default_group_for_app_is_grp_and_unique(id_application, id_role, is_default_group_for_app)) NOT VALID;
+
+
 ---------
 --VIEWS--
 ---------
@@ -212,8 +314,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.organisme,
     a.id_unite,
     a.remarques,
-    a.pn,
-    a.session_appli,
     a.date_insert,
     a.date_update,
     a.id_menu
@@ -231,8 +331,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_liste AS id_menu
@@ -255,8 +353,6 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_liste AS id_menu
@@ -267,7 +363,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
           WHERE u.groupe = false AND u.active = true) a;
 
 -- Vue permettant de retourner les roles et leurs droits maximum pour chaque application
-CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS 
+CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS
 SELECT a.groupe,
     a.active,
     a.id_role,
@@ -282,8 +378,6 @@ SELECT a.groupe,
     a.organisme,
     a.id_unite,
     a.remarques,
-    a.pn,
-    a.session_appli,
     a.date_insert,
     a.date_update,
     max(a.id_droit) AS id_droit_max,
@@ -302,8 +396,6 @@ SELECT a.groupe,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_profil AS id_droit,
@@ -326,8 +418,6 @@ SELECT a.groupe,
             o.nom_organisme AS organisme,
             0 AS id_unite,
             u.remarques,
-            u.pn,
-            u.session_appli,
             u.date_insert,
             u.date_update,
             c.id_profil AS id_droit,
@@ -338,9 +428,9 @@ SELECT a.groupe,
              LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
           ) a
   WHERE a.active = true
-  GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.pn, a.session_appli, a.date_insert, a.date_update, a.id_application;
+  GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.date_insert, a.date_update, a.id_application;
 
 -- Vue permettant de retourner les utilisateurs (pas les roles) et leurs droits maximum pour chaque application
-CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS 
+CREATE OR REPLACE VIEW utilisateurs.v_userslist_forall_applications AS
 SELECT * FROM utilisateurs.v_roleslist_forall_applications
 WHERE groupe = false;
