@@ -32,7 +32,7 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
     wget https://github.com/PnEcrins/UsersHub/archive/vX.Y.Z.zip
     unzip vX.Y.Z.zip
     mkdir -p /home/synthese/usershub
-    cp usershub-X.Y.Z/* /home/synthese/usershub
+    cp -r usershub-X.Y.Z/* /home/synthese/usershub
     cd /home/synthese
 
 
@@ -44,8 +44,14 @@ Installation pour Debian 9.
 ::  
   
     su -
-    apt-get install apache2  python-dev python-pip libpq-dev supervisor
+    apt-get install -y python3 python3-dev python3-setuptools python-pip python-virtualenv libpq-dev 
+    apt-get install -y supervisor
+    apt-get install -y apache2
+    apt-get install curl
+    curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    apt-get install -y nodejs 
     pip install virtualenv==20.0.1
+
     adduser synthese sudo
 
 * Installer NVM (Node version manager), node et npm
