@@ -5,35 +5,34 @@
 SERVEUR
 =======
 
-Cette documentation décrit l'installation indépendante de UsersHub. Il est aussi possible de l'installation avec le script automatisé d'installation globale de GeoNature (https://github.com/PnEcrins/GeoNature/tree/master/docs/install_all).
+Cette documentation décrit l'installation indépendante de UsersHub. Il est aussi possible de réaliser l'installation avec le script automatisé d'installation globale de GeoNature (https://github.com/PnEcrins/GeoNature/tree/master/docs/install_all).
 
 Prérequis
 =========
 
-* Ressources minimum serveur :
+* Ressources minimum du serveur :
 
 Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
 
-* Disposer d'un utilisateur linux (nommé ``synthese`` dans notre exemple). Le répertoire de cet utilisateur ``synthese`` doit être dans ``/home/synthese``. Si vous souhaitez utiliser un autre utilisateur linux, vous devrez adapter les lignes de commande proposées dans cette documentation ainsi que dans les fichiers ``install_db.sh`` et ``install_app.sh``
+* Disposer d'un utilisateur linux (nommé ``synthese`` dans notre exemple). Le répertoire de cet utilisateur ``synthese`` doit être dans ``/home/synthese``. Si vous souhaitez utiliser un autre utilisateur linux, vous devrez adapter les lignes de commande proposées dans cette documentation.
  
   ::  
   
     adduser --home /home/synthese synthese
+    adduser synthese sudo
 
 :Note:
 
-    Pour la suite de l'installation, veuillez utiliser l'utilisateur Linux créer précedemment (``synthese``), et non l'utilisateur ``root``.
+    Pour la suite de l'installation, veuillez utiliser l'utilisateur Linux créé précedemment (``synthese`` dans l'exemple), et non l'utilisateur ``root``.
 
 * Récupérer le zip de l'application sur le Github du projet (X.Y.Z à remplacer par la version souhaitée de UsersHub)
  
   ::  
   
-    cd /tmp
-    wget https://github.com/PnEcrins/UsersHub/archive/vX.Y.Z.zip
-    unzip vX.Y.Z.zip
-    mkdir -p /home/synthese/usershub
-    cp -r usershub-X.Y.Z/* /home/synthese/usershub
     cd /home/synthese
+    wget https://github.com/PnX-SI/UsersHub/archive/X.Y.Z.zip
+    unzip X.Y.Z.zip
+    mv UsersHub-X.Y.Z usershub
 
 
 Installation et configuration du serveur
@@ -43,17 +42,14 @@ Installation pour Debian 9.
 
 ::  
   
-    su -
-    apt-get install -y python3 python3-dev python3-setuptools python-pip python-virtualenv libpq-dev 
-    apt-get install -y supervisor
-    apt-get install -y apache2
-    apt-get install curl
+    sudo apt-get install -y python3 python3-dev python3-setuptools python-pip python-virtualenv libpq-dev 
+    sudo apt-get install -y supervisor
+    sudo apt-get install -y apache2
+    sudo apt-get install -y curl
     curl -sL https://deb.nodesource.com/setup_10.x | bash -
-    apt-get install -y nodejs 
+    sudo apt-get install -y nodejs 
     pip install virtualenv==20.0.1
-
-    adduser synthese sudo
-
+    
 * Installer NVM (Node version manager), node et npm
 
   ::  
@@ -78,6 +74,14 @@ Installation et configuration de PostgreSQL
  
   ::  
   
-    apt-get install postgresql-9.6 postgresql-server-dev-9.6
-    adduser postgres sudo
+    sudo apt-get install postgresql-9.6 postgresql-server-dev-9.6
+
+* Création d'un utilisateur PostgreSQL
+ 
+  ::  
+  
+    sudo su postgres
+    psql
+    CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';
+    \q
     exit
