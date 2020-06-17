@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2020-06-17)
 ------------------
 
 **Nouveautés**
@@ -15,6 +15,7 @@ CHANGELOG
 **Corrections**
 
 * Correction de l'affichage des fiches "Organisme" (#90)
+* Correction de la documentation d'installation (par @lpofredc)
 
 **Notes de version**
 
