@@ -10,16 +10,12 @@ CHANGELOG
 * Mise à jour des librairies Javascript (Bootstrap 4.5.0, jQuery 3.5.0)
 * Mise à jour de MarkupSafe de la version 1.0 à 1.1 (#103)
 * Amélioration du template du formulaire de connexion
-* Suppression du paramètre ``ID_APP`` du fichier ``config/config.py``, dont la valeur est récupérée automatiquement avec le ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications``
+* Utilisation du ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications`` pour l'authentification, au lieu du paramètre ``ID_APP`` du fichier ``config/config.py``
 
 **Corrections**
 
 * Correction de l'affichage des fiches "Organisme" (#90)
 * Correction de la documentation d'installation (par @lpofredc)
-
-**Notes de version**
-
-* Vous pouvez supprimer le paramètre ``ID_APP`` du fichier ``config/config.py`` car il n'est plus utilisé
 
 2.1.1 (2019-02-12)
 ------------------
@@ -29,7 +25,6 @@ CHANGELOG
 * Modification de l'écriture d'une contrainte d'unicité
 * Modification de la méthode d'installation du virtualenv
 * Utilisation de nvm pour installer node et npm (uniformisation avec GeoNature)
-
 
 **Note de version**
 
