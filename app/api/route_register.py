@@ -298,23 +298,41 @@ def change_application_right():
     if not id_application or not id_role or not code_profil:
         return {"msg": "Problème de paramètres POST"}, 400
 
-    cor = (
+
+
+    cor_profil = (
         db.session.query(CorRoleAppProfil)
-        .filter(id_role == CorRoleAppProfil.id_role)
         .filter(id_application == CorRoleAppProfil.id_application)
+        .filter(id_profil == CorRoleAppProfil.id_profil)
         .first()
     )
 
-    if not cor:
-        cor = CorRoleAppProfil(
+    if not cor_profil:
+        return {"msg": "Pas de cor_profil Error "}, 400
+
+    # ligne de cor_roles qui donne un droit à notre utilisateur pour l'application
+    cor_roles = (
+        db.session.query(CorRoles)
+        .filter(id_role == CorRoles.id_role_utilisateur)
+        .join(
+            CorRoleAppProfil,
+            id_application == CorRoleAppProfil.id_application
+        )
+        .first()
+    )
+
+    print(cor_roles)
+
+    if not cor_roles:
+        cor_roles = CorRoles(
             **{
-                "id_role": id_role,
-                "id_application": id_application,
-                "id_profil": id_profil,
+                "id_role_groupe": cor_profil.id_role,
+                "id_role_utilisareur": id_role,
             }
         )
+        DB.session.add(cor_roles)
     else:
-        cor.id_profil = id_profil
+        cor_roles.id_role_groupe = cor_profil.id_role
 
     db.session.commit()
 
