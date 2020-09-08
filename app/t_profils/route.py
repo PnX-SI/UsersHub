@@ -1,8 +1,7 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash
+from flask import redirect, url_for, render_template, Blueprint, request, flash, current_app
 
 from pypnusershub import routes as fnauth
 
-from app.env import URL_REDIRECT
 from app.t_profils import forms as t_profilsforms
 from app.models import (
     TProfils,
@@ -12,7 +11,9 @@ from app.models import (
     Bib_Organismes,
     CorRoleAppProfil,
 )
-from config import config
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
+URL_APPLICATION = current_app.config['URL_APPLICATION']
 
 route = Blueprint("profils", __name__)
 
@@ -55,9 +56,9 @@ def profils():
         line=columns,
         table=tab,
         key="id_profil",
-        pathU=config.URL_APPLICATION + "/profil/update/",
-        pathD=config.URL_APPLICATION + "/profil/delete/",
-        pathA=config.URL_APPLICATION + "/profil/add/new",
+        pathU=URL_APPLICATION + "/profil/update/",
+        pathD=URL_APPLICATION + "/profil/delete/",
+        pathA=URL_APPLICATION + "/profil/add/new",
         name="un profil",
         name_list="Profils",
         otherCol="False",

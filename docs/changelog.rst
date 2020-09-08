@@ -13,6 +13,20 @@ UPDATE pg_attribute SET atttypmod = 504
 WHERE attrelid = 'utilisateurs.bib_organismes'::regclass
 AND attname = 'nom_organisme';
 
+2.1.2 (2020-06-17)
+------------------
+
+**Nouveautés**
+
+* Mise à jour des librairies Javascript (Bootstrap 4.5.0, jQuery 3.5.0)
+* Mise à jour de MarkupSafe de la version 1.0 à 1.1 (#103)
+* Amélioration du template du formulaire de connexion
+* Utilisation du ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications`` pour l'authentification, au lieu du paramètre ``ID_APP`` du fichier ``config/config.py``
+
+**Corrections**
+
+* Correction de l'affichage des fiches "Organisme" (#90)
+* Correction de la documentation d'installation (par @lpofredc)
 
 2.1.1 (2019-02-12)
 ------------------
@@ -23,9 +37,14 @@ AND attname = 'nom_organisme';
 * Modification de la méthode d'installation du virtualenv
 * Utilisation de nvm pour installer node et npm (uniformisation avec GeoNature)
 
-
 **Note de version**
 
+* Installez ``pip3`` et ``virtualenv``
+::
+
+    sudo apt-get update
+    sudo apt-get install python3-pip
+    sudo pip3 install virtualenv==20.0.1
 * Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
 * Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 

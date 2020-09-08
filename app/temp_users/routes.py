@@ -8,14 +8,17 @@ from flask import (
     redirect,
     url_for,
     flash,
+    current_app
 )
 from pypnusershub.db.models_register import TempUser
 from pypnusershub import routes as fnauth
 
-from app.env import db, URL_REDIRECT
+from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import TApplications
 
+
+URL_REDIRECT = current_app.config['URL_REDIRECT']
 
 routes = Blueprint("temp_users", __name__)
 

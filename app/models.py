@@ -8,7 +8,6 @@ from sqlalchemy.sql import select, func
 from sqlalchemy.orm import synonym, relationship, backref
 from pypnusershub.db.models import check_and_encrypt_password
 
-from config import config
 from app.env import db
 from app.utils.utilssqlalchemy import serializable
 from app.genericRepository import GenericRepository
