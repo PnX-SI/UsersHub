@@ -2,6 +2,17 @@
 CHANGELOG
 =========
 
+2.1.2 (Unreleased)
+
+**Corrections**
+
+* Passage de 255 à 500 character pour le champs bib_organimses.nom_organisme
+TODO en superuser: 
+
+UPDATE pg_attribute SET atttypmod = 504
+WHERE attrelid = 'utilisateurs.bib_organismes'::regclass
+AND attname = 'nom_organisme';
+
 
 2.1.1 (2019-02-12)
 ------------------

@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS t_roles (
 CREATE TABLE IF NOT EXISTS bib_organismes (
     id_organisme serial NOT NULL,
     uuid_organisme uuid NOT NULL DEFAULT public.uuid_generate_v4(),
-    nom_organisme character varying(100) NOT NULL,
+    nom_organisme character varying(500) NOT NULL,
     adresse_organisme character varying(128),
     cp_organisme character varying(5),
     ville_organisme character varying(100),
