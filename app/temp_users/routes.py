@@ -1,4 +1,5 @@
 import requests as req_lib
+import logging
 
 from flask import (
     Blueprint,
@@ -21,6 +22,7 @@ from app.models import TApplications
 URL_REDIRECT = current_app.config['URL_REDIRECT']
 
 routes = Blueprint("temp_users", __name__)
+log = logging.getLogger()
 
 
 @routes.route("/list", methods=["GET"])
@@ -56,15 +58,45 @@ def validate(token, id_application):
     Call the API to validate a temp user
     """
     data_to_post = {"token": token, "id_application": id_application}
+
+    # Get temp user infos
+    temp_user = (
+        db.session
+            .query(TempUser.confirmation_url)
+            .filter(token == TempUser.token_role)
+            .first()
+    )
+    if not temp_user:
+        return {"msg": "Aucun utilisateur trouvé avec le token user demandé"}, 42
+    url_after_validation = temp_user[0]
+
+    # Call temp user validation URL
     url_validate = (
         current_app.config["URL_APPLICATION"] + "/api_register/valid_temp_user"
     )
     r = req_lib.post(url=url_validate, json=data_to_post, cookies=request.cookies)
+    if r.status_code != 200:
+        flash("Erreur durant la validation de l'utilisateur temporaire", "error")
+        return redirect(url_for("temp_users.temp_users_list"))
+    elif not url_after_validation:
+        flash("L'utilisateur a bien été validé")
+        return redirect(url_for("temp_users.temp_users_list"))
+    
+    user_data = r.json()
+
+    # Call post UsersHub actions URL
+    if url_after_validation:
+        r = req_lib.post(
+            url=url_after_validation, 
+            json=user_data, 
+            cookies=request.cookies
+        )
     if r.status_code == 200:
         flash("L'utilisateur a bien été validé")
         return redirect(url_for("temp_users.temp_users_list"))
     else:
-        flash("Une erreur s'est produite", "error")
+        flash("Erreur durant l'appel des actions de l'application", "error")
+        log.error(f"Error HTTP {r.status_code} for {url_after_validation}")
         return redirect(url_for("temp_users.temp_users_list"))
 
 
