@@ -67,7 +67,7 @@ def validate(token, id_application):
             .first()
     )
     if not temp_user:
-        return {"msg": "Aucun utilisateur trouvé avec le token user demandé"}, 42
+        return {"msg": "Aucun utilisateur trouvé avec le token user demandé"}, 404
     url_after_validation = temp_user[0]
 
     # Call temp user validation URL
@@ -96,7 +96,7 @@ def validate(token, id_application):
         return redirect(url_for("temp_users.temp_users_list"))
     else:
         flash("Erreur durant l'appel des actions de l'application", "error")
-        log.error(f"Error HTTP {r.status_code} for {url_after_validation}")
+        log.error("Error HTTP {} for {}".format(r.status_code, url_after_validation))
         return redirect(url_for("temp_users.temp_users_list"))
 
 
