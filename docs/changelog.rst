@@ -5,15 +5,28 @@ CHANGELOG
 2.1.3 (Unreleased)
 ------------------
 
+Voir https://github.com/PnX-SI/UsersHub/compare/ubuntu_20.04
+
+**Nouveautés**
+
+* Possibilité de définir une action spécifique à une application, à exécuter après la validation d'un compte utilisateur en attente, renseignée dans le nouveau champs ``utilisateurs.temp_users.confirmation_url`` (#115 par @jpm-cbna)
+* Passage du champs ``bib_organismes.nom_organisme`` de 100 à 500 caractères
+* Mise à jour des versions des librairies psycopg2 (2.8.5) et sqlalchemy (1.3.19) (par @jpm-cbna)
+
 **Corrections**
 
-* Passage de 100 à 500 caractères pour le champs ``bib_organimses.nom_organisme``
-TODO en superuser : 
+*
+
+**Note de version**
+
+Pour passer le champs ``bib_organismes.nom_organisme`` à 500 caractères, TODO en superuser : 
 ::
 
     UPDATE pg_attribute SET atttypmod = 504
     WHERE attrelid = 'utilisateurs.bib_organismes'::regclass
     AND attname = 'nom_organisme';
+    
+* Exécuter le script de mise à jour de la BDD (``data/update_2.1.2to2.1.3.sql``)
 
 2.1.2 (2020-06-17)
 ------------------
