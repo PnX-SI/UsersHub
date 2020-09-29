@@ -2,6 +2,36 @@
 CHANGELOG
 =========
 
+2.1.3 (2020-09-29)
+------------------
+
+**Nouveautés**
+
+* Possibilité de définir une action spécifique à une application, à exécuter après la validation d'un compte utilisateur en attente, renseignée dans le nouveau champs ``utilisateurs.temp_users.confirmation_url`` (#115 par @jpm-cbna)
+* Passage du champs ``bib_organismes.nom_organisme`` de 100 à 500 caractères
+* Mise à jour des versions des librairies psycopg2 (2.8.5) et sqlalchemy (1.3.19) (par @jpm-cbna)
+
+**Note de version**
+
+Si vous mettez à jour UsersHub :
+
+* Pour passer le champs ``bib_organismes.nom_organisme`` à 500 caractères, exécuter en ligne de commande : 
+  ::
+    # Se connecter avec le superuser de la BDD (postgres)
+    sudo su postgres
+    # Se connecter à la BDD geonature2db (à adapter si votre BDD est nommée autrement)
+    psql -d geonature2db
+    # Exécuter la requête de mise à jour du champs
+    UPDATE pg_attribute SET atttypmod = 500+4
+    WHERE attrelid = 'utilisateurs.bib_organismes'::regclass
+    AND attname = 'nom_organisme';
+    # Quitter la commande SQL
+    \q
+    # Se déconnecter de l'utilisateur postgres
+    exit
+* Exécuter le script de mise à jour de la BDD (https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.2to2.1.3.sql)
+* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
 2.1.2 (2020-06-17)
 ------------------
 
@@ -10,16 +40,12 @@ CHANGELOG
 * Mise à jour des librairies Javascript (Bootstrap 4.5.0, jQuery 3.5.0)
 * Mise à jour de MarkupSafe de la version 1.0 à 1.1 (#103)
 * Amélioration du template du formulaire de connexion
-* Suppression du paramètre ``ID_APP`` du fichier ``config/config.py``, dont la valeur est récupérée automatiquement avec le ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications``
+* Utilisation du ``code_application`` de valeur ``UH`` dans la table ``utilisateurs.t_applications`` pour l'authentification, au lieu du paramètre ``ID_APP`` du fichier ``config/config.py``
 
 **Corrections**
 
 * Correction de l'affichage des fiches "Organisme" (#90)
 * Correction de la documentation d'installation (par @lpofredc)
-
-**Notes de version**
-
-* Vous pouvez supprimer le paramètre ``ID_APP`` du fichier ``config/config.py`` car il n'est plus utilisé
 
 2.1.1 (2019-02-12)
 ------------------
@@ -29,7 +55,6 @@ CHANGELOG
 * Modification de l'écriture d'une contrainte d'unicité
 * Modification de la méthode d'installation du virtualenv
 * Utilisation de nvm pour installer node et npm (uniformisation avec GeoNature)
-
 
 **Note de version**
 

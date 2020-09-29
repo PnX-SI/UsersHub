@@ -7,7 +7,6 @@ import hashlib
 import random
 import re
 
-
 from flask import Blueprint, request, current_app
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models_register import TempUser, CorRoleToken
@@ -26,7 +25,7 @@ route = Blueprint("api_register", __name__)
 @json_resp
 def get_one_t_roles(id_role):
     """
-        Fonction qui retourne les données concernant un utilisateur
+        Fonction qui retourne les données concernant un utilisateur.
     """
     role = TRoles.get_one(id_role)
 
@@ -38,7 +37,7 @@ def get_one_t_roles(id_role):
 @json_resp
 def test_connexion():
     """
-        route pour tester la connexion
+        Route pour tester la connexion.
     """
     return {"msg": "connexion ok"}
 
@@ -48,26 +47,28 @@ def test_connexion():
 @json_resp
 def create_temp_user():
     """
-        route pour creer un compte temporaire en attendait
-        la confirmation de l'adresse mail
-        les mots de passe seront stocké en crypté
-
-        1. on stocke les variables qui seront
-            utilisées par la création de compte
-        2. on envoie un mail pour demander la confirmation du compte mail
+        Route pour créer un compte temporaire en attendant la confirmation de 
+        l'adresse mail.
+        
+        Nous stockons :
+        1. Les infos qui seront utilisées par la création de compte. Dont les 
+        mots de passe qui sont stockés cryptés.
+        2. Les infos permettant d'appeler l'appli source si la création du
+        compte est confirmée (Appel d'une URL de callaback => confirmation_url).
     """
 
-    # recuperation des parametres
+    # Get data from JSON
     data = request.get_json()
 
+    # Create new temp user
     role_data = {}
     for att in data:
         if hasattr(TempUser, att):
             role_data[att] = data[att]
     temp_user = TempUser(**role_data)
 
+    # Encrypt and set password
     try:
-        # encrypt en set pwd
         temp_user.set_password(
             data["password"],
             data["password_confirmation"],
@@ -76,28 +77,28 @@ def create_temp_user():
     except DifferentPasswordError:
         return "Password and password_confirmation are differents", 500
 
-    # verification des parametres (mdp, login et email existant)
+    # Check sended parameters (password, login and exiting email)
     (is_temp_user_valid, msg) = temp_user.is_valid()
 
     if not is_temp_user_valid:
         return {"msg": msg}, 400
 
-    # on efface les comptes doublons
+    # Delete duplicate entries
     db.session.query(TempUser).filter(
         TempUser.identifiant == temp_user.identifiant
     ).delete()
     db.session.commit()
 
-    # on efface les compte de plus de 168h
+    # Delete old entries (cleaning)
     db.session.query(TempUser).filter(
         TempUser.date_insert <= (datetime.now() - timedelta(days=7))
     ).delete()
     db.session.commit()
 
-    # On cree un nouveau utilisateur
+    # Update attributes
     temp_user.token_role = str(random.getrandbits(128))
 
-    # sauvegarde en base
+    # Save new temp user in database
     db.session.add(temp_user)
     db.session.commit()
 
@@ -109,8 +110,8 @@ def create_temp_user():
 @json_resp
 def valid_temp_user():
     """
-        route pour valider un compte temporaire
-        et en faire un utilisateur (requete a usershub)
+        Route pour valider un compte temporaire et en faire un utilisateur
+        (requete a usershub).
     """
 
     data_in = request.get_json()
@@ -158,8 +159,8 @@ def valid_temp_user():
 
 def set_cor_role_token(email):
     """
-        fonction pour la creation d'un token associé a un id_role
-        parametres : email
+        Fonction pour la création d'un token associé a un id_role
+        Parametres : email
     """
     if not email:
         return {"msg": "Aucun email"}, 404
