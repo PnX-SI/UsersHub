@@ -2,10 +2,8 @@
 CHANGELOG
 =========
 
-2.1.3 (Unreleased)
+2.1.3 (2020-09-29)
 ------------------
-
-Voir https://github.com/PnX-SI/UsersHub/compare/ubuntu_20.04
 
 **Nouveautés**
 
@@ -13,20 +11,26 @@ Voir https://github.com/PnX-SI/UsersHub/compare/ubuntu_20.04
 * Passage du champs ``bib_organismes.nom_organisme`` de 100 à 500 caractères
 * Mise à jour des versions des librairies psycopg2 (2.8.5) et sqlalchemy (1.3.19) (par @jpm-cbna)
 
-**Corrections**
-
-*
-
 **Note de version**
 
-Pour passer le champs ``bib_organismes.nom_organisme`` à 500 caractères, TODO en superuser : 
-::
+Si vous mettez à jour UsersHub :
 
-    UPDATE pg_attribute SET atttypmod = 504
+* Pour passer le champs ``bib_organismes.nom_organisme`` à 500 caractères, exécuter en ligne de commande : 
+  ::
+    # Se connecter avec le superuser de la BDD (postgres)
+    sudo su postgres
+    # Se connecter à la BDD geonature2db (à adapter si votre BDD est nommée autrement)
+    psql -d geonature2db
+    # Exécuter la requête de mise à jour du champs
+    UPDATE pg_attribute SET atttypmod = 500+4
     WHERE attrelid = 'utilisateurs.bib_organismes'::regclass
     AND attname = 'nom_organisme';
-    
-* Exécuter le script de mise à jour de la BDD (``data/update_2.1.2to2.1.3.sql``)
+    # Quitter la commande SQL
+    \q
+    # Se déconnecter de l'utilisateur postgres
+    exit
+* Exécuter le script de mise à jour de la BDD (https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.2to2.1.3.sql)
+* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 2.1.2 (2020-06-17)
 ------------------
