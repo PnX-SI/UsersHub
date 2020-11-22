@@ -79,6 +79,7 @@ fi
 
 if ! database_exists $db_name; then
 	create_usershub_db
+	create_usershub_schema
 fi
 
 if [ ! -f ./config/config.py ]; then
@@ -106,7 +107,7 @@ if [ ! -f ./config/config.py ]; then
     echo "" >> ./config/config.py
     echo "" >> ./config/config.py
     echo "PORT = 5001" >> ./config/config.py
-    echo "DEBUG = False" >> ./config/config.py
+    echo "DEBUG = ${DEBUG:-False}" >> ./config/config.py
     echo "" >> ./config/config.py
     echo "ACTIVATE_API = True" >> ./config/config.py
     echo "ACTIVATE_APP = True" >> ./config/config.py
@@ -117,4 +118,4 @@ fi
 
 # Start App
 
-gunicorn -w ${workers:-1} --access-logfile - -b 0.0.0.0:5001 server:app
+gunicorn -w ${WORKERS:-1} --access-logfile - -b 0.0.0.0:5001 server:app
