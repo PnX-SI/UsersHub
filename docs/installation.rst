@@ -104,3 +104,70 @@ Mise à jour de l'application
     ./install_app.sh
 
 * Suivre les éventuelles notes de version spécifiques à chaque version
+
+
+Installation via Docker
+=======================
+
+
+Nécessite que `Docker <https://docs.docker.com/engine/install/>`_ et `docker-compose <https://docs.docker.com/compose/install/>`_ soient préinstallés sur le serveur.
+Ceci est un exemple de base qui peut etre complété par d'autres applications (proxy inverse comme `Traefik <https://hub.docker.com>`_, `Nginx <https://hub.docker.com/_/nginx>`_ , `Apache <https://hub.docker.com/_/httpd>`_, etc.).
+Toutes les variables utiles du fichiers config/settings.ini.sample peuvent être utilisées.
+
+
+Créez un fichier `docker-compose.yaml` sur la base de l'exemple suivant:
+
+::
+
+    version: "3"
+
+    services:
+
+      db:
+        image: mdillon/postgis:11-alpine
+        container_name: geonature_db
+        volumes:
+          - $POSTGRES_DATA_DIR:/var/lib/postgresql/data
+        ports:
+          - 5433:5432
+        environment:
+          POSTGRES_DB: $POSTGRES_DB
+          POSTGRES_USER: $POSTGRES_USER
+          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+
+      usershub:
+        image: geonature/usershub:latest
+        container_name: usershub
+        ports:
+          - 80:5001
+        volumes:
+          - /opt/docker/geonature/usershub/config:/usr/src/app/config
+        links:
+          - db
+        environment:
+        POSTGRES_DB: $POSTGRES_DB
+        POSTGRES_USER: $POSTGRES_USER
+        POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+        URL: $URL
+
+
+Dans le même dossier, créez un fichier `.env` contenant a minima les variables suivantes.
+::
+
+    POSTGRES_DATA_DIR=<StockageDesFichiersPostgreSQL>
+    POSTGRES_DB=<NomBaseDeDonnées>
+    POSTGRES_USER=<UtilisateurPostgreSQL>
+    POSTGRES_PASSWORD=<MotDePassePostgreSQL>
+    URL=<http://AdresseDeMonUsersHub>
+
+
+Lancez ensuite la stack avec la commande suivante:
+
+
+::
+
+    docker-compose up -d
+
+
+rendez-vous alors à l'adresse de votre usershub. 
