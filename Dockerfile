@@ -1,3 +1,13 @@
+########################################################################
+#
+# UsersHub  (A GeoNature suite application)
+#
+#########################################################################
+
+#########################################################################
+# Create a Node container which will be used to install the JS libs
+#########################################################################
+
 FROM node:12-alpine3.11 AS node-builder
 
 COPY app/static /app/static
@@ -6,24 +16,52 @@ WORKDIR /app/static
 
 RUN npm ci
 
-FROM python:3.7-buster
+#########################################################################
+# Create a Python container run app
+###################################################################
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y locales && \
-    localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
+FROM python:3.7-slim-buster
+
+## install dependencies
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y locales gcc libpq-dev postgresql-client && \
+    localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8 && \
+    apt-get clean
+
+## set LANG env
 ENV LANG fr_FR.utf8
 
-WORKDIR /app
+## set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY . /app
+## set working directory
+WORKDIR /usr/src/app
 
-RUN pip3 install -r requirements.txt
+## add user
+RUN addgroup --system user && adduser --system --no-create-home --group user
+RUN chown -R user:user /usr/src/app && chmod -R 755 /usr/src/app
 
-COPY --from=node-builder /app/static/node_modules /app/app/static/node_modules
+## add and install requirements
+RUN pip install --upgrade pip
+COPY ./requirements.txt /usr/src/app/requirements.txt
+RUN pip install -r requirements.txt
 
-VOLUME /app/app/config
+## Clean apt after requirements install
+RUN apt-get autoremove -y gcc
+RUN rm -rf /var/lib/apt/lists/* 
+
+## Run app as user
+USER user
+
+COPY . /usr/src/app
+
+COPY --from=node-builder /app/static/node_modules /usr/src/app/app/static/node_modules
+
+VOLUME /usr/src/app/app/config
 
 EXPOSE 5001
 
-RUN rm -rf /var/lib/apt/lists/* 
-
-CMD ["gunicorn", "--access-logfile","-" ,"-b", "0.0.0.0:5001", "server:app"]
+#CMD ["gunicorn", "--access-logfile","-" ,"-b", "0.0.0.0:5001", "server:app"]
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
