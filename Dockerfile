@@ -40,28 +40,27 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /usr/src/app
 
 ## add user
-RUN addgroup --system user && adduser --system --no-create-home --group user
-RUN chown -R user:user /usr/src/app && chmod -R 755 /usr/src/app
+RUN addgroup --system -gid 1001 user && adduser --system --no-create-home --uid 1001 --group user
 
 ## add and install requirements
 RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 ## Clean apt after requirements install
 RUN apt-get autoremove -y gcc
 RUN rm -rf /var/lib/apt/lists/* 
 
-## Run app as user
+COPY . /usr/src/app
+RUN chown -R user:user /usr/src/app && chmod -R 755 /usr/src/app
+
+VOLUME ["/usr/src/app/config"]
+
 USER user
 
-COPY . /usr/src/app
-
+# Copy js libs from node builder
 COPY --from=node-builder /app/static/node_modules /usr/src/app/app/static/node_modules
-
-VOLUME /usr/src/app/app/config
 
 EXPOSE 5001
 
-#CMD ["gunicorn", "--access-logfile","-" ,"-b", "0.0.0.0:5001", "server:app"]
 ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
