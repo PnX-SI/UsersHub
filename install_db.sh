@@ -43,15 +43,6 @@ then
     sudo -n -u postgres -s psql -d $db_name -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
     # Mise en place de la structure de la base et des données permettant son fonctionnement avec l'application
     echo "Création de la structure de la base de données..."
-    export PGPASSWORD=$user_pg_pass;psql -h $db_host -U $user_pg -d $db_name -f data/usershub.sql &>> log/install_db.log
-    if $insert_minimal_data
-        then
-            echo "Insertion des données minimales dans la base de données..."
-            export PGPASSWORD=$user_pg_pass;psql -h $db_host -U $user_pg -d $db_name -f data/usershub-data.sql &>> log/install_db.log
-    fi
-    if $insert_sample_data
-        then
-            echo "Insertion des données exemple dans la base de données..."
-            export PGPASSWORD=$user_pg_pass;psql -h $db_host -U $user_pg -d $db_name -f data/usershub-dataset.sql &>> log/install_db.log
-    fi
+    export FLASK_APP=server:app
+    flask db upgrade utilisateurs@head -x data=$insert_minimal_data -x sample-data=$insert_sample_data
 fi

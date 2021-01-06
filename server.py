@@ -19,9 +19,14 @@ from flask import (
     request, session, render_template,
     g
 )
+from flask_migrate import Migrate
 
 from app.env import db
 from config import config
+
+
+migrate = Migrate()
+
 
 class ReverseProxied(object):
     def __init__(self, app, script_name=None, scheme=None, server=None):
@@ -55,6 +60,7 @@ app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["URL_APPLICAT
 app.secret_key = app.config["SECRET_KEY"]
 
 db.init_app(app)
+migrate.init_app(app, db, directory='app/migrations')
 
 # pass parameters to the usershub authenfication sub-module, DONT CHANGE THIS
 app.config["DB"] = db

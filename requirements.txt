@@ -1,10 +1,11 @@
-https://github.com/PnX-SI/UsersHub-authentification-module/archive/1.4.4.zip
+-e git+https://github.com/PnX-SI/UsersHub-authentification-module@alembic#egg=pypnusershub
 bcrypt==3.1.4
 cffi==1.11.5
 click==6.7
 decorator==4.3.0
 Flask-Bootstrap==3.3.7.1
 Flask-Cors==3.0.6
+flask-migrate==2.5.3
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 flask==1.1.1
