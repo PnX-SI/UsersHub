@@ -403,7 +403,7 @@ SELECT a.groupe,
             c.id_application
            FROM utilisateurs.t_roles u
              JOIN utilisateurs.cor_role_app_profil c ON c.id_role = u.id_role
-             JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
+             LEFT JOIN utilisateurs.bib_organismes o ON o.id_organisme = u.id_organisme
         UNION
          SELECT u.groupe,
             u.id_role,
