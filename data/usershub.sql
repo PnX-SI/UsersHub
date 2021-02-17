@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS bib_organismes (
     email_organisme character varying(100),
     url_organisme character varying(255),
     url_logo character varying(255),
-    champs_addi jsonb,
+    additional_data jsonb,
     id_parent integer
 );
 
