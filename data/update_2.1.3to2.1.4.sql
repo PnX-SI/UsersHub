@@ -2,7 +2,7 @@
 BEGIN;
 
 ALTER TABLE utilisateurs.bib_organismes
-    ADD COLUMN IF NOT EXISTS champs_addi JSONB;
+    ADD COLUMN IF NOT EXISTS additional_data JSONB;
 
 -- Fix LEFT JOIN on bib_organismes
 CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS
