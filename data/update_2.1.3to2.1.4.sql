@@ -1,6 +1,9 @@
 -- Update UsersHub DB schema from v2.1.3 to v2.1.4
 BEGIN;
 
+ALTER TABLE utilisateurs.bib_organismes
+    ADD COLUMN IF NOT EXISTS additional_data JSONB;
+
 -- Fix LEFT JOIN on bib_organismes
 CREATE OR REPLACE VIEW utilisateurs.v_roleslist_forall_applications AS
 SELECT a.groupe,
