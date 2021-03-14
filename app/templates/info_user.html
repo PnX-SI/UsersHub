@@ -3,7 +3,7 @@
 
 {%set is_identifiant = user['identifiant'] is not none and user['identifiant'] != '' %}
 {%set is_uuid = user['uuid_role'] is not none and user['uuid_role'] != '' %}
-{%set is_organisme = organisme.nom_organisme is not none and organisme.nom_organisme != '' %}
+{%set is_organisme = organisme is not none and organisme['nom_organisme'] != '' %}
 {%set is_desc = user['desc_role'] is not none and user['desc_role'] != '' %}
 {%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
 {%set is_mail = user['email'] is not none and user['email'] != '' %}
@@ -21,7 +21,7 @@
                 <br /><strong>UUID :</strong> {{user['uuid_role']}}
             {% endif %}
             {% if is_identifiant %}
-                <br /><strong>Identifiant :</strong>{{user['identifiant']}}
+                <br /><strong>Identifiant :</strong> {{user['identifiant']}}
             {% endif %}
             {% if is_mail %}
                 <br /><strong>Email :</strong> <a href="mailto:{{user['email']}}">{{user['email']}}</a>
