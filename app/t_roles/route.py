@@ -219,6 +219,9 @@ def updatepass(id_role=None):
     """
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
+    # Build title
+    role_fullname=buildUserFullName(myuser)
+    title=f"Changer le mot de passe de l'utilisateur '{role_fullname}'"
 
     if request.method == "POST":
         if form.validate_on_submit() and form.validate():
@@ -241,11 +244,7 @@ def updatepass(id_role=None):
                     return render_template(
                         "user_pass.html",
                         form=form,
-                        title="Changer le mot de passe de l'utilisateur '"
-                        + myuser["nom_role"]
-                        + " "
-                        + myuser["prenom_role"]
-                        + "'",
+                        title=title,
                         id_role=id_role,
                     )
             form_user["id_role"] = id_role
@@ -257,11 +256,7 @@ def updatepass(id_role=None):
     return render_template(
         "user_pass.html",
         form=form,
-        title="Changer le mot de passe de l'utilisateur '"
-        + myuser["nom_role"]
-        + " "
-        + myuser["prenom_role"]
-        + "'",
+        title=title,
         id_role=id_role,
     )
 
@@ -286,6 +281,7 @@ def deluser(id_role):
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def info(id_role):
     user = TRoles.get_one(id_role)
+    user["fullname"] = buildUserFullName(user)
     organisme = Bib_Organismes.get_one(user["id_organisme"])
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
@@ -299,6 +295,14 @@ def info(id_role):
         rights=rights,
         pathU=URL_APPLICATION + "/user/update/",
     )
+
+def buildUserFullName(user):
+    fullname=[]
+    if user["nom_role"] != None:
+        fullname.append(user["nom_role"].upper())
+    if user["prenom_role"] != None:
+        fullname.append(user["prenom_role"].title())
+    return ' '.join(fullname)
 
 
 def pops(form, with_group=True):

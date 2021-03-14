@@ -11,7 +11,7 @@
 {%set is_list = lists|length > 0 %}
 {%set is_right = rights|length > 0 %}
 <div class="container main-zone ng-scope ">
-    <h3>Utilisateur "{{user['nom_role']}} {{user['prenom_role']}}"</h3>
+    <h3>Utilisateur "{{user['fullname']}}"</h3>
     <div class="ml-5">
         <small>
             {% if is_desc %}
