@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs.temp_users
 (
     id_temp_user SERIAL NOT NULL,
     token_role text,
-    organisme character(32),
+    organisme character varying(200),
     id_application integer NOT NULL,
     confirmation_url character varying(250),
     groupe boolean NOT NULL DEFAULT false,

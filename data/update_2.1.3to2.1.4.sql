@@ -72,4 +72,7 @@ SELECT a.groupe,
   WHERE a.active = true
   GROUP BY a.groupe, a.active, a.id_role, a.identifiant, a.nom_role, a.prenom_role, a.desc_role, a.pass, a.pass_plus, a.email, a.id_organisme, a.organisme, a.id_unite, a.remarques, a.date_insert, a.date_update, a.id_application;
 
+-- Fix temp_users.organisme field, increase size to 200 characters (32 is really to short)
+ALTER TABLE utilisateurs.temp_users ALTER COLUMN organisme TYPE varchar(200);
+
 COMMIT;
