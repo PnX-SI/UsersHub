@@ -12,7 +12,6 @@ from flask import (
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
 
-
 from app.t_roles import forms as t_rolesforms
 from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
@@ -131,6 +130,7 @@ def addorupdate(id_role=None):
     form.id_organisme.choices = Bib_Organismes.choixSelect(
         "id_organisme", "nom_organisme", order_by="nom_organisme"
     )
+    form.id_organisme.choices.insert(0, ("", "-- Selectionnez un organisme..."))
     form.a_groupe.choices = TRoles.choix_group("id_role", "nom_role", aucun=None)
 
     if id_role is not None:
