@@ -24,21 +24,41 @@
         </div>
         <div id="memberslist" class="card-body collapse show">
         {% if is_members %}
-            <ul class="list-group list-group-flush">
-                {% for user in members %}
-                    <li class="list-group-item">
-                        {% set is_group = user.groupe %}
-                        {% if is_group %}
-                            <a href="{{url_application}}/group/info/{{user.id_role}}">
-                                {{user.nom_role}}</a>
-                        {% else %}
-                            <a href="{{url_application}}/user/info/{{user.id_role}}">
-                                {%if user.prenom_role %}{{user.prenom_role}} {% endif %}{{user.nom_role}}</a>
-                        {% endif %}
-                    
-                    </li>
-                {% endfor %}   
-            </ul>
+            <table class="table table-borderless table-striped table-hover">
+                <thead class="">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in members %}
+                        <tr>
+                            <td>
+                                {% set is_group = user.groupe %}
+                                {% if is_group %}
+                                    <a href="{{url_application}}/group/info/{{user.id_role}}">
+                                        {{user.nom_role}}</a>
+                                {% else %}
+                                    <a href="{{url_application}}/user/info/{{user.id_role}}">
+                                        {%if user.prenom_role %}
+                                            {{user.prenom_role}}
+                                        {% endif %}
+                                        {{user.nom_role}}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.email %}
+                                    <a href="mailto:{{user.email}}">{{user.email}}</a>
+                                {% else %}
+                                    &nbsp;
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
             <p class="text-info ml-5">Le groupe ne comporte aucun membre.</p>
         {% endif %}
