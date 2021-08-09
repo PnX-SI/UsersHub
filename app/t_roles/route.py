@@ -286,7 +286,7 @@ def deluser(id_role):
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def info(id_role):
     user = TRoles.get_one(id_role)
-    organisme = Bib_Organismes.get_one(user["id_organisme"])
+    organisme = Bib_Organismes.get_one(user["id_organisme"]) if user['id_organisme'] else None
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
