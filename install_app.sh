@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. config/settings.ini
+. config/settings.ini || exit 1
 
 # Création des fichiers de configuration
 cd config
@@ -8,12 +8,12 @@ cd config
 
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
-  cp config.py.sample config.py
+  cp config.py.sample config.py || exit 1
 fi
 
 
 echo "préparation du fichier config.py..."
-sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
+sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py || exit 1
 
 url_application="${url_application//\//\\/}"
 # on enleve le / final
@@ -21,16 +21,16 @@ if [ "${url_application: -1}" = '/' ]
 then
 url_application="${url_application::-1}"
 fi
-sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py
+sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
 
 cd ..
 
 # Installation de l'environement python
 
 echo "Installation du virtual env..."
-python3 -m venv venv
+python3 -m venv venv || exit 1
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt || exit 1
 deactivate
 
 # rendre la commande nvm disponible
@@ -39,9 +39,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # Installation de l'environement javascript
 cd app/static
-nvm install
-nvm use
-npm ci
+nvm install || exit 1
+nvm use || exit 1
+npm ci || exit 1
 cd ../..
 
 
@@ -49,15 +49,15 @@ cd ../..
 export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
 # Configuration systemd
-envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service
-sudo systemctl daemon-reload
+envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
+sudo systemctl daemon-reload || exit 1
 
 # Configuration apache
-sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf
-sudo a2enconf usershub
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo systemctl reload apache2
+sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
+sudo a2enconf usershub || exit 1
+sudo a2enmod proxy || exit 1
+sudo a2enmod proxy_http || exit 1
+sudo systemctl reload apache2 || exit 1
 # you may need a restart if proxy & proxy_http was not already enabled
 
 echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
