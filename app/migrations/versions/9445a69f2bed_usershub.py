@@ -15,7 +15,6 @@ down_revision = None
 branch_labels = ('usershub',)
 depends_on = (
     'fa35dfe5ff27',  # schema utilisateurs
-    '72f227e37bdf',  # schema utilisateurs, données d’exemples
 )
 
 
@@ -38,14 +37,6 @@ def upgrade():
     VALUES
         (6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH')),
         (3, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH'))
-    """)
-    op.execute("""
-    INSERT INTO cor_role_app_profil (id_role, id_application, id_profil) VALUES
-    (
-        (SELECT id_role FROM t_roles WHERE nom_role = 'Grp_admin'),
-        (SELECT id_application FROM t_applications WHERE code_application = 'UH'),
-        (SELECT id_profil FROM t_profils WHERE code_profil = '6')
-    )
     """)
 
 
