@@ -26,17 +26,6 @@ ATTENTION : Les valeurs renseignées dans ce fichier sont utilisées par le scri
     Si vous installez UsersHub dans le cadre de la gestion des utilisateurs de GeoNature, il est conseillé d'utiliser les mêmes utilisateurs PostgreSQL que pour GeoNature.
 
 
-Création de la base de données
-==============================
-
-* Création de la base de données et chargement des données initiales
- 
-  ::  
-  
-    cd /home/synthese/usershub
-    ./install_db.sh
-
-
 Configuration de l'application
 ==============================
 
@@ -48,26 +37,37 @@ Configuration de l'application
     ./install_app.sh
 
 
+Création de la base de données
+==============================
+
+* Création de la base de données et chargement des données initiales
+ 
+  ::  
+  
+    cd /home/synthese/usershub
+    ./install_db.sh
+
+
 Configuration Apache
 ====================
 
-Créer le fichier ``/etc/apache2/sites-avalaible/usershub.conf`` avec ce contenu :
+Créer le fichier ``/etc/apache2/conf-available/usershub.conf`` avec ce contenu :
  
 ::  
   
     <Location /usershub>
-        ProxyPass  http://localhost:5001
-        ProxyPassReverse  http://localhost:5001
+        ProxyPass  http://localhost:5001/usershub
+        ProxyPassReverse  http://localhost:5001/usershub
     </Location>
 
 Activer le site et recharger la configuration Apache :
  
 ::  
   
-    sudo a2ensite usershub
+    sudo a2enconf usershub
     sudo service apache2 reload
 
-* Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub avec l'utilisateur ``admin`` et son mot de passe ``admin``.
+* Pour tester, se connecter à l'application via http://mon-domaine.fr/usershub/ avec l'utilisateur ``admin`` et son mot de passe ``admin``.
 
 
 Mise à jour de l'application
@@ -102,5 +102,13 @@ Mise à jour de l'application
     
     cd usershub
     ./install_app.sh
+
+* Mettre à jour la base de données :
+
+::
+
+    cd usershub
+    source venv/bin/activate
+    flask db upgrade usershub@head
 
 * Suivre les éventuelles notes de version spécifiques à chaque version

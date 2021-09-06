@@ -28,7 +28,7 @@ cd ..
 # Installation de l'environement python
 
 echo "Installation du virtual env..."
-python3 -m virtualenv -p /usr/bin/python3 venv
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
@@ -46,22 +46,18 @@ cd ../..
 
 
 #Lancement de l'application
-DIR=$(readlink -e "${0%/*}")
-currentdir=${PWD##*/}
+export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
+# Configuration systemd
+envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service
+sudo systemctl daemon-reload
 
-sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
-sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
-
-# activate proxy apache extension
+# Configuration apache
+sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf
+sudo a2enconf usershub
 sudo a2enmod proxy
 sudo a2enmod proxy_http
+sudo systemctl reload apache2
+# you may need a restart if proxy & proxy_http was not already enabled
 
-# lancement des services qui créent les fichiers de logs
-sudo -s supervisorctl reread
-sudo -s supervisorctl reload
-
-#création d'un fichier rotation des logs une fois qu'ils sont créés
-sudo cp $DIR/log_rotate /etc/logrotate.d/uhv2
-sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/logrotate.d/uhv2
-sudo logrotate -f /etc/logrotate.conf
+echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
