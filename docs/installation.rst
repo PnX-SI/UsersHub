@@ -13,9 +13,9 @@ Configuration de la base de données PostgreSQL
  
   ::  
   
-    cd /home/synthese/usershub
-    cp config/settings.ini.sample config/settings.ini
-    nano config/settings.ini
+    $ cd ~/usershub
+    $ cp config/settings.ini.sample config/settings.ini
+    $ nano config/settings.ini
 
 Renseigner le nom de la base de données, l'utilisateur PostgreSQL et son mot de passe. Il est possible mais non conseillé de laisser les valeurs proposées par défaut. 
 
@@ -33,7 +33,7 @@ Configuration de l'application
  
   ::  
   
-    cd /home/synthese/usershub
+    cd ~/usershub
     ./install_app.sh
 
 
@@ -44,21 +44,18 @@ Création de la base de données
  
   ::  
   
-    cd /home/synthese/usershub
+    cd ~/usershub
     ./install_db.sh
 
 
 Configuration Apache
 ====================
 
-Créer le fichier ``/etc/apache2/conf-available/usershub.conf`` avec ce contenu :
- 
-::  
-  
-    <Location /usershub>
-        ProxyPass  http://localhost:5001/usershub
-        ProxyPassReverse  http://localhost:5001/usershub
-    </Location>
+Copier le fichier de configuration apache d’exemple :
+
+::
+
+    sudo cp ~/usershub/usershub_apache.conf /etc/apache2/conf-available/usershub.conf
 
 Activer le site et recharger la configuration Apache :
  

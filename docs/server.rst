@@ -18,8 +18,8 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
  
   ::  
   
-    adduser --home /home/synthese synthese
-    adduser synthese sudo
+    # adduser --home /home/synthese synthese
+    # adduser synthese sudo
 
 :Note:
 
@@ -29,43 +29,30 @@ Un serveur disposant d'au moins de 1 Go RAM et de 5 Go d'espace disque.
  
   ::  
   
-    cd /home/synthese
-    wget https://github.com/PnX-SI/UsersHub/archive/X.Y.Z.zip
-    unzip X.Y.Z.zip
-    mv UsersHub-X.Y.Z usershub
+    $ cd /home/synthese
+    $ wget https://github.com/PnX-SI/UsersHub/archive/X.Y.Z.zip
+    $ unzip X.Y.Z.zip
+    $ mv UsersHub-X.Y.Z usershub
 
 
 Installation et configuration du serveur
 ========================================
 
-Installation pour Debian 9.
+Installation pour Debian 10 et Debian 11.
 
 ::  
   
-    sudo apt-get install -y python3 python3-dev python3-setuptools python-pip python-virtualenv libpq-dev 
-    sudo apt-get install -y supervisor
-    sudo apt-get install -y apache2
-    sudo apt-get install -y curl
-    curl -sL https://deb.nodesource.com/setup_10.x | bash -
-    sudo apt-get install -y nodejs 
-    pip install virtualenv==20.0.1
+    $ sudo apt install -y python3-venv libpq-dev postgresql apache2
     
 * Installer NVM (Node version manager), node et npm
 
-  ::  
+::  
         
-        wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
-
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    $ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
  
-Fermer la console et la réouvrir pour que les modifications soient prises en compte.
-    
-:Note:
+Fermer la console et la réouvrir pour que l’environnement npm soit pris en compte.
 
-    Cette documentation concerne une installation sur Debian. Pour tout autre environemment les commandes sont à adapter.
 
 Installation et configuration de PostgreSQL
 ===========================================
@@ -74,14 +61,10 @@ Installation et configuration de PostgreSQL
  
   ::  
   
-    sudo apt-get install postgresql-9.6 postgresql-server-dev-9.6
+    $ sudo apt-get install postgresql
 
 * Création d'un utilisateur PostgreSQL
  
   ::  
   
-    sudo su postgres
-    psql
-    CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';
-    \q
-    exit
+    $ sudo -u postgres psql -c "CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';"
