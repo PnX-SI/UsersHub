@@ -307,7 +307,7 @@ CREATE OR REPLACE VIEW v_userslist_forall_menu AS
     a.identifiant,
     a.nom_role,
     a.prenom_role,
-    (upper(a.nom_role::text) || ' '::text) || a.prenom_role::text AS nom_complet,
+    btrim(concat(upper(a.nom_role::text), ' '::text, a.prenom_role::text)) AS nom_complet,								
     a.desc_role,
     a.pass,
     a.pass_plus,
