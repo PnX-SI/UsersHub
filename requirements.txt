@@ -1,2 +1,2 @@
 -r requirements-common.txt
-https://github.com/PnX-SI/UsersHub-authentification-module/archive/1.4.4.zip
+https://github.com/PnX-SI/UsersHub-authentification-module/archive/1.5.1.zip
