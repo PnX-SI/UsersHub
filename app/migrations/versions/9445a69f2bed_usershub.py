@@ -35,8 +35,13 @@ def upgrade():
     INSERT INTO utilisateurs.cor_profil_for_app
         (id_profil, id_application)
     VALUES
-        (6, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH')),
-        (3, (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH'))
+        (
+            (SELECT id_profil FROM utilisateurs.t_profils WHERE code_profil = '6'),
+            (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH')
+        ), (
+            (SELECT id_profil FROM utilisateurs.t_profils WHERE code_profil = '3'),
+            (SELECT id_application FROM utilisateurs.t_applications WHERE code_application = 'UH')
+        )
     """)
 
 
