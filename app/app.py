@@ -14,9 +14,12 @@ from flask import (
     g
 )
 from werkzeug.middleware.proxy_fix import ProxyFix
+from sqlalchemy.exc import ProgrammingError
 from flask_migrate import Migrate
 
 from app.env import db
+
+from pypnusershub.db.models import Application
 
 
 migrate = Migrate()
@@ -54,6 +57,13 @@ def create_app():
 
     with app.app_context():
         app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
+
+        try:
+            uh_app = Application.query.filter_by(code_application='UH').one()
+        except ProgrammingError:
+            logging.warning("Warning: unable to find UsersHub application, database not yet initialized?")
+        else:
+            app.config["ID_APP"] = uh_app.id_application
 
         if app.config["ACTIVATE_APP"]:
             @app.route("/")

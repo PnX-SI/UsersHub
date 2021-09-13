@@ -8,9 +8,6 @@ URLS_COR = ['http://localhost:5000']
 
 SECRET_KEY = 'super secret key'
 
-# ID of UsersHub application
-ID_APP = 1
-
 # Authentification crypting method (hash or md5)
 PASS_METHOD = 'hash'
 
