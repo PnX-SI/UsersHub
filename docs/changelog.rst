@@ -2,12 +2,44 @@
 CHANGELOG
 =========
 
-2.1.4 (unreleased)
+2.2 (unreleased)
 ------------------
 
-**Corrections**
+**Nouveautés**
 
-*
+* Packaging de l’application UsersHub
+* Passage de ``supervisor`` à ``systemd``
+
+  * Les logs de l’application se trouve désormais dans le répertoire système ``/var/log/usershub.log``
+
+* Ajout d’un template de configuration ``apache``
+* Gestion des évolutions de la base de données avec `alembic <https://alembic.sqlalchemy.org/>`_
+* Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
+* Mise-à-jour de `UsersHub-authentification-module`
+* Ajout d’un champs JSONB ``additional_data`` à ``bib_organismes``
+
+**Développement**
+
+* Ajout de `UsersHub-authentification-module` en temps que sous-module git
+
+**Note de version**
+
+Si vous mettez à jour UsersHub :
+
+* Passage à ``systemd`` :
+
+  * Stopper UsersHub : ``sudo supervisorctl stop usershub2``
+  * Supprimer le fichier de configuration de supervisor ``/etc/supervisor/conf.d/usershub-service.conf``
+  * Si supervisor n’est plus utilisé par aucun service (répertoire ``conf.d`` vide), il peut être désinstallé : ``sudo apt remove supervisor``)
+  * Copier ``usershub.service`` dans ``/etc/systemd/system``
+  * Éditer ``/etc/systemd/system/usershub.service`` et remplacer les variables ``${USER}`` et ``${USERSHUB_DIR}`` par les valeurs appropriées (`e.g.` ``geonatureadmin`` et ``/home/geonatureadmin/usershub``)
+  * Lancer la commande ``sudo systemctl daemon-reload``
+  * Pour démarrer UsersHub : ``sudo systemctl start usershub``
+  * Pour activer UsersHub au démarrage : ``sudo systemctl enable usershub``
+
+* Correction de la configuration apache : si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier d’exemple ``install/assets/geonature_apache.conf``.
+
+
 
 2.1.3 (2020-09-29)
 ------------------
@@ -24,6 +56,7 @@ Si vous mettez à jour UsersHub :
 
 * Pour passer le champs ``bib_organismes.nom_organisme`` à 500 caractères, exécuter en ligne de commande : 
   ::
+
     # Se connecter avec le superuser de la BDD (postgres)
     sudo su postgres
     # Se connecter à la BDD geonature2db (à adapter si votre BDD est nommée autrement)
@@ -66,11 +99,13 @@ Si vous mettez à jour UsersHub :
 **Note de version**
 
 * Installez ``pip3`` et ``virtualenv``
+
 ::
 
     sudo apt-get update
     sudo apt-get install python3-pip
     sudo pip3 install virtualenv==20.0.1
+
 * Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
 * Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
