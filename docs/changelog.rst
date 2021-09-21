@@ -25,20 +25,31 @@ CHANGELOG
 
 Si vous mettez à jour UsersHub :
 
+* Suppression de ``supervisor`` :
+
+  * Vérifier que UsersHub n’est pas lancé par supervisor : ``sudo supervisorctl stop usershub2``
+  * Supprimer le fichier de configuration de supervisor ``/etc/supervisor/conf.d/usershub-service.conf``
+  * Si supervisor n’est plus utilisé par aucun service (répertoire ``/etc/supervisor/conf.d/`` vide), il peut être désinstallé : ``sudo apt remove supervisor``
+
+* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+
 * Passage à ``systemd`` :
 
-  * Stopper UsersHub : ``sudo supervisorctl stop usershub2``
-  * Supprimer le fichier de configuration de supervisor ``/etc/supervisor/conf.d/usershub-service.conf``
-  * Si supervisor n’est plus utilisé par aucun service (répertoire ``conf.d`` vide), il peut être désinstallé : ``sudo apt remove supervisor``
-  * Copier le fichier ``usershub.service`` dans ``/etc/systemd/system``
-  * Éditer ``/etc/systemd/system/usershub.service`` et remplacer les variables ``${USER}`` (votre utilisateur linux courant) et ``${USERSHUB_DIR}`` (chemin absolu du répertoire de UsersHub) par les valeurs appropriées (`e.g.` ``geonatureadmin`` et ``/home/geonatureadmin/usershub``)
-  * Lancer la commande ``sudo systemctl daemon-reload``
+  * Le fichier ``/etc/systemd/system/usershub.service`` doit avoir été installé par le script ``install_app.sh``
   * Pour démarrer UsersHub : ``sudo systemctl start usershub``
   * Pour activer UsersHub automatiquement au démarrage : ``sudo systemctl enable usershub``
 
-* Correction de la configuration Apache : si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier d’exemple ``usershub_apache.conf``.
+* Correction de la configuration Apache :
 
-* Si vous n'utilisez pas n'utilisez pas GeoNature, appliquez le passage à Alembic
+  * Le fichier ``/etc/apache2/conf-available/usershub.conf`` doit avoir été installé par le script ``install_app.sh``
+  * Si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
+  * Vous pouvez également utiliser le fichier fournis soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans votre configuration de vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
+
+* **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
+
+  * Sourcer le virtualenv de UsersHub : ``source venv/bin/activate``
+  * Indiquer à alembic que vous possédez déjà la version 1.4.7 du schéma ``utilisateurs`` (UsersHub 2.1.3) : ``flask db stamp fa35dfe5ff27``
+  * Appliquer les révisions du schéma ``utilisateurs`` : ``flask db upgrade utilisateurs@head``
 
 2.1.3 (2020-09-29)
 ------------------
