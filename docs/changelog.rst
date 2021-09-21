@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2.2 (unreleased)
+2.2.0 (unreleased)
 ------------------
 
 **Nouveautés**
@@ -37,7 +37,7 @@ Si vous mettez à jour UsersHub :
   * Pour démarrer UsersHub : ``sudo systemctl start usershub``
   * Pour activer UsersHub au démarrage : ``sudo systemctl enable usershub``
 
-* Correction de la configuration apache : si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier d’exemple ``install/assets/geonature_apache.conf``.
+* Correction de la configuration apache : si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier d’exemple ``usershub_apache.conf``.
 
 
 
