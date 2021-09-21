@@ -13,10 +13,9 @@ CHANGELOG
   * Les logs de l’application se trouvent désormais dans le répertoire système ``/var/log/usershub.log``
 
 * Ajout d'un template de configuration ``apache``
-* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_, déplacée dans le sous-module UsersHub-authentification-module (https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data)
+* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module UsersHub-authentification-module (https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data)
 * Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
-* Mise à jour de ``UsersHub-authentification-module``
-* Ajout d’un champs JSONB ``additional_data`` à ``bib_organismes``
+* Mise à jour de la version de ``UsersHub-authentification-module``
 
 **Développement**
 
