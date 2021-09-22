@@ -7,12 +7,13 @@ CHANGELOG
 
 **Nouveautés**
 
+* Affichage des emails des utilisateurs dans les fiches des groupes (#133)
 * Packaging de l’application UsersHub
 * Passage de ``supervisor`` à ``systemd``
 
   * Les logs de l’application se trouvent désormais dans le répertoire système ``/var/log/usershub.log``
 
-* Ajout d'un template de configuration ``apache``
+* Ajout d'un template de configuration ``Apache``
 * Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module UsersHub-authentification-module (https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data)
 * Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
 * Mise à jour de la version de ``UsersHub-authentification-module``
@@ -39,7 +40,7 @@ Si vous mettez à jour UsersHub :
   * Pour démarrer UsersHub : ``sudo systemctl start usershub``
   * Pour activer UsersHub automatiquement au démarrage : ``sudo systemctl enable usershub``
 
-* Correction de la configuration Apache :
+* Révision de la configuration Apache :
 
   * Le fichier ``/etc/apache2/conf-available/usershub.conf`` doit avoir été installé par le script ``install_app.sh``
   * Si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
@@ -48,7 +49,7 @@ Si vous mettez à jour UsersHub :
 * **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
 
   * Sourcer le virtualenv de UsersHub : ``source venv/bin/activate``
-  * Indiquer à alembic que vous possédez déjà la version 1.4.7 du schéma ``utilisateurs`` (UsersHub 2.1.3) : ``flask db stamp fa35dfe5ff27``
+  * Indiquer à Alembic que vous possédez déjà la version 1.4.7 du schéma ``utilisateurs`` (UsersHub 2.1.3) : ``flask db stamp fa35dfe5ff27``
   * Appliquer les révisions du schéma ``utilisateurs`` : ``flask db upgrade utilisateurs@head``
 
 2.1.3 (2020-09-29)
