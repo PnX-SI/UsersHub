@@ -43,7 +43,7 @@ Si vous mettez à jour UsersHub :
 * Révision de la configuration Apache :
 
   * Le fichier ``/etc/apache2/conf-available/usershub.conf`` doit avoir été installé par le script ``install_app.sh``
-  * Si vous servez UsersHub sur un prefix (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
+  * Si vous servez UsersHub sur un préfixe (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
   * Vous pouvez également utiliser le fichier fournis soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans votre configuration de vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
 
 * **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
