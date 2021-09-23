@@ -30,7 +30,13 @@ cd ..
 echo "Installation du virtual env..."
 python3 -m venv venv || exit 1
 source venv/bin/activate
-pip install -r requirements.txt || exit 1
+pip install --upgrade pip || exit 1
+if [ "${mode}" = "dev" ]; then
+    pip install -r requirements-dev.txt || exit 1
+else
+    pip install -r requirements.txt || exit 1
+fi
+
 deactivate
 
 # rendre la commande nvm disponible
