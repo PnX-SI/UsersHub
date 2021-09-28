@@ -14,13 +14,13 @@ CHANGELOG
   * Les logs de l’application se trouvent désormais dans le répertoire système ``/var/log/usershub.log``
 
 * Ajout d'un template de configuration ``Apache``
-* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module UsersHub-authentification-module (https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data)
+* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data>`_
 * Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
-* Mise à jour de la version de ``UsersHub-authentification-module``
+* Mise à jour de `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/releases>`_ en version 1.5.1
 
 **Développement**
 
-* Ajout de ``UsersHub-authentification-module`` en temps que sous-module git
+* Ajout de UsersHub-authentification-module en temps que sous-module git
 
 **Note de version**
 
@@ -44,7 +44,7 @@ Si vous mettez à jour UsersHub :
 
   * Le fichier ``/etc/apache2/conf-available/usershub.conf`` doit avoir été installé par le script ``install_app.sh``
   * Si vous servez UsersHub sur un préfixe (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
-  * Vous pouvez également utiliser le fichier fournis soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans votre configuration de vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
+  * Vous pouvez également utiliser le fichier fourni soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans votre configuration de vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
 
 * **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
 
