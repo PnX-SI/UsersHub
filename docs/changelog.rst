@@ -14,9 +14,9 @@ CHANGELOG
   * Les logs de l’application se trouvent désormais dans le répertoire système ``/var/log/usershub.log``
 
 * Ajout d'un template de configuration ``Apache``
-* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data>`_
+* Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data>`__
 * Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
-* Mise à jour de `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/releases>`_ en version 1.5.3
+* Mise à jour de `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/releases>`__ en version 1.5.3
 
 **Développement**
 
@@ -29,10 +29,11 @@ Si vous mettez à jour UsersHub :
 * Suppression de ``supervisor`` :
 
   * Vérifier que UsersHub n’est pas lancé par supervisor : ``sudo supervisorctl stop usershub2``
-  * Supprimer le fichier de configuration de supervisor ``/etc/supervisor/conf.d/usershub-service.conf``
+  * Supprimer le fichier de configuration de supervisor ``sudo rm /etc/supervisor/conf.d/usershub-service.conf``
   * Si supervisor n’est plus utilisé par aucun service (répertoire ``/etc/supervisor/conf.d/`` vide), il peut être désinstallé : ``sudo apt remove supervisor``
 
-* Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
+* Installer le paquet ``python3-venv`` nouvellement nécessaire : ``sudo apt install python3-venv``
+* Suivre la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 * Passage à ``systemd`` :
 
@@ -42,14 +43,15 @@ Si vous mettez à jour UsersHub :
 
 * Révision de la configuration Apache :
 
-  * Le fichier ``/etc/apache2/conf-available/usershub.conf`` doit avoir été installé par le script ``install_app.sh``
-  * Si vous servez UsersHub sur un préfixe (typiquement ``/usershub``), assurez vous que celui-ci figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
-  * Vous pouvez également utiliser le fichier fourni soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans votre configuration de vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
+  * Le script d’installation ``install_app.sh`` aura installé le fichier ``/etc/apache2/conf-available/usershub.conf`` permettant de servir UsersHub sur le préfixe ``/usershub``.
+  * Vous pouvez utiliser ce fichier de configuration soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans la configuration de votre vhost (``IncludeOptional /etc/apache2/conf-enabled/usershub.conf``).
+  * Si vous gardez votre propre fichier de configuration et que vous servez UsersHub sur un préfixe (typiquement ``/usershub``), assurez vous que ce préfixe figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
 
 * **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
 
+  * Se placer dans le dossier de UsersHub : ``cd ~/usershub``
   * Sourcer le virtualenv de UsersHub : ``source venv/bin/activate``
-  * Indiquer à Alembic que vous possédez déjà la version 1.4.7 du schéma ``utilisateurs`` (UsersHub 2.1.3) : ``flask db stamp fa35dfe5ff27``
+  * Indiquer à Alembic que vous possédez déjà la version 1.4.7 du schéma ``utilisateurs``, UsersHub 2.1.3 et les données d’exemples : ``flask db stamp f63a8f44c969``
   * Appliquer les révisions du schéma ``utilisateurs`` : ``flask db upgrade utilisateurs@head``
 
 2.1.3 (2020-09-29)

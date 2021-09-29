@@ -1,7 +1,6 @@
 """UsersHub
 
 Revision ID: 9445a69f2bed
-Revises: fa35dfe5ff27
 Create Date: 2021-08-30 16:33:42.410504
 
 """
