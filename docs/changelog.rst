@@ -16,7 +16,7 @@ CHANGELOG
 * Ajout d'un template de configuration ``Apache``
 * Gestion de la base de données et de ses évolutions avec `Alembic <https://alembic.sqlalchemy.org/>`_ déplacée dans le sous-module `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/tree/master/src/pypnusershub/migrations/data>`_
 * Suppression de ``ID_APP`` du fichier de configuration (auto-détection depuis la base de données)
-* Mise à jour de `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/releases>`_ en version 1.5.1
+* Mise à jour de `UsersHub-authentification-module <https://github.com/PnX-SI/UsersHub-authentification-module/releases>`_ en version 1.5.3
 
 **Développement**
 
