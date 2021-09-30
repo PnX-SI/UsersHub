@@ -75,7 +75,7 @@ Mise à jour de l'application
 ::
 
     cd
-    wget https://github.com/PnEcrins/UsersHub/archive/X.Y.Z.zip
+    wget https://github.com/PnX-SI/UsersHub/archive/X.Y.Z.zip
     unzip X.Y.Z.zip
     rm X.Y.Z.zip
 
