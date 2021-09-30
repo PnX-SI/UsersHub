@@ -83,7 +83,7 @@ Si vous mettez à jour UsersHub :
     \q
     # Se déconnecter de l'utilisateur postgres
     exit
-* Exécuter le script de mise à jour de la BDD (https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.2to2.1.3.sql)
+* Exécuter le script de mise à jour de la BDD (https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_2.1.2to2.1.3.sql)
 * Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 2.1.2 (2020-06-17)
@@ -120,7 +120,7 @@ Si vous mettez à jour UsersHub :
     sudo apt-get install python3-pip
     sudo pip3 install virtualenv==20.0.1
 
-* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.1.0to2.1.1.sql
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_2.1.0to2.1.1.sql
 * Suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 
@@ -146,7 +146,7 @@ Si vous mettez à jour UsersHub :
 **Notes de version**
 
 * Vous pouvez passer directement de la version 2.0.0 à la version 2.1.0, mais en suivant les notes de version intermédiaires.
-* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/master/data/update_2.0.3to2.1.0.sql
+* Exécuter le script de mise à jour de la BDD suivant: https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_2.0.3to2.1.0.sql
 * Si vous mettez à jour depuis la version 2.0.0, suivez la procédure classique de mise à jour (https://usershub.readthedocs.io/fr/latest/installation.html#mise-a-jour-de-l-application)
 
 2.0.3 (2019-02-27)
@@ -201,7 +201,7 @@ Si vous mettez à jour UsersHub :
 **Corrections**
 
 * Corrections mineures de l'authentification et de la gestion des sessions
-* Mise à jour des scripts de synchronisation du schéma ``utilisateurs`` entre BDD mère et BDD filles (``data/synchro_interbase_fille.sql``	et ``data/synchro_interbase_mere.sql``). A tester et finaliser.
+* Mise à jour des scripts de synchronisation du schéma ``utilisateurs`` entre BDD mère et BDD filles (https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/synchro_interbase_fille.sql	et https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/synchro_interbase_mere.sql). A tester et finaliser.
 
 **Notes de version**
 
@@ -277,7 +277,7 @@ Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par 
 
 * Version beta à ne pas utiliser en production
 * Installation : https://github.com/PnEcrins/UsersHub/issues/35
-* Exécuter le script de mise à jour de la BDD ``data/update_1.3.1to2.sql`` (attention il ne migre pas encore les données UsersHub V1)
+* Exécuter le script de mise à jour de la BDD https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_1.3.1to2.sql (attention il ne migre pas encore les données UsersHub V1)
 * Renseigner les fichiers ``settings.ini`` et ``config.py`` à partir des samples
 
 1.3.1 (2018-05-17)
@@ -303,10 +303,9 @@ Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par 
 **Notes de version**
 
 * Ajouter le paramètre ``$pass_cost`` dans le ``config/config.php`` et lui donner une valeur éventuellement différente. Plus la valeur est importante, plus le temps de calcul de hashage du mot de passe est important.
-* Exécuter le script ``data/update1.3.0to1.3.1.sql``
+* Exécuter le script https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update1.3.0to1.3.1.sql
 * Reporter les modifications dans les bases filles.
 * Facultatif : revoir la configuration apache qui est maintenant dans un fichier usershub.conf (voir la doc). Ne pas oublier de supprimer le lien symbolique dans ``/var/www/html``
-
 
 1.3.0 (2017-12-11)
 ------------------
@@ -320,7 +319,7 @@ Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par 
 
 **Notes de version**
 
-* Les modifications de la BDD (ajout champ ``pass_plus`` notamment) doivent concerner la BDD principale de UsersHub (BDD mère) mais aussi toutes les BDD filles inscrites dans le fichier ``dbconnexions.json``. Pour cela 2 scripts sont proposés : ``data/update_mère_1.2.1to1.3.0.sql`` et ``data/update_filles_1.2.1to1.3.0.sql``.
+* Les modifications de la BDD (ajout champ ``pass_plus`` notamment) doivent concerner la BDD principale de UsersHub (BDD mère) mais aussi toutes les BDD filles inscrites dans le fichier ``dbconnexions.json``. Pour cela 2 scripts sont proposés : https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_mère_1.2.1to1.3.0.sql et https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update_filles_1.2.1to1.3.0.sql.
 * Synchroniser les UUID vers les BDD filles. Le script SQL appliqué sur la BDD mère va générer des UUID pour chaque utilisateur et organisme. S'il était appliqué sur les BDD filles, les UUID générés seraient différents de ceux de la BDD mère. Il faut donc les générer une seule fois dans la BDD mère, puis les copier dans les BDD filles. Pour cela, après s'être authentifié dans UsersHub il suffit de lancer le script ``web/sync_uuid.php`` : http://mondomaine.fr/usershub/sync_uuid.php. ATTENTION, ce script utilise le fichier ``dbconnexions.json`` pour boucler sur les BDD filles, il ne fonctionnera que si vous avez préalablement mis à jour toutes les BDD filles inscrites dans ``dbconnexions.json``.
 * Créer le fichier ``config/config.php`` à partir du fichier ``config/config.php.sample`` et choisissez le mécanisme d'authentification à UsersHub que vous souhaitez mettre en place, ainsi que la taille minimale des mots de passe du nouveau champs ``pass_plus``. Il est conseillé de conserver le mot de passe ``pass`` (encodé en md5) le temps de mettre à jour les mots de passe des utilisateurs de UsersHub.
 * Générer le hash des mots de passe, au moins pour les utilisateurs de UsersHub. Il existe trois manières de le faire :
@@ -359,7 +358,7 @@ Refonte totale de l'application en Python, Flask, Jinja, Bootstrap, Jquery. Par 
 
 **Notes de version**
 
-* Si vous mettez à jour l'application depuis la version 1.2.0, éxécutez le script ``data/update1.2.0to1.2.1.sql`` qui supprime la table inutile ``bib_observateurs``.
+* Si vous mettez à jour l'application depuis la version 1.2.0, éxécutez le script https://github.com/PnX-SI/UsersHub/blob/2.1.3/data/update1.2.0to1.2.1.sql qui supprime la table inutile ``bib_observateurs``.
 
 1.2.0 (2016-11-16)
 ------------------
