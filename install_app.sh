@@ -60,10 +60,8 @@ sudo systemctl daemon-reload || exit 1
 
 # Configuration apache
 sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
-sudo a2enconf usershub || exit 1
 sudo a2enmod proxy || exit 1
 sudo a2enmod proxy_http || exit 1
-sudo systemctl reload apache2 || exit 1
 # you may need a restart if proxy & proxy_http was not already enabled
 
 echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
