@@ -15,9 +15,14 @@ fontawesome*
 
 app/templates/mails/sign_up_confirmation.html
 
+
 /docs/changelog.html
 
 *.swp
 *.swo
 
 *.egg-info/
+
+.idea
+usershub.pid
+
