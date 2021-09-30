@@ -2,6 +2,14 @@
 CHANGELOG
 =========
 
+2.2.1 (2021-09-29)
+------------------
+
+**Nouveautés**
+
+* Le fichier de configuration Apache fourni par UsersHub n’est plus automatiquement activé ; il peut l’être manuellement avec la commande ``a2enconf usershub``.
+* Une dépendance Alembic de la branche ``usershub`` vers la dernière révision de la branche ``utilisateurs`` permet d’obtenir automatiquement la dernière version du schéma ``utilisateurs`` avec la commande ``flask db upgrade usershub@head`` (tel que fait dans le script ``install_db.sh``).
+
 2.2.0 (2021-09-29)
 ------------------
 
