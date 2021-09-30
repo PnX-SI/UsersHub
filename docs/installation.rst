@@ -48,6 +48,15 @@ Création de la base de données
     ./install_db.sh
 
 
+* Si vous souhaitez les données utilisateurs d’exemple, en particulier l’utilisateur ``admin`` (mot de passe : ``admin``), executez :
+
+  ::
+
+    cd ~/usershub
+    source venv/bin/activate
+    flask db upgrade usershub-samples@head
+
+
 Configuration Apache
 ====================
 
