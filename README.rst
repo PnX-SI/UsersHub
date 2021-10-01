@@ -42,7 +42,7 @@ Ou dans ``docs/installation.rst``
 
 Docker
 -----
-L'installation via docker se fait de la manière suivante: ::
+L'installation via docker se fait de la manière suivante: :
     docker-compose --env-file .env.local -p usershub -f docker-compose.yml up --build
 Attention l'argument --env-file est nécessaire pour la prise en compte du routage dans les labels traefik
 
