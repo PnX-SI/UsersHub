@@ -36,7 +36,5 @@ currentdir=${PWD##*/}
 
 
 #Lancement de l'application
-export PYTHONPATH=$BASE_DIR:$PYTHONPATH
-export FLASK_APP=server
-exec gunicorn docker_server:app --pid="${app_name}.pid" -w "${gun_num_workers}"  -b "${gun_host}:${gun_port}"  -n "${app_name}"
+exec gunicorn "app.app:create_app()" --pid="${app_name}.pid" -w "${gun_num_workers}"  -b "${gun_host}:${gun_port}"  -n "${app_name}"
 

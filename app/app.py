@@ -43,7 +43,10 @@ def configure_alembic(alembic_config):
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile("../config/config.py")
-    app.config['APPLICATION_ROOT'] = urlsplit(app.config['URL_APPLICATION']).path
+    if 'APPLICATION_ROOT' not in os.environ:
+        app.config['APPLICATION_ROOT'] = urlsplit(app.config['URL_APPLICATION']).path
+    else:
+        app.config['APPLICATION_ROOT'] = os.environ.get("APPLICATION_ROOT")
     if 'SCRIPT_NAME' not in os.environ:
         os.environ['SCRIPT_NAME'] = app.config['APPLICATION_ROOT']
     app.config["URL_REDIRECT"] =  "{}/{}".format(app.config["URL_APPLICATION"], "login")

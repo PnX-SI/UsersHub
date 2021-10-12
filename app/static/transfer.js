@@ -160,7 +160,6 @@ var update = function() {
       window.location.href = data.redirect;
     })
     .fail(function(data) {
-      console.log(data);
       alert("Une erreur s'est produite");
     });
 
@@ -195,7 +194,6 @@ if (
   url_array.indexOf("rights") != -1
 ) {
   id_application = url_array[url_array.length - 1];
-  console.log(id_application);
   $.ajax({
     url: url_app + "/api/profils?id_application=" + id_application,
     type: "get",

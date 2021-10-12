@@ -14,6 +14,7 @@ RUN apt-get install -y postgresql-11-postgis-2.5
 RUN mkdir /UsersHub
 WORKDIR /UsersHub
 COPY requirements.txt /UsersHub/
+COPY requirements-common.txt /UsersHub/
 RUN pip3 install -r requirements.txt
 COPY . /UsersHub
 
