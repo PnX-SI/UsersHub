@@ -46,6 +46,18 @@ Installer NVM (Node version manager), node et npm
 
 Fermer la console et la réouvrir pour que l’environnement npm soit pris en compte.
 
+Téléchargement de UsersHub
+==========================
+
+Récupérer le zip de l'application sur le Github du projet (X.Y.Z à remplacer par la version souhaitée de UsersHub)
+
+::
+
+    $ cd /home/synthese
+    $ wget https://github.com/PnX-SI/UsersHub/archive/X.Y.Z.zip
+    $ unzip X.Y.Z.zip
+    $ mv UsersHub-X.Y.Z usershub
+
 Configuration de PostgresQL
 ===========================
 
