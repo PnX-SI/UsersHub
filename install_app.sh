@@ -22,6 +22,7 @@ then
 url_application="${url_application::-1}"
 fi
 sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
+sed -i "s/URLS_COR =.*$/URLS_COR = ['$url_application']/g" config.py || exit 1
 
 cd ..
 
