@@ -16,12 +16,12 @@ Pour installer UsersHub, il vous faut un serveur avec :
 Création d’un utilisateur
 =========================
 
-Vous devez disposer d'un utilisateur Linux pour faire tourner UsersHub (nommé ``synthese`` dans notre exemple). Le répertoire de cet utilisateur ``synthese`` doit être dans ``/home/synthese``. Si vous souhaitez utiliser un autre utilisateur linux, vous devrez adapter les lignes de commande proposées dans cette documentation.
+Vous devez disposer d'un utilisateur Linux pour faire tourner UsersHub (nommé ``synthese`` dans notre exemple). L’utilisateur doit appartenir au groupe ``sudo``. Le répertoire de cet utilisateur ``synthese`` doit être dans ``/home/synthese``. Si vous souhaitez utiliser un autre utilisateur Linux, vous devrez adapter les lignes de commande proposées dans cette documentation.
 
 ::
 
-    # adduser --home /home/synthese synthese
-    # adduser synthese sudo
+    $ adduser --home /home/synthese synthese
+    $ adduser synthese sudo
 
 :Note:
 
@@ -37,7 +37,7 @@ Installez les dépendances suivantes :
     $ sudo apt install -y python3-venv libpq-dev postgresql apache2
 
 
-Installer NVM (Node version manager), node et npm
+Installer NVM (Node version manager), node et npm :
 
 ::
 
@@ -45,6 +45,15 @@ Installer NVM (Node version manager), node et npm
 
 
 Fermer la console et la réouvrir pour que l’environnement npm soit pris en compte.
+
+Configuration de PostgresQL
+===========================
+
+Créer un utilisateur PostgreSQL :
+
+::
+
+    $ sudo -u postgres psql -c "CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';"
 
 Téléchargement de UsersHub
 ==========================
@@ -58,17 +67,8 @@ Récupérer le zip de l'application sur le Github du projet (X.Y.Z à remplacer 
     $ unzip X.Y.Z.zip
     $ mv UsersHub-X.Y.Z usershub
 
-Configuration de PostgresQL
-===========================
-
-Créer un utilisateur PostgreSQL :
-
-::
-
-    $ sudo -u postgres psql -c "CREATE ROLE geonatuser WITH LOGIN PASSWORD 'monpassachanger';"
-
-Configuration de la base de données PostgreSQL
-==============================================
+Configuration de UsersHub
+=========================
 
 Créer et mettre à jour le fichier ``config/settings.ini`` :
  
@@ -120,6 +120,13 @@ Création et installation de la base de données
 
 Configuration Apache
 ====================
+
+Activez les modules ``mod_proxy`` et ``mod_proxy_http``, et redémarrez Apache :
+
+::
+
+    $ sudo a2enmod proxy proxy_http
+    $ sudo systemctl restart apache
 
 UsersHub peut être classiquement déployé sur 2 types d’URL distincts :
 
