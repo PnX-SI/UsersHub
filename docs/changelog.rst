@@ -7,9 +7,9 @@ CHANGELOG
 
 **Corrections**
 
-* Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/develop/installation.html#installation-de-usershub-sur-un-sous-domaine)
+* Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/develop/installation.html#installation-de-usershub-sur-un-sous-domaine) (#148)
 * Correction de la génération automatique de la documentation sur Read the Docs (https://usershub.readthedocs.io)
-* Suppression de l'extension ``Flask-Cors`` et du paramètre associé (``URLS_COR``)
+* Suppression de l'extension ``Flask-Cors`` et du paramètre associé (``URLS_COR``) (#148)
 
 **Note de version**
 
