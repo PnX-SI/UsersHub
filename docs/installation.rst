@@ -36,13 +36,11 @@ Installez les dépendances suivantes :
 
     $ sudo apt install -y python3-venv libpq-dev postgresql apache2
 
-
-Installer NVM (Node version manager), node et npm :
+Installer NVM (Node version manager), Node.js et npm :
 
 ::
 
     $ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-
 
 Fermer la console et la réouvrir pour que l’environnement npm soit pris en compte.
 
@@ -146,7 +144,7 @@ Le processus d’installation de l’application créer le fichier de configurat
 Installation de UsersHub sur un sous-domaine
 --------------------------------------------
 
-Dans le cas où UsersHub est installé sur un sous-domaine et non sur un préfexe (c’est-à-dire ``https://usershub.mon-domaine.fr``), veuillez ajouter dans le fichier de configuration de votre virtualhost (*e.g.* ``/etc/apache2/sites-enabled/usershub.conf``) la section suivante :
+Dans le cas où UsersHub est installé sur un sous-domaine et non sur un préfixe (c’est-à-dire ``https://usershub.mon-domaine.fr``), veuillez ajouter dans le fichier de configuration de votre virtualhost (*e.g.* ``/etc/apache2/sites-enabled/usershub.conf``) la section suivante :
 
 ::
 
