@@ -5,6 +5,8 @@ CHANGELOG
 2.2.2 (unreleased)
 ------------------
 
+Voir PR de sécurité
+
 **Corrections**
 
 * Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/develop/installation.html#installation-de-usershub-sur-un-sous-domaine) (#148)
