@@ -9,19 +9,18 @@ cd config
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
   cp config.py.sample config.py || exit 1
+
+  echo "préparation du fichier config.py..."
+  sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py || exit 1
+  
+  url_application="${url_application//\//\\/}"
+  # on enleve le / final
+  if [ "${url_application: -1}" = '/' ]
+  then
+  url_application="${url_application::-1}"
+  fi
+  sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
 fi
-
-
-echo "préparation du fichier config.py..."
-sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py || exit 1
-
-url_application="${url_application//\//\\/}"
-# on enleve le / final
-if [ "${url_application: -1}" = '/' ]
-then
-url_application="${url_application::-1}"
-fi
-sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
 
 cd ..
 

@@ -2,12 +2,29 @@
 CHANGELOG
 =========
 
+2.2.2 (2021-12-22)
+------------------
+
+**Corrections**
+
+* Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/latest/installation.html#installation-de-usershub-sur-un-sous-domaine) (#148)
+* Correction de la configuration quand UsersHub est à la racine d'un sous-domaine (#148)
+* Correction de la génération automatique de la documentation sur Read the Docs (https://usershub.readthedocs.io)
+* Suppression de l'extension ``Flask-Cors`` et du paramètre associé (``URLS_COR``) (#148)
+* Si le fichier ``config/config.py`` existe, alors on n'écrase plus ses valeurs à partir de celles du fichier ``config/settings.ini`` quand on lance le script ``install_app.sh``, lors d'une mise à jour de UsersHub notamment
+
+**Note de version**
+
+Si vous mettez à jour UsersHub :
+
+* Vous pouvez supprimer le paramètre ``URLS_COR`` de votre fichier ``config/config.py`` car celui-ci n'est plus utilisé
+
 2.2.1 (2021-09-29)
 ------------------
 
 **Nouveautés**
 
-* Le fichier de configuration Apache fourni par UsersHub n’est plus automatiquement activé ; il peut l’être manuellement avec la commande ``a2enconf usershub``.
+* Le fichier de configuration Apache fourni par UsersHub n’est plus automatiquement activé; il peut l’être manuellement avec la commande ``a2enconf usershub``.
 * Une dépendance Alembic de la branche ``usershub`` vers la dernière révision de la branche ``utilisateurs`` permet d’obtenir automatiquement la dernière version du schéma ``utilisateurs`` avec la commande ``flask db upgrade usershub@head`` (tel que fait dans le script ``install_db.sh``).
 
 2.2.0 (2021-09-29)
@@ -54,7 +71,7 @@ Si vous mettez à jour UsersHub :
   * Le script d’installation ``install_app.sh`` aura installé le fichier ``/etc/apache2/conf-available/usershub.conf`` permettant de servir UsersHub sur le préfixe ``/usershub``.
   * Vous pouvez utiliser ce fichier de configuration soit en l’activant (``sudo a2enconf usershub``), soit en l’incluant dans la configuration de votre vhost (``Include /etc/apache2/conf-available/usershub.conf``).
   * Si vous gardez votre propre fichier de configuration et que vous servez UsersHub sur un préfixe (typiquement ``/usershub``), assurez vous que ce préfixe figure bien également à la fin des directives ``ProxyPass`` et ``ProxyPassReverse`` comme c’est le cas dans le fichier ``/etc/apache2/conf-available/usershub.conf``.
-  * Si vous décidez d’utiliser le fichier fourni, pensez à supprimer votre ancienne configuration apache (``sudo a2dissite usershub && sudo rm /etc/apache2/sites-available/usershub.conf``).
+  * Si vous décidez d’utiliser le fichier fourni, pensez à supprimer votre ancienne configuration Apache (``sudo a2dissite usershub && sudo rm /etc/apache2/sites-available/usershub.conf``).
 
 * **Si vous n’utilisez pas GeoNature**, vous devez appliquer les évolutions du schéma ``utilisateurs`` depuis UsersHub :
 
