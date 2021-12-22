@@ -2,17 +2,16 @@
 CHANGELOG
 =========
 
-2.2.2 (unreleased)
+2.2.2 (2021-12-22)
 ------------------
-
-Voir PR de sécurité
 
 **Corrections**
 
-* Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/develop/installation.html#installation-de-usershub-sur-un-sous-domaine) (#148)
+* Complément de la documentation Apache pour préciser quand UsersHub est sur un sous-domaine (https://usershub.readthedocs.io/fr/latest/installation.html#installation-de-usershub-sur-un-sous-domaine) (#148)
 * Correction de la configuration quand UsersHub est à la racine d'un sous-domaine (#148)
 * Correction de la génération automatique de la documentation sur Read the Docs (https://usershub.readthedocs.io)
 * Suppression de l'extension ``Flask-Cors`` et du paramètre associé (``URLS_COR``) (#148)
+* Si le fichier ``config/config.py`` existe, alors on n'écrase plus ses valeurs à partir de celles du fichier ``config/settings.ini`` quand on lance le script ``install_app.sh``, lors d'une mise à jour de UsersHub notamment
 
 **Note de version**
 
