@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. config/settings.ini
+. config/settings.ini || exit 1
 
 # Création des fichiers de configuration
 cd config
@@ -8,29 +8,34 @@ cd config
 
 echo "Création du fichier de configuration ..."
 if [ ! -f config.py ]; then
-  cp config.py.sample config.py
+  cp config.py.sample config.py || exit 1
+
+  echo "préparation du fichier config.py..."
+  sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py || exit 1
+  
+  url_application="${url_application//\//\\/}"
+  # on enleve le / final
+  if [ "${url_application: -1}" = '/' ]
+  then
+  url_application="${url_application::-1}"
+  fi
+  sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
 fi
-
-
-echo "préparation du fichier config.py..."
-sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\/\/$user_pg:$user_pg_pass@$db_host:$pg_port\/$db_name\"/" config.py
-
-url_application="${url_application//\//\\/}"
-# on enleve le / final
-if [ "${url_application: -1}" = '/' ]
-then
-url_application="${url_application::-1}"
-fi
-sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py
 
 cd ..
 
 # Installation de l'environement python
 
 echo "Installation du virtual env..."
-python3 -m virtualenv -p /usr/bin/python3 venv
+python3 -m venv venv || exit 1
 source venv/bin/activate
-pip install -r requirements.txt
+pip install --upgrade pip || exit 1
+if [ "${mode}" = "dev" ]; then
+    pip install -r requirements-dev.txt || exit 1
+else
+    pip install -r requirements.txt || exit 1
+fi
+
 deactivate
 
 # rendre la commande nvm disponible
@@ -39,29 +44,23 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # Installation de l'environement javascript
 cd app/static
-nvm install
-nvm use
-npm ci
+nvm install || exit 1
+nvm use || exit 1
+npm ci || exit 1
 cd ../..
 
 
 #Lancement de l'application
-DIR=$(readlink -e "${0%/*}")
-currentdir=${PWD##*/}
+export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
+# Configuration systemd
+envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
+sudo systemctl daemon-reload || exit 1
 
-sudo -s cp usershub-service.conf /etc/supervisor/conf.d/
-sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/usershub-service.conf
+# Configuration apache
+sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
+sudo a2enmod proxy || exit 1
+sudo a2enmod proxy_http || exit 1
+# you may need a restart if proxy & proxy_http was not already enabled
 
-# activate proxy apache extension
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-
-# lancement des services qui créent les fichiers de logs
-sudo -s supervisorctl reread
-sudo -s supervisorctl reload
-
-#création d'un fichier rotation des logs une fois qu'ils sont créés
-sudo cp $DIR/log_rotate /etc/logrotate.d/uhv2
-sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/logrotate.d/uhv2
-sudo logrotate -f /etc/logrotate.conf
+echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"

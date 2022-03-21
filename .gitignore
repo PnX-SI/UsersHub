@@ -14,3 +14,10 @@ fontawesome*
 *.php
 
 app/templates/mails/sign_up_confirmation.html
+
+/docs/changelog.html
+
+*.swp
+*.swo
+
+*.egg-info/

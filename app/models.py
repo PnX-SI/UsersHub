@@ -26,7 +26,7 @@ class Bib_Organismes(GenericRepository):
     """
 
     __tablename__ = "bib_organismes"
-    __table_args__ = {"schema": "utilisateurs"}
+    __table_args__ = {"schema": "utilisateurs", "extend_existing": True}
     id_organisme = db.Column(db.Integer, primary_key=True)
     uuid_organisme = db.Column(
         UUID(as_uuid=True), default=select([func.uuid_generate_v4()])
@@ -364,7 +364,7 @@ class CorRoles(GenericRepository):
     """
 
     __tablename__ = "cor_roles"
-    __table_args__ = {"schema": "utilisateurs"}
+    __table_args__ = {"schema": "utilisateurs", "extend_existing": True}
     id_role_groupe = db.Column(db.Integer, primary_key=True)
     id_role_utilisateur = db.Column(
         db.Integer, ForeignKey("utilisateurs.t_roles.id_role"), primary_key=True

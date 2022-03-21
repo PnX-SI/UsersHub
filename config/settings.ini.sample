@@ -2,6 +2,9 @@
 ### PostgreSQL settings ###
 ###########################
 
+# set to dev to install usershub in development mode
+mode=prod
+
 # Effacer la base de donnée existante lors de la réinstallation
 drop_apps_db=false
 # Host de la base de données de l'application

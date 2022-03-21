@@ -1,4 +1,4 @@
-APP_PATH/var/log/*.log {
+/var/log/usershub.log {
     daily
     rotate 8
     size 100M

@@ -282,7 +282,7 @@ def deluser(id_role):
 def info(id_role):
     user = TRoles.get_one(id_role)
     user["fullname"] = buildUserFullName(user)
-    organisme = Bib_Organismes.get_one(user["id_organisme"])
+    organisme = Bib_Organismes.get_one(user["id_organisme"]) if user['id_organisme'] else None
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
