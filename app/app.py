@@ -1,7 +1,7 @@
 """
     Serveur de l'application UsersHub
 """
-
+import logging
 import os
 import sys
 import json
@@ -21,6 +21,7 @@ from app.env import db
 
 from pypnusershub.db.models import Application
 
+log = logging.getLogger()
 
 migrate = Migrate()
 
@@ -61,7 +62,7 @@ def create_app():
         try:
             uh_app = Application.query.filter_by(code_application='UH').one()
         except ProgrammingError:
-            logging.warning("Warning: unable to find UsersHub application, database not yet initialized?")
+            log.warning("Warning: unable to find UsersHub application, database not yet initialized?")
         else:
             app.config["ID_APP"] = uh_app.id_application
 
