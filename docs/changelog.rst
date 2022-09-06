@@ -2,6 +2,23 @@
 CHANGELOG
 =========
 
+2.3.0 (unreleased)
+------------------
+
+**🚀 Nouveautés**
+
+* Support de *Flask 2*
+
+  * Mise à jour de ``UsersHub-authentification-module`` en version ``1.6.0``
+
+* *systemd* : Ajout d’une dépendance au service ``postgresql``
+* Amélioration de l’affichage des tables
+
+**🐛 Corrections**
+
+* Correction d’un import manquant
+
+
 2.2.2 (2021-12-22)
 ------------------
 
