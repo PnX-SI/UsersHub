@@ -54,8 +54,13 @@ cd ../..
 export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
 # Configuration systemd
+envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/usershub.conf || exit 1
+sudo systemd-tmpfiles --create /etc/tmpfiles.d/usershub.conf || exit 1
 envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
 sudo systemctl daemon-reload || exit 1
+
+# Configuration logrotate
+envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/usershub
 
 # Configuration apache
 sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1

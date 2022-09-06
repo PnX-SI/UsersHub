@@ -13,6 +13,11 @@ CHANGELOG
 
 * *systemd* : Ajout d’une dépendance au service ``postgresql``
 * Amélioration de l’affichage des tables
+* Fichiers de log :
+
+  * Les logs sont à présent écrits dans le fichier ``/var/log/usershub/usershub.log``
+  * L’outil ``logrotate`` est configuré pour assurer la rotation du fichier
+  * L’ancien fichier de log ``/var/log/usershub.log`` est intouché; vous pouvez le supprimer, ou l’archiver manuellement.
 
 **🐛 Corrections**
 

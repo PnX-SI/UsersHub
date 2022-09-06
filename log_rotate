@@ -1,7 +1,11 @@
-/var/log/usershub.log {
+/var/log/usershub/usershub.log {
+    su ${USER} ${USER}
     daily
     rotate 8
     size 100M
     create
     compress
+    postrotate
+    systemctl reload usershub || true
+    endscript
 }
