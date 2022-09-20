@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+2.3.1 (unreleased)
+------------------
+
+**🐛 Corrections**
+
+* Ajout de ``gunicorn`` aux requirements
+
 2.3.0 (2022-09-16)
 ------------------
 
