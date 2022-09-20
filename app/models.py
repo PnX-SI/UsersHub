@@ -438,7 +438,7 @@ class CorRoleListe(GenericRepository):
     """ Classe de correspondance entre la table t_roles et la table t_listes"""
 
     __tablename__ = "cor_role_liste"
-    __table_args__ = {"schema": "utilisateurs"}
+    __table_args__ = {"schema": "utilisateurs", "extend_existing": True}
     id_role = db.Column(
         db.Integer, ForeignKey("utilisateurs.t_roles.id_role"), primary_key=True
     )

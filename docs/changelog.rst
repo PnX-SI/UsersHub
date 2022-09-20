@@ -8,6 +8,8 @@ CHANGELOG
 **🐛 Corrections**
 
 * Ajout de ``gunicorn`` aux requirements
+* Ajout de ``extend_existing=True`` sur le modèle ``CorRoleListe``
+
 
 2.3.0 (2022-09-16)
 ------------------
