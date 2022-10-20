@@ -187,7 +187,7 @@ Mise à jour de l'application
     cd usershub
     ./install_app.sh
 
-* Mettre à jour la base de données :
+* Si vous utilisez UsersHub tout seul (sans GeoNature), mettre à jour sa base de données :
 
 ::
 
