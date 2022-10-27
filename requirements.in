@@ -1,10 +1,2 @@
-Flask
-Flask-SQLAlchemy
-Flask-WTF
-Flask-Migrate
-psycopg2
-WTForms-Components
-WTForms
-python-dateutil
-python-dotenv
-marshmallow-sqlalchemy
+-r requirements-common.in
+-r requirements-dependencies.in

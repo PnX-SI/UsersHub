@@ -7,8 +7,6 @@ with (root_dir / 'VERSION').open() as f:
     version = f.read()
 with (root_dir / 'README.rst').open() as f:
     long_description = f.read()
-with (root_dir / 'requirements.in').open() as f:
-    requirements = f.read().splitlines()
 
 
 setuptools.setup(
@@ -21,5 +19,8 @@ setuptools.setup(
     url='https://github.com/PnX-SI/UsersHub',
     version=version,
     packages=setuptools.find_packages(where='.', include=['app*']),
-    install_requires=requirements,
+    install_requires=(
+        list(open("requirements-common.in", "r"))
+        + list(open("requirements-dependencies.in", "r"))
+    ),
 )

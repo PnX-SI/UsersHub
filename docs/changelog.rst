@@ -2,6 +2,37 @@
 CHANGELOG
 =========
 
+2.3.1 (2022-09-20)
+------------------
+
+**🐛 Corrections**
+
+* Ajout de ``gunicorn`` aux requirements
+* Ajout de ``extend_existing=True`` sur le modèle ``CorRoleListe``
+
+
+2.3.0 (2022-09-16)
+------------------
+
+**🚀 Nouveautés**
+
+* Support de *Flask 2*
+
+  * Mise à jour de ``UsersHub-authentification-module`` en version ``1.6.0``
+
+* *systemd* : Ajout d’une dépendance au service ``postgresql``
+* Amélioration de l’affichage des tables
+* Fichiers de log :
+
+  * Les logs sont à présent écrits dans le fichier ``/var/log/usershub/usershub.log``
+  * L’outil ``logrotate`` est configuré pour assurer la rotation du fichier
+  * L’ancien fichier de log ``/var/log/usershub.log`` est intouché; vous pouvez le supprimer, ou l’archiver manuellement.
+
+**🐛 Corrections**
+
+* Correction d’un import manquant
+
+
 2.2.2 (2021-12-22)
 ------------------
 

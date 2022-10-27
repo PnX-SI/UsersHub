@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import json
+import logging
 from pkg_resources import iter_entry_points
 from urllib.parse import urlsplit
 
