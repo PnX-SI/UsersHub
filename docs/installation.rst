@@ -95,6 +95,8 @@ Configuration de l'application
     cd ~/usershub
     ./install_app.sh
 
+Le configuration de l'application est dans le fichier ``config/config.py``.  
+Quand vous modifiez ce fichier, vous devez redémarrer le servce UsersHub avec la commande ``sudo systemctl start usershub``.
 
 Création et installation de la base de données
 ==============================================
