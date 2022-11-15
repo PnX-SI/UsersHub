@@ -8,6 +8,7 @@ import json
 import logging
 from pkg_resources import iter_entry_points
 from urllib.parse import urlsplit
+from pathlib import Path
 
 from flask import (
     Flask, redirect, url_for,
@@ -55,7 +56,7 @@ def create_app():
     db.init_app(app)
     app.config["DB"] = db
 
-    migrate.init_app(app, db, directory='app/migrations')
+    migrate.init_app(app, db, directory=Path(__file__).absolute().parent / 'migrations')
 
     with app.app_context():
         app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
