@@ -58,15 +58,11 @@ def create_app():
 
     migrate.init_app(app, db, directory=Path(__file__).absolute().parent / 'migrations')
 
+    if "CODE_APPLICATION" not in app.config:
+        app.config["CODE_APPLICATION"] = "UH"
+
     with app.app_context():
         app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
-
-        try:
-            uh_app = Application.query.filter_by(code_application='UH').one()
-        except ProgrammingError:
-            logging.warning("Warning: unable to find UsersHub application, database not yet initialized?")
-        else:
-            app.config["ID_APP"] = uh_app.id_application
 
         if app.config["ACTIVATE_APP"]:
             @app.route("/")

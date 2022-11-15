@@ -10,4 +10,5 @@ route = Blueprint('login', __name__)
 
 @route.route('login', methods=['GET'])
 def login():
-    return render_template('login.html', id_app=current_app.config['ID_APP'])
+    app = TApplications.query.filter_by(code_application=current_app.config["CODE_APPLICATION"]).one()
+    return render_template('login.html', id_app=app.id_application)
