@@ -43,7 +43,7 @@ def configure_alembic(alembic_config):
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=os.environ.get("USERSHUB_STATIC_FOLDER", "static"))
     app.config.from_pyfile(os.environ.get("USERSHUB_SETTINGS", "../config/config.py"))
     app.config.from_prefixed_env(prefix="USERSHUB")
     app.config['APPLICATION_ROOT'] = urlsplit(app.config['URL_APPLICATION']).path or '/'
