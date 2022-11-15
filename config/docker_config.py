@@ -1,0 +1,12 @@
+from secrets import token_hex
+
+PASS_METHOD = "hash"
+FILL_MD5_PASS = False
+COOKIE_EXPIRATION = 3600
+COOKIE_AUTORENEW = True
+ACTIVATE_API = True
+ACTIVATE_APP = True
+
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+URL_APPLICATION = "http://localhost:5001"
+SECRET_KEY = token_hex(16)

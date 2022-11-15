@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgis/postgis:13-3.2
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-usershub}
+      - POSTGRES_USER=${POSTGRES_USER:-usershubadmin}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-usershubpasswd}
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+      - postgres:/var/lib/postgresql/data
+
+  usershub:
+    image: pnx-si/usershub:latest
+    build: .
+    depends_on:
+      - postgres
+    volumes:
+      - ./config/:/dist/config/
+    user: ${UID:-1000}:${GID:-1000}
+    environment:
+      - USERSHUB_SETTINGS=${USERSHUB_SETTINGS:-config.py}
+      - USERSHUB_SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER:-usershubadmin}:${POSTGRES_PASSWORD:-usershubpasswd}@postgres:5432/${POSTGRES_DB:-usershub}
+      - PYTHONPATH=/dist/config
+    ports:
+      - "${USERSHUB_PORT:-5001}:80"
+
+volumes:
+  postgres:
