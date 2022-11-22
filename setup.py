@@ -27,4 +27,9 @@ setuptools.setup(
         "app": ["templates/*.html", "templates/*.js"],
         "app.migrations": ["alembic.ini", "script.py.mako"],
     },
+    entry_points={
+        "alembic": [
+            "migrations = app.migrations:versions",
+        ],
+    },
 )
