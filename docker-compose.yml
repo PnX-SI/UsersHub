@@ -22,7 +22,7 @@ services:
       - USERSHUB_SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER:-usershubadmin}:${POSTGRES_PASSWORD:-usershubpasswd}@postgres:5432/${POSTGRES_DB:-usershub}
       - PYTHONPATH=/dist/config
     ports:
-      - "${USERSHUB_PORT:-5001}:80"
+      - "${USERSHUB_PORT:-5001}:5001"
 
 volumes:
   postgres:
