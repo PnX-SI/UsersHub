@@ -2,6 +2,25 @@
 CHANGELOG
 =========
 
+2.3.2 (unreleased)
+------------------
+
+**🚀 Nouveautés**
+
+* Ajout d’un ``Dockerfile`` et publication de celui-ci par Github Action
+* Ajout d’un fichier Docker Compose permettant de lancer UsersHub et PostgreSQL
+* Support de la variable d’environnement ``USERSHUB_SETTINGS`` pour définir le fichier de configuration
+* Ajout du paramètre ``CODE_APPLICATION`` (valeur par défaut : ``UH``)
+* Le dossier des fichiers statiques peut être définie avec la variable d’environnement ``USERSHUB_STATIC_FOLDER``
+
+
+**🐛 Corrections**
+
+* Correction du packaging : incorporation des templates, des fichiers Alembic
+* Suppression de la dépendance à PostgreSQL dans le fichier service systemd
+* Déclaration des migrations Alembic dans les entry points
+
+
 2.3.1 (2022-09-20)
 ------------------
 
