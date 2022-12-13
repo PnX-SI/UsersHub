@@ -7,12 +7,11 @@ CHANGELOG
 
 **🚀 Nouveautés**
 
-* Ajout d’un ``Dockerfile`` et publication de celui-ci par Github Action
+* Ajout d’un ``Dockerfile`` et publication automatique des images de celui-ci par Github Action
 * Ajout d’un fichier Docker Compose permettant de lancer UsersHub et PostgreSQL
 * Support de la variable d’environnement ``USERSHUB_SETTINGS`` pour définir le fichier de configuration
 * Ajout du paramètre ``CODE_APPLICATION`` (valeur par défaut : ``UH``)
-* Le dossier des fichiers statiques peut être définie avec la variable d’environnement ``USERSHUB_STATIC_FOLDER``
-
+* Le dossier des fichiers statiques peut être défini avec la variable d’environnement ``USERSHUB_STATIC_FOLDER``
 
 **🐛 Corrections**
 
