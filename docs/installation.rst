@@ -154,6 +154,13 @@ Dans le cas où UsersHub est installé sur un sous-domaine et non sur un préfix
     </Location>
 
 
+Configuration de l'application
+==============================
+
+La configuration de UsersHub est réalisée dans le fichier ``config/config.py``.
+
+Si vous modifiez les paramètres dans ce fichier, vous devez recharger l'application avec la commande ``systemctl reload usershub``.
+
 Mise à jour de l'application
 ============================
 
