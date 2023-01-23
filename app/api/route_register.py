@@ -254,7 +254,7 @@ def change_password():
     db.session.commit()
 
     # delete cors
-    db.session.query(CorRoleToken.id_role).filter(CorRoleToken.token == token).delete()
+    db.session.query(CorRoleToken).filter(CorRoleToken.token == token).delete()
     db.session.commit()
 
     return role.as_dict()
