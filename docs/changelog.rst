@@ -2,6 +2,18 @@
 CHANGELOG
 =========
 
+2.3.3 (unreleased)
+------------------
+
+**🚀 Nouveautés**
+
+* Docker : l’image est construite avec la version des modules référencées par les sous-modules Git
+
+**🐛 Corrections**
+
+* Correction de la route permettant la modification du mot de passe
+
+
 2.3.2 (2022-11-23)
 ------------------
 
