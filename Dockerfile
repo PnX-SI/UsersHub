@@ -39,7 +39,38 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
 
+FROM python:3.9-bullseye AS dev
+
+WORKDIR /dist/
+
+RUN python -m venv /dist/venv
+ENV PATH="/dist/venv/bin:$PATH"
+
+RUN --mount=type=cache,target=/root/.cache \
+    pip install --upgrade pip setuptools wheel
+
+COPY /setup.py .
+COPY /requirements-common.in .
+COPY /requirements-dependencies.in .
+COPY /VERSION .
+COPY /MANIFEST.in .
+COPY /README.rst .
+COPY /LICENSE .
+COPY /dependencies/ ./dependencies/
+COPY /requirements-dev.txt .
+RUN --mount=type=cache,target=/root/.cache \
+    pip install -e . -r requirements-dev.txt
+
+COPY ./config/docker_config.py ./config.py
+ENV USERSHUB_SETTINGS=/dist/config.py
+
+ENV FLASK_APP=app.app:create_app
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5001"]
+
+
 FROM python:3.9-bullseye AS app
+RUN --mount=type=cache,target=/root/.cache \
+    pip install --upgrade pip setuptools wheel
 
 WORKDIR /dist/
 
