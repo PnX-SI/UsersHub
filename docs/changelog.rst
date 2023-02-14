@@ -7,11 +7,12 @@ CHANGELOG
 
 **🚀 Nouveautés**
 
-* Docker : l’image est construite avec la version des modules référencées par les sous-modules Git
+* Docker : l’image est construite avec la version des modules référencés par les sous-modules Git
 
 **🐛 Corrections**
 
-* Correction de la route permettant la modification du mot de passe
+* Correction de l'affichage des rôles associés à une liste (#165)
+* Correction de la route permettant la modification du mot de passe (https://github.com/PnX-SI/GeoNature/issues/2288)
 
 
 2.3.2 (2022-11-23)
