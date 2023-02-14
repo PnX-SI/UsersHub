@@ -255,13 +255,12 @@ class TRoles(GenericRepository):
         q = db.session.query(cls)
         q = q.order_by(desc(cls.nom_role))
         subquery = (
-            db.session.query(CorRoleListe.id_role)
+            ~db.session.query(CorRoleListe)
             .filter(CorRoleListe.id_liste == id_liste)
-            .all()
+            .filter(CorRoleListe.id_role == cls.id_role)
+            .exists()
         )
-
-        q = q.filter(cls.id_role.notin_(subquery))
-        # TODO filtrer les roles actifs
+        q = q.filter(subquery).filter(cls.active == True)
         data = [data.as_dict_full_name() for data in q.all()]
         return data
 
