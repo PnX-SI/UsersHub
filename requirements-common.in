@@ -9,3 +9,4 @@ python-dateutil
 python-dotenv
 marshmallow-sqlalchemy
 gunicorn
+sqlalchemy<2
