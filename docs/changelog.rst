@@ -13,6 +13,7 @@ CHANGELOG
 
 * Correction de l'affichage des rôles associés à une liste (#165)
 * Correction de la route permettant la modification du mot de passe (https://github.com/PnX-SI/GeoNature/issues/2288)
+* Mise à jour de ``UsersHub-authentification-module`` en version corrective ``1.6.2``
 
 
 2.3.2 (2022-11-23)
