@@ -5,6 +5,11 @@ CHANGELOG
 2.3.4 (unreleased)
 ------------------
 
+**🐛 Corrections**
+
+* Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection
+lorsque l'url de l'application n'est pas situé à la racine.
+
 
 2.3.3 (2023-02-16)
 ------------------
