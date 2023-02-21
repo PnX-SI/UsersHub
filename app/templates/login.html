@@ -45,7 +45,7 @@ login = function() {
         dataType:"json",
         success: function(response){
             console.log(response);
-            window.location.href = '{{url_application}}';
+            window.location.href = '{{url_application}}/';
         },
         error: function(error){
             $("#login-error" ).show();
