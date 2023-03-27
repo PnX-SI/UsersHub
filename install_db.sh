@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Make sure root cannot run our script
 if [ "$(id -u)" == "0" ]; then
    echo "This script must NOT be run as root" 1>&2
