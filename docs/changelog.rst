@@ -7,9 +7,9 @@ CHANGELOG
 
 **🐛 Corrections**
 
-* Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection
-lorsque l'url de l'application n'est pas situé à la racine.
-* Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé.
+* Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection lorsque l'URL de l'application n'est pas située à la racine (#173 / #174)
+* Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé quand un administrateur cherche à le valider (#177 / https://github.com/PnX-SI/GeoNature/issues/862)
+* Meilleure portabilité des scripts dans les différents systèmes Unix (#176)
 
 2.3.3 (2023-02-16)
 ------------------
