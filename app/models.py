@@ -194,12 +194,7 @@ class TRoles(GenericRepository):
         Methode qui concatène le nom et prénom du role
         retourne un nom complet
         """
-
-        if self.prenom_role == None:
-            full_name = self.nom_role
-        else:
-            full_name = self.nom_role + " " + self.prenom_role
-        return full_name
+        return ' '.join([(self.nom_role or ''), (self.prenom_role or '')])
 
     def as_dict_full_name(self):
         """
