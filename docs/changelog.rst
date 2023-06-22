@@ -9,7 +9,7 @@ CHANGELOG
 
 * Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection
 lorsque l'url de l'application n'est pas situé à la racine.
-
+* Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé.
 
 2.3.3 (2023-02-16)
 ------------------
