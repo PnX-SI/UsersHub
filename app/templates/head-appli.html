@@ -31,7 +31,7 @@
           </ul>
           <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-                <a class="nav-link"  title="Déconnexion" href="{{ url_for('auth.logout') }}?redirect={{config.URL_APPLICATION}}">
+                <a class="nav-link"  title="Déconnexion" href="{{ url_for('auth.logout') }}?redirect={{config.URL_REDIRECT}}">
                   {{user.identifiant}}
                   <i class="fa fa-sign-out font-medium" aria-hidden="true"></i>
                 </a>

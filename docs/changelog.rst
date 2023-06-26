@@ -2,6 +2,17 @@
 CHANGELOG
 =========
 
+2.3.4 (2023-06-27)
+------------------
+
+**🐛 Corrections**
+
+* Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection lorsque l'URL de l'application n'est pas située à la racine (#173 / #174 - par @joelclems)
+* Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé quand un administrateur cherche à le valider (#177 / https://github.com/PnX-SI/GeoNature/issues/862 - par @joelclems)
+* Correction de l'affichage de la fiche d'un utilisateur si celui-ci n'a pas d'organisme (#125 - par @jpm-cbna)
+* Correction de la modification du mot de passe d'un utilisateur qui n'a pas de prénom ou de nom (#107 - par @jpm-cbna)
+* Meilleure portabilité des scripts dans les différents systèmes Unix (#176 - par @MathRdt)
+
 2.3.3 (2023-02-16)
 ------------------
 

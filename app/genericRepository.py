@@ -11,18 +11,20 @@ class GenericRepository(db.Model):
 
     @classmethod
     def get_one(cls, id, as_model=False):
-
         """
         Methode qui retourne un dictionnaire d'un élément d'un Model
         Avec pour paramètres l'id de l'élément
         Si as_model != False alors au lieu de retourner un dictionnaire on retourne l'object du modèle
         """
+        if not id:
+            return None
 
-        if as_model == False:
-            data = db.session.query(cls).get(id)
+        data = db.session.query(cls).get(id)
+
+        if not as_model:
             return data.as_dict(True)
         else:
-            return db.session.query(cls).get(id)
+            return data
 
     @classmethod
     def get_all(
