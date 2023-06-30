@@ -2,10 +2,17 @@
 CHANGELOG
 =========
 
-2.3.4 (2023-06-27)
+2.3.5 (unreleased)
 ------------------
 
 **🐛 Corrections**
+
+* Augmentation de la taille du champs utilsateurs.temps_user.organisme
+
+
+2.3.4 (2023-06-27)
+------------------
+
 
 * Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection lorsque l'URL de l'application n'est pas située à la racine (#173 / #174 - par @joelclems)
 * Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé quand un administrateur cherche à le valider (#177 / https://github.com/PnX-SI/GeoNature/issues/862 - par @joelclems)
