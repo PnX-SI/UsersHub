@@ -50,6 +50,7 @@ RUN --mount=type=cache,target=/root/.cache \
     pip install --upgrade pip setuptools wheel
 
 COPY /setup.py .
+COPY --chmod=755 /docker_healthcheck.sh .
 COPY /requirements-common.in .
 COPY /requirements-dependencies.in .
 COPY /VERSION .
@@ -113,6 +114,8 @@ ENV PYTHONPATH=/dist/config/
 ENV USERSHUB_SETTINGS=config.py
 ENV USERSHUB_STATIC_FOLDER=/dist/static
 
+COPY --chmod=755 /docker_healthcheck.sh .
+
 EXPOSE 5001
 
-CMD ["gunicorn", "app.app:create_app()", "--bind=0.0.0.0:5001", "--access-logfile=-", "--error-logfile=-"]
+CMD ["gunicorn", "app.app:create_app()", "--bind=0.0.0.0:5001", "--access-logfile=-", "--error-logfile=-", "--reload", "--reload-extra-file=config/config.py"]
