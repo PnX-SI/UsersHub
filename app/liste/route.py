@@ -1,6 +1,12 @@
 from flask import (
-    redirect, url_for, render_template,
-    Blueprint, request, flash, jsonify, current_app
+    redirect,
+    url_for,
+    render_template,
+    Blueprint,
+    request,
+    flash,
+    jsonify,
+    current_app,
 )
 from pypnusershub import routes as fnauth
 
@@ -9,8 +15,8 @@ from app.liste import forms as listeforms
 from app.models import TListes, CorRoleListe, TRoles
 from app.utils.utils_all import strigify_dict
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-URL_APPLICATION = current_app.config['URL_APPLICATION']
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
+URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 
 route = Blueprint("liste", __name__)
@@ -19,9 +25,6 @@ route = Blueprint("liste", __name__)
 @route.route("lists/list", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def lists():
     """
@@ -67,9 +70,6 @@ def lists():
 @route.route("list/update/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_liste):
     """
@@ -106,9 +106,6 @@ def addorupdate(id_liste):
 @route.route("list/members/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def membres(id_liste):
     """
@@ -149,9 +146,6 @@ def membres(id_liste):
 @route.route("list/delete/<id_liste>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_liste):
     """
@@ -163,7 +157,7 @@ def delete(id_liste):
 
 
 @route.route("list/info/<id_liste>", methods=["GET"])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(3)
 def info(id_liste):
     mylist = TListes.get_one(id_liste)
     members = (

@@ -6,7 +6,7 @@ from flask import (
     request,
     flash,
     jsonify,
-    current_app
+    current_app,
 )
 
 from app.env import db
@@ -22,8 +22,8 @@ from app.models import (
 from pypnusershub import routes as fnauth
 
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-URL_APPLICATION = current_app.config['URL_APPLICATION']
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
+URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("application", __name__)
 
@@ -31,9 +31,6 @@ route = Blueprint("application", __name__)
 @route.route("applications/list", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def applications():
     """
@@ -91,7 +88,7 @@ def applications():
 
 
 @route.route("application/info/<id_application>", methods=["GET"])
-@fnauth.check_auth(3, False, URL_REDIRECT)
+@fnauth.check_auth(3)
 def info(id_application):
     """
     Route qui retourne une fiche de l'application
@@ -117,16 +114,13 @@ def info(id_application):
 @route.route("application/update/<id_application>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_application):
     """
-        Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
-        L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
-        Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_application
-        Une fois le formulaire validé on retourne une redirection vers la liste d'application
+    Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour une application
+    L'envoie du formulaire permet l'ajout ou la maj d'une application dans la base
+    Retourne un template accompagné d'un formulaire pré-rempli ou non selon le paramètre id_application
+    Une fois le formulaire validé on retourne une redirection vers la liste d'application
     """
     form = t_applicationsforms.Application()
     form.id_parent.choices = TApplications.choixSelect(
@@ -177,9 +171,6 @@ def addorupdate(id_application):
 @route.route("application/delete/<id_application>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_application):
     """
@@ -193,9 +184,6 @@ def delete(id_application):
 @route.route("application/profils/<id_application>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def profils_for_app(id_application):
     """
@@ -235,9 +223,6 @@ def profils_for_app(id_application):
 @route.route("application_roles_profil/<int:id_application>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def profils_in_app(id_application):
     """
@@ -286,16 +271,13 @@ def profils_in_app(id_application):
 )
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def add_or_update_profil_for_role_in_app(id_application, id_role=None):
     """
-        add or update un profil sur une application
-        on part du principe qu'un role ne peut avoir qu'un profil dans une application
-        TODO: pour mettre plusieurs profil a un role dans une appli:
-        rajouter une clé primaire a cor_role_app_profil pour gérer l'update
+    add or update un profil sur une application
+    on part du principe qu'un role ne peut avoir qu'un profil dans une application
+    TODO: pour mettre plusieurs profil a un role dans une appli:
+    rajouter une clé primaire a cor_role_app_profil pour gérer l'update
     """
     form = t_applicationsforms.AppProfil(id_application)
     application = TApplications.get_one(id_application)
@@ -359,9 +341,6 @@ def add_or_update_profil_for_role_in_app(id_application, id_role=None):
 )
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete_cor_role_app_profil(id_role, id_application):
     try:
