@@ -6,7 +6,7 @@ from flask import (
     Blueprint,
     request,
     flash,
-    current_app
+    current_app,
 )
 
 from pypnusershub import routes as fnauth
@@ -19,8 +19,8 @@ from app.utils.utils_all import strigify_dict
 from app.env import db
 
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-URL_APPLICATION = current_app.config['URL_APPLICATION']
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
+URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("user", __name__)
 
@@ -34,7 +34,6 @@ route = Blueprint("user", __name__)
     redirect_on_insufficient_right=URL_REDIRECT,
 )
 def users():
-
     """
     Route qui affiche la liste des utilisateurs
     Retourne un template avec pour paramètres :
@@ -61,6 +60,7 @@ def users():
         "Actif",
         "pass_plus",
         "pass_md5",
+        "Autres",
     ]  # noqa
     columns = [
         "id_role",
@@ -73,6 +73,7 @@ def users():
         "active",
         "pass_plus",
         "pass_md5",
+        "champs_addi",
     ]  # noqa
     filters = [{"col": "groupe", "filter": "False"}]
     contents = TRoles.get_all(columns, filters, order_by="identifiant", order="asc")
@@ -219,9 +220,6 @@ def updatepass(id_role=None):
     """
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
-    # Build title
-    role_fullname= buildUserFullName(myuser)
-    title=f"Changer le mot de passe de l'utilisateur '{role_fullname}'"
 
     if request.method == "POST":
         if form.validate_on_submit() and form.validate():
@@ -244,7 +242,11 @@ def updatepass(id_role=None):
                     return render_template(
                         "user_pass.html",
                         form=form,
-                        title=title,
+                        title="Changer le mot de passe de l'utilisateur '"
+                        + myuser["nom_role"]
+                        + " "
+                        + myuser["prenom_role"]
+                        + "'",
                         id_role=id_role,
                     )
             form_user["id_role"] = id_role
@@ -256,7 +258,11 @@ def updatepass(id_role=None):
     return render_template(
         "user_pass.html",
         form=form,
-        title=title,
+        title="Changer le mot de passe de l'utilisateur '"
+        + myuser["nom_role"]
+        + " "
+        + myuser["prenom_role"]
+        + "'",
         id_role=id_role,
     )
 
@@ -281,7 +287,9 @@ def deluser(id_role):
 @fnauth.check_auth(6, False, URL_REDIRECT)
 def info(id_role):
     user = TRoles.get_one(id_role)
-    organisme = Bib_Organismes.get_one(user["id_organisme"]) if user['id_organisme'] else None
+    organisme = (
+        Bib_Organismes.get_one(user["id_organisme"]) if user["id_organisme"] else None
+    )
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
@@ -294,14 +302,6 @@ def info(id_role):
         rights=rights,
         pathU=URL_APPLICATION + "/user/update/",
     )
-
-def buildUserFullName(user):
-    fullname = []
-    if user["nom_role"]:
-        fullname.append(user["nom_role"].upper())
-    if user["prenom_role"]:
-        fullname.append(user["prenom_role"].title())
-    return ' '.join(fullname)
 
 
 def pops(form, with_group=True):
@@ -330,6 +330,7 @@ def process(form, user, groups):
     form.email.process_data(user["email"])
     form.remarques.process_data(user["remarques"])
     form.identifiant.process_data(user["identifiant"])
+    form.champs_addi.process_data(user["champs_addi"])
     form.a_groupe.process_data(groups)
     return form
 
@@ -340,4 +341,3 @@ def test(id_role):
 
     tab = [{"test1": "test1", "test2": "Test 1"}, {"test1": "test2", "test2": "Test 2"}]
     return render_template("generic_table.html", fLine=fLine, table=tab)
-
