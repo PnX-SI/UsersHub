@@ -10,11 +10,7 @@ from pkg_resources import iter_entry_points
 from urllib.parse import urlsplit
 from pathlib import Path
 
-from flask import (
-    Flask, redirect, url_for,
-    request, session, render_template,
-    g
-)
+from flask import Flask, redirect, url_for, request, session, render_template, g
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.exc import ProgrammingError
 from flask_migrate import Migrate
@@ -34,29 +30,33 @@ def configure_alembic(alembic_config):
     'migrations' entry point value of the 'gn_module' group for all modules having such entry point.
     Thus, alembic will find migrations of all installed geonature modules.
     """
-    version_locations = alembic_config.get_main_option('version_locations', default='').split()
-    for entry_point in iter_entry_points('alembic', 'migrations'):
-        _, migrations = str(entry_point).split('=', 1)
-        version_locations += [ migrations.strip() ]
-    alembic_config.set_main_option('version_locations', ' '.join(version_locations))
+    version_locations = alembic_config.get_main_option(
+        "version_locations", default=""
+    ).split()
+    for entry_point in iter_entry_points("alembic", "migrations"):
+        _, migrations = str(entry_point).split("=", 1)
+        version_locations += [migrations.strip()]
+    alembic_config.set_main_option("version_locations", " ".join(version_locations))
     return alembic_config
 
 
 def create_app():
-    app = Flask(__name__, static_folder=os.environ.get("USERSHUB_STATIC_FOLDER", "static"))
+    app = Flask(
+        __name__, static_folder=os.environ.get("USERSHUB_STATIC_FOLDER", "static")
+    )
     app.config.from_pyfile(os.environ.get("USERSHUB_SETTINGS", "../config/config.py"))
     app.config.from_prefixed_env(prefix="USERSHUB")
-    app.config['APPLICATION_ROOT'] = urlsplit(app.config['URL_APPLICATION']).path or '/'
-    if 'SCRIPT_NAME' not in os.environ and app.config['APPLICATION_ROOT'] != '/':
-        os.environ['SCRIPT_NAME'] = app.config['APPLICATION_ROOT']
-    app.config["URL_REDIRECT"] =  "{}/{}".format(app.config["URL_APPLICATION"], "login")
+    app.config["APPLICATION_ROOT"] = urlsplit(app.config["URL_APPLICATION"]).path or "/"
+    if "SCRIPT_NAME" not in os.environ and app.config["APPLICATION_ROOT"] != "/":
+        os.environ["SCRIPT_NAME"] = app.config["APPLICATION_ROOT"]
+    app.config["URL_REDIRECT"] = "{}/{}".format(app.config["URL_APPLICATION"], "login")
     app.secret_key = app.config["SECRET_KEY"]
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
 
     db.init_app(app)
     app.config["DB"] = db
 
-    migrate.init_app(app, db, directory=Path(__file__).absolute().parent / 'migrations')
+    migrate.init_app(app, db, directory=Path(__file__).absolute().parent / "migrations")
 
     if "CODE_APPLICATION" not in app.config:
         app.config["CODE_APPLICATION"] = "UH"
@@ -65,26 +65,29 @@ def create_app():
         app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
 
         if app.config["ACTIVATE_APP"]:
+
             @app.route("/")
             def index():
-                """ Route par défaut de l'application """
+                """Route par défaut de l'application"""
                 return redirect(url_for("user.users"))
 
             @app.route("/constants.js")
             def constants_js():
-                """ Route des constantes javascript """
+                """Route des constantes javascript"""
                 return render_template("constants.js")
 
             @app.after_request
             def after_login_method(response):
                 """
-                    Fonction s'exécutant après chaque requete
-                    permet de gérer l'authentification
+                Fonction s'exécutant après chaque requete
+                permet de gérer l'authentification
                 """
                 if not request.cookies.get("token"):
                     session["current_user"] = None
 
-                if request.endpoint == "auth.login" and response.status_code == 200:  # noqa
+                if (
+                    request.endpoint == "auth.login" and response.status_code == 200
+                ):  # noqa
                     current_user = json.loads(response.get_data().decode("utf-8"))
                     session["current_user"] = current_user["user"]
                 return response
@@ -133,9 +136,11 @@ def create_app():
 
             app.register_blueprint(route.route, url_prefix="/api")
 
-        if app.config['ACTIVATE_API']:
+        if app.config["ACTIVATE_API"]:
             from app.api import route_register
 
-            app.register_blueprint(route_register.route, url_prefix="/api_register")  # noqa
+            app.register_blueprint(
+                route_register.route, url_prefix="/api_register"
+            )  # noqa
 
     return app
