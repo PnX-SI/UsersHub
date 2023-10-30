@@ -21,11 +21,11 @@ route = Blueprint("api_register", __name__)
 
 
 @route.route("/role/<id_role>", methods=["GET", "POST"])
-@fnauth.check_auth(1, False, "/api_register/role_check_auth_error")
+@fnauth.check_auth(1)
 @json_resp
 def get_one_t_roles(id_role):
     """
-        Fonction qui retourne les données concernant un utilisateur.
+    Fonction qui retourne les données concernant un utilisateur.
     """
     role = TRoles.get_one(id_role)
 
@@ -37,7 +37,7 @@ def get_one_t_roles(id_role):
 @json_resp
 def test_connexion():
     """
-        Route pour tester la connexion.
+    Route pour tester la connexion.
     """
     return {"msg": "connexion ok"}
 
@@ -47,14 +47,14 @@ def test_connexion():
 @json_resp
 def create_temp_user():
     """
-        Route pour créer un compte temporaire en attendant la confirmation de 
-        l'adresse mail.
-        
-        Nous stockons :
-        1. Les infos qui seront utilisées par la création de compte. Dont les 
-        mots de passe qui sont stockés cryptés.
-        2. Les infos permettant d'appeler l'appli source si la création du
-        compte est confirmée (Appel d'une URL de callaback => confirmation_url).
+    Route pour créer un compte temporaire en attendant la confirmation de
+    l'adresse mail.
+
+    Nous stockons :
+    1. Les infos qui seront utilisées par la création de compte. Dont les
+    mots de passe qui sont stockés cryptés.
+    2. Les infos permettant d'appeler l'appli source si la création du
+    compte est confirmée (Appel d'une URL de callaback => confirmation_url).
     """
 
     # Get data from JSON
@@ -110,8 +110,8 @@ def create_temp_user():
 @json_resp
 def valid_temp_user():
     """
-        Route pour valider un compte temporaire et en faire un utilisateur
-        (requete a usershub).
+    Route pour valider un compte temporaire et en faire un utilisateur
+    (requete a usershub).
     """
 
     data_in = request.get_json()
@@ -164,8 +164,8 @@ def valid_temp_user():
 
 def set_cor_role_token(email):
     """
-        Fonction pour la création d'un token associé a un id_role
-        Parametres : email
+    Fonction pour la création d'un token associé a un id_role
+    Parametres : email
     """
     if not email:
         return {"msg": "Aucun email"}, 404
@@ -193,8 +193,8 @@ def set_cor_role_token(email):
 
 def check_token(token):
     """
-        fonction permettant de vérifier la présence
-        d'un token et qui retourne l'id_role associé
+    fonction permettant de vérifier la présence
+    d'un token et qui retourne l'id_role associé
     """
     res = (
         db.session.query(CorRoleToken.id_role)
@@ -212,9 +212,9 @@ def check_token(token):
 @json_resp
 def create_cor_role_token():
     """
-        route pour la creation d'un token associé a un id_role
-        fait un appel de la fonction set_cor_role_token(email)
-        parametres post : email
+    route pour la creation d'un token associé a un id_role
+    fait un appel de la fonction set_cor_role_token(email)
+    parametres post : email
     """
 
     data = request.get_json()
@@ -229,8 +229,8 @@ def create_cor_role_token():
 @json_resp
 def change_password():
     """
-        Route permettant à un utilisateur de renouveller
-        son mot de passe
+    Route permettant à un utilisateur de renouveller
+    son mot de passe
     """
     data = request.get_json()
 
@@ -270,7 +270,7 @@ def change_password():
 @json_resp
 def change_application_right():
     """
-        Change les droits d'un utilisateur pour une application
+    Change les droits d'un utilisateur pour une application
     """
 
     req_data = request.get_json()
@@ -338,10 +338,10 @@ def change_application_right():
 @json_resp
 def add_application_right_to_role():
     """
-        Route permettant de d'ajouter des droits
-        pour une application a un utilisateur
-        soit en l'associant à un groupe
-        soit en lui affectant le profil "1"
+    Route permettant de d'ajouter des droits
+    pour une application a un utilisateur
+    soit en l'associant à un groupe
+    soit en lui affectant le profil "1"
     """
 
     req_data = request.get_json()
@@ -370,7 +370,6 @@ def add_application_right_to_role():
     pwd_hash = hashlib.md5(pwd.encode("utf-8")).hexdigest()
 
     if not role.pass_md5 == pwd_hash:
-
         return {"msg": "password false"}, 500
 
     # Test si l'utilisateur n'est pas déjà associé au groupe
@@ -388,10 +387,10 @@ def add_application_right_to_role():
 @json_resp
 def login_recovery():
     """
-        route pour changer des paramètres d'utilisateur
-        FIXME : Route qui ne modifie rien du tout
-            devrait peut être transformée pour être plus générique
-            et retourner les informations d'un utilisateur donné
+    route pour changer des paramètres d'utilisateur
+    FIXME : Route qui ne modifie rien du tout
+        devrait peut être transformée pour être plus générique
+        et retourner les informations d'un utilisateur donné
     """
     req_data = request.get_json()
 
@@ -429,14 +428,13 @@ def login_recovery():
 @json_resp
 def update_user():
     """
-        route pour changer des paramètres d'utilisateur
+    route pour changer des paramètres d'utilisateur
     """
     req_data = request.get_json()
 
     id_role = req_data.get("id_role", None)
 
     if not id_role:
-
         return {"msg": "Pas d'id_role"}, 400
 
     role_data = {}
@@ -455,8 +453,8 @@ def update_user():
 @json_resp
 def check_token_validity():
     """
-        route permettant de savoir si un token est toujours valide
-        parametres post : token
+    route permettant de savoir si un token est toujours valide
+    parametres post : token
     """
 
     data = request.get_json()
@@ -466,4 +464,3 @@ def check_token_validity():
         return {"msg": "valid token"}, 200
 
     return {"msg": "invalid token"}, 500
-

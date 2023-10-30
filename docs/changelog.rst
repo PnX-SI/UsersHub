@@ -2,6 +2,14 @@
 CHANGELOG
 =========
 
+2.4.0 (2023-10-26)
+------------------
+
+**🚀 Nouveautés**
+
+* Passage à Flask-Login pour la gestion de l'authentification via la monté de version du sous-module d'authentification en version 2.0.0
+
+
 2.3.4 (2023-06-27)
 ------------------
 

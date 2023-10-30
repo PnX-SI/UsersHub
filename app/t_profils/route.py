@@ -1,4 +1,12 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash, current_app
+from flask import (
+    redirect,
+    url_for,
+    render_template,
+    Blueprint,
+    request,
+    flash,
+    current_app,
+)
 
 from pypnusershub import routes as fnauth
 
@@ -12,8 +20,8 @@ from app.models import (
     CorRoleAppProfil,
 )
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-URL_APPLICATION = current_app.config['URL_APPLICATION']
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
+URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("profils", __name__)
 
@@ -25,9 +33,6 @@ Routes des profils
 @route.route("profils/list", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def profils():
     """
@@ -70,9 +75,6 @@ def profils():
 @route.route("profil/delete/<id_profil>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_profil):
     """
@@ -88,9 +90,6 @@ def delete(id_profil):
 @route.route("profil/update/<id_profil>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_profil):
     """
