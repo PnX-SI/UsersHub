@@ -122,7 +122,12 @@ def valid_temp_user():
     # recherche de l'utilisateur temporaire correspondant au token
     temp_user = db.session.query(TempUser).filter(token == TempUser.token_role).first()
     if not temp_user:
-        return {"msg": "pas d'utilisateur trouvé avec le token user demandé"}, 422
+        return {
+            "msg": f"""
+                Il n'y a pas d'utilisateur temporaire correspondant au token fourni {token}.<br>
+                Il se peut que la demande de création de compte ai déjà été validée, ou bien que l'adresse de validation soit erronée.<br>
+                """
+        }, 422
 
     req_data = temp_user.as_dict()
     # Récupération du groupe par défaut
