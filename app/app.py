@@ -7,10 +7,19 @@ import sys
 import json
 import logging
 from pkg_resources import iter_entry_points
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlencode
 from pathlib import Path
 
-from flask import Flask, redirect, url_for, request, session, render_template, g
+from flask import (
+    Flask,
+    Response,
+    redirect,
+    url_for,
+    request,
+    session,
+    render_template,
+    g,
+)
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.exc import ProgrammingError
 from flask_migrate import Migrate
@@ -19,6 +28,7 @@ from app.env import db
 
 from pypnusershub.db.models import Application
 from pypnusershub.login_manager import login_manager
+from app.utils.errors import handle_unauthenticated_request
 
 
 migrate = Migrate()
@@ -128,5 +138,7 @@ def create_app():
             app.register_blueprint(
                 route_register.route, url_prefix="/api_register"
             )  # noqa
+
+        app.login_manager.unauthorized_handler(handle_unauthenticated_request)
 
     return app
