@@ -16,16 +16,8 @@ def handle_unauthenticated_request():
     flask.Response
         response
     """
-    routes_with_no_redirect_login = [
-        "create_cor_role_token",
-        "test_connexion",
-    ]
-    in_request = [
-        route
-        for route in routes_with_no_redirect_login
-        if route in request.url_rule.rule
-    ]
-    if len(in_request):
+
+    if "application/json" in request.headers.get("Content-Type", ""):
         return Response(response={}, status=401)
     else:
         url_redirect = current_app.config["URL_REDIRECT"]
