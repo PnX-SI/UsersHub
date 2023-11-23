@@ -1,5 +1,6 @@
-from flask import current_app, Response, request, redirect
+from flask import current_app, Response, request, redirect, url_for
 from urllib.parse import urlencode
+from werkzeug.exceptions import Unauthorized
 
 
 # Unauthorized means disconnected
@@ -8,18 +9,15 @@ from urllib.parse import urlencode
 
 def handle_unauthenticated_request():
     """
-    To avoid returning the login page html indicated in `routes_with_no_redirect_login`
-    this function override `LoginManager.unauthorized()` from `flask-login` .
+    To avoid returning the login page html when a route is used by geonature API
+    this function overrides `LoginManager.unauthorized()` from `flask-login` .
 
     Returns
     -------
     flask.Response
         response
     """
-
     if "application/json" in request.headers.get("Content-Type", ""):
-        return Response(response={}, status=401)
+        raise Unauthorized
     else:
-        url_redirect = current_app.config["URL_REDIRECT"]
-        query_string = urlencode({"next": request.url})
-        return redirect(f"{url_redirect}?{query_string}")
+        return redirect(url_for("login.login", next=request.path))
