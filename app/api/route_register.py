@@ -122,12 +122,15 @@ def valid_temp_user():
     # recherche de l'utilisateur temporaire correspondant au token
     temp_user = db.session.query(TempUser).filter(token == TempUser.token_role).first()
     if not temp_user:
-        return {
-            "msg": f"""
+        return (
+            {
+                "msg": f"""
                 Il n'y a pas d'utilisateur temporaire correspondant au token fourni {token}.<br>
                 Il se peut que la demande de création de compte ai déjà été validée, ou bien que l'adresse de validation soit erronée.<br>
                 """
-        }, 422
+            },
+            422,
+        )
 
     req_data = temp_user.as_dict()
     # Récupération du groupe par défaut
@@ -167,6 +170,7 @@ def set_cor_role_token(email):
     Fonction pour la création d'un token associé a un id_role
     Parametres : email
     """
+
     if not email:
         return {"msg": "Aucun email"}, 404
 
@@ -220,7 +224,6 @@ def create_cor_role_token():
     data = request.get_json()
 
     email = data["email"]
-
     return set_cor_role_token(email)
 
 
