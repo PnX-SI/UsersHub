@@ -93,7 +93,6 @@ marshmallow-sqlalchemy==0.29.0
 packaging==23.2
     # via
     #   flask-marshmallow
-    #   gunicorn
     #   marshmallow
     #   marshmallow-sqlalchemy
 psycopg2==2.9.9
@@ -102,8 +101,6 @@ psycopg2==2.9.9
     #   pypnusershub
 pycparser==2.21
     # via cffi
-pyparsing==3.0.9
-    # via packaging
 pypnusershub==2.0.0
     # via -r requirements-dependencies.in
 python-dateutil==2.8.2
@@ -124,6 +121,9 @@ sqlalchemy==1.4.50
     #   flask-sqlalchemy
     #   marshmallow-sqlalchemy
     #   pypnusershub
+    #   utils-flask-sqlalchemy
+typing-extensions==4.9.0
+    # via alembic
 urllib3==1.26.12
     # via requests
 utils-flask-sqlalchemy==0.3.6
