@@ -1,6 +1,7 @@
 """
     Route permettant de manipuler les données de UsersHub via une API
 """
+
 from datetime import datetime, timedelta
 
 import hashlib

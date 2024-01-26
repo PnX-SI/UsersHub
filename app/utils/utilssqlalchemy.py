@@ -1,6 +1,7 @@
-'''
+"""
 Fonctions utilitaires
-'''
+"""
+
 import json
 from functools import wraps
 
@@ -11,7 +12,6 @@ from werkzeug.datastructures import Headers
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import ColumnProperty
-
 
 
 # def testDataType(value, sqlType, paramName):
@@ -39,19 +39,20 @@ from sqlalchemy.orm import ColumnProperty
      MANQUE FLOAT
 """
 SERIALIZERS = {
-    'date': lambda x: str(x) if x else None,
-    'datetime': lambda x: str(x) if x else None,
-    'time': lambda x: str(x) if x else None,
-    'timestamp': lambda x: str(x) if x else None,
-    'uuid': lambda x: str(x) if x else None
+    "date": lambda x: str(x) if x else None,
+    "datetime": lambda x: str(x) if x else None,
+    "time": lambda x: str(x) if x else None,
+    "timestamp": lambda x: str(x) if x else None,
+    "uuid": lambda x: str(x) if x else None,
 }
 
 
 class GenericTable:
     """
-        Classe permettant de créer à la volée un mapping
-            d'une vue avec la base de données par rétroingénierie
+    Classe permettant de créer à la volée un mapping
+        d'une vue avec la base de données par rétroingénierie
     """
+
     def __init__(self, tableName, schemaName, geometry_field):
         meta = MetaData(schema=schemaName, bind=DB.engine)
         meta.reflect(views=True)
@@ -64,29 +65,27 @@ class GenericTable:
 
         # Mise en place d'un mapping des colonnes en vue d'une sérialisation
         self.serialize_columns = [
-            (
-                name,
-                SERIALIZERS.get(
-                    db_col.type.__class__.__name__.lower(),
-                    lambda x: x
-                )
-            )
+            (name, SERIALIZERS.get(db_col.type.__class__.__name__.lower(), lambda x: x))
             for name, db_col in self.tableDef.columns.items()
-            if not db_col.type.__class__.__name__ == 'Geometry'
+            if not db_col.type.__class__.__name__ == "Geometry"
         ]
         self.columns = [column.name for column in self.tableDef.columns]
 
     def as_dict(self, data):
         return {
-            item: _serializer(getattr(data, item)) for item, _serializer in self.serialize_columns
+            item: _serializer(getattr(data, item))
+            for item, _serializer in self.serialize_columns
         }
+
 
 def serializeQuery(data, columnDef):
     rows = [
         {
-            c['name']: getattr(row, c['name'])
-            for c in columnDef if getattr(row, c['name']) is not None
-        } for row in data
+            c["name"]: getattr(row, c["name"])
+            for c in columnDef
+            if getattr(row, c["name"]) is not None
+        }
+        for row in data
     ]
     return rows
 
@@ -96,29 +95,30 @@ def serializeQueryTest(data, columnDef):
     for row in data:
         inter = {}
         for c in columnDef:
-            if getattr(row, c['name']) is not None:
-                if isinstance(c['type'], (DB.Date, DB.DateTime, UUID)):
-                    inter[c['name']] = str(getattr(row, c['name']))
-                elif isinstance(c['type'], DB.Numeric):
-                    inter[c['name']] = float(getattr(row, c['name']))
-                elif not isinstance(c['type'], Geometry):
-                    inter[c['name']] = getattr(row, c['name'])
+            if getattr(row, c["name"]) is not None:
+                if isinstance(c["type"], (DB.Date, DB.DateTime, UUID)):
+                    inter[c["name"]] = str(getattr(row, c["name"]))
+                elif isinstance(c["type"], DB.Numeric):
+                    inter[c["name"]] = float(getattr(row, c["name"]))
+                elif not isinstance(c["type"], Geometry):
+                    inter[c["name"]] = getattr(row, c["name"])
         rows.append(inter)
     return rows
 
 
 def serializeQueryOneResult(row, columnDef):
     row = {
-        c['name']: getattr(row, c['name'])
-        for c in columnDef if getattr(row, c['name']) is not None
+        c["name"]: getattr(row, c["name"])
+        for c in columnDef
+        if getattr(row, c["name"]) is not None
     }
     return row
 
 
 def serializable(cls):
     """
-        Décorateur de classe pour les DB.Models
-        Permet de rajouter la fonction as_dict qui est basée sur le mapping SQLAlchemy
+    Décorateur de classe pour les DB.Models
+    Permet de rajouter la fonction as_dict qui est basée sur le mapping SQLAlchemy
     """
 
     """
@@ -131,15 +131,16 @@ def serializable(cls):
             db_col = prop.columns[0]
             # HACK
             #  -> Récupération du nom de l'attribut sans la classe
-            name = str(prop).split('.', 1)[1]
-            if not db_col.type.__class__.__name__ == 'Geometry':
-                cls_db_columns.append((
-                    name,
-                    SERIALIZERS.get(
-                        db_col.type.__class__.__name__.lower(),
-                        lambda x: x
+            name = str(prop).split(".", 1)[1]
+            if not db_col.type.__class__.__name__ == "Geometry":
+                cls_db_columns.append(
+                    (
+                        name,
+                        SERIALIZERS.get(
+                            db_col.type.__class__.__name__.lower(), lambda x: x
+                        ),
                     )
-                ))
+                )
 
     """
         Liste des propriétés synonymes
@@ -149,17 +150,13 @@ def serializable(cls):
     for syn in cls.__mapper__.synonyms:
         col = cls.__mapper__.c[syn.name]
         # if column type is geometry pass
-        if col.type.__class__.__name__ == 'Geometry':
+        if col.type.__class__.__name__ == "Geometry":
             pass
 
         # else add synonyms in columns properties
-        cls_db_columns.append((
-            syn.key,
-            SERIALIZERS.get(
-                col.type.__class__.__name__.lower(),
-                lambda x: x
-            )
-        ))
+        cls_db_columns.append(
+            (syn.key, SERIALIZERS.get(col.type.__class__.__name__.lower(), lambda x: x))
+        )
 
     """
         Liste des propriétés de type relationship
@@ -187,13 +184,11 @@ def serializable(cls):
         else:
             fprops = cls_db_columns
 
-        out = {
-            item: _serializer(getattr(self, item)) for item, _serializer in fprops
-        }
+        out = {item: _serializer(getattr(self, item)) for item, _serializer in fprops}
 
         if recursif is False:
             return out
-        for (rel, uselist) in cls_db_relationships:
+        for rel, uselist in cls_db_relationships:
             if getattr(self, rel) is None:
                 break
 
@@ -209,10 +204,11 @@ def serializable(cls):
 
 
 def json_resp(fn):
-    '''
+    """
     Décorateur transformant le résultat renvoyé par une vue
     en objet JSON
-    '''
+    """
+
     @wraps(fn)
     def _json_resp(*args, **kwargs):
         res = fn(*args, **kwargs)
@@ -223,20 +219,18 @@ def json_resp(fn):
 
         if not res:
             status = 404
-            res = {'message': 'not found'}
+            res = {"message": "not found"}
 
-        return Response(
-            json.dumps(res),
-            status=status,
-            mimetype='application/json'
-        )
+        return Response(json.dumps(res), status=status, mimetype="application/json")
+
     return _json_resp
 
 
 def csv_resp(fn):
-    '''
+    """
     Décorateur transformant le résultat renvoyé en un fichier csv
-    '''
+    """
+
     @wraps(fn)
     def _csv_resp(*args, **kwargs):
         res = fn(*args, **kwargs)
@@ -244,20 +238,18 @@ def csv_resp(fn):
         outdata = [separator.join(columns)]
 
         headers = Headers()
-        headers.add('Content-Type', 'text/plain')
+        headers.add("Content-Type", "text/plain")
         headers.add(
-            'Content-Disposition',
-            'attachment',
-            filename='export_%s.csv' % filename
+            "Content-Disposition", "attachment", filename="export_%s.csv" % filename
         )
 
         for o in data:
             outdata.append(
                 separator.join(
-                    '"%s"' % (o.get(i), '')
-                    [o.get(i) is None] for i in columns
+                    '"%s"' % (o.get(i), "")[o.get(i) is None] for i in columns
                 )
             )
-        out = '\r\n'.join(outdata)
+        out = "\r\n".join(outdata)
         return Response(out, headers=headers)
+
     return _csv_resp
