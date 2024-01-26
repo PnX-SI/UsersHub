@@ -2,12 +2,15 @@
 CHANGELOG
 =========
 
-2.4.0 (2023-10-26)
+2.4.0 (unreleased)
 ------------------
 
 **🚀 Nouveautés**
 
-* Passage à Flask-Login pour la gestion de l'authentification via la monté de version du sous-module d'authentification en version 2.0.0
+- Passage à Flask-Login pour la gestion de l'authentification via la mise à jour de UsersHub-authentification-module en version 2.0.0 (#188)
+- Mise à jour de nombreuses dépendances Python
+- Mise à jour du linter black en version 24
+- Rechargement automatique du Docker quand on modifie le fichier de configuration de UsersHub
 
 
 2.3.4 (2023-06-27)
@@ -15,24 +18,24 @@ CHANGELOG
 
 **🐛 Corrections**
 
-* Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection lorsque l'URL de l'application n'est pas située à la racine (#173 / #174 - par @joelclems)
-* Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé quand un administrateur cherche à le valider (#177 / https://github.com/PnX-SI/GeoNature/issues/862 - par @joelclems)
-* Correction de l'affichage de la fiche d'un utilisateur si celui-ci n'a pas d'organisme (#125 - par @jpm-cbna)
-* Correction de la modification du mot de passe d'un utilisateur qui n'a pas de prénom ou de nom (#107 - par @jpm-cbna)
-* Meilleure portabilité des scripts dans les différents systèmes Unix (#176 - par @MathRdt)
+- Correction de la route de redirection après login ou un logout pour éviter les erreurs de redirection lorsque l'URL de l'application n'est pas située à la racine (#173 / #174 - par @joelclems)
+- Création de compte : affichage d'un message explicite lorsque le token d'un utlisateur temporaire n'est pas trouvé quand un administrateur cherche à le valider (#177 / https://github.com/PnX-SI/GeoNature/issues/862 - par @joelclems)
+- Correction de l'affichage de la fiche d'un utilisateur si celui-ci n'a pas d'organisme (#125 - par @jpm-cbna)
+- Correction de la modification du mot de passe d'un utilisateur qui n'a pas de prénom ou de nom (#107 - par @jpm-cbna)
+- Meilleure portabilité des scripts dans les différents systèmes Unix (#176 - par @MathRdt)
 
 2.3.3 (2023-02-16)
 ------------------
 
 **🚀 Nouveautés**
 
-* Docker : l’image est construite avec la version des modules référencés par les sous-modules Git
+- Docker : l’image est construite avec la version des modules référencés par les sous-modules Git
 
 **🐛 Corrections**
 
-* Correction de l'affichage des rôles associés à une liste (#165)
-* Correction de la route permettant la modification du mot de passe (https://github.com/PnX-SI/GeoNature/issues/2288)
-* Mise à jour de ``UsersHub-authentification-module`` en version corrective ``1.6.2``
+- Correction de l'affichage des rôles associés à une liste (#165)
+- Correction de la route permettant la modification du mot de passe (https://github.com/PnX-SI/GeoNature/issues/2288)
+- Mise à jour de ``UsersHub-authentification-module`` en version corrective ``1.6.2``
 
 
 2.3.2 (2022-11-23)
@@ -40,17 +43,17 @@ CHANGELOG
 
 **🚀 Nouveautés**
 
-* Ajout d’un ``Dockerfile`` et publication automatique des images de celui-ci par Github Action
-* Ajout d’un fichier Docker Compose permettant de lancer UsersHub et PostgreSQL
-* Support de la variable d’environnement ``USERSHUB_SETTINGS`` pour définir le fichier de configuration
-* Ajout du paramètre ``CODE_APPLICATION`` (valeur par défaut : ``UH``)
-* Le dossier des fichiers statiques peut être défini avec la variable d’environnement ``USERSHUB_STATIC_FOLDER``
+- Ajout d’un ``Dockerfile`` et publication automatique des images de celui-ci par Github Action
+- Ajout d’un fichier Docker Compose permettant de lancer UsersHub et PostgreSQL
+- Support de la variable d’environnement ``USERSHUB_SETTINGS`` pour définir le fichier de configuration
+- Ajout du paramètre ``CODE_APPLICATION`` (valeur par défaut : ``UH``)
+- Le dossier des fichiers statiques peut être défini avec la variable d’environnement ``USERSHUB_STATIC_FOLDER``
 
 **🐛 Corrections**
 
-* Correction du packaging : incorporation des templates, des fichiers Alembic
-* Suppression de la dépendance à PostgreSQL dans le fichier service systemd
-* Déclaration des migrations Alembic dans les entry points
+- Correction du packaging : incorporation des templates, des fichiers Alembic
+- Suppression de la dépendance à PostgreSQL dans le fichier service systemd
+- Déclaration des migrations Alembic dans les entry points
 
 
 2.3.1 (2022-09-20)
@@ -58,8 +61,8 @@ CHANGELOG
 
 **🐛 Corrections**
 
-* Ajout de ``gunicorn`` aux requirements
-* Ajout de ``extend_existing=True`` sur le modèle ``CorRoleListe``
+- Ajout de ``gunicorn`` aux requirements
+- Ajout de ``extend_existing=True`` sur le modèle ``CorRoleListe``
 
 
 2.3.0 (2022-09-16)
@@ -67,21 +70,21 @@ CHANGELOG
 
 **🚀 Nouveautés**
 
-* Support de *Flask 2*
+- Support de *Flask 2*
 
-  * Mise à jour de ``UsersHub-authentification-module`` en version ``1.6.0``
+  - Mise à jour de ``UsersHub-authentification-module`` en version ``1.6.0``
 
-* *systemd* : Ajout d’une dépendance au service ``postgresql``
-* Amélioration de l’affichage des tables
-* Fichiers de log :
+- *systemd* : Ajout d’une dépendance au service ``postgresql``
+- Amélioration de l’affichage des tables
+- Fichiers de log :
 
-  * Les logs sont à présent écrits dans le fichier ``/var/log/usershub/usershub.log``
-  * L’outil ``logrotate`` est configuré pour assurer la rotation du fichier
-  * L’ancien fichier de log ``/var/log/usershub.log`` est intouché; vous pouvez le supprimer, ou l’archiver manuellement.
+  - Les logs sont à présent écrits dans le fichier ``/var/log/usershub/usershub.log``
+  - L’outil ``logrotate`` est configuré pour assurer la rotation du fichier
+  - L’ancien fichier de log ``/var/log/usershub.log`` est intouché; vous pouvez le supprimer, ou l’archiver manuellement.
 
 **🐛 Corrections**
 
-* Correction d’un import manquant
+- Correction d’un import manquant
 
 
 2.2.2 (2021-12-22)
