@@ -36,7 +36,6 @@ class GenericRepository(db.Model):
         order_by=None,
         order="asc",
     ):
-
         """
         Methode qui retourne un dictionnaire de tout les éléments d'un Model
         Avec pour paramètres:
@@ -65,7 +64,6 @@ class GenericRepository(db.Model):
 
     @classmethod
     def post(cls, entity_dict):
-
         """
         Methode qui ajoute un élément à une table
         Avec pour paramètres un dictionnaire de cet élément
@@ -83,7 +81,6 @@ class GenericRepository(db.Model):
 
     @classmethod
     def update(cls, entity_dict):
-
         """
         Methode qui met à jour un élément
         Avec pour paramètre un dictionnaire de cet élément
@@ -101,7 +98,6 @@ class GenericRepository(db.Model):
 
     @classmethod
     def delete(cls, id):
-
         """
         Methode qui supprime un élement d'une table à partir d'un id donné
         Avec pour paramètre un id (clé primaire)
@@ -115,7 +111,6 @@ class GenericRepository(db.Model):
 
     @classmethod
     def choixSelect(cls, id, nom, aucun=None, order_by=None):
-
         """
         Methode qui retourne un tableau de tuples d'id  et de nom
         Avec pour paramètres un id et un nom
@@ -135,4 +130,3 @@ class GenericRepository(db.Model):
     #         for col in cls.__table__.columns.keys()
 
     #     return cls.__table__.columns.keys()
-
