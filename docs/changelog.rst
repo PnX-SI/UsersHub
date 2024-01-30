@@ -2,14 +2,16 @@
 CHANGELOG
 =========
 
-2.4.0 (unreleased)
+2.4.0 (2024-01-30)
 ------------------
 
 **🚀 Nouveautés**
 
-- Passage à Flask-Login pour la gestion de l'authentification via la mise à jour de UsersHub-authentification-module en version 2.0.0 (#188)
+- Passage à Flask-Login pour la gestion de l'authentification via la mise à jour de UsersHub-authentification-module en version 2.1.1 (#188)
+- Passage de Flask en version 3.0
+- Passage de SQLAlchemy en 1.4
 - Mise à jour de nombreuses dépendances Python
-- Mise à jour du linter black en version 24
+- Mise à jour du linter black en version 24 (#193)
 - Rechargement automatique du Docker quand on modifie le fichier de configuration de UsersHub
 
 
