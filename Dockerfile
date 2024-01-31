@@ -50,7 +50,6 @@ RUN --mount=type=cache,target=/root/.cache \
     pip install --upgrade pip setuptools wheel
 
 COPY /setup.py .
-COPY --chmod=755 /docker_healthcheck.sh .
 COPY /requirements-common.in .
 COPY /requirements-dependencies.in .
 COPY /VERSION .
@@ -113,8 +112,6 @@ ENV FLASK_APP=app.app:create_app
 ENV PYTHONPATH=/dist/config/
 ENV USERSHUB_SETTINGS=config.py
 ENV USERSHUB_STATIC_FOLDER=/dist/static
-
-COPY --chmod=755 /docker_healthcheck.sh .
 
 EXPOSE 5001
 
