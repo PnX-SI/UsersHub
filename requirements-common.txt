@@ -11,12 +11,12 @@ gunicorn==19.9.0
 infinity==1.4
 intervals==0.8.1
 itsdangerous==0.24
-Jinja2==2.10.1
+Jinja2==2.11.3
 Mako==1.1.5
-MarkupSafe==1.1
+MarkupSafe==2.0.1
 marshmallow==3.13.0
 marshmallow-sqlalchemy==0.26.1
-psycopg2==2.8.5
+psycopg2==2.9.5
 pycparser==2.18
 python-dateutil==2.7.3
 python-dotenv==0.19.0
