@@ -242,7 +242,7 @@ def updatepass(id_role=None):
             flash(strigify_dict(form.errors), "error")
 
     return render_template(
-        "user_pass.html",
+        "user_pass.html", 
         form=form,
         title=title,
         id_role=id_role,
@@ -269,6 +269,7 @@ def info(id_role):
     organisme = (
         Bib_Organismes.get_one(user["id_organisme"]) if user["id_organisme"] else None
     )
+    fullname = buildUserFullName(user)
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
@@ -276,6 +277,7 @@ def info(id_role):
         "info_user.html",
         user=user,
         organisme=organisme,
+        fullname=fullname,
         groups=groups,
         lists=lists,
         rights=rights,
