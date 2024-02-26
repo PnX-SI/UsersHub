@@ -6,12 +6,14 @@
 {%set is_organisme = organisme is not none and organisme['nom_organisme'] != '' %}
 {%set is_desc = user['desc_role'] is not none and user['desc_role'] != '' %}
 {%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
+{%set is_champs_addi = user['champs_addi']['organisme'] is not none
+and user['champs_addi']['organisme'] != '' %}
 {%set is_mail = user['email'] is not none and user['email'] != '' %}
 {%set is_group = groups|length > 0 %}
 {%set is_list = lists|length > 0 %}
 {%set is_right = rights|length > 0 %}
 <div class="container main-zone ng-scope ">
-    <h3>Utilisateur "{{user['fullname']}}"</h3>
+    <h3>Utilisateur "{{fullname}}"</h3>
     <div class="ml-5">
         <small>
             {% if is_desc %}
@@ -28,6 +30,8 @@
             {% endif %}
             {% if is_organisme %}
                 <br /><strong>Organisme :</strong> {{organisme.nom_organisme}}
+            {% elif is_champs_addi %}
+                <br /><strong>Organisme :</strong> {{user['champs_addi']['organisme']}}
             {% endif %}
             {% if is_remarques %}
                 <br /><strong>Remarques :</strong> {{user['remarques']}}
