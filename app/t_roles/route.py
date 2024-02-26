@@ -242,7 +242,7 @@ def updatepass(id_role=None):
             flash(strigify_dict(form.errors), "error")
 
     return render_template(
-        "user_pass.html", 
+        "user_pass.html",
         form=form,
         title=title,
         id_role=id_role,
