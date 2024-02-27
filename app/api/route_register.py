@@ -89,9 +89,10 @@ def create_temp_user():
     ).delete()
     db.session.commit()
 
+
     # Delete old entries (cleaning)
     db.session.query(TempUser).filter(
-        TempUser.date_insert <= (datetime.now() - timedelta(days=7))
+        TempUser.date_insert <= (datetime.now() - timedelta(days=current_app.config["AUTO_ACCOUNT_DELETION_DAYS"]))
     ).delete()
     db.session.commit()
 
