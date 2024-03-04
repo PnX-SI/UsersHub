@@ -8,6 +8,7 @@ from flask import (
     flash,
     current_app
 )
+import re
 
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
@@ -307,6 +308,9 @@ def buildUserFullName(user):
         fullname.append(user["prenom_role"].title())
     return ' '.join(fullname)
 
+@route.app_template_filter()
+def pretty_json_key(key):
+    return re.sub("([a-z])([A-Z])","\g<1> \g<2>",key)
 
 def pops(form, with_group=True):
     """

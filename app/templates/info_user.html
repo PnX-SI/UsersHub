@@ -10,6 +10,7 @@
 and user['champs_addi']['organisme'] != '' %}
 {%set is_date_insert = user['date_insert'] is not none and user['date_insert'] != '' %}
 {%set is_date_update = user['date_update'] is not none and user['date_update'] != '' %}
+{%set is_champs_addi = user['champs_addi'] is not none and user['champs_addi'] != '' %}
 {%set is_mail = user['email'] is not none and user['email'] != '' %}
 {%set is_group = groups|length > 0 %}
 {%set is_list = lists|length > 0 %}
@@ -38,6 +39,7 @@ and user['champs_addi']['organisme'] != '' %}
             {% if is_remarques %}
                 <br /><strong>Remarques :</strong> {{user['remarques']}}
             {% endif %}
+
             {% if user['pass_plus'] == "" or user["pass_plus"] is none %}
                 <br /><strong>Mot de passe Plus :</strong> Non
             {%else %}
@@ -58,6 +60,31 @@ and user['champs_addi']['organisme'] != '' %}
             {% endif %}
             {% if is_date_update %}
                 <br /><strong class="text-muted">Date de mise à jour :</strong> {{user['date_update']|truncate(10, True, '', 0)}}
+            {% endif %}
+            {% if is_champs_addi %}
+                <dl class="list-def-inline">
+                {% for key, value in user.champs_addi.items() %}
+                    <dt>{{ key|pretty_json_key|capitalize }} : </dt>
+                    <dd>
+                        {% if value is iterable and (value is not string and value is not mapping) %}
+                            <ul>
+                                {% for item in value %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% elif value is mapping %}
+                            <dl class="list-def-inline">
+                            {% for key, value in value.items() %}
+                                <dt>{{ key|e|capitalize }} : </dt>
+                                <dd>{{ value }} </dd>
+                            {% endfor %}
+                            </dl>
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </dd>
+                {% endfor %}
+                </dl>
             {% endif %}
         </small>
     </div>
