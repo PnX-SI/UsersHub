@@ -19,6 +19,8 @@ from app.utils.utils_all import strigify_dict
 from app.env import db
 
 
+
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("user", __name__)
@@ -55,6 +57,7 @@ def users():
         "Actif",
         "pass_plus",
         "pass_md5",
+        "Autres",
     ]  # noqa
     columns = [
         "id_role",
@@ -67,6 +70,7 @@ def users():
         "active",
         "pass_plus",
         "pass_md5",
+        "champs_addi",
     ]  # noqa
     filters = [{"col": "groupe", "filter": "False"}]
     contents = TRoles.get_all(columns, filters, order_by="identifiant", order="asc")
@@ -211,6 +215,7 @@ def updatepass(id_role=None):
     role_fullname = buildUserFullName(myuser)
     title = f"Changer le mot de passe de l'utilisateur '{role_fullname}'"
 
+
     if request.method == "POST":
         if form.validate_on_submit() and form.validate():
             form_user = pops(form.data, False)
@@ -232,7 +237,11 @@ def updatepass(id_role=None):
                     return render_template(
                         "user_pass.html",
                         form=form,
-                        title=title,
+                        title="Changer le mot de passe de l'utilisateur '"
+                        + myuser["nom_role"]
+                        + " "
+                        + myuser["prenom_role"]
+                        + "'",
                         id_role=id_role,
                     )
             form_user["id_role"] = id_role
@@ -244,7 +253,11 @@ def updatepass(id_role=None):
     return render_template(
         "user_pass.html",
         form=form,
-        title=title,
+        title="Changer le mot de passe de l'utilisateur '"
+        + myuser["nom_role"]
+        + " "
+        + myuser["prenom_role"]
+        + "'",
         id_role=id_role,
     )
 
@@ -283,6 +296,7 @@ def info(id_role):
     )
 
 
+
 def buildUserFullName(user):
     fullname = []
     if user["nom_role"]:
@@ -290,7 +304,6 @@ def buildUserFullName(user):
     if user["prenom_role"]:
         fullname.append(user["prenom_role"].title())
     return " ".join(fullname)
-
 
 def pops(form, with_group=True):
     """
@@ -318,6 +331,7 @@ def process(form, user, groups):
     form.email.process_data(user["email"])
     form.remarques.process_data(user["remarques"])
     form.identifiant.process_data(user["identifiant"])
+    form.champs_addi.process_data(user["champs_addi"])
     form.a_groupe.process_data(groups)
     return form
 

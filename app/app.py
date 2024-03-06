@@ -20,6 +20,7 @@ from flask import (
     render_template,
     g,
 )
+
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.exc import ProgrammingError
 from flask_migrate import Migrate
@@ -88,6 +89,24 @@ def create_app():
                 """Route des constantes javascript"""
                 return render_template("constants.js")
 
+
+            @app.after_request
+            def after_login_method(response):
+                """
+                Fonction s'exécutant après chaque requete
+                permet de gérer l'authentification
+                """
+                if not request.cookies.get("token"):
+                    session["current_user"] = None
+
+                if (
+                    request.endpoint == "auth.login" and response.status_code == 200
+                ):  # noqa
+                    current_user = json.loads(response.get_data().decode("utf-8"))
+                    session["current_user"] = current_user["user"]
+                return response
+
+
             @app.context_processor
             def inject_user():
                 return dict(user=getattr(g, "user", None))
@@ -139,6 +158,8 @@ def create_app():
                 route_register.route, url_prefix="/api_register"
             )  # noqa
 
+
         app.login_manager.unauthorized_handler(handle_unauthenticated_request)
+
 
     return app
