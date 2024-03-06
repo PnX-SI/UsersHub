@@ -1,8 +1,10 @@
 """
     Définition du formulaire : création/modification d'un role
 """
+
 import ast
 import json
+
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
@@ -10,6 +12,7 @@ from wtforms import (
     SubmitField,
     HiddenField,
     SelectField,
+    RadioField,
     BooleanField,
     SelectMultipleField,
     TextAreaField,

@@ -7,10 +7,20 @@ import sys
 import json
 import logging
 from pkg_resources import iter_entry_points
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlencode
 from pathlib import Path
 
-from flask import Flask, redirect, url_for, request, session, render_template, g
+from flask import (
+    Flask,
+    Response,
+    redirect,
+    url_for,
+    request,
+    session,
+    render_template,
+    g,
+)
+
 from werkzeug.middleware.proxy_fix import ProxyFix
 from sqlalchemy.exc import ProgrammingError
 from flask_migrate import Migrate
@@ -18,6 +28,8 @@ from flask_migrate import Migrate
 from app.env import db
 
 from pypnusershub.db.models import Application
+from pypnusershub.login_manager import login_manager
+from app.utils.errors import handle_unauthenticated_request
 
 
 migrate = Migrate()
@@ -52,7 +64,8 @@ def create_app():
     app.config["URL_REDIRECT"] = "{}/{}".format(app.config["URL_APPLICATION"], "login")
     app.secret_key = app.config["SECRET_KEY"]
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
-
+    login_manager.init_app(app)
+    login_manager.login_view = "login.login"
     db.init_app(app)
     app.config["DB"] = db
 
@@ -76,6 +89,7 @@ def create_app():
                 """Route des constantes javascript"""
                 return render_template("constants.js")
 
+
             @app.after_request
             def after_login_method(response):
                 """
@@ -91,6 +105,7 @@ def create_app():
                     current_user = json.loads(response.get_data().decode("utf-8"))
                     session["current_user"] = current_user["user"]
                 return response
+
 
             @app.context_processor
             def inject_user():
@@ -142,5 +157,9 @@ def create_app():
             app.register_blueprint(
                 route_register.route, url_prefix="/api_register"
             )  # noqa
+
+
+        app.login_manager.unauthorized_handler(handle_unauthenticated_request)
+
 
     return app

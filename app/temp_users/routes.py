@@ -9,7 +9,7 @@ from flask import (
     redirect,
     url_for,
     flash,
-    current_app
+    current_app,
 )
 from pypnusershub.db.models_register import TempUser
 from pypnusershub import routes as fnauth
@@ -19,14 +19,12 @@ from app.utils.utilssqlalchemy import json_resp
 from app.models import TApplications
 
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-
 routes = Blueprint("temp_users", __name__)
 log = logging.getLogger()
 
 
 @routes.route("/list", methods=["GET"])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(6)
 def temp_users_list():
     """
     Get all temp_users
@@ -52,7 +50,7 @@ def temp_users_list():
 
 
 @routes.route("/validate/<token>/<int:id_application>", methods=["GET"])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(6)
 def validate(token, id_application):
     """
     Call the API to validate a temp user
@@ -61,10 +59,9 @@ def validate(token, id_application):
 
     # Get temp user infos
     temp_user = (
-        db.session
-            .query(TempUser.confirmation_url)
-            .filter(token == TempUser.token_role)
-            .first()
+        db.session.query(TempUser.confirmation_url)
+        .filter(token == TempUser.token_role)
+        .first()
     )
     if not temp_user:
         return {"msg": "Aucun utilisateur trouvé avec le token user demandé"}, 404
@@ -81,15 +78,13 @@ def validate(token, id_application):
     elif not url_after_validation:
         flash("L'utilisateur a bien été validé")
         return redirect(url_for("temp_users.temp_users_list"))
-    
+
     user_data = r.json()
 
     # Call post UsersHub actions URL
     if url_after_validation:
         r = req_lib.post(
-            url=url_after_validation, 
-            json=user_data, 
-            cookies=request.cookies
+            url=url_after_validation, json=user_data, cookies=request.cookies
         )
     if r.status_code == 200:
         flash("L'utilisateur a bien été validé")
@@ -101,7 +96,7 @@ def validate(token, id_application):
 
 
 @routes.route("/delete/<token>", methods=["GET"])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(6)
 def delete(token):
     """
     DELETE a temp_user

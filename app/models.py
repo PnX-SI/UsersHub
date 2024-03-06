@@ -194,7 +194,7 @@ class TRoles(GenericRepository):
         Methode qui concatène le nom et prénom du role
         retourne un nom complet
         """
-        return ' '.join([(self.nom_role or ''), (self.prenom_role or '')])
+        return " ".join([(self.nom_role or ""), (self.prenom_role or "")])
 
     def as_dict_full_name(self):
         """
@@ -298,7 +298,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_profil_in_app(cls, id_application):
-
         """
         Methode qui retourne un dictionnaire de roles avec leur profil sur une application
         Avec pour paramètre un id d'application
@@ -324,7 +323,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_user_profil_out_app(cls, id_application):
-
         """
         Methode qui retourne un dictionnaire de roles n'ayant pas de droits
             sur une application
@@ -341,7 +339,6 @@ class TRoles(GenericRepository):
 
     @classmethod
     def get_groups(cls):
-
         """
         Methode qui retourne une liste des roles
             de type groupe
@@ -352,7 +349,6 @@ class TRoles(GenericRepository):
 
 @serializable
 class CorRoles(GenericRepository):
-
     """
     Classe de correspondance entre un utilisateur et un groupe
     """
@@ -383,7 +379,6 @@ class CorRoles(GenericRepository):
 
     @classmethod
     def add_cor(cls, id_group, ids_role):
-
         """
         Methode qui ajoute des relations roles <-> groupe
         Avec pour paramètres un id de groupe(id_role)
@@ -398,7 +393,6 @@ class CorRoles(GenericRepository):
 
     @classmethod
     def del_cor(cls, id_group, ids_role):
-
         """
         Methode qui supprime des relations roles <-> groupe
         Avec pour paramètres un id de groupe(id_role) et un tableau
@@ -414,7 +408,6 @@ class CorRoles(GenericRepository):
 
 @serializable
 class TListes(GenericRepository):
-
     """
     Model de la table t_listes
     """
@@ -429,7 +422,7 @@ class TListes(GenericRepository):
 
 @serializable
 class CorRoleListe(GenericRepository):
-    """ Classe de correspondance entre la table t_roles et la table t_listes"""
+    """Classe de correspondance entre la table t_roles et la table t_listes"""
 
     __tablename__ = "cor_role_liste"
     __table_args__ = {"schema": "utilisateurs", "extend_existing": True}
@@ -470,7 +463,6 @@ class CorRoleListe(GenericRepository):
 
 @serializable
 class TApplications(GenericRepository):
-
     """
     Model de la table t_applications
     """
@@ -517,7 +509,7 @@ class TProfils(GenericRepository):
     @classmethod
     def get_profil_in_app_with_code(cls, id_application, code_profil):
         """
-            Methode qui retourne un profil à partir de son code
+        Methode qui retourne un profil à partir de son code
         """
         return (
             db.session.query(TProfils)
@@ -560,7 +552,7 @@ class TProfils(GenericRepository):
 
 @serializable
 class CorProfilForApp(GenericRepository):
-    """ Classe de correspondance entre la table t_applications et la table t_profils"""
+    """Classe de correspondance entre la table t_applications et la table t_profils"""
 
     __tablename__ = "cor_profil_for_app"
     __table_args__ = {"schema": "utilisateurs", "extend_existing": True}
@@ -689,4 +681,3 @@ class CorRoleAppProfil(GenericRepository):
                 cls.id_profil == t["id_profil"]
             ).filter(cls.id_application == id_app).delete()
             db.session.commit()
-

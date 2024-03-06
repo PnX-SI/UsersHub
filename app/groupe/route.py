@@ -1,4 +1,13 @@
-from flask import redirect, url_for, render_template, Blueprint, request, flash, jsonify, current_app
+from flask import (
+    redirect,
+    url_for,
+    render_template,
+    Blueprint,
+    request,
+    flash,
+    jsonify,
+    current_app,
+)
 from pypnusershub import routes as fnauth
 
 from app.groupe import forms as groupeforms
@@ -7,8 +16,8 @@ from app.models import CorRoles
 from app.utils.utils_all import strigify_dict
 
 
-URL_REDIRECT = current_app.config['URL_REDIRECT']
-URL_APPLICATION = current_app.config['URL_APPLICATION']
+URL_REDIRECT = current_app.config["URL_REDIRECT"]
+URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("groupe", __name__)
 
@@ -16,12 +25,8 @@ route = Blueprint("groupe", __name__)
 @route.route("groups/list", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def groups():
-
     """
     Route qui affiche la liste des groupes
     Retourne un template avec pour paramètres :
@@ -66,12 +71,8 @@ def groups():
 @route.route("group/update/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_role=None):
-
     """
     Route affichant un formulaire vierge ou non (selon l'url) pour ajouter ou mettre à jour un groupe
     L'envoie du formulaire permet l'ajout ou la maj du groupe dans la base
@@ -111,9 +112,6 @@ def addorupdate(id_role=None):
 @route.route("group/members/<id_groupe>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def membres(id_groupe):
     """
@@ -156,9 +154,6 @@ def membres(id_groupe):
 @route.route("group/delete/<id_groupe>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def delete(id_groupe):
     """
@@ -173,9 +168,6 @@ def delete(id_groupe):
 @route.route("group/info/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def info(id_role):
     group = TRoles.get_one(id_role)

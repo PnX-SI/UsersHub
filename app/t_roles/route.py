@@ -19,6 +19,7 @@ from app.utils.utils_all import strigify_dict
 from app.env import db
 
 
+
 URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
@@ -28,10 +29,6 @@ route = Blueprint("user", __name__)
 @route.route("users/list", methods=["GET"])
 @fnauth.check_auth(
     3,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
-    redirect_on_insufficient_right=URL_REDIRECT,
 )
 def users():
     """
@@ -117,9 +114,6 @@ def users():
 @route.route("user/update/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def addorupdate(id_role=None):
     """
@@ -207,9 +201,6 @@ def addorupdate(id_role=None):
 @route.route("user/pass/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def updatepass(id_role=None):
     """
@@ -220,6 +211,10 @@ def updatepass(id_role=None):
     """
     form = t_rolesforms.UserPass()
     myuser = TRoles.get_one(id_role)
+    # Build title
+    role_fullname = buildUserFullName(myuser)
+    title = f"Changer le mot de passe de l'utilisateur '{role_fullname}'"
+
 
     if request.method == "POST":
         if form.validate_on_submit() and form.validate():
@@ -270,9 +265,6 @@ def updatepass(id_role=None):
 @route.route("users/delete/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(
     6,
-    False,
-    redirect_on_expiration=URL_REDIRECT,
-    redirect_on_invalid_token=URL_REDIRECT,
 )
 def deluser(id_role):
     """
@@ -284,7 +276,7 @@ def deluser(id_role):
 
 
 @route.route("user/info/<id_role>", methods=["GET", "POST"])
-@fnauth.check_auth(6, False, URL_REDIRECT)
+@fnauth.check_auth(6)
 def info(id_role):
     user = TRoles.get_one(id_role)
     organisme = (
@@ -303,6 +295,15 @@ def info(id_role):
         pathU=URL_APPLICATION + "/user/update/",
     )
 
+
+
+def buildUserFullName(user):
+    fullname = []
+    if user["nom_role"]:
+        fullname.append(user["nom_role"].upper())
+    if user["prenom_role"]:
+        fullname.append(user["prenom_role"].title())
+    return " ".join(fullname)
 
 def pops(form, with_group=True):
     """
