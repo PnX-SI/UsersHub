@@ -8,6 +8,8 @@
 {%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
 {%set is_champs_addi = user['champs_addi']['organisme'] is not none
 and user['champs_addi']['organisme'] != '' %}
+{%set is_date_insert = user['date_insert'] is not none and user['date_insert'] != '' %}
+{%set is_date_update = user['date_update'] is not none and user['date_update'] != '' %}
 {%set is_mail = user['email'] is not none and user['email'] != '' %}
 {%set is_group = groups|length > 0 %}
 {%set is_list = lists|length > 0 %}
@@ -35,6 +37,27 @@ and user['champs_addi']['organisme'] != '' %}
             {% endif %}
             {% if is_remarques %}
                 <br /><strong>Remarques :</strong> {{user['remarques']}}
+            {% endif %}
+            {% if user['pass_plus'] == "" or user["pass_plus"] is none %}
+                <br /><strong>Mot de passe Plus :</strong> Non
+            {%else %}
+                <br /><strong>Mot de passe Plus :</strong> Oui
+            {% endif %}
+            {% if user['pass_md5'] == "" or user["pass_md5"] is none %}
+                <br /><strong>Mot de passe Md5 :</strong> Non
+            {%else %}
+                <br /><strong>Mot de passe Md5 :</strong> Oui
+            {% endif %}
+            {% if user['active'] == True %}
+                <br /><strong>Compte Actif :</strong> Oui
+            {%else %}
+                <br /><strong>Compte Actif :</strong> Non
+            {% endif %}
+            {% if is_date_insert %}
+                <br /><strong class="text-muted">Date de création :</strong> {{user['date_insert']|truncate(10, True, '', 0)}}
+            {% endif %}
+            {% if is_date_update %}
+                <br /><strong class="text-muted">Date de mise à jour :</strong> {{user['date_update']|truncate(10, True, '', 0)}}
             {% endif %}
         </small>
     </div>
