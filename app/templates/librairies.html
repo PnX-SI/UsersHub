@@ -3,8 +3,20 @@
 {% block title %}UsersHub V2{% endblock %}
 
 {% block styles %}
-  
+
 <style type="text/css">
+  dl.list-def-inline {
+    display: grid;
+    grid-template-columns: max-content auto;
+  }
+
+  dl.list-def-inline dt {
+    grid-column-start: 1;
+  }
+
+  dl.list-def-inline dd {
+    grid-column-start: 2;
+  }
 
   #add {
     -ms-transform: rotate(180deg); /* IE 9 */
@@ -19,7 +31,7 @@
   .font-medium {
     font-size: 25px !important;
   }
-  
+
   .forms {
     padding: 40px !important;
   }
@@ -65,20 +77,20 @@ href="{{ url_for('static', filename='images/favicon.png') }}"
 
 
 {% block scripts %}
-  <script
+<script
   src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"
   type="text/javascript"
-  ></script>
-  <script
+></script>
+<script
   src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.js') }}"
   type="text/javascript"
-  ></script>
-  <script
+></script>
+<script
   src=" {{url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.min.js')}} "
   type="text/javascript"
-  ></script>
-  <script src="{{ url_for('constants_js') }} " type="text/javascript"></script>
-  <script
+></script>
+<script src="{{ url_for('constants_js') }} " type="text/javascript"></script>
+<script
   src="{{ url_for('static', filename='transfer.js') }}"
   type="text/javascript"
   ></script>
