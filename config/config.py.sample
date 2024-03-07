@@ -5,6 +5,9 @@ URL_APPLICATION = 'http://localhost:5001'
 
 SECRET_KEY = 'super secret key'
 
+# Number of days befoe automatic deletion of account creation request
+AUTO_ACCOUNT_DELETION_DAYS = 7
+
 # Authentification crypting method (hash or md5)
 PASS_METHOD = 'hash'
 
