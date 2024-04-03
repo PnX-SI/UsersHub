@@ -40,21 +40,10 @@ and user['champs_addi']['organisme'] != '' %}
                 <br /><strong>Remarques :</strong> {{user['remarques']}}
             {% endif %}
 
-            {% if user['pass_plus'] == "" or user["pass_plus"] is none %}
-                <br /><strong>Mot de passe Plus :</strong> Non
-            {%else %}
-                <br /><strong>Mot de passe Plus :</strong> Oui
-            {% endif %}
-            {% if user['pass_md5'] == "" or user["pass_md5"] is none %}
-                <br /><strong>Mot de passe Md5 :</strong> Non
-            {%else %}
-                <br /><strong>Mot de passe Md5 :</strong> Oui
-            {% endif %}
-            {% if user['active'] == True %}
-                <br /><strong>Compte Actif :</strong> Oui
-            {%else %}
-                <br /><strong>Compte Actif :</strong> Non
-            {% endif %}
+            
+            <br /><strong>Mot de passe Plus :</strong> {"Non" if user['pass_plus'] == "" or user["pass_plus"] is none else "Oui"}
+            <br /><strong>Mot de passe Md5 :</strong> {"Non" if user['pass_md5'] == "" or user["pass_md5"] is none else "Oui"}
+            <br /><strong>Compte Actif :</strong> {{"Oui" if user["active"] else "Non" }}
             {% if is_date_insert %}
                 <br /><strong>Date de création :</strong> {{user['date_insert']|truncate(10, True, '', 0)}}
             {% endif %}
