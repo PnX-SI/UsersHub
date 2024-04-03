@@ -294,9 +294,11 @@ def buildUserFullName(user):
         fullname.append(user["prenom_role"].title())
     return " ".join(fullname)
 
+
 @route.app_template_filter()
 def pretty_json_key(key):
-    return re.sub("([a-z])([A-Z])","\g<1> \g<2>",key)
+    return re.sub("([a-z])([A-Z])", "\g<1> \g<2>", key)
+
 
 def pops(form, with_group=True):
     """
