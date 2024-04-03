@@ -33,7 +33,7 @@ def temp_users_list():
     temp_users = []
     for d in data:
         temp_user = d.as_dict()
-        temp_user["full_name"] = temp_user["nom_role"] + " " + temp_user["prenom_role"]
+        temp_user["full_name"] = f"{temp_user['nom_role']} {temp_user['prenom_role']}"
         app = db.session.query(TApplications).get(temp_user["id_application"])
         temp_user["app_name"] = None
         if app:
