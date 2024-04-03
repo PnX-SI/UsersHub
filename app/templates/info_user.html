@@ -56,10 +56,10 @@ and user['champs_addi']['organisme'] != '' %}
                 <br /><strong>Compte Actif :</strong> Non
             {% endif %}
             {% if is_date_insert %}
-                <br /><strong class="text-muted">Date de création :</strong> {{user['date_insert']|truncate(10, True, '', 0)}}
+                <br /><strong>Date de création :</strong> {{user['date_insert']|truncate(10, True, '', 0)}}
             {% endif %}
             {% if is_date_update %}
-                <br /><strong class="text-muted">Date de mise à jour :</strong> {{user['date_update']|truncate(10, True, '', 0)}}
+                <br /><strong>Date de mise à jour :</strong> {{user['date_update']|truncate(10, True, '', 0)}}
             {% endif %}
             {% if is_champs_addi %}
                 <dl class="list-def-inline">
