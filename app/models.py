@@ -72,7 +72,9 @@ class TRoles(GenericRepository):
     pass_plus = db.Column(db.Unicode)
     champs_addi = db.Column(JSONB)
     date_insert = db.Column(db.DateTime, default=db.func.now(), nullable=False)
-    date_update = db.Column(db.DateTime, default=db.func.now(), nullable=False, onupdate=db.func.now())
+    date_update = db.Column(
+        db.DateTime, default=db.func.now(), nullable=False, onupdate=db.func.now()
+    )
 
     # Add synonym for column pass
     # Hack because pass is an python reserved word
