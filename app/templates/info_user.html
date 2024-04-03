@@ -6,7 +6,7 @@
 {%set is_organisme = organisme is not none and organisme['nom_organisme'] != '' %}
 {%set is_desc = user['desc_role'] is not none and user['desc_role'] != '' %}
 {%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
-{%set is_champs_addi = user['champs_addi']['organisme'] is not none
+{%set is_orga_champ_addi = user['champs_addi']['organisme'] is not none
 and user['champs_addi']['organisme'] != '' %}
 {%set is_date_insert = user['date_insert'] is not none and user['date_insert'] != '' %}
 {%set is_date_update = user['date_update'] is not none and user['date_update'] != '' %}
@@ -33,7 +33,7 @@ and user['champs_addi']['organisme'] != '' %}
             {% endif %}
             {% if is_organisme %}
                 <br /><strong>Organisme :</strong> {{organisme.nom_organisme}}
-            {% elif is_champs_addi %}
+            {% elif is_orga_champ_addi %}
                 <br /><strong>Organisme :</strong> {{user['champs_addi']['organisme']}}
             {% endif %}
             {% if is_remarques %}
