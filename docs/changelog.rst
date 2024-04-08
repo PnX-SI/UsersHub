@@ -2,6 +2,22 @@
 CHANGELOG
 =========
 
+2.4.1 (unreleased)
+------------------
+
+*🚀 Nouveautés**
+
+ - Ajout d'une variable de configuration pour la durée limite du stockage d'un utilisateur temporaire (#136)
+ - Affichage complet des informations utilisateurs stockées en base de données (#203)
+ - Affichage des champs additionnels liés à l'utilisateur dans l'interface (#197)
+
+**🐛 Corrections**
+
+ - Problème d'affichage du nom et prénom dans la page d'informations d'un utilisateur (#198)
+ - Compilation/publication de la documentation par ReadTheDoc (#205)
+
+
+
 2.4.0 (2024-01-30)
 ------------------
 
