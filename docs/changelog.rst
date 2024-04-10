@@ -5,7 +5,7 @@ CHANGELOG
 2.4.1 (unreleased)
 ------------------
 
-*🚀 Nouveautés**
+**🚀 Nouveautés**
 
  - Ajout d'une variable de configuration pour la durée limite du stockage d'un utilisateur temporaire (#136)
  - Affichage complet des informations utilisateurs stockées en base de données (#203)
