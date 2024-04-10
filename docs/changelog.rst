@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2.4.1 (unreleased)
+2.4.1 (2024-04-10)
 ------------------
 
 **🚀 Nouveautés**
@@ -13,8 +13,8 @@ CHANGELOG
 
 **🐛 Corrections**
 
- - Problème d'affichage du nom et prénom dans la page d'informations d'un utilisateur (#198)
- - Compilation/publication de la documentation par ReadTheDoc (#205)
+ - Problème d'affichage du nom et prénom dans la page d'informations utilisateur (#198)
+ - Compilation/publication de la documentation avec ReadTheDoc (#205)
 
 
 
