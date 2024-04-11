@@ -8,6 +8,7 @@ from flask import (
     flash,
     current_app,
 )
+import re
 
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
@@ -269,6 +270,7 @@ def info(id_role):
     organisme = (
         Bib_Organismes.get_one(user["id_organisme"]) if user["id_organisme"] else None
     )
+    fullname = buildUserFullName(user)
     groups = TRoles.get_user_groups(id_role)
     lists = TRoles.get_user_lists(id_role)
     rights = TRoles.get_user_app_profils(id_role)
@@ -276,6 +278,7 @@ def info(id_role):
         "info_user.html",
         user=user,
         organisme=organisme,
+        fullname=fullname,
         groups=groups,
         lists=lists,
         rights=rights,
@@ -290,6 +293,11 @@ def buildUserFullName(user):
     if user["prenom_role"]:
         fullname.append(user["prenom_role"].title())
     return " ".join(fullname)
+
+
+@route.app_template_filter()
+def pretty_json_key(key):
+    return re.sub("([a-z])([A-Z])", "\g<1> \g<2>", key)
 
 
 def pops(form, with_group=True):

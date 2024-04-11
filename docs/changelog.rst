@@ -2,6 +2,22 @@
 CHANGELOG
 =========
 
+2.4.1 (2024-04-11)
+------------------
+
+**🚀 Nouveautés**
+
+- Ajout du paramètre ``AUTO_ACCOUNT_DELETION_DAYS`` pour pouvoir définir la durée limite du stockage d'un utilisateur temporaire (#136)
+- Affichage complet des informations utilisateurs stockées en base de données (#203)
+- Affichage des champs additionnels liés à l'utilisateur dans l'interface (#197)
+
+**🐛 Corrections**
+
+- Problème d'affichage du nom et prénom dans la page d'informations utilisateur (#198)
+- Correction du déploiement automatique de la documentation sur Read the Docs (#200)
+- Suppression des scripts spécifiques healthcheck Docker (#196)
+
+
 2.4.0 (2024-01-30)
 ------------------
 

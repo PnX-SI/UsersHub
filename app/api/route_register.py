@@ -17,6 +17,7 @@ from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import TRoles, CorRoleAppProfil, TProfils, CorRoles
 
+import sqlalchemy as sa
 
 route = Blueprint("api_register", __name__)
 
@@ -85,15 +86,18 @@ def create_temp_user():
         return {"msg": msg}, 400
 
     # Delete duplicate entries
-    db.session.query(TempUser).filter(
-        TempUser.identifiant == temp_user.identifiant
-    ).delete()
+    db.session.execute(
+        sa.delete(TempUser).where(TempUser.identifiant == temp_user.identifiant)
+    )
     db.session.commit()
 
     # Delete old entries (cleaning)
-    db.session.query(TempUser).filter(
-        TempUser.date_insert <= (datetime.now() - timedelta(days=7))
-    ).delete()
+    days = 7 if not "AUTO_ACCOUNT_DELETION_DAYS" in current_app.config else 7
+    db.session.execute(
+        sa.delete(TempUser).where(
+            TempUser.date_insert <= (datetime.now() - timedelta(days=days))
+        )
+    )
     db.session.commit()
 
     # Update attributes
