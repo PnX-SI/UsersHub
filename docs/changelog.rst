@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+2.4.2 (2024-04-23)
+------------------
+
+**🐛 Corrections**
+
+- Mise à jour de `UsersHub-authentification-module` en 2.1.4 (#207)
+
 2.4.1 (2024-04-11)
 ------------------
 
