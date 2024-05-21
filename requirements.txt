@@ -111,7 +111,7 @@ python-dateutil==2.8.2
     #   utils-flask-sqlalchemy
 python-dotenv==1.0.1
     # via -r requirements-common.in
-requests==2.31.0
+requests==2.32.0
     # via pypnusershub
 six==1.16.0
     # via
