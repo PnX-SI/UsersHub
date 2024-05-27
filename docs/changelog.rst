@@ -2,6 +2,14 @@
 CHANGELOG
 =========
 
+2.4.3 (2024-05-27)
+------------------
+
+**🚀 Nouveautés**
+
+- Mise à jour de dépendances critiques : `requests`, `jinja2`, `werkzeug`, `dnspython`, `cryptography`, `gunicorn` et `idna` (#217)
+
+
 2.4.2 (2024-04-23)
 ------------------
 
