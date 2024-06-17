@@ -124,10 +124,8 @@ sqlalchemy==1.4.52
     #   pypnusershub
     #   utils-flask-sqlalchemy
 typing-extensions==4.11.0
-    # via
-    #   alembic
-    #   sqlalchemy
-urllib3==2.2.1
+    # via alembic
+urllib3==2.2.2
     # via requests
 utils-flask-sqlalchemy==0.4.1
     # via pypnusershub
