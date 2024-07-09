@@ -124,9 +124,7 @@ sqlalchemy==1.4.52
     #   pypnusershub
     #   utils-flask-sqlalchemy
 typing-extensions==4.11.0
-    # via
-    #   alembic
-    #   sqlalchemy
+    # via alembic
 urllib3==2.2.1
     # via requests
 utils-flask-sqlalchemy==0.4.1
@@ -144,5 +142,5 @@ wtforms==3.1.2
     #   wtforms-components
 wtforms-components==0.10.5
     # via -r requirements-common.in
-zipp==3.18.2
+zipp==3.19.1
     # via importlib-metadata
