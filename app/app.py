@@ -27,9 +27,8 @@ from flask_migrate import Migrate
 from app.env import db
 
 from pypnusershub.db.models import Application
-from pypnusershub.login_manager import login_manager
 from app.utils.errors import handle_unauthenticated_request
-
+from pypnusershub.auth import auth_manager
 
 migrate = Migrate()
 
@@ -63,10 +62,18 @@ def create_app():
     app.config["URL_REDIRECT"] = "{}/{}".format(app.config["URL_APPLICATION"], "login")
     app.secret_key = app.config["SECRET_KEY"]
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
-    login_manager.init_app(app)
-    login_manager.login_view = "login.login"
     db.init_app(app)
     app.config["DB"] = db
+    providers_config = [
+        {
+            "module": "pypnusershub.auth.providers.default.LocalProvider",
+            "id_provider": "local_provider",
+        },
+    ]
+    auth_manager.init_app(
+        app, prefix="/pypn/auth/", providers_declaration=providers_config
+    )
+    auth_manager.home_page = app.config["URL_APPLICATION"]
 
     migrate.init_app(app, db, directory=Path(__file__).absolute().parent / "migrations")
 
@@ -91,10 +98,6 @@ def create_app():
             @app.context_processor
             def inject_user():
                 return dict(user=getattr(g, "user", None))
-
-            from pypnusershub import routes
-
-            app.register_blueprint(routes.routes, url_prefix="/pypn/auth")
 
             from app.t_roles import route
 
