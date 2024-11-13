@@ -1,16 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
-    PasswordField,
-    BooleanField,
     SubmitField,
     HiddenField,
-    SelectField,
     validators,
 )
 from wtforms.validators import DataRequired, Email
 
-# from wtforms_components import IntergerField
+
+def validate_code_postal(form, field):
+    if len(field.data) != 5:
+        raise validators.ValidationError(
+            "Le code postal renseigné comporte plus/moins de 5 caractères"
+        )
 
 
 class Organisme(FlaskForm):
@@ -23,7 +25,7 @@ class Organisme(FlaskForm):
         validators=[DataRequired(message="Le nom de l'organisme est obligatoire")],
     )
     adresse_organisme = StringField("Adresse")
-    cp_organisme = StringField("Code Postal")
+    cp_organisme = StringField("Code Postal", validators=[validate_code_postal])
     ville_organisme = StringField("Ville")
     tel_organisme = StringField("Téléphone")
     fax_organisme = StringField("Fax")
