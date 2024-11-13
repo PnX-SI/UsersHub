@@ -7,7 +7,7 @@ CHANGELOG
 
 **🚀 Nouveautés**
 
-  - Mise à jour de `UsersHub-authentification-module` en 3.0.0 (#225)
+- Mise à jour de `UsersHub-authentification-module` en 3.0.0 (#225)
 
 2.4.3 (2024-05-27)
 ------------------
