@@ -32,4 +32,7 @@ setuptools.setup(
             "migrations = app.migrations:versions",
         ],
     },
+    extras_require={
+        "sentry": ["sentry_sdk[flask]"],
+    },
 )
