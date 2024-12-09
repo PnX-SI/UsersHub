@@ -201,5 +201,6 @@ Mise à jour de l'application
     cd usershub
     source venv/bin/activate
     flask db upgrade usershub@head
+    flask db upgrade utilisateurs@head
 
 * Suivre les éventuelles notes de version spécifiques à chaque version
