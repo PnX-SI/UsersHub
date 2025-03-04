@@ -1,5 +1,5 @@
 """
-    Serveur de l'application UsersHub
+Serveur de l'application UsersHub
 """
 
 import os

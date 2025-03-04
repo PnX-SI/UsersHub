@@ -1,5 +1,5 @@
 """
-    Définition du formulaire : création/modification d'un role
+Définition du formulaire : création/modification d'un role
 """
 
 from flask_wtf import FlaskForm
