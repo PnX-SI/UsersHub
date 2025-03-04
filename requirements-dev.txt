@@ -6,31 +6,27 @@
 #
 -e file:dependencies/UsersHub-authentification-module#egg=pypnusershub
     # via -r requirements-submodules.in
-alembic==1.13.2
+alembic==1.14.1
     # via
     #   flask-migrate
     #   pypnusershub
-authlib==1.3.1
+authlib==1.5.1
     # via pypnusershub
-bcrypt==4.2.0
+bcrypt==4.3.0
     # via pypnusershub
-blinker==1.8.2
+blinker==1.9.0
     # via flask
-certifi==2024.7.4
+certifi==2025.1.31
     # via requests
-cffi==1.17.0
+cffi==1.17.1
     # via cryptography
-charset-normalizer==3.3.2
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via flask
-cryptography==43.0.0
+cryptography==43.0.3
     # via authlib
-dnspython==2.6.1
-    # via email-validator
-email-validator==2.2.0
-    # via wtforms-components
-flask==3.0.3
+flask==3.1.0
     # via
     #   -r requirements-common.in
     #   flask-login
@@ -42,9 +38,9 @@ flask==3.0.3
     #   utils-flask-sqlalchemy
 flask-login==0.6.3
     # via pypnusershub
-flask-marshmallow==1.2.1
+flask-marshmallow==1.3.0
     # via pypnusershub
-flask-migrate==4.0.7
+flask-migrate==4.1.0
     # via
     #   -r requirements-common.in
     #   utils-flask-sqlalchemy
@@ -54,17 +50,15 @@ flask-sqlalchemy==3.0.5
     #   flask-migrate
     #   pypnusershub
     #   utils-flask-sqlalchemy
-flask-wtf==1.2.1
+flask-wtf==1.2.2
     # via -r requirements-common.in
-greenlet==3.0.3
+greenlet==3.1.1
     # via sqlalchemy
-gunicorn==22.0.0
+gunicorn==23.0.0
     # via -r requirements-common.in
-idna==3.7
-    # via
-    #   email-validator
-    #   requests
-importlib-metadata==8.2.0
+idna==3.10
+    # via requests
+importlib-metadata==8.6.1
     # via flask
 infinity==1.5
     # via intervals
@@ -74,31 +68,31 @@ itsdangerous==2.2.0
     # via
     #   flask
     #   flask-wtf
-jinja2==3.1.4
+jinja2==3.1.5
     # via flask
-mako==1.3.5
+mako==1.3.9
     # via alembic
-markupsafe==2.1.5
+markupsafe==3.0.2
     # via
     #   jinja2
     #   mako
     #   werkzeug
     #   wtforms
     #   wtforms-components
-marshmallow==3.21.3
+marshmallow==3.26.1
     # via
     #   flask-marshmallow
     #   marshmallow-sqlalchemy
     #   utils-flask-sqlalchemy
-marshmallow-sqlalchemy==1.0.0
+marshmallow-sqlalchemy==1.4.1
     # via
     #   -r requirements-common.in
     #   pypnusershub
-packaging==24.1
+packaging==24.2
     # via
     #   gunicorn
     #   marshmallow
-psycopg2==2.9.9
+psycopg2==2.9.10
     # via
     #   -r requirements-common.in
     #   pypnusershub
@@ -112,11 +106,9 @@ python-dotenv==1.0.1
     # via -r requirements-common.in
 requests==2.32.3
     # via pypnusershub
-six==1.16.0
-    # via
-    #   python-dateutil
-    #   wtforms-components
-sqlalchemy==1.4.53
+six==1.17.0
+    # via python-dateutil
+sqlalchemy==1.4.54
     # via
     #   alembic
     #   flask-sqlalchemy
@@ -126,25 +118,25 @@ sqlalchemy==1.4.53
 typing-extensions==4.12.2
     # via
     #   alembic
-    #   sqlalchemy
-urllib3==2.2.2
+    #   marshmallow-sqlalchemy
+urllib3==2.3.0
     # via requests
 utils-flask-sqlalchemy==0.4.1
     # via pypnusershub
-validators==0.33.0
+validators==0.34.0
     # via wtforms-components
-werkzeug==3.0.3
+werkzeug==3.1.3
     # via
     #   flask
     #   flask-login
-wtforms==3.1.2
+wtforms==3.2.1
     # via
     #   -r requirements-common.in
     #   flask-wtf
     #   wtforms-components
-wtforms-components==0.10.5
+wtforms-components==0.11.0
     # via -r requirements-common.in
-xmltodict==0.13.0
+xmltodict==0.14.2
     # via pypnusershub
-zipp==3.19.2
+zipp==3.21.0
     # via importlib-metadata
