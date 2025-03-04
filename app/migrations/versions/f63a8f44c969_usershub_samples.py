@@ -1,7 +1,7 @@
 """UsersHub samples data
 
 Revision ID: f63a8f44c969
-Revises: 
+Revises:
 Create Date: 2021-09-06 18:17:06.392398
 
 """
