@@ -9,9 +9,11 @@ from flask import (
     current_app,
 )
 import re
+import sqlalchemy as sa
 
 from pypnusershub import routes as fnauth
 from pypnusershub.db.models import check_and_encrypt_password
+from pypnusershub.db.models import cor_role_provider
 
 
 from app.t_roles import forms as t_rolesforms
@@ -259,6 +261,11 @@ def deluser(id_role):
     Route qui supprime un utilisateurs dont l'id est donné en paramètres dans l'url
     Retourne une redirection vers la liste d'utilisateurs
     """
+    # TODO remove hack after delete cascade add in cor_role_provider in next release of UH-AM
+    db.session.execute(
+        sa.delete(cor_role_provider).where(cor_role_provider.c.id_role == id_role)
+    )
+
     TRoles.delete(id_role)
     return redirect(url_for("user.users"))
 
