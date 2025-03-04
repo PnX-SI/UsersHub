@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Make sure root cannot run our script
 if [ "$(id -u)" == "0" ]; then
-   echo "This script must NOT be run as root" 1>&2
-   exit 1
+    echo "This script must NOT be run as root" 1>&2
+    exit 1
 fi
 
 . config/settings.ini
@@ -24,7 +24,7 @@ function database_exists () {
 if database_exists $db_name
 then
     if $drop_apps_db
-        then
+    then
         echo "Suppression de la base..."
         sudo -n -u postgres -s dropdb $db_name
     else
@@ -44,4 +44,5 @@ fi
 
 source venv/bin/activate
 flask db upgrade usershub@head
+flask db upgrade utilisateurs@head
 deactivate
