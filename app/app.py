@@ -29,6 +29,8 @@ from app.env import db
 from pypnusershub.db.models import Application
 from app.utils.errors import handle_unauthenticated_request
 from pypnusershub.auth import auth_manager
+from pathlib import Path
+import importlib.metadata
 
 migrate = Migrate()
 
@@ -61,7 +63,7 @@ def create_app():
         os.environ["SCRIPT_NAME"] = app.config["APPLICATION_ROOT"]
     app.config["URL_REDIRECT"] = "{}/{}".format(app.config["URL_APPLICATION"], "login")
     app.secret_key = app.config["SECRET_KEY"]
-    app.config["VERSION"] = open("VERSION").read().strip()
+    app.config["VERSION"] = importlib.metadata.version("usershub")
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
     db.init_app(app)
     app.config["DB"] = db
