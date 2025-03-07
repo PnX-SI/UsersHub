@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.4.6 (2025-03-07)
+
+**🚀 Nouveautés**
+
+- Mise à jour de `UsersHub-authentification-module` en 3.0.3 (#236)
+
+**🐛 Corrections**
+
+- Correction de la récupération de la variable `VERSION` (#235 par @jacquesfize)
+- Correction de la suppression d'un utilisateur lorsque ce dernier est associé à un provider (#236 par @jacquesfize)
+
 ## 2.4.5 (2025-03-04)
 
 **🚀 Nouveautés**
