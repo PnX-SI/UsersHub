@@ -96,7 +96,7 @@ psycopg2==2.9.10
     #   pypnusershub
 pycparser==2.22
     # via cffi
-pypnusershub==3.0.2
+pypnusershub==3.0.3
     # via -r requirements-dependencies.in
 python-dateutil==2.9.0.post0
     # via
