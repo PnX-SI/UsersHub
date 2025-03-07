@@ -29,7 +29,6 @@ from app.env import db
 from pypnusershub.db.models import Application
 from app.utils.errors import handle_unauthenticated_request
 from pypnusershub.auth import auth_manager
-from pathlib import Path
 import importlib.metadata
 
 migrate = Migrate()
