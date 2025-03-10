@@ -2,10 +2,15 @@
 
 ## 2.4.7 (2025-03-10)
 
+**🚀 Nouveautés**
+
+- [Développement] Ajout d'un Makefile(#239 par @jacquesfize)
+
 **🐛 Corrections**
 
 - Correction du problème de validation du champs `email` (#237 par @jacquesfize)
 - Correction du problème de récupération de la version de UsersHub (#238 par @jacquesfize)
+- Correction du `docker-compose.yml` (#239 par @jacquesfize)
 
 ## 2.4.6 (2025-03-07)
 
