@@ -8,16 +8,50 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
       - postgres:/var/lib/postgresql/data
+    healthcheck:
+      # during db init, postgres is not listening on localhost so this avoid false healthy status
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-d",
+          "${POSTGRES_DB}",
+          "-U",
+          "${POSTGRES_USER}",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  usershub-install-db:
+    image: pnx-si/usershub:latest
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - USERSHUB_URL_APPLICATION=${USERSHUB_URL_APPLICATION:-/}
+      - USERSHUB_SETTINGS=${USERSHUB_SETTINGS:-config.py}
+      - USERSHUB_SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER:-usershubadmin}:${POSTGRES_PASSWORD:-usershubpasswd}@postgres:5432/${POSTGRES_DB:-usershub}
+    command: sh -c "python -m flask db upgrade utilisateurs@head && python -m flask db upgrade usershub@head && python -m flask db upgrade usershub-samples@head"
+    working_dir: /dist
 
   usershub:
     image: pnx-si/usershub:latest
     build: .
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      usershub-install-db:
+        condition: service_completed_successfully
     volumes:
       - ./config/:/dist/config/
     user: ${UID:-1000}:${GID:-1000}
     environment:
+      - USERSHUB_URL_APPLICATION=${USERSHUB_URL_APPLICATION:-http://localhost:5001}
+      - USERSHUB_SECRET_KEY=${USERSHUB_SECRET_KEY:-mysupersecretkey}
       - USERSHUB_SETTINGS=${USERSHUB_SETTINGS:-config.py}
       - USERSHUB_SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER:-usershubadmin}:${POSTGRES_PASSWORD:-usershubpasswd}@postgres:5432/${POSTGRES_DB:-usershub}
       - PYTHONPATH=/dist/config
