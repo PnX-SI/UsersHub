@@ -13,3 +13,7 @@ start: run
 install:
 	./install_app.sh
 	./install_db.sh
+
+autoupgrade:
+	. venv/bin/activate && flask db upgrade usershub@head
+	. venv/bin/activate && flask db upgrade utilisateurs@head
