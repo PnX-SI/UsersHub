@@ -1,0 +1,63 @@
+name: Test the installation of UsersHub
+
+on: [push, pull_request]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_DB: usershub_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+          cache: "pip"
+      - name: Fill settings file
+        run: |
+          cp config/settings.ini.sample config/settings.ini
+          cp config/config.py.sample config/config.py
+          sed -i 's|SQLALCHEMY_DATABASE_URI = .*|SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@localhost:5432/usershub_test"|' config/config.py
+          sed -i 's|SECRET_KEY = .*|SECRET_KEY = "mysupersecretkey"|' config/config.py
+          sed -i 's|user_pg=.*|user_pg=postgres|' config/settings.ini
+          sed -i 's|user_pg_pass=.*|user_pg_pass=postgres|' config/settings.ini
+          sed -i 's|db_name=.*|db_name=usershub_test|' config/settings.ini
+          sed -i 's|db_host=.*|db_host=localhost|' config/settings.ini
+          sed -i 's|pg_port=.*|pg_port=5432|' config/settings.ini
+          cat config/settings.ini
+          cat config/config.py
+      - name: Install database extensions
+        run: |
+          PGPASSWORD=postgres psql -U postgres -d usershub_test -h localhost -p 5432 -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+      - name: Install dependencies
+        run: |
+          ./install_app.sh
+          ./install_db.sh
+          source venv/bin/activate
+          flask db upgrade usershub-samples@head
+      - name: Run UsersHub
+        run: |
+          source venv/bin/activate
+          flask run &
+      - name: Check if UsersHub is running
+        run: |
+          CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/login)
+          if [ $CODE != 200 ]; then
+            echo "Error: UsersHub is not running properly. Status code is $CODE"
+            exit 1
+          fi
