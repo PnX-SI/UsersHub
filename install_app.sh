@@ -35,7 +35,7 @@ if [ "${mode}" = "dev" ]; then
 else
     pip install -r requirements.txt || exit 1
 fi
-
+pip install -e . || exit 1
 deactivate
 
 # rendre la commande nvm disponible
