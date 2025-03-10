@@ -16,7 +16,7 @@ function database_exists () {
         return 0
     else
         # Grep db name in the list of database
-        sudo -n -u postgres -s -- psql -tAl | grep -q "^$1|"
+        PGPASSWORD=$user_pg_pass psql -h $db_host -p $pg_port -U $user_pg -tAl | grep -q "^$1|"
         return $?
     fi
 }
@@ -26,7 +26,7 @@ then
     if $drop_apps_db
     then
         echo "Suppression de la base..."
-        sudo -n -u postgres -s dropdb $db_name
+        PGPASSWORD=$user_pg_pass dropdb -U $user_pg -h $db_host -p $pg_port $db_name
     else
         echo "La base de données existe et le fichier de settings indique de ne pas la supprimer."
     fi
@@ -36,9 +36,9 @@ if ! database_exists $db_name
 then
     mkdir -p log
     echo "Création de la base..."
-    sudo -u postgres -s createdb -O $user_pg $db_name
+    PGPASSWORD=$user_pg_pass createdb -h $db_host -p $pg_port -U $user_pg -O $user_pg $db_name
     echo "Ajout de l'extension pour les UUID..."
-    sudo -u postgres -s psql -d $db_name -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+    PGPASSWORD=$user_pg_pass psql -h $db_host -p $pg_port -U $user_pg -d $db_name -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 fi
 
 
