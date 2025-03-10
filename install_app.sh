@@ -49,23 +49,24 @@ nvm use || exit 1
 npm ci || exit 1
 cd ../..
 
+if [ "${mode}" != "dev" ]; then
+  #Lancement de l'application
+  export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
-#Lancement de l'application
-export USERSHUB_DIR=$(readlink -e "${0%/*}")
+  # Configuration systemd
+  envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/usershub.conf || exit 1
+  sudo systemd-tmpfiles --create /etc/tmpfiles.d/usershub.conf || exit 1
+  envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
+  sudo systemctl daemon-reload || exit 1
 
-# Configuration systemd
-envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/usershub.conf || exit 1
-sudo systemd-tmpfiles --create /etc/tmpfiles.d/usershub.conf || exit 1
-envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
-sudo systemctl daemon-reload || exit 1
+  # Configuration logrotate
+  envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/usershub
 
-# Configuration logrotate
-envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/usershub
+  # Configuration apache
+  sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
+  sudo a2enmod proxy || exit 1
+  sudo a2enmod proxy_http || exit 1
+  # you may need a restart if proxy & proxy_http was not already enabled
 
-# Configuration apache
-sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
-sudo a2enmod proxy || exit 1
-sudo a2enmod proxy_http || exit 1
-# you may need a restart if proxy & proxy_http was not already enabled
-
-echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
+  echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
+fi;
