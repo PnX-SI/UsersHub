@@ -92,7 +92,7 @@ def create_temp_user():
     db.session.commit()
 
     # Delete old entries (cleaning)
-    days = 7 if not "AUTO_ACCOUNT_DELETION_DAYS" in current_app.config else 7
+    days = current_app.config.get("AUTO_ACCOUNT_DELETION_DAYS", 7)
     db.session.execute(
         sa.delete(TempUser).where(
             TempUser.date_insert <= (datetime.now() - timedelta(days=days))
