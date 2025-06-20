@@ -48,11 +48,11 @@ def test_connexion():
 @json_resp
 def create_temp_user():
     """
-        Route pour créer un compte temporaire en attendant la confirmation de 
+        Route pour créer un compte temporaire en attendant la confirmation de
         l'adresse mail.
-        
+
         Nous stockons :
-        1. Les infos qui seront utilisées par la création de compte. Dont les 
+        1. Les infos qui seront utilisées par la création de compte. Dont les
         mots de passe qui sont stockés cryptés.
         2. Les infos permettant d'appeler l'appli source si la création du
         compte est confirmée (Appel d'une URL de callaback => confirmation_url).
@@ -91,7 +91,7 @@ def create_temp_user():
     db.session.commit()
 
     # Delete old entries (cleaning)
-    days = 7 if not "AUTO_ACCOUNT_DELETION_DAYS" in current_app.config else 7
+    days = current_app.config.get("AUTO_ACCOUNT_DELETION_DAYS", 7)
     db.session.execute(
         sa.delete(TempUser).where(
             TempUser.date_insert <= (datetime.now() - timedelta(days=days))
@@ -465,4 +465,3 @@ def check_token_validity():
         return {"msg": "valid token"}, 200
 
     return {"msg": "invalid token"}, 500
-
