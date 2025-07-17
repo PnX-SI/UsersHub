@@ -18,7 +18,6 @@ from app import genericRepository
 from app.bib_organismes import forms as bib_organismeforms
 from app.models import Bib_Organismes, TRoles
 from app.utils.utils_all import strigify_dict
-from app.utils.decorators import handle_db_errors
 
 URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
@@ -127,7 +126,6 @@ def addorupdate(id_organisme):
 @fnauth.check_auth(
     6,
 )
-@handle_db_errors("organisme.organisms", "l'organisme", redirect_on_error=True)
 def delete(id_organisme):
     """
     Route qui supprime un organisme dont l'id est donné en paramètres dans l'url
@@ -135,7 +133,7 @@ def delete(id_organisme):
     """
 
     Bib_Organismes.delete(id_organisme)
-    flash("L''organisme 'a été supprimé avec succès.", "success")
+    flash("L''organisme a été supprimé avec succès.", "success")
     return redirect(url_for("organisme.organisms"))
 
 

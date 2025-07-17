@@ -19,7 +19,6 @@ from pypnusershub.db.models import cor_role_provider
 from app.t_roles import forms as t_rolesforms
 from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
-from app.utils.decorators import handle_db_errors
 from app.env import db
 
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
@@ -254,10 +253,9 @@ def updatepass(id_role=None):
 
 @route.route("users/delete/<id_role>", methods=["GET", "POST"])
 @fnauth.check_auth(6)
-@handle_db_errors("user.users", "l'utilisateur", redirect_on_error=True)
 def deluser(id_role):
     TRoles.delete(id_role)
-    flash("L''utilisateur 'a été supprimé avec succès.", "success")
+    flash("L''utilisateur a été supprimé avec succès.", "success")
     return redirect(url_for("user.users"))
 
 
