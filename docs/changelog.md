@@ -4,7 +4,7 @@
 
 **🚀 Nouveautés**
 
-- [Développement] Ajout d'un Makefile(#239 par @jacquesfize)
+- [Développement] Ajout d'un Makefile (#239 par @jacquesfize)
 
 **🐛 Corrections**
 
