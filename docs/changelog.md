@@ -32,7 +32,7 @@
 **🐛 Corrections**
 
 - Ajout de la mise à jour de la branche alembic `utilisateurs` dans le processus de mise à jour de UsersHub (#232 par @jacquesfize)
-- Ajout de la suppression des entrées associées à un utilisateur dans `cor_role_provider` quand ce dernier est supprimée (#234 par @jacquesfize)
+- Ajout de la suppression des entrées associées à un utilisateur dans `cor_role_provider` quand ce dernier est supprimé (#234 par @jacquesfize)
 
 ## 2.4.4 (2024-11-12)
 
