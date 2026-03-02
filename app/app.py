@@ -6,7 +6,7 @@ import os
 import sys
 import json
 import logging
-from pkg_resources import iter_entry_points
+from importlib.metadata import entry_points
 from urllib.parse import urlsplit, urlencode
 from pathlib import Path
 
@@ -44,12 +44,15 @@ def configure_alembic(alembic_config):
     version_locations = alembic_config.get_main_option(
         "version_locations", default=""
     ).split()
-    for entry_point in iter_entry_points("alembic", "migrations"):
-        _, migrations = str(entry_point).split("=", 1)
-        version_locations += [migrations.strip()]
+    for entry_point in get_entry_points_by_group_and_name('alembic', 'migrations'):
+        version_locations.append(entry_point.value)
     alembic_config.set_main_option("version_locations", " ".join(version_locations))
     return alembic_config
 
+def get_entry_points_by_group_and_name(group, name):
+    eps = entry_points()
+    group_eps = eps.get(group, [])
+    return [ep for ep in group_eps if ep.name == name]
 
 def create_app():
     app = Flask(
