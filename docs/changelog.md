@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.4.8 (2026-03-03)
+
+**🚀 Nouveautés**
+
+- [Développement] Rendre Usershub compatible avec debian13 (##246 par @christophe-ramet)
+
 ## 2.4.7 (2025-03-10)
 
 **🚀 Nouveautés**
