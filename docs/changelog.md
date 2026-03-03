@@ -1,10 +1,16 @@
 # CHANGELOG
 
+## 2.4.8 (2026-03-03)
+
+**🚀 Nouveautés**
+
+- [Développement] Rendre Usershub compatible avec debian13 (##246 par @christophe-ramet)
+
 ## 2.4.7 (2025-03-10)
 
 **🚀 Nouveautés**
 
-- [Développement] Ajout d'un Makefile(#239 par @jacquesfize)
+- [Développement] Ajout d'un Makefile (#239 par @jacquesfize)
 
 **🐛 Corrections**
 
@@ -32,7 +38,7 @@
 **🐛 Corrections**
 
 - Ajout de la mise à jour de la branche alembic `utilisateurs` dans le processus de mise à jour de UsersHub (#232 par @jacquesfize)
-- Ajout de la suppression des entrées associées à un utilisateur dans `cor_role_provider` quand ce dernier est supprimée (#234 par @jacquesfize)
+- Ajout de la suppression des entrées associées à un utilisateur dans `cor_role_provider` quand ce dernier est supprimé (#234 par @jacquesfize)
 
 ## 2.4.4 (2024-11-12)
 
