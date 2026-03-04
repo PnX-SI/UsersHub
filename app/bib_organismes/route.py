@@ -19,7 +19,6 @@ from app.bib_organismes import forms as bib_organismeforms
 from app.models import Bib_Organismes, TRoles
 from app.utils.utils_all import strigify_dict
 
-
 URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 route = Blueprint("organisme", __name__)
@@ -134,6 +133,7 @@ def delete(id_organisme):
     """
 
     Bib_Organismes.delete(id_organisme)
+    flash("L''organisme a été supprimé avec succès.", "success")
     return redirect(url_for("organisme.organisms"))
 
 

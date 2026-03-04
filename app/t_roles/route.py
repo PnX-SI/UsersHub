@@ -21,7 +21,6 @@ from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
 from app.env import db
 
-
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("user", __name__)
@@ -253,16 +252,10 @@ def updatepass(id_role=None):
 
 
 @route.route("users/delete/<id_role>", methods=["GET", "POST"])
-@fnauth.check_auth(
-    6,
-)
+@fnauth.check_auth(6)
 def deluser(id_role):
-    """
-    Route qui supprime un utilisateurs dont l'id est donné en paramètres dans l'url
-    Retourne une redirection vers la liste d'utilisateurs
-    """
-
     TRoles.delete(id_role)
+    flash("L''utilisateur a été supprimé avec succès.", "success")
     return redirect(url_for("user.users"))
 
 

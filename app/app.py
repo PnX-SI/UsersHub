@@ -21,13 +21,17 @@ from flask import (
     g,
 )
 from werkzeug.middleware.proxy_fix import ProxyFix
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import ProgrammingError, IntegrityError
 from flask_migrate import Migrate
 
 from app.env import db
 
 from pypnusershub.db.models import Application
-from app.utils.errors import handle_unauthenticated_request
+from app.utils.errors import (
+    handle_unauthenticated_request,
+    handle_integrity_error,
+    handle_general_exception,
+)
 from pypnusershub.auth import auth_manager
 import importlib.metadata
 
@@ -148,5 +152,6 @@ def create_app():
             )  # noqa
 
         app.login_manager.unauthorized_handler(handle_unauthenticated_request)
-
+        app.register_error_handler(IntegrityError, handle_integrity_error)
+        app.register_error_handler(Exception, handle_general_exception)
     return app
