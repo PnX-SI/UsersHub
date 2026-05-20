@@ -53,6 +53,11 @@ if [ "${mode}" != "dev" ]; then
   #Lancement de l'application
   export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
+  export unit_description=$unit_description
+  export app_name=$app_name
+  export gun_host=$gun_host
+  export gun_port=$gun_port
+
   # Configuration systemd
   envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/$app_name.conf || exit 1
   sudo systemd-tmpfiles --create /etc/tmpfiles.d/$app_name.conf || exit 1
