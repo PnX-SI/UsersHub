@@ -63,7 +63,7 @@ if [ "${mode}" != "dev" ]; then
   envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/$app_name
 
   # Configuration apache
-  envsubst '${gun_port}' < usershub_apache.conf | sudo tee /etc/apache2/conf-available/$app_name.conf || exit 1
+  envsubst '${gun_host} ${gun_port} $' < usershub_apache.conf | sudo tee /etc/apache2/conf-available/$app_name.conf || exit 1
   sudo a2enmod proxy || exit 1
   sudo a2enmod proxy_http || exit 1
   # you may need a restart if proxy & proxy_http was not already enabled
