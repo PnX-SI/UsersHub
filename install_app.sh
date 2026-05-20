@@ -59,13 +59,13 @@ if [ "${mode}" != "dev" ]; then
   export gun_port=$gun_port
 
   # Configuration systemd
-  envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/$app_name.conf || exit 1
+  envsubst '${USER} ${app_name}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/$app_name.conf || exit 1
   sudo systemd-tmpfiles --create /etc/tmpfiles.d/$app_name.conf || exit 1
   envsubst '${USER} ${USERSHUB_DIR} ${unit_description} ${app_name} ${gun_host} ${gun_port} $' < usershub.service | sudo tee /etc/systemd/system/$app_name.service || exit 1
   sudo systemctl daemon-reload || exit 1
 
   # Configuration logrotate
-  envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/$app_name
+  envsubst '${USER} ${app_name}' < log_rotate | sudo tee /etc/logrotate.d/$app_name
 
   # Configuration apache
   envsubst '${gun_host} ${gun_port} $' < usershub_apache.conf | sudo tee /etc/apache2/conf-available/$app_name.conf || exit 1
