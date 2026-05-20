@@ -41,8 +41,12 @@ python_path=/usr/bin/python3
 ### Gunicorn settings ###
 #########################
 
-app_name=usershub2
+# Modify these if you want to install multiple instances of usershub on the same
+# server, or if port 5001 is already used
+# app_name must be different from one instance to another
+app_name=usershub
+unit_description=UsersHub
 venv_dir=venv
 gun_num_workers=4
-gun_host=0.0.0.0
+gun_host=127.0.0.1
 gun_port=5001
