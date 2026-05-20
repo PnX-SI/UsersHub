@@ -1,5 +1,5 @@
 [Unit]
-Description=UsersHub
+Description=${unit_description}
 After=network.target
 After=postgresql.service
 
@@ -8,12 +8,12 @@ Type=simple
 User=${USER}
 Group=${USER}
 WorkingDirectory=${USERSHUB_DIR}/
-Environment=GUNICORN_PROC_NAME=usershub
+Environment=GUNICORN_PROC_NAME=${app_name}
 Environment=GUNICORN_NUM_WORKERS=4
-Environment=GUNICORN_HOST=127.0.0.1
-Environment=GUNICORN_PORT=5001
+Environment=GUNICORN_HOST=${gun_host}
+Environment=GUNICORN_PORT=${gun_port}
 Environment=GUNICORN_TIMEOUT=30
-Environment=GUNICORN_LOG_FILE=/var/log/usershub/%N%I.log
+Environment=GUNICORN_LOG_FILE=/var/log/${app_name}/%N%I.log
 EnvironmentFile=-${USERSHUB_DIR}/environ
 ExecStart=${USERSHUB_DIR}/venv/bin/gunicorn app.app:create_app() \
                 --name "${GUNICORN_PROC_NAME}" --workers "${GUNICORN_NUM_WORKERS}" \
