@@ -20,6 +20,7 @@ if [ ! -f config.py ]; then
   url_application="${url_application::-1}"
   fi
   sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
+  sed -i "s/PORT =.*$/PORT ='$gun_port'/g" config.py || exit 1
 fi
 
 cd ..
