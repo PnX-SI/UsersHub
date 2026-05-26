@@ -63,6 +63,7 @@ if [ "${mode}" != "dev" ]; then
   sudo systemd-tmpfiles --create /etc/tmpfiles.d/$app_name.conf || exit 1
   envsubst '${USER} ${USERSHUB_DIR} ${unit_description} ${app_name} ${gun_host} ${gun_port} $' < usershub.service | sudo tee /etc/systemd/system/$app_name.service || exit 1
   sudo systemctl daemon-reload || exit 1
+  sudo systemctl enable $app_name
 
   # Configuration logrotate
   envsubst '${USER} ${app_name}' < log_rotate | sudo tee /etc/logrotate.d/$app_name
