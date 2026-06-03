@@ -72,6 +72,7 @@ if [ "${mode}" != "dev" ]; then
   envsubst '${gun_host} ${gun_port} $' < usershub_apache.conf | sudo tee /etc/apache2/conf-available/$app_name.conf || exit 1
   sudo a2enmod proxy || exit 1
   sudo a2enmod proxy_http || exit 1
+  sudo systemctl enable $app_name
   # you may need a restart if proxy & proxy_http was not already enabled
 
   echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start $app_name"
