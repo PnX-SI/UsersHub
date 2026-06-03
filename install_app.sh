@@ -20,6 +20,7 @@ if [ ! -f config.py ]; then
   url_application="${url_application::-1}"
   fi
   sed -i "s/URL_APPLICATION =.*$/URL_APPLICATION ='$url_application'/g" config.py || exit 1
+  sed -i "s/PORT =.*$/PORT ='$gun_port'/g" config.py || exit 1
 fi
 
 cd ..
@@ -53,20 +54,27 @@ if [ "${mode}" != "dev" ]; then
   #Lancement de l'application
   export USERSHUB_DIR=$(readlink -e "${0%/*}")
 
+  export unit_description=$unit_description
+  export app_name=$app_name
+  export gun_host=$gun_host
+  export gun_port=$gun_port
+
   # Configuration systemd
-  envsubst '${USER}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/usershub.conf || exit 1
-  sudo systemd-tmpfiles --create /etc/tmpfiles.d/usershub.conf || exit 1
-  envsubst '${USER} ${USERSHUB_DIR}' < usershub.service | sudo tee /etc/systemd/system/usershub.service || exit 1
+  envsubst '${USER} ${app_name}' < tmpfiles-usershub.conf | sudo tee /etc/tmpfiles.d/$app_name.conf || exit 1
+  sudo systemd-tmpfiles --create /etc/tmpfiles.d/$app_name.conf || exit 1
+  envsubst '${USER} ${USERSHUB_DIR} ${unit_description} ${app_name} ${gun_host} ${gun_port} $' < usershub.service | sudo tee /etc/systemd/system/$app_name.service || exit 1
   sudo systemctl daemon-reload || exit 1
+  sudo systemctl enable $app_name
 
   # Configuration logrotate
-  envsubst '${USER}' < log_rotate | sudo tee /etc/logrotate.d/usershub
+  envsubst '${USER} ${app_name}' < log_rotate | sudo tee /etc/logrotate.d/$app_name
 
   # Configuration apache
-  sudo cp usershub_apache.conf /etc/apache2/conf-available/usershub.conf || exit 1
+  envsubst '${gun_host} ${gun_port} $' < usershub_apache.conf | sudo tee /etc/apache2/conf-available/$app_name.conf || exit 1
   sudo a2enmod proxy || exit 1
   sudo a2enmod proxy_http || exit 1
+  sudo systemctl enable $app_name
   # you may need a restart if proxy & proxy_http was not already enabled
 
-  echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start usershub"
+  echo "Vous pouvez maintenant démarrer UsersHub avec la commande : sudo systemctl start $app_name"
 fi;

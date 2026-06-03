@@ -1,4 +1,4 @@
-/var/log/usershub/usershub.log {
+/var/log/${app_name}/${app_name}.log {
     su ${USER} ${USER}
     daily
     rotate 8
@@ -6,6 +6,6 @@
     create
     compress
     postrotate
-    systemctl reload usershub || true
+    systemctl reload ${app_name} || true
     endscript
 }
