@@ -1,8 +1,6 @@
-
 {% include "librairies.html" %}
-{% import "wtf_bootstrap_4.html" as wtf %} 
+{% import "wtf_bootstrap_4.html" as wtf %}
 {% include "head-appli.html" %}
-
 
 {% block content %}
 
@@ -12,23 +10,127 @@
     {{ form.hidden_tag() }}
 
     <div class="row forms card">
-      {% include "alert_messages.html" %} 
+      {% include "alert_messages.html" %}
 
       {{ wtf.form_field(form.active) }}
       {{ wtf.form_field(form.nom_role) }}
       {{ wtf.form_field(form.prenom_role) }}
       {{ wtf.form_field(form.identifiant) }}
-      {{ wtf.form_field(form.id_organisme, id="inputGroupSelect01") }}
+
+      <div class="form-group required w-100">
+        <label class="control-label" for="organism-autocomplete">Organisme</label>
+        {{ form.id_organisme() }}
+        <div class="position-relative">
+          {{ form.organisme_label(class="form-control", id="organism-autocomplete", autocomplete="off", placeholder="Rechercher un organisme...") }}
+          <div id="organism-autocomplete-results" class="list-group position-absolute w-100 shadow-sm" style="z-index: 20; display: none; max-height: 260px; overflow-y: auto;"></div>
+        </div>
+        <small class="form-text text-muted">Tape quelques lettres pour rechercher puis clique sur l'organisme voulu.</small>
+      </div>
+
       {% if not id_role %}
         {{ wtf.form_field(form.pass_plus) }}
         {{ wtf.form_field(form.mdpconf) }}
       {% endif %}
-      <label style="margin-bottom: -15px!important;" for="a_group"> Groupe <small> (Ctrl+clic pour ajouter/retirer des items)</small></label>
-      {{ wtf.form_field(form.a_groupe) }} 
+
+      <div class="form-group required w-100">
+        <label class="control-label mb-2" for="user-groups">Groupes</label>
+        <div id="user-groups" class="border rounded p-3" style="max-height: 320px; overflow-y: auto;">
+          <div class="row">
+            {% for value, label in form.a_groupe.choices %}
+              <div class="col-md-6 col-lg-4 mb-2">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    class="custom-control-input"
+                    id="group-choice-{{ value }}"
+                    name="{{ form.a_groupe.name }}"
+                    type="checkbox"
+                    value="{{ value }}"
+                    {% if form.a_groupe.data and value in form.a_groupe.data %}checked{% endif %}
+                  />
+                  <label class="custom-control-label" for="group-choice-{{ value }}">{{ label }}</label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <small class="form-text text-muted">Coche les groupes à associer à l'utilisateur.</small>
+      </div>
+
       {{ wtf.form_field(form.email) }}
       {{ wtf.form_field(form.remarques) }}
       {{ wtf.form_field(form.submit, class="btn btn-success") }}
     </div>
   </form>
+
+  <script type="text/javascript">
+    (function() {
+      var autocompleteInput = document.getElementById("organism-autocomplete");
+      var organismIdInput = document.getElementById("id_organisme");
+      var resultsContainer = document.getElementById("organism-autocomplete-results");
+      var autocompleteUrl = "{{ autocomplete_organism_url }}";
+      var debounceTimer = null;
+
+      function hideResults() {
+        resultsContainer.style.display = "none";
+        resultsContainer.innerHTML = "";
+      }
+
+      function renderResults(items) {
+        resultsContainer.innerHTML = "";
+        if (!items.length) {
+          hideResults();
+          return;
+        }
+        items.forEach(function(item) {
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "list-group-item list-group-item-action";
+          button.textContent = item.label;
+          button.addEventListener("click", function() {
+            organismIdInput.value = item.id_organisme;
+            autocompleteInput.value = item.nom_organisme || item.label;
+            hideResults();
+          });
+          resultsContainer.appendChild(button);
+        });
+        resultsContainer.style.display = "block";
+      }
+
+      function fetchResults(query) {
+        var url = autocompleteUrl + "?q=" + encodeURIComponent(query) + "&limit=12";
+        window
+          .fetch(url, { credentials: "same-origin" })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error("autocomplete_error");
+            }
+            return response.json();
+          })
+          .then(function(items) {
+            renderResults(items);
+          })
+          .catch(function() {
+            hideResults();
+          });
+      }
+
+      autocompleteInput.addEventListener("input", function() {
+        var query = autocompleteInput.value.trim();
+        organismIdInput.value = "";
+        window.clearTimeout(debounceTimer);
+        if (query.length < 2) {
+          hideResults();
+          return;
+        }
+        debounceTimer = window.setTimeout(function() {
+          fetchResults(query);
+        }, 180);
+      });
+
+      autocompleteInput.addEventListener("blur", function() {
+        window.setTimeout(hideResults, 150);
+      });
+    })();
+  </script>
 
 {% endblock %}

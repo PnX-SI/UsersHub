@@ -8,8 +8,6 @@ from wtforms import (
     PasswordField,
     SubmitField,
     HiddenField,
-    SelectField,
-    RadioField,
     BooleanField,
     SelectMultipleField,
     TextAreaField,
@@ -32,8 +30,9 @@ class Utilisateur(FlaskForm):
     )
     prenom_role = StringField("Prenom")
     desc_role = TextAreaField("Description")
-    id_organisme = SelectField("Organisme", coerce=int, choices=[], default=-1)
-    a_groupe = SelectMultipleField("", choices=[], coerce=int)
+    id_organisme = HiddenField("Organisme")
+    organisme_label = StringField("Organisme")
+    a_groupe = MultiCheckboxField("", choices=[], coerce=int)
     identifiant = StringField("Identifiant")
     pass_plus = PasswordField("Mot de passe")
     mdpconf = PasswordField("Confirmation")

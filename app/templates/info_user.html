@@ -1,20 +1,21 @@
 {% include "librairies.html" %}
 {% include "head-appli.html" %}
+{% from "_additional_fields.html" import render_additional_fields %}
 
 {%set is_identifiant = user['identifiant'] is not none and user['identifiant'] != '' %}
 {%set is_uuid = user['uuid_role'] is not none and user['uuid_role'] != '' %}
 {%set is_organisme = organisme is not none and organisme['nom_organisme'] != '' %}
 {%set is_desc = user['desc_role'] is not none and user['desc_role'] != '' %}
 {%set is_remarques = user['remarques'] is not none and user['remarques'] != '' %}
-{%set is_orga_champ_addi = user['champs_addi']['organisme'] is not none
-and user['champs_addi']['organisme'] != '' %}
+{%set is_orga_champ_addi = fallback_organism_name is not none and fallback_organism_name != '' %}
 {%set is_date_insert = user['date_insert'] is not none and user['date_insert'] != '' %}
 {%set is_date_update = user['date_update'] is not none and user['date_update'] != '' %}
-{%set is_champs_addi = user['champs_addi'] is not none and user['champs_addi'] != '' %}
+{%set is_champs_addi = user_additional_fields is mapping and user_additional_fields != {} %}
 {%set is_mail = user['email'] is not none and user['email'] != '' %}
 {%set is_group = groups|length > 0 %}
 {%set is_list = lists|length > 0 %}
 {%set is_right = rights|length > 0 %}
+
 <div class="container main-zone ng-scope ">
     <h3>Utilisateur "{{fullname}}"</h3>
     <div class="ml-5">
@@ -34,16 +35,15 @@ and user['champs_addi']['organisme'] != '' %}
             {% if is_organisme %}
                 <br /><strong>Organisme :</strong> {{organisme.nom_organisme}}
             {% elif is_orga_champ_addi %}
-                <br /><strong>Organisme :</strong> {{user['champs_addi']['organisme']}}
+                <br /><strong>Organisme :</strong> {{fallback_organism_name}}
             {% endif %}
             {% if is_remarques %}
                 <br /><strong>Remarques :</strong> {{user['remarques']}}
             {% endif %}
 
-
             <br /><strong>Mot de passe Plus :</strong> {{"Non" if user['pass_plus'] == "" or user["pass_plus"] is none else "Oui"}}
             <br /><strong>Mot de passe Md5 :</strong> {{"Non" if user['pass_md5'] == "" or user["pass_md5"] is none else "Oui"}}
-            <br /><strong>Compte Actif :</strong> {{"Oui" if user["active"] else "Non" }}
+            <br /><strong>Compte Actif :</strong> {{"Oui" if user["active"] else "Non"}}
             {% if is_date_insert %}
                 <br /><strong>Date de création :</strong> {{user['date_insert']|truncate(10, True, '', 0)}}
             {% endif %}
@@ -51,29 +51,8 @@ and user['champs_addi']['organisme'] != '' %}
                 <br /><strong>Date de mise à jour :</strong> {{user['date_update']|truncate(10, True, '', 0)}}
             {% endif %}
             {% if is_champs_addi %}
-                <dl class="list-def-inline">
-                {% for key, value in user.champs_addi.items() %}
-                    <dt>{{ key|pretty_json_key|capitalize }}&nbsp;:&nbsp;</dt>
-                    <dd>
-                        {% if value is iterable and (value is not string and value is not mapping) %}
-                            <ul>
-                                {% for item in value %}
-                                    <li>{{ item }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% elif value is mapping %}
-                            <dl class="list-def-inline">
-                            {% for key, value in value.items() %}
-                                <dt>{{ key|e|capitalize }}&nbsp;:&nbsp;</dt>
-                                <dd>{{ value }} </dd>
-                            {% endfor %}
-                            </dl>
-                        {% else %}
-                            {{ value }}
-                        {% endif %}
-                    </dd>
-                {% endfor %}
-                </dl>
+                <br /><strong>Champs additionnels :</strong>
+                {{render_additional_fields(user_additional_fields, user_additional_field_exclude_keys)}}
             {% endif %}
         </small>
     </div>
@@ -85,13 +64,13 @@ and user['champs_addi']['organisme'] != '' %}
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#grouplist">
             <h5 class="bg-secondary">Liste des groupes auxquels appartient l'utilisateur <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
-        <div id="grouplist"  class="card-body collapse">
-            {%if is_group %}
+        <div id="grouplist" class="card-body collapse">
+            {% if is_group %}
                 <ul class="list-group list-group-flush">
                     {% for group in groups %}
                         <li class="list-group-item">
-                            <a href="{{url_application}}/group/info/{{group.id_role}}">{{group.nom_role}}</a>
-                            <a href="{{url_application}}/group/members/{{group['id_role']}}">
+                            <a href="{{ url_application }}/group/info/{{ group.id_role }}">{{group.nom_role}}</a>
+                            <a href="{{ url_application }}/group/members/{{ group['id_role'] }}">
                                 <button type="submit" class="btn btn-outline-success btn-sm float-right">
                                     Modifier les membres du groupe "{{group['nom_role']}}"
                                 </button>
@@ -110,12 +89,12 @@ and user['champs_addi']['organisme'] != '' %}
             <h5>Liste des listes auxquelles appartient l'utilisateur <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
         <div id="listlist" class="card-body collapse">
-            {%if is_list %}
+            {% if is_list %}
                 <ul class="list-group list-group-flush">
                     {% for list in lists %}
                         <li class="list-group-item">
-                            <a href="{{url_application}}/list/info/{{list.id_liste}}">{{list.nom_liste}}</a>
-                            <a href="{{url_application}}/list/members/{{list.id_liste}}">
+                            <a href="{{ url_application }}/list/info/{{ list.id_liste }}">{{list.nom_liste}}</a>
+                            <a href="{{ url_application }}/list/members/{{ list.id_liste }}">
                                 <button type="submit" class="btn btn-outline-success btn-sm float-right">
                                     Modifier les membres de la liste "{{list['nom_liste']}}"
                                 </button>
@@ -133,14 +112,14 @@ and user['champs_addi']['organisme'] != '' %}
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#profillist">
             <h5>Liste des applications pour lesquelles l'utilisateur dispose d'un profil <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
         </div>
-        <div id="profillist"  class="card-body collapse">
-            {%if is_right %}
+        <div id="profillist" class="card-body collapse">
+            {% if is_right %}
                 <ul class="list-group list-group-flush">
                     {% for right in rights %}
                         <li class="list-group-item">
-                            Application "<a href="{{url_application}}/application/info/{{right['application_rel']['id_application']}}">{{right['application_rel']['nom_application']}}</a>" :
+                            Application "<a href="{{ url_application }}/application/info/{{ right['application_rel']['id_application'] }}">{{right['application_rel']['nom_application']}}</a>" :
                             {{right['profil_rel']['nom_profil']}} (code {{right['profil_rel']['code_profil']}})
-                            <a href="{{url_application}}/application/update/role_profil/{{right['id_role']}}/{{right['id_application']}}">
+                            <a href="{{ url_application }}/application/update/role_profil/{{ right['id_role'] }}/{{ right['id_application'] }}">
                                 <button type="submit" class="btn btn-outline-success btn-sm float-right">
                                     Modifier le profil de l'utilisateur dans l'application "{{right['application_rel']['nom_application']}}"
                                 </button>
@@ -154,7 +133,7 @@ and user['champs_addi']['organisme'] != '' %}
         </div>
     </div>
     <br />
-    <a href="{{pathU}}{{user['id_role']}}">
+    <a href="{{ pathU }}{{ user['id_role'] }}">
         <button type="submit" class="btn btn-success btn-block">
             Modifier l'utilisateur
         </button>

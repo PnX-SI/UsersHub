@@ -8,8 +8,11 @@ from flask import (
     jsonify,
     current_app,
 )
+import json
+import sqlalchemy as sa
 from pypnusershub import routes as fnauth
 
+from app.env import db
 from app.groupe import forms as groupeforms
 from app.models import TRoles
 from app.models import CorRoles
@@ -20,6 +23,150 @@ URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("groupe", __name__)
+
+MEMBER_TABLE_COLUMNS = [
+    {"data": "select", "orderable": False, "searchable": False},
+    {"data": "id_role"},
+    {"data": "full_name"},
+]
+
+
+def _is_datatables_request():
+    return request.args.get("draw") is not None
+
+
+def _parse_pending_ids(name):
+    raw_value = request.args.get(name, default="[]", type=str)
+    try:
+        values = json.loads(raw_value)
+    except ValueError:
+        return []
+    ids = []
+    for value in values:
+        try:
+            ids.append(int(value))
+        except (TypeError, ValueError):
+            continue
+    return ids
+
+
+def _build_membership_row(row):
+    return {
+        "select": '<input type="checkbox" class="membership-check">',
+        "id_role": row.id_role,
+        "full_name": row.full_name or "",
+        "groupe": "True" if row.groupe else "False",
+    }
+
+
+def _base_role_members_query():
+    return db.session.query(
+        TRoles.id_role.label("id_role"),
+        TRoles.groupe.label("groupe"),
+        sa.func.concat(
+            sa.func.coalesce(TRoles.nom_role, ""),
+            sa.literal(" "),
+            sa.func.coalesce(TRoles.prenom_role, ""),
+        ).label("full_name"),
+        TRoles.identifiant.label("identifiant"),
+        TRoles.nom_role.label("nom_role"),
+        TRoles.prenom_role.label("prenom_role"),
+        TRoles.active.label("active"),
+    )
+
+
+def _build_group_members_query(id_groupe, panel, pending_add_ids, pending_del_ids):
+    query = _base_role_members_query()
+    pending_add_query = _base_role_members_query().filter(TRoles.id_role.in_(pending_add_ids))
+    pending_del_query = _base_role_members_query().filter(TRoles.id_role.in_(pending_del_ids))
+
+    if panel == "selected":
+        query = (
+            query.join(CorRoles, CorRoles.id_role_utilisateur == TRoles.id_role)
+            .filter(CorRoles.id_role_groupe == id_groupe)
+        )
+        if pending_del_ids:
+            query = query.filter(~TRoles.id_role.in_(pending_del_ids))
+        if pending_add_ids:
+            query = query.union(pending_add_query)
+        return query
+
+    subquery = db.session.query(CorRoles.id_role_utilisateur).filter(
+        CorRoles.id_role_groupe == id_groupe
+    )
+    subquery2 = db.session.query(CorRoles.id_role_groupe).filter(
+        CorRoles.id_role_utilisateur == id_groupe
+    )
+    query = (
+        query.filter(TRoles.id_role != id_groupe)
+        .filter(TRoles.id_role.notin_(subquery))
+        .filter(TRoles.id_role.notin_(subquery2))
+    )
+    if pending_add_ids:
+        query = query.filter(~TRoles.id_role.in_(pending_add_ids))
+    if pending_del_ids:
+        query = query.union(pending_del_query)
+    return query
+
+
+def _apply_members_search(query, search_value):
+    if not search_value:
+        return query
+    pattern = f"%{search_value.strip()}%"
+    return query.filter(
+        sa.or_(
+            sa.cast(sa.column("id_role"), sa.String).ilike(pattern),
+            sa.func.coalesce(sa.column("full_name"), "").ilike(pattern),
+            sa.func.coalesce(sa.column("identifiant"), "").ilike(pattern),
+            sa.func.coalesce(sa.column("nom_role"), "").ilike(pattern),
+            sa.func.coalesce(sa.column("prenom_role"), "").ilike(pattern),
+        )
+    )
+
+
+def _apply_members_ordering(query):
+    order_column_index = request.args.get("order[0][column]", default=2, type=int)
+    requested_column = request.args.get(
+        f"columns[{order_column_index}][data]",
+        default=MEMBER_TABLE_COLUMNS[min(order_column_index, len(MEMBER_TABLE_COLUMNS) - 1)]["data"],
+        type=str,
+    )
+    order_direction = request.args.get("order[0][dir]", default="asc", type=str)
+    sortable_columns = {
+        "id_role": sa.column("id_role"),
+        "full_name": sa.func.lower(sa.func.coalesce(sa.column("full_name"), "")),
+    }
+    sort_expr = sortable_columns.get(requested_column, sortable_columns["full_name"])
+    sort_expr = sort_expr.desc() if order_direction == "desc" else sort_expr.asc()
+    return query.order_by(sort_expr, sa.column("id_role").asc())
+
+
+def _group_members_datatables_response(id_groupe):
+    panel = request.args.get("panel", default="available", type=str)
+    draw = request.args.get("draw", default=1, type=int)
+    start = max(request.args.get("start", default=0, type=int), 0)
+    length = request.args.get("length", default=25, type=int)
+    search_value = request.args.get("search[value]", default="", type=str)
+    pending_add_ids = _parse_pending_ids("pending_add")
+    pending_del_ids = _parse_pending_ids("pending_del")
+
+    base_query = _build_group_members_query(id_groupe, panel, pending_add_ids, pending_del_ids).subquery()
+    query = db.session.query(base_query)
+    total_count = query.order_by(None).count()
+    filtered_query = _apply_members_search(query, search_value)
+    filtered_count = filtered_query.order_by(None).count()
+    ordered_query = _apply_members_ordering(filtered_query)
+    page_size = filtered_count if length < 0 else length
+    rows = ordered_query.offset(start).limit(page_size).all()
+
+    return jsonify(
+        {
+            "draw": draw,
+            "recordsTotal": total_count,
+            "recordsFiltered": filtered_count,
+            "data": [_build_membership_row(row) for row in rows],
+        }
+    )
 
 
 @route.route("groups/list", methods=["GET", "POST"])
@@ -125,11 +272,8 @@ def membres(id_groupe):
         - variable qui permet a jinja de colorer une ligne si celui-ci est un groupe --> group
     """
 
-    users_in_group = TRoles.test_group(TRoles.get_user_in_group(id_groupe))
-    users_out_group = TRoles.test_group(TRoles.get_user_out_group(id_groupe))
     group = TRoles.get_one(id_groupe)
     header = ["ID", "Nom"]
-    data = ["id_role", "full_name"]
     if request.method == "POST":
         data = request.get_json()
         new_users_in_group = data["tab_add"]
@@ -140,14 +284,19 @@ def membres(id_groupe):
         except Exception as e:
             return jsonify(str(e)), 500
         return jsonify({"redirect": url_for("groupe.groups")}), 200
+    if _is_datatables_request():
+        return _group_members_datatables_response(id_groupe)
     return render_template(
         "tobelong.html",
         fLine=header,
-        data=data,
-        table=users_out_group,
-        table2=users_in_group,
-        group="groupe",
         info="Membres du groupe '" + group["nom_role"] + "'",
+        membership_mode=True,
+        available_table_id="user",
+        selected_table_id="adding_table",
+        data_ajax_url=url_for("groupe.membres", id_groupe=id_groupe),
+        table_columns=MEMBER_TABLE_COLUMNS,
+        available_title="Utilisateurs disponibles",
+        selected_title="Membres du groupe",
     )
 
 

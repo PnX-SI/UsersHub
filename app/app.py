@@ -3,35 +3,69 @@ Serveur de l'application UsersHub
 """
 
 import os
-import sys
-import json
-import logging
-from importlib.metadata import entry_points
+from logging.config import dictConfig
+from importlib import metadata
+from importlib.metadata import PackageNotFoundError, entry_points
 from urllib.parse import urlsplit, urlencode
 from pathlib import Path
 
 from flask import (
     Flask,
-    Response,
     redirect,
     url_for,
-    request,
-    session,
     render_template,
     g,
 )
 from werkzeug.middleware.proxy_fix import ProxyFix
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from flask_migrate import Migrate
 
 from app.env import db
 
-from pypnusershub.db.models import Application
-from app.utils.errors import handle_unauthenticated_request
+from app.utils.errors import (
+    handle_general_exception,
+    handle_integrity_error,
+    handle_sqlalchemy_error,
+    handle_unauthenticated_request,
+)
+from app.observability import register_request_logging, register_slow_sql_logging
 from pypnusershub.auth import auth_manager
-import importlib.metadata
 
 migrate = Migrate()
+
+
+def configure_logging(app):
+    app.config.setdefault("LOG_LEVEL", "INFO")
+    app.config.setdefault("ENABLE_REQUEST_LOGGING", False)
+    app.config.setdefault("ENABLE_SLOW_REQUEST_LOGGING", False)
+    app.config.setdefault("ENABLE_REQUEST_ERROR_LOGGING", False)
+    app.config.setdefault("ENABLE_SLOW_SQL_LOGGING", False)
+
+    if getattr(app, "_usershub_logging_configured", False):
+        return
+
+    dictConfig(
+        {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {
+                "standard": {
+                    "format": "%(asctime)s %(levelname)s %(name)s %(message)s"
+                }
+            },
+            "handlers": {
+                "default": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "standard",
+                }
+            },
+            "root": {
+                "level": app.config["LOG_LEVEL"],
+                "handlers": ["default"],
+            },
+        }
+    )
+    app._usershub_logging_configured = True
 
 
 @migrate.configure
@@ -49,10 +83,23 @@ def configure_alembic(alembic_config):
     alembic_config.set_main_option("version_locations", " ".join(version_locations))
     return alembic_config
 
+
 def get_entry_points_by_group_and_name(group, name):
     eps = entry_points()
-    group_eps = eps.get(group, [])
+    if hasattr(eps, "select"):
+        group_eps = eps.select(group=group)
+    else:
+        group_eps = eps.get(group, [])
     return [ep for ep in group_eps if ep.name == name]
+
+
+def get_usershub_version():
+    try:
+        return metadata.version("usershub")
+    except PackageNotFoundError:
+        version_file = Path(__file__).absolute().parent.parent / "VERSION"
+        return version_file.read_text().strip()
+
 
 def create_app():
     app = Flask(
@@ -60,14 +107,16 @@ def create_app():
     )
     app.config.from_pyfile(os.environ.get("USERSHUB_SETTINGS", "../config/config.py"))
     app.config.from_prefixed_env(prefix="USERSHUB")
+    configure_logging(app)
     app.config["APPLICATION_ROOT"] = urlsplit(app.config["URL_APPLICATION"]).path or "/"
     if "SCRIPT_NAME" not in os.environ and app.config["APPLICATION_ROOT"] != "/":
         os.environ["SCRIPT_NAME"] = app.config["APPLICATION_ROOT"]
     app.config["URL_REDIRECT"] = "{}/{}".format(app.config["URL_APPLICATION"], "login")
     app.secret_key = app.config["SECRET_KEY"]
-    app.config["VERSION"] = importlib.metadata.version("usershub")
+    app.config["VERSION"] = get_usershub_version()
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
     db.init_app(app)
+    register_request_logging(app)
     app.config["DB"] = db
     providers_config = [
         {
@@ -86,6 +135,7 @@ def create_app():
         app.config["CODE_APPLICATION"] = "UH"
 
     with app.app_context():
+        register_slow_sql_logging(app, db.engine)
         app.jinja_env.globals["url_application"] = app.config["URL_APPLICATION"]
 
         if app.config["ACTIVATE_APP"]:
@@ -148,5 +198,8 @@ def create_app():
             )  # noqa
 
         app.login_manager.unauthorized_handler(handle_unauthenticated_request)
+        app.register_error_handler(IntegrityError, handle_integrity_error)
+        app.register_error_handler(SQLAlchemyError, handle_sqlalchemy_error)
+        app.register_error_handler(Exception, handle_general_exception)
 
     return app
