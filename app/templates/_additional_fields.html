@@ -1,0 +1,38 @@
+{% macro render_additional_value(value) -%}
+    {% if value is sameas true %}
+        Oui
+    {% elif value is sameas false %}
+        Non
+    {% elif value is mapping %}
+        {{ render_additional_fields(value) }}
+    {% elif value is iterable and value is not string %}
+        <ul class="mb-0 pl-3">
+        {% for item in value if item is not none and item != '' and item != [] and item != {} %}
+            <li>{{ render_additional_value(item) }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        {{ value }}
+    {% endif %}
+{%- endmacro %}
+
+{% macro render_additional_fields(data, exclude_keys=[]) -%}
+    {% if data is mapping %}
+        {% set ns = namespace(has_entries=false) %}
+        {% for key, value in data.items() %}
+            {% if key not in exclude_keys and value is not none and value != '' and value != [] and value != {} %}
+                {% set ns.has_entries = true %}
+            {% endif %}
+        {% endfor %}
+        {% if ns.has_entries %}
+        <dl class="list-def-inline">
+            {% for key, value in data.items() %}
+                {% if key not in exclude_keys and value is not none and value != '' and value != [] and value != {} %}
+                <dt>{{ key|pretty_json_key|capitalize }}&nbsp;:&nbsp;</dt>
+                <dd>{{ render_additional_value(value) }}</dd>
+                {% endif %}
+            {% endfor %}
+        </dl>
+        {% endif %}
+    {% endif %}
+{%- endmacro %}

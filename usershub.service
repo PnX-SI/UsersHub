@@ -18,7 +18,7 @@ EnvironmentFile=-${USERSHUB_DIR}/environ
 ExecStart=${USERSHUB_DIR}/venv/bin/gunicorn app.app:create_app() \
                 --name "${GUNICORN_PROC_NAME}" --workers "${GUNICORN_NUM_WORKERS}" \
                 --bind "${GUNICORN_HOST}:${GUNICORN_PORT}" --timeout="${GUNICORN_TIMEOUT}" \
-                --log-file "${GUNICORN_LOG_FILE}"
+                --log-file "${GUNICORN_LOG_FILE}"  --capture-output
 ExecReload=/bin/kill -s HUP $MAINPID
 TimeoutStartSec=10
 TimeoutStopSec=5

@@ -24,3 +24,13 @@ DEBUG = False
 
 ACTIVATE_API = True
 ACTIVATE_APP = True
+
+# LOGS and diagnostics
+# Enable them when you need to investigate 500 errors or slow pages.
+#LOG_LEVEL = "INFO"
+#ENABLE_REQUEST_LOGGING = False
+#ENABLE_SLOW_REQUEST_LOGGING = True
+#ENABLE_REQUEST_ERROR_LOGGING = True
+#ENABLE_SLOW_SQL_LOGGING = True
+#SLOW_REQUEST_THRESHOLDS_MS = (500, 1000, 3000)
+#SLOW_SQL_THRESHOLD_MS = 200

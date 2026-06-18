@@ -1,5 +1,6 @@
-{% include "librairies.html" %}   
+{% include "librairies.html" %}
 {% include "head-appli.html" %}
+{% from "_additional_fields.html" import render_additional_fields %}
 
 {% block content %}
 {%set is_fax = org['fax_organisme'] is not none and org['fax_organisme'] != '' %}
@@ -11,35 +12,41 @@
 {%set is_url = org['url_organisme'] is not none and org['url_organisme'] != '' %}
 {%set is_logo = org['url_logo'] is not none and org['url_logo'] != '' %}
 {%set is_users = users|length > 0 %}
+{%set has_additional_fields = organism_additional_fields is mapping and organism_additional_fields != {} %}
+
 <div class="container main-zone ng-scope ">
-    {%if is_logo %}
-        <img class="img-fluid" src="{{org['url_logo']}}">
+    {% if is_logo %}
+        <img class="img-fluid" src="{{ org['url_logo'] }}">
     {% endif %}
     <h3>Organisme "{{org['nom_organisme']}}"</h3>
     <div class="ml-3">
-        <small> 
-            {%if is_addess %}
+        <small>
+            {% if is_addess %}
                 {{org['adresse_organisme']}}
             {% endif %}
             <br />
-            {%if is_cp %}{{org['cp_organisme']}}{% endif %} {%if is_ville %}{{org['ville_organisme']}}{% endif %}
-            {%if is_tel %}
-                <br /><strong>tel</strong> : {{org['tel_organisme']}}
+            {% if is_cp %}{{org['cp_organisme']}}{% endif %} {% if is_ville %}{{org['ville_organisme']}}{% endif %}
+            {% if is_tel %}
+                <br /><strong>Tél</strong> : {{org['tel_organisme']}}
             {% endif %}
-            {%if is_fax %}
-                <br /><strong>fax</strong> : {{org['fax_organisme']}}
+            {% if is_fax %}
+                <br /><strong>Fax</strong> : {{org['fax_organisme']}}
             {% endif %}
-            {%if is_mail %}
-                <br /><strong>Email</strong>: <a href="mailto:{{org['email_organisme']}}">{{org['email_organisme']}}</a>
+            {% if is_mail %}
+                <br /><strong>Email</strong> : <a href="mailto:{{org['email_organisme']}}">{{org['email_organisme']}}</a>
             {% endif %}
-            {%if is_url %}
-                <br /><strong>Site web</strong> :  <a href="{{org['url_organisme']}}" target="_blank">{{org['url_organisme']}}</a>
+            {% if is_url %}
+                <br /><strong>Site web</strong> : <a href="{{ org['url_organisme'] }}" target="_blank">{{org['url_organisme']}}</a>
             {% endif %}
-            </small>
+            {% if has_additional_fields %}
+                <br /><strong>Champs additionnels :</strong>
+                {{render_additional_fields(organism_additional_fields)}}
+            {% endif %}
+        </small>
     </div>
     <br />
     <hr />
-    <br />         
+    <br />
     <div class="card">
         <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#memberslist">
             <h5>Liste des utilisateurs membres de l'organisme "{{org['nom_organisme']}}" <i class="fa fa-chevron-down float-right" aria-hidden="true"></i></h5>
@@ -49,8 +56,9 @@
                 <ul class="list-group list-group-flush">
                     {% for user in users %}
                         <li class="list-group-item">
-                            <a href="{{url_application}}/user/info/{{user.id_role}}">
-                                {%if user.prenom_role %}{{user.prenom_role}} {% endif %}{{user.nom_role}}</a>
+                            <a href="{{ url_application }}/user/info/{{ user.id_role }}">
+                                {% if user.prenom_role %}{{user.prenom_role}} {% endif %}{{user.nom_role}}
+                            </a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -60,7 +68,7 @@
         </div>
     </div>
     <br />
-    <a href="{{url_application}}/organism/update/{{org['id_organisme']}}">
+    <a href="{{ url_application }}/organism/update/{{ org['id_organisme'] }}">
         <button type="submit" class="btn btn-success btn-block">
             Modifier l'organisme
         </button>

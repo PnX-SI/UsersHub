@@ -20,7 +20,35 @@
         </div>
 
         <div id="table">
-          <table class="hover table table-bordered table-striped table-hover table-sm table-responsive-sm" id="tri">
+          {% if datatable_extra_filters %}
+          <div class="datatable-extra-filters form-row align-items-end mb-3">
+            {% for datatable_filter in datatable_extra_filters %}
+            <div class="col-auto datatable-extra-filter-group">
+              <label for="{{ datatable_filter.id }}" class="mb-1">{{ datatable_filter.label }}</label>
+              <select
+                id="{{ datatable_filter.id }}"
+                class="custom-select datatable-extra-filter"
+                data-param="{{ datatable_filter.name }}"
+              >
+                {% for option in datatable_filter.options %}
+                <option value="{{ option.value }}" {% if option.value == datatable_filter.value %}selected{% endif %}>
+                  {{ option.label }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <table class="hover table table-bordered table-striped table-hover table-sm table-responsive-sm" id="tri"
+            {% if datatable_server_side|default(False) %}
+            data-server-side="true"
+            data-ajax-url="{{ datatable_ajax_url }}"
+            data-columns='{{ datatable_columns|tojson }}'
+            data-order='{{ datatable_order|tojson }}'
+            data-page-length="{{ datatable_page_length|default(25) }}"
+            {% endif %}
+          >
             <thead>
               <tr class="footable-filtering"></tr>
               <tr>
@@ -51,6 +79,7 @@
               </tr>
             </thead>
             <tbody>
+              {% if not datatable_server_side|default(False) %}
               {% for elt in table %}
                 <tr>
                   {% for name in line %}
@@ -131,6 +160,7 @@
                   </td>
                 </tr>
               {% endfor %}
+              {% endif %}
             </tbody>
           </table>
       </div>

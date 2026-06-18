@@ -1,11 +1,8 @@
-import hashlib
-
-from flask import current_app, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, distinct, or_, desc
+from flask import current_app
+from sqlalchemy import ForeignKey, distinct, desc
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import select, func
-from sqlalchemy.orm import synonym, relationship, backref
+from sqlalchemy.orm import synonym, relationship
 from pypnusershub.db.models import check_and_encrypt_password
 
 from app.env import db
@@ -236,7 +233,7 @@ class TRoles(GenericRepository):
         Avec pour paramètre un id_liste
         """
 
-        q = db.session.query(cls).filter(cls.active == True)
+        q = db.session.query(cls)
         q = q.order_by(desc(cls.nom_role))
         q = q.join(CorRoleListe)
         q = q.filter(id_liste == CorRoleListe.id_liste)
@@ -259,7 +256,7 @@ class TRoles(GenericRepository):
             .filter(CorRoleListe.id_role == cls.id_role)
             .exists()
         )
-        q = q.filter(subquery).filter(cls.active == True)
+        q = q.filter(subquery)
         data = [data.as_dict_full_name() for data in q.all()]
         return data
 
@@ -269,7 +266,7 @@ class TRoles(GenericRepository):
         Methode qui retourne un dictionnaire de role appartenant à un groupe
         Avec pour paramètres un id de role
         """
-        q = db.session.query(cls).filter(cls.active == True)
+        q = db.session.query(cls)
         q = q.order_by(desc(cls.groupe))
         q = q.join(CorRoles)
         q = q.filter(id_groupe == CorRoles.id_role_groupe)

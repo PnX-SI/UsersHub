@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## Unreleased
+
+**🚀 Nouveautés**
+
+- [Observabilité] Ajout d'une couche d'observabilité centralisée Flask avec `X-Request-ID`, logs de fin de requête, logs de requêtes lentes et logs SQL lents.
+- [Erreurs] Mise en place de handlers globaux pour les erreurs SQLAlchemy et les erreurs applicatives avec messages HTML plus explicites et traces corrélées par `request_id`.
+- [Utilisateurs] Passage de `/users/list` en pagination, tri et recherche côté serveur tout en conservant la route et l'écran fonctionnel existants.
+- [Organismes] Passage de `/organisms/list` en pagination, tri et recherche côté serveur tout en conservant la route et l'écran fonctionnel existants.
+- [Groupes] Passage de `/group/members/<id_groupe>` en pagination serveur pour les membres disponibles et sélectionnés.
+- [Listes] Passage de `/list/members/<id_liste>` en pagination serveur pour les membres disponibles et sélectionnés.
+- [Utilisateurs] Ajout d'un filtre activable `Tous / Actifs / Inactifs` sur la liste des utilisateurs, avec valeur par défaut `Tous`.
+- [Formulaire utilisateur] Remplacement du sélecteur d'organisme par une autocomplétion distante sur `user/add` et `user/update`.
+- [Formulaire utilisateur] Remplacement du sélecteur de groupes par une liste de cases à cocher plus lisible, avec tri alphabétique des groupes.
+- [API] Ajout d'une route d'autocomplétion pour les organismes utilisée par le formulaire utilisateur.
+- [Fiches] Affichage générique des champs additionnels dans les fiches utilisateur et organisme, y compris pour des structures variables et imbriquées.
+
+**🐛 Corrections**
+
+- [Fiches utilisateur] Correction des accès fragiles aux champs additionnels, notamment lorsque `champs_addi` est absent, vide ou partiellement renseigné.
+- [Fiches organisme] Ajout d'un affichage optionnel des champs additionnels liés aux organismes, sans dépendre d'une colonne `additional_data` présente sur tous les schémas.
+- [Membres groupes/listes] Conservation des rôles inactifs dans les écrans d'affectation des groupes et des listes.
+
+**🧪 Tests**
+
+- Ajout d'un socle de tests d'intégration sur l'application principale UsersHub.
+- Ajout de tests de non-régression sur le login, la redirection des routes protégées, les contrats utilisés par GeoNature et les listes paginées.
+- Ajout de tests sur l'observabilité, la présence de `X-Request-ID`, les erreurs SQL capturées, l'autocomplétion organisme, le filtre de statut utilisateur, les champs additionnels et les écrans membres paginés.
+
 ## 2.4.8 (2026-03-03)
 
 **🚀 Nouveautés**
