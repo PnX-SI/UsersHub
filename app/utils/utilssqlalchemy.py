@@ -13,7 +13,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import ColumnProperty
 
-
 # def testDataType(value, sqlType, paramName):
 #     if sqlType == DB.Integer or isinstance(sqlType, (DB.Integer)):
 #         try:

@@ -44,15 +44,17 @@ def configure_alembic(alembic_config):
     version_locations = alembic_config.get_main_option(
         "version_locations", default=""
     ).split()
-    for entry_point in get_entry_points_by_group_and_name('alembic', 'migrations'):
+    for entry_point in get_entry_points_by_group_and_name("alembic", "migrations"):
         version_locations.append(entry_point.value)
     alembic_config.set_main_option("version_locations", " ".join(version_locations))
     return alembic_config
+
 
 def get_entry_points_by_group_and_name(group, name):
     eps = entry_points()
     group_eps = eps.get(group, [])
     return [ep for ep in group_eps if ep.name == name]
+
 
 def create_app():
     app = Flask(

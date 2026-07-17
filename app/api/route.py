@@ -5,7 +5,6 @@ from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import TProfils, CorProfilForApp
 
-
 route = Blueprint("api", __name__)
 
 

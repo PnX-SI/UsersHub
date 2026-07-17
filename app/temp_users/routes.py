@@ -18,7 +18,6 @@ from app.env import db
 from app.utils.utilssqlalchemy import json_resp
 from app.models import TApplications
 
-
 routes = Blueprint("temp_users", __name__)
 log = logging.getLogger()
 

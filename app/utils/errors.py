@@ -2,7 +2,6 @@ from flask import current_app, Response, request, redirect, url_for
 from urllib.parse import urlencode
 from werkzeug.exceptions import Unauthorized
 
-
 # Unauthorized means disconnected
 # (logged but not allowed to perform an action = Forbidden)
 
