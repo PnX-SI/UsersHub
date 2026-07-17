@@ -15,7 +15,6 @@ from app.models import TRoles
 from app.models import CorRoles
 from app.utils.utils_all import strigify_dict
 
-
 URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 

@@ -12,7 +12,6 @@ from app.env import db
 from app.utils.utilssqlalchemy import serializable
 from app.genericRepository import GenericRepository
 
-
 """
     Fichier contenant les models de la base de données
 """
@@ -81,7 +80,7 @@ class TRoles(GenericRepository):
     pass_md5 = synonym("pass5")
 
     def set_password(self, password, password_confirmation):
-        (self.pass_plus, self.pass_md5) = check_and_encrypt_password(
+        self.pass_plus, self.pass_md5 = check_and_encrypt_password(
             password,
             password_confirmation,
             current_app.config["PASS_METHOD"] == "md5"

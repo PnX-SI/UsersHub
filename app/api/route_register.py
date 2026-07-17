@@ -80,7 +80,7 @@ def create_temp_user():
         return "Password and password_confirmation are differents", 500
 
     # Check sended parameters (password, login and exiting email)
-    (is_temp_user_valid, msg) = temp_user.is_valid()
+    is_temp_user_valid, msg = temp_user.is_valid()
 
     if not is_temp_user_valid:
         return {"msg": msg}, 400
@@ -128,12 +128,10 @@ def valid_temp_user():
     temp_user = db.session.query(TempUser).filter(token == TempUser.token_role).first()
     if not temp_user:
         return (
-            {
-                "msg": f"""
+            {"msg": f"""
                 Il n'y a pas d'utilisateur temporaire correspondant au token fourni {token}.<br>
                 Il se peut que la demande de création de compte ai déjà été validée, ou bien que l'adresse de validation soit erronée.<br>
-                """
-            },
+                """},
             422,
         )
 

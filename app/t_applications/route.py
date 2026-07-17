@@ -21,7 +21,6 @@ from app.models import (
 
 from pypnusershub import routes as fnauth
 
-
 URL_REDIRECT = current_app.config["URL_REDIRECT"]
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
