@@ -48,7 +48,7 @@ class Utilisateur(FlaskForm):
         "Nom",
         validators=[DataRequired(message="Le nom de l'utilisateur est obligatoire")],
     )
-    prenom_role = StringField("Prenom")
+    prenom_role = StringField("Prénom")
     desc_role = TextAreaField("Description")
     id_organisme = SelectField(
         "Organisme",
@@ -63,7 +63,7 @@ class Utilisateur(FlaskForm):
     mdpconf = PasswordField("Confirmation")
     email = StringField(
         "E-mail",
-        validators=[validators.Optional(), Email(message="L'email est incorect")],
+        validators=[validators.Optional(), Email(message="L'email est incorrect")],
     )
     groupe = HiddenField("groupe", default=None)
     remarques = TextAreaField("Commentaire")
