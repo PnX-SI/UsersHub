@@ -20,7 +20,6 @@ from app.models import TRoles, Bib_Organismes, CorRoles
 from app.utils.utils_all import strigify_dict
 from app.env import db
 
-
 URL_APPLICATION = current_app.config["URL_APPLICATION"]
 
 route = Blueprint("user", __name__)
@@ -124,7 +123,7 @@ def addorupdate(id_role=None):
     form.id_organisme.choices = Bib_Organismes.choixSelect(
         "id_organisme", "nom_organisme", order_by="nom_organisme"
     )
-    form.id_organisme.choices.insert(0, ("", "-- Selectionnez un organisme..."))
+    form.id_organisme.choices.insert(0, ("", "-- Sélectionnez un organisme --"))
     form.a_groupe.choices = TRoles.choix_group("id_role", "nom_role", aucun=None)
 
     if id_role is not None:
