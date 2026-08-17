@@ -106,6 +106,21 @@ RUN --mount=type=cache,target=/root/.cache \
     pip install *.whl
 
 
+FROM app-${DEPS} AS prod-with-sentry
+
+RUN --mount=type=cache,target=/root/.cache \
+    pip install sentry_sdk[flask]
+
+ENV FLASK_APP=app.app:create_app
+ENV PYTHONPATH=/dist/config/
+ENV USERSHUB_SETTINGS=config.py
+ENV USERSHUB_STATIC_FOLDER=/dist/static
+
+EXPOSE 5001
+
+CMD ["gunicorn", "app.app:create_app()", "--bind=0.0.0.0:5001", "--access-logfile=-", "--error-logfile=-", "--reload", "--reload-extra-file=config/config.py"]
+
+
 FROM app-${DEPS} AS prod
 
 ENV FLASK_APP=app.app:create_app
