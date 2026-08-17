@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "usershub"
+dynamic = ["version", "dependencies"]
+readme = "README.rst"
+maintainers = [
+    { name = "Parcs nationaux des Écrins et des Cévennes", email = "geonature@ecrins-parcnational.fr" }
+]
+
+[project.urls]
+Homepage = "https://github.com/PnX-SI/UsersHub"
+
+[project.entry-points.alembic]
+migrations = "app.migrations:versions"
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION" }
+dependencies = { file = "requirements.in" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+app = ["templates/*.html", "templates/*.js"]
+"app.migrations" = ["alembic.ini", "script.py.mako"]
+
+[tool.black]
+line-length = 99
