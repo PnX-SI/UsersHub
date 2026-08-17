@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "usershub"
 dynamic = ["version", "dependencies"]
+description = "Application web de gestion centralisée des utilisateurs"
 readme = "README.rst"
 maintainers = [
     { name = "Parcs nationaux des Écrins et des Cévennes", email = "geonature@ecrins-parcnational.fr" }
